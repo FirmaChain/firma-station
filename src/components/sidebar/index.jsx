@@ -1,12 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Typography } from "@material-ui/core";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { Typography } from "@material-ui/core";
 
 import HomeIcon from "@material-ui/icons/Home";
 import AccountsIcon from "@material-ui/icons/AccountBalanceWallet";
@@ -21,6 +21,8 @@ import ExplorerIcon from "@material-ui/icons/Archive";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 import { makeStyles } from "@material-ui/styles";
+
+import theme from "../../theme";
 
 const LogoImg = styled.div`
   height: 80px;
@@ -48,12 +50,12 @@ function Sidebar() {
       width: drawerWidth,
     },
     paper: {
-      color: "white",
+      color: theme.colors.defaultWhite,
       border: 0,
       margin: 0,
       padding: 0,
       width: drawerWidth,
-      background: "black",
+      background: theme.colors.backgroundSideBar,
       display: "flex",
     },
     icon: {
@@ -61,12 +63,12 @@ function Sidebar() {
     },
     name: {
       "& span": {
-        fontSize: "14px",
+        fontSize: theme.sizes.sideMenuFont,
         color: "#afafaf",
       },
     },
     active: {
-      background: "#eeeeee25",
+      background: theme.colors.purple2 + "25",
       borderRight: "4px solid #3550DE",
       "& span": {
         color: "#efefef",

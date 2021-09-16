@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-
 import { Typography } from "@material-ui/core";
 
 const ContentContainer = styled.div`
@@ -10,8 +9,8 @@ const ContentContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: calc(100% - 130px);
-  background-color: "black";
-  color: "white";
+  background-color: ${({ theme }) => theme.colors.backgroundBlack};
+  color: ${({ theme }) => theme.colors.defaultFont};
 `;
 
 const BackgroundImg = styled.div`

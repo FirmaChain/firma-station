@@ -1,21 +1,30 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
 
 import Sidebar from "./components/sidebar";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 import { RightContainer, MainContainer } from "./styles/common";
 
 import Routes from "./routes";
 import "./app.css";
 
+import theme from "./theme";
+
 const App = () => (
   <BrowserRouter>
-    <MainContainer>
-      <Sidebar />
-      <RightContainer>
-        <Routes />
-      </RightContainer>
-    </MainContainer>
+    <ThemeProvider theme={theme}>
+      <MainContainer>
+        <Sidebar />
+        <RightContainer>
+          <Header />
+          <Routes />
+          <Footer />
+        </RightContainer>
+      </MainContainer>
+    </ThemeProvider>
   </BrowserRouter>
 );
 
