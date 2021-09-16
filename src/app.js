@@ -10,6 +10,7 @@ import { RightContainer, MainContainer } from "./styles/common";
 
 import Routes from "./routes";
 import "./app.css";
+import "./i18n";
 
 import theme from "./theme";
 

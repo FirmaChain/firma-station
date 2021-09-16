@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Typography } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 const ContentContainer = styled.div`
   width: 100%;
@@ -29,10 +30,12 @@ const BackgroundImg = styled.div`
 `;
 
 function Coming() {
+  const { t } = useTranslation();
+
   return (
     <ContentContainer>
       <Typography variant="h3" align="center">
-        Under Development
+        {t("comingsoon")}
         <BackgroundImg />
       </Typography>
     </ContentContainer>
