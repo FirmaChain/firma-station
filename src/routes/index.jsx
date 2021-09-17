@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
+import Home from "../pages/home";
 import Coming from "../pages/coming";
 
 const routePublic = (path, component) => ({
@@ -9,7 +10,7 @@ const routePublic = (path, component) => ({
 });
 
 const routes = {
-  Home: routePublic("/", Coming),
+  Home: routePublic("/", Home),
   Accounts: routePublic("/accounts", Coming),
   History: routePublic("/history", Coming),
   Staking: routePublic("/staking", Coming),
