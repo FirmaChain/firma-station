@@ -1,3 +1,4 @@
+import { Typography } from "@material-ui/core";
 import React from "react";
 
 import styled from "styled-components";
@@ -36,9 +37,30 @@ const Badge = styled.div`
   float: left;
 `;
 
+const QrImage = styled.img`
+  width: 15px;
+  height: 15px;
+  float: left;
+`;
+
+const QrText = styled.div`
+  width: 300px;
+  height: 15px;
+  float: left;
+  margin-left: 6px;
+  line-height: 15px;
+  font-size: 15px;
+`;
+
 function Header() {
+  const menus = [{ name: "Logout", path: "/Logout" }];
+
   return (
     <HeaderContainer>
+      <Typography style={{ float: "left", display: "inline-block", marginTop: "35px", color: "#aaa" }}>
+        <QrImage src="/images/qr.png" />
+        <QrText>Import QR Code</QrText>
+      </Typography>
       <MenuList>
         <MenuItem
           style={{
