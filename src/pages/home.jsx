@@ -3,11 +3,20 @@ import styled from "styled-components";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
+import { PieChart, Pie, Cell } from "recharts";
 import { BlankCard, SingleTitleCard } from "../components/card";
 import { AessetTable } from "../components/table";
 import { CustomTabs } from "../components/tab";
 
 import theme from "../theme";
+
+const data = [
+  { name: "Group A", value: 400 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 },
+  { name: "Group D", value: 200 },
+];
+const COLORS = [theme.colors.mainpurple, theme.colors.mainblue, theme.colors.maingreen, theme.colors.mainred];
 
 const dashboardDataList = [
   { title: "Latest Block", content: "140184", bgColor: theme.colors.backgroundSideBar },
@@ -100,6 +109,20 @@ const RightCardMiddleWrap = styled.div`
   gap: 0 30px;
 `;
 
+const StakingWrap = styled.div`
+  width: calc(100% - 150px);
+  height: 100%;
+  float: left;
+  display: flex;
+`;
+
+const StakingTextWrap = styled.div`
+  width: 100%;
+  margin: auto;
+  flex: 1;
+  text-align: center;
+`;
+
 function Home() {
   const useStyles = makeStyles({
     addressTitleTypo: {
@@ -173,7 +196,41 @@ function Home() {
         </LeftCardWrap>
         <RightCardWrap>
           <RightCardMiddleWrap>
-            <BlankCard bgColor={theme.colors.backgroundSideBar} height="168px" flex="2.08"></BlankCard>
+            <BlankCard bgColor={theme.colors.backgroundSideBar} height="168px" flex="2.08">
+              <PieChart width={140} height={140} className={classes.piechart}>
+                <Pie
+                  data={data}
+                  innerRadius={40}
+                  outerRadius={60}
+                  fill="#8884d8"
+                  paddingAngle={5}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+              </PieChart>
+              <StakingWrap>
+                <StakingTextWrap>
+                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Available</Typography>
+                  <Typography style={{ fontSize: "18px" }}>9000 FCT</Typography>
+                </StakingTextWrap>
+                <StakingTextWrap>
+                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Delegated</Typography>
+                  <Typography style={{ fontSize: "18px" }}>1010 FCT</Typography>
+                </StakingTextWrap>
+                <StakingTextWrap>
+                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Unbonding</Typography>
+                  <Typography style={{ fontSize: "18px" }}>0 FCT</Typography>
+                </StakingTextWrap>
+                <StakingTextWrap>
+                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Staking Reward</Typography>
+                  <Typography style={{ fontSize: "18px" }}>324.5 FCT</Typography>
+                </StakingTextWrap>
+              </StakingWrap>
+            </BlankCard>
           </RightCardMiddleWrap>
 
           <RightCardTopWrap>
