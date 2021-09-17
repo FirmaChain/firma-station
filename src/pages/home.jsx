@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
-
 import { BlankCard, SingleTitleCard } from "../components/card";
+import { AessetTable } from "../components/table";
+import { CustomTabs } from "../components/tab";
 
 import theme from "../theme";
 
@@ -12,6 +13,33 @@ const dashboardDataList = [
   { title: "Latest Block", content: "140184", bgColor: theme.colors.backgroundSideBar },
   { title: "Transactions", content: "12539", bgColor: theme.colors.backgroundSideBar },
   { title: "Inflation", content: "140184", bgColor: theme.colors.backgroundSideBar },
+];
+
+const assets1 = [
+  ["FCT", 10010],
+  ["NFT [#300]", 1],
+  ["NFT [#301]", 1],
+];
+
+const columns1 = [
+  { name: "Name", align: "center" },
+  { name: "Balances", align: "center" },
+];
+
+const assets2 = [
+  ["1E5BFBF9...", "SEND", "firma1trqyle9...", "firma1pwlanx5...", "1000000 FCT", "2021-09-16 00:00:00"],
+  ["1E5BFBF9...", "Create Contract File", "firma1trqyle9...", "firma1pwlanx5...", "1000000 FCT", "2021-09-16 00:00:00"],
+  ["1E5BFBF9...", "Add Contract Log", "firma1trqyle9...", "firma1pwlanx5...", "1000000 FCT", "2021-09-16 00:00:00"],
+  ["1E5BFBF9...", "NFT Transfer", "firma1trqyle9...", "firma1pwlanx5...", "1000000 FCT", "2021-09-16 00:00:00"],
+];
+
+const columns2 = [
+  { name: "Hash", align: "center" },
+  { name: "Type", align: "center", width: "130px" },
+  { name: "From", align: "center" },
+  { name: "To", align: "center" },
+  { name: "Amount", align: "center" },
+  { name: "Time", align: "center", width: "80px" },
 ];
 
 const userInfo = {
@@ -120,6 +148,9 @@ function Home() {
       fontWeight: "600",
       color: "white",
     },
+    piechart: {
+      float: "left",
+    },
   });
 
   const classes = useStyles();
@@ -135,7 +166,10 @@ function Home() {
             <Typography className={classes.defaultSymbol}>{userInfo.denom}</Typography>
             <Typography className={classes.defaultBalances}>{userInfo.balance}</Typography>
           </BlankCard>
-          <BlankCard bgColor={theme.colors.backgroundSideBar} height="100%"></BlankCard>
+          <BlankCard bgColor={theme.colors.backgroundSideBar} height="100%">
+            <Typography className={classes.addressTitleTypo}>Assets</Typography>
+            <AessetTable columns={columns1} assets={assets1} size="medium" />
+          </BlankCard>
         </LeftCardWrap>
         <RightCardWrap>
           <RightCardMiddleWrap>
@@ -148,7 +182,10 @@ function Home() {
             })}
           </RightCardTopWrap>
 
-          <BlankCard bgColor={theme.colors.backgroundSideBar} height="100%"></BlankCard>
+          <BlankCard bgColor={theme.colors.backgroundSideBar} height="100%">
+            <CustomTabs />
+            <AessetTable columns={columns2} assets={assets2} size="small" />
+          </BlankCard>
         </RightCardWrap>
       </CardWrap>
     </ContentContainer>
