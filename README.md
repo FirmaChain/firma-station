@@ -1,4 +1,4 @@
-# Firma Station - Desktop & Web App
+# Firma Station - Desktop & Web App wallet and governance tool
 
 
 ![image](https://user-images.githubusercontent.com/5277080/134673615-d1750329-1a1d-4370-8195-582948834aff.png)
@@ -17,11 +17,11 @@ It is currently under development and early stage develpoment and provide detail
 
 This app can also be used for TestNet and using Faucet, you can test various scenarios.
 
-<p/>
+<p/><p/>
 <p/>
 
 **WARNING**: The coin obtained through firma station devnet/testnet is not compatible with the coin of mainnet and has no value.
 
 # How to bulid Firma-Faucet
 
-### 1. Install and Run 
+
