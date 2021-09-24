@@ -1,48 +1,40 @@
 import React from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 
-import theme from "../../theme";
+import {
+  TableStyled,
+  TableBodyStyled,
+  TableCellStyled,
+  TableContainerStyled,
+  TableHeadStyled,
+  TableRowStyled,
+} from "./styles";
 
 function AessetTable({ columns, assets, size }) {
-  const useStyles = makeStyles({
-    root: {
-      backgroundColor: theme.colors.backgroundSideBar,
-      boxShadow: 0,
-      "& *": {
-        color: "#aaa",
-        borderBottom: "1px solid #34353C",
-      },
-    },
-  });
-
-  const classes = useStyles();
-
   return (
-    <TableContainer component={Paper} className={classes.root} elevation={0}>
-      <Table size={size} className={classes.root}>
-        <TableHead>
-          <TableRow>
+    <TableContainerStyled elevation={0}>
+      <TableStyled size={size}>
+        <TableHeadStyled>
+          <TableRowStyled>
             {columns.map(({ name, align, width }, i) => (
-              <TableCell align={align} width={width} key={i}>
+              <TableCellStyled align={align} width={width} key={i}>
                 {name}
-              </TableCell>
+              </TableCellStyled>
             ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
+          </TableRowStyled>
+        </TableHeadStyled>
+        <TableBodyStyled>
           {assets.map((data, i) => (
-            <TableRow key={i}>
+            <TableRowStyled key={i}>
               {data.map((value, j) => (
-                <TableCell align={columns[j].align} key={j} style={{ color: "#bbb" }}>
+                <TableCellStyled align={columns[j].align} key={j} style={{ color: "#bbb" }}>
                   {value}
-                </TableCell>
+                </TableCellStyled>
               ))}
-            </TableRow>
+            </TableRowStyled>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        </TableBodyStyled>
+      </TableStyled>
+    </TableContainerStyled>
   );
 }
 

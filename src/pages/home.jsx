@@ -21,7 +21,7 @@ const COLORS = [theme.colors.mainpurple, theme.colors.mainblue, theme.colors.mai
 const dashboardDataList = [
   { title: "Latest Block", content: "140184", bgColor: theme.colors.backgroundSideBar },
   { title: "Transactions", content: "12539", bgColor: theme.colors.backgroundSideBar },
-  { title: "Inflation", content: "140184", bgColor: theme.colors.backgroundSideBar },
+  { title: "Inflation", content: "13.56 %", bgColor: theme.colors.backgroundSideBar },
 ];
 
 const assets1 = [
@@ -182,7 +182,7 @@ function Home() {
     <ContentContainer>
       <CardWrap>
         <LeftCardWrap>
-          <BlankCard bgColor={theme.colors.purple2} height="168px" background={true}>
+          <BlankCard bgColor={theme.colors.mainblue} height="168px" backgroundLogo={true}>
             <Typography className={classes.addressTitleTypo}>Address</Typography>
             <FileCopyIcon className={classes.copyIcon}></FileCopyIcon>
             <Typography className={classes.addressTypo}>{userInfo.address}</Typography>
@@ -214,20 +214,20 @@ function Home() {
               </PieChart>
               <StakingWrap>
                 <StakingTextWrap>
-                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Available</Typography>
-                  <Typography style={{ fontSize: "18px" }}>9000 FCT</Typography>
+                  <Typography style={{ color: "#aaa", fontSize: "16px" }}>Available</Typography>
+                  <Typography style={{ fontSize: "20px" }}>9000 FCT</Typography>
                 </StakingTextWrap>
                 <StakingTextWrap>
-                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Delegated</Typography>
-                  <Typography style={{ fontSize: "18px" }}>1010 FCT</Typography>
+                  <Typography style={{ color: "#aaa", fontSize: "16px" }}>Delegated</Typography>
+                  <Typography style={{ fontSize: "20px" }}>1010 FCT</Typography>
                 </StakingTextWrap>
                 <StakingTextWrap>
-                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Unbonding</Typography>
-                  <Typography style={{ fontSize: "18px" }}>0 FCT</Typography>
+                  <Typography style={{ color: "#aaa", fontSize: "16px" }}>Unbonding</Typography>
+                  <Typography style={{ fontSize: "20px" }}>0 FCT</Typography>
                 </StakingTextWrap>
                 <StakingTextWrap>
-                  <Typography style={{ color: "#aaa", fontSize: "14px" }}>Staking Reward</Typography>
-                  <Typography style={{ fontSize: "18px" }}>324.5 FCT</Typography>
+                  <Typography style={{ color: "#aaa", fontSize: "16px" }}>Staking Reward</Typography>
+                  <Typography style={{ fontSize: "20px" }}>324.5 FCT</Typography>
                 </StakingTextWrap>
               </StakingWrap>
             </BlankCard>
@@ -235,7 +235,7 @@ function Home() {
 
           <RightCardTopWrap>
             {dashboardDataList.map(({ title, content, bgColor }, index) => {
-              return <SingleTitleCard title={title} content={content} bgColor={bgColor} key={index} height="100%" />;
+              return <SingleTitleCard title={title} content={content} background={bgColor} key={index} height="100%" />;
             })}
           </RightCardTopWrap>
 

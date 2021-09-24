@@ -3,19 +3,12 @@ const colors = {
   activeBackground: "#323232",
   backgroundBlack: "#131317",
   defaultWhite: "#929fed",
-  defaultGray: "#eee",
-  defaultFont: "#fff",
-  gray1: "#cacaca",
-  red1: "#AF2929",
-  red2: "#EF4B56",
-  orange1: "#faa356",
-  green1: "#25C767",
-  green2: "#39DA9E",
-  blue1: "#3252D3",
-  blue2: "#77bdfb",
-  blue3: "#242486",
-  purple1: "#cea5fb",
-  purple2: "#3550DE",
+  defaultGray: "#eeeeee",
+  defaultDarkGray: "#aaa",
+  defaultFont: "#8285af",
+  defaultGrayFont: "#707070",
+  realWhite: "#ffffff",
+  borderLine: "#34353c",
 
   default1: "#647dae",
   default2: "#aa647b",
@@ -23,6 +16,9 @@ const colors = {
   default4: "#f57c00",
   default5: "#1976d2",
   default6: "#388e3c",
+
+  buttonBackground: "#1e2650",
+  buttonBorder: "#324ab8",
 
   mainblue: "#3550DE",
   mainpurple: "#502CBA",
@@ -33,12 +29,24 @@ const colors = {
 };
 
 const sizes = {
-  sideMenuFont: "16px",
+  sideMenu: "16px",
+  singleCardTitle: "14px",
+  singleCardContent: "32px",
+  footerContent: "12px",
+  headerContent: "13px",
+  sideMenuDrawer: "230px",
+};
+
+const urls = {
+  logo: "/images/white_logo.svg",
+  fullLogo: "/images/firma_chain_title.svg",
+  qr: "/images/qr.png",
 };
 
 const theme = {
   colors,
   sizes,
+  urls,
 };
 
 export default theme;

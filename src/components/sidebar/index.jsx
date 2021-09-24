@@ -1,12 +1,5 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { Typography } from "@material-ui/core";
 
 import HomeIcon from "@material-ui/icons/Home";
 import AccountsIcon from "@material-ui/icons/AccountBalanceWallet";
@@ -20,143 +13,90 @@ import BuyFirmaIcon from "@material-ui/icons/Payment";
 import ExplorerIcon from "@material-ui/icons/Archive";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-import { makeStyles } from "@material-ui/styles";
+import {
+  DrawerStyled,
+  LogoImg,
+  ListStyled,
+  ListItemStyled,
+  ListItemIconStyled,
+  ListItemTextStyled,
+  BottomWrap,
+  BottomMenuTypo,
+  BottomIcon,
+} from "./styles";
 
-import theme from "../../theme";
-
-const LogoImg = styled.div`
-  height: 80px;
-  margin: 0 20px;
-  background-image: url("/images/firma_chain_title.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center center;
-`;
-
-const BottomWrap = styled.div`
-  height: 30px;
-  line-height: 48px;
-  padding: 8px 16px;
-  margin-top: auto;
-`;
+const menus = [
+  { name: "Home", path: "/", icon: HomeIcon, externalLink: "" },
+  { name: "Accounts", path: "/accounts", icon: AccountsIcon, externalLink: "" },
+  { name: "History", path: "/history", icon: HistoryIcon, externalLink: "" },
+  { name: "Staking", path: "/staking", icon: StakingIcon, externalLink: "" },
+  { name: "Government", path: "/government", icon: GovernmentIcon, externalLink: "" },
+  { name: "Swap", path: "/swap", icon: SwapIcon, externalLink: "" },
+  { name: "News", path: "/news", icon: NewsIcon, externalLink: "" },
+  { name: "Supports", path: "/supports", icon: SupportsIcon, externalLink: "" },
+  {
+    name: "Buy Firma",
+    path: "/market",
+    icon: BuyFirmaIcon,
+    externalLink: "https://coinmarketcap.com/currencies/firmachain/markets",
+  },
+  {
+    name: "Explorer",
+    path: "/explorer",
+    icon: ExplorerIcon,
+    externalLink: "https://explorer-devnet.firmachain.org/",
+  },
+];
 
 function Sidebar() {
-  const drawerWidth = 230;
-
   const location = useLocation();
 
-  const useStyles = makeStyles(() => ({
-    drawer: {
-      width: drawerWidth,
-    },
-    paper: {
-      color: theme.colors.defaultWhite,
-      border: 0,
-      margin: 0,
-      padding: 0,
-      width: drawerWidth,
-      background: theme.colors.backgroundSideBar,
-      display: "flex",
-    },
-    icon: {
-      color: "#eee",
-    },
-    name: {
-      "& span": {
-        fontSize: theme.sizes.sideMenuFont,
-        color: "#afafaf",
-      },
-    },
-    active: {
-      background: theme.colors.purple2 + "25",
-      borderRight: "4px solid #3550DE",
-      "& span": {
-        color: "#efefef",
-      },
-    },
-    externalLink: {
-      cursor: "pointer",
-    },
-    settingIcon: {
-      float: "left",
-      marginRight: "30px",
-      color: "#efefef",
-    },
-    settingTypo: {
-      float: "left",
-      color: "#afafaf",
-    },
-  }));
-
-  const classes = useStyles();
-
-  const menus = [
-    { name: "Home", path: "/", icon: HomeIcon, externalLink: "" },
-    { name: "Accounts", path: "/accounts", icon: AccountsIcon, externalLink: "" },
-    { name: "History", path: "/history", icon: HistoryIcon, externalLink: "" },
-    { name: "Staking", path: "/staking", icon: StakingIcon, externalLink: "" },
-    { name: "Government", path: "/government", icon: GovernmentIcon, externalLink: "" },
-    { name: "Swap", path: "/swap", icon: SwapIcon, externalLink: "" },
-    { name: "News", path: "/news", icon: NewsIcon, externalLink: "" },
-    { name: "Supports", path: "/supports", icon: SupportsIcon, externalLink: "" },
-    {
-      name: "Buy Firma",
-      path: "/market",
-      icon: BuyFirmaIcon,
-      externalLink: "https://coinmarketcap.com/currencies/firmachain/markets",
-    },
-    {
-      name: "Explorer",
-      path: "/explorer",
-      icon: ExplorerIcon,
-      externalLink: "https://explorer-devnet.firmachain.org/",
-    },
-  ];
-
   return (
-    <Drawer className={classes.drawer} classes={{ paper: classes.paper }} variant="permanent" anchor="left">
+    <DrawerStyled variant="permanent" anchor="left">
       <LogoImg />
-      <List disablePadding={true}>
+      <ListStyled disablePadding={true}>
         {menus.map((menu, index) => {
           if (menu.externalLink !== "") {
             return (
-              <ListItem
+              <ListItemStyled
                 key={index}
-                className={classes.externalLink}
                 onClick={() => {
                   window.open(menu.externalLink);
                 }}
+                $isExternalLink={true}
               >
-                <ListItemIcon className={classes.icon}>
+                <ListItemIconStyled>
                   <menu.icon />
-                </ListItemIcon>
-                <ListItemText className={classes.name} primary={menu.name} />
-              </ListItem>
+                </ListItemIconStyled>
+                <ListItemTextStyled primary={menu.name} />
+              </ListItemStyled>
             );
           } else {
             return (
-              <ListItem
+              <ListItemStyled
                 button
                 component={Link}
                 to={menu.path}
                 key={index}
-                className={location.pathname === menu.path ? classes.active : ""}
+                $isSelected={location.pathname === menu.path}
               >
-                <ListItemIcon className={classes.icon}>
+                <ListItemIconStyled>
                   <menu.icon />
-                </ListItemIcon>
-                <ListItemText className={classes.name} primary={menu.name} />
-              </ListItem>
+                </ListItemIconStyled>
+                <ListItemTextStyled primary={menu.name} />
+              </ListItemStyled>
             );
           }
         })}
-      </List>
+      </ListStyled>
 
       <BottomWrap>
-        <SettingsIcon className={classes.settingIcon} />
-        <Typography className={classes.settingTypo}>Settings</Typography>
+        <BottomIcon>
+          <SettingsIcon />
+        </BottomIcon>
+        <BottomMenuTypo>Settings</BottomMenuTypo>
       </BottomWrap>
-    </Drawer>
+    </DrawerStyled>
   );
 }
 
