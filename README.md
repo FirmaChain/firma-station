@@ -1,4 +1,4 @@
-# Firma Station - Desktop & Web App wallet and governance tool
+# Firma Station - Desktop & Web App wallet service
 
 
 ![image](https://user-images.githubusercontent.com/5277080/134673615-d1750329-1a1d-4370-8195-582948834aff.png)
@@ -24,4 +24,9 @@ This app can also be used for TestNet and using Faucet, you can test various sce
 
 # How to bulid Firma-Faucet
 
-
+### 1. Install and Run 
+```javascript
+npm install
+npm start
+```
+</br>
