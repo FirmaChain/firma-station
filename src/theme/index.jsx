@@ -4,6 +4,7 @@ const colors = {
   backgroundBlack: "#131317",
   defaultWhite: "#929fed",
   defaultGray: "#eeeeee",
+  defaultGray2: "#bbb",
   defaultDarkGray: "#aaa",
   defaultFont: "#8285af",
   defaultGrayFont: "#707070",
@@ -34,11 +35,17 @@ const sizes = {
   singleCardContent: "32px",
   footerContent: "12px",
   headerContent: "13px",
+  accountCardSize1: "20px",
+  accountCardSize2: "11px",
+  accountCardSize3: "16px",
+  stakingCardSize1: "16px",
+  stakingCardSize2: "20px",
   sideMenuDrawer: "230px",
 };
 
 const urls = {
   logo: "/images/white_logo.svg",
+  bgLogo: "/images/bgLogo.png",
   fullLogo: "/images/firma_chain_title.svg",
   qr: "/images/qr.png",
 };

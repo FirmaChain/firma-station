@@ -6,6 +6,7 @@ export const ContentContainer = styled.div`
   padding: 0 40px;
   height: calc(100% - 130px);
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
+  color: ${({ theme }) => theme.colors.defaultFont};
 `;
 
 export const CardWrap = styled.div`
@@ -34,6 +35,15 @@ export const RightCardWrap = styled.div`
 
 export const RightCardTopWrap = styled.div`
   width: 100%;
+  min-height: 168px;
+  max-height: 168px;
+  height: 168px;
+  display: flex;
+  gap: 0 30px;
+`;
+
+export const RightCardMiddleWrap = styled.div`
+  width: 100%;
   min-height: 120px;
   max-height: 120px;
   height: 120px;
@@ -42,25 +52,6 @@ export const RightCardTopWrap = styled.div`
   box-shadow: 0;
 `;
 
-export const RightCardMiddleWrap = styled.div`
-  width: 100%;
-  min-height: 168px;
-  max-height: 168px;
-  height: 168px;
-  display: flex;
-  gap: 0 30px;
-`;
-
-export const StakingWrap = styled.div`
-  width: calc(100% - 150px);
+export const RightCardBottomWrap = styled.div`
   height: 100%;
-  float: left;
-  display: flex;
-`;
-
-export const StakingTextWrap = styled.div`
-  width: 100%;
-  margin: auto;
-  flex: 1;
-  text-align: center;
 `;

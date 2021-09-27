@@ -1,43 +1,11 @@
 import React from "react";
-import styled from "styled-components";
-import { Typography } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
-
-const ContentContainer = styled.div`
-  width: 100%;
-  padding: 0 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: calc(100% - 130px);
-  background-color: ${({ theme }) => theme.colors.backgroundBlack};
-  color: ${({ theme }) => theme.colors.defaultFont};
-`;
-
-const BackgroundImg = styled.div`
-  z-index: 1;
-  width: 540px;
-  height: 540px;
-  position: absolute;
-  top: 50%;
-  left: 49%;
-  transform: translate(-50%, -50%);
-  opacity: 0.05;
-  background-image: url("/images/bgLogo.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-`;
+import { ContentContainer } from "../styles/home";
+import { ComingDiv } from "../organisms/coming";
 
 function Coming() {
-  const { t } = useTranslation();
-
   return (
     <ContentContainer>
-      <Typography variant="h3" align="center">
-        {t("comingsoon")}
-        <BackgroundImg />
-      </Typography>
+      <ComingDiv />
     </ContentContainer>
   );
 }

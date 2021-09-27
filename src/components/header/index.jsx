@@ -7,7 +7,7 @@ function Header() {
     <HeaderContainer>
       <QrWapper>
         <QrImage />
-        <QrText>Import QR Code</QrText>
+        <QrText>Export QR Code</QrText>
       </QrWapper>
       <MenuList>
         <MenuItem>
