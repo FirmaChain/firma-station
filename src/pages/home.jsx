@@ -50,13 +50,15 @@ const chainData = [
 ];
 
 function Home() {
-  const { address, balance } = useSelector((state) => state.wallet);
+  const { address, balance, isInit } = useSelector((state) => state.wallet);
 
   return (
     <ContentContainer>
       <CardWrap>
         <LeftCardWrap>
-          <AccountCard accountInfo={{ address, denom: "FCT", balance }} />
+          <AccountCard
+            accountInfo={{ address: isInit ? address : "", denom: "FCT", balance: isInit ? balance : "0" }}
+          />
           <AssetCard
             assetData={{
               columns: [

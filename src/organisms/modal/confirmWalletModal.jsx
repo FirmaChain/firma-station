@@ -8,6 +8,8 @@ import { walletActions } from "redux/action";
 
 import { ModalContainer, ModalTitle, ModalContent, ModalLabel, ModalInput, CreateButton } from "./styles";
 
+import useFirma from "utils/firma";
+
 import styled from "styled-components";
 
 const InputContainer = styled.div`
@@ -59,6 +61,7 @@ function ConfirmWalletModal() {
   const confirmWalletModalState = useSelector((state) => state.modal.confirmWallet);
   const { mnemonic } = useSelector((state) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
+  const { resetWallet, initWallet } = useFirma();
 
   const [inputTarget, setInputTarget] = useState([]);
   const [selectTarget, setSelectTarget] = useState([]);
@@ -99,16 +102,18 @@ function ConfirmWalletModal() {
       setSelectTarget(selectTargetList);
     } else {
       activeCreateButton(false);
+      setCurrentWordIndex(0);
     }
   }, [confirmWalletModalState]);
 
   const closeModal = () => {
+    resetWallet();
     modalActions.handleModalConfirmWallet(false);
   };
 
   const closeConfirmWalletModal = () => {
+    initWallet();
     modalActions.handleModalConfirmWallet(false);
-    walletActions.handleWalletInit(true);
   };
 
   const prevModal = () => {

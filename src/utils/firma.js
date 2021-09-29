@@ -32,6 +32,10 @@ function useFirma() {
     walletActions.handleWalletInit(false);
   }
 
+  function initWallet() {
+    walletActions.handleWalletInit(true);
+  }
+
   async function setWalletState(wallet) {
     walletActions.handleWalletMnemonic(await wallet.getMnemonic());
     walletActions.handleWalletPrivateKey(await wallet.getPrivateKey());
@@ -56,6 +60,7 @@ function useFirma() {
     recoverWalletFromMnemonic,
     recoverWalletFromPrivateKey,
     resetWallet,
+    initWallet,
     sendFCT,
     convertToFct,
   };
