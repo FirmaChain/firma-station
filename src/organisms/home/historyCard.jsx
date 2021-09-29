@@ -1,9 +1,9 @@
 import React from "react";
 
-import theme from "../../theme";
-import { BlankCard } from "../../components/card";
-import { CustomTabs } from "../../components/tab";
-import { AessetTable } from "../../components/table";
+import theme from "themes";
+import { BlankCard } from "components/card";
+import { CustomTabs } from "components/tab";
+import { AessetTable } from "components/table";
 
 function HistoryCard({ historyData }) {
   return (

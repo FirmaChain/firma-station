@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import statusReducer from "./statusReducer";
+import modalReducer from "./modalReducer";
 
 export default combineReducers({
-  status: statusReducer,
+  modal: modalReducer,
 });

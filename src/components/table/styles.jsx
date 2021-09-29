@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 export const TableContainerStyled = styled(TableContainer)`
   background-color: ${({ theme }) => theme.colors.backgroundSideBar} !important;

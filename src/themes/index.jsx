@@ -41,6 +41,8 @@ const sizes = {
   stakingCardSize1: "16px",
   stakingCardSize2: "20px",
   sideMenuDrawer: "230px",
+  modalTitle: "20px",
+  modalLabel: "16px",
 };
 
 const urls = {

@@ -2,17 +2,17 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
-import Sidebar from "./components/sidebar";
-import Header from "./components/header";
-import Footer from "./components/footer";
+import Sidebar from "components/sidebar";
+import Header from "components/header";
+import Footer from "components/footer";
 
-import { RightContainer, MainContainer } from "./styles/common";
+import { RightContainer, MainContainer } from "styles/common";
 
-import Routes from "./routes";
-import "./app.css";
-import "./i18n";
+import Routes from "routes";
+import "app.css";
+import "i18n";
 
-import theme from "./theme";
+import theme from "themes";
 
 const App = () => (
   <BrowserRouter>

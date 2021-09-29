@@ -1,6 +1,6 @@
 import React from "react";
-import { ContentContainer } from "../styles/home";
-import { ComingDiv } from "../organisms/coming";
+import { ContentContainer } from "styles/home";
+import { ComingDiv } from "organisms/coming";
 
 function Coming() {
   return (

@@ -1,17 +1,17 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import HomeIcon from "@material-ui/icons/Home";
-import AccountsIcon from "@material-ui/icons/AccountBalanceWallet";
-import HistoryIcon from "@material-ui/icons/History";
-import StakingIcon from "@material-ui/icons/Inbox";
-import GovernmentIcon from "@material-ui/icons/AccountBalance";
-import SwapIcon from "@material-ui/icons/SwapHoriz";
-import NewsIcon from "@material-ui/icons/Chat";
-import SupportsIcon from "@material-ui/icons/Help";
-import BuyFirmaIcon from "@material-ui/icons/Payment";
-import ExplorerIcon from "@material-ui/icons/Archive";
-import SettingsIcon from "@material-ui/icons/Settings";
+import HomeIcon from "@mui/icons-material/Home";
+import AccountsIcon from "@mui/icons-material/AccountBalanceWallet";
+import HistoryIcon from "@mui/icons-material/History";
+import StakingIcon from "@mui/icons-material/Inbox";
+import GovernmentIcon from "@mui/icons-material/AccountBalance";
+import SwapIcon from "@mui/icons-material/SwapHoriz";
+import NewsIcon from "@mui/icons-material/Chat";
+import SupportsIcon from "@mui/icons-material/Help";
+import BuyFirmaIcon from "@mui/icons-material/Payment";
+import ExplorerIcon from "@mui/icons-material/Archive";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import {
   DrawerStyled,

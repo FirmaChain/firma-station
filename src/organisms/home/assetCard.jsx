@@ -1,8 +1,8 @@
 import React from "react";
 
-import theme from "../../theme";
-import { BlankCard } from "../../components/card";
-import { AessetTable } from "../../components/table";
+import theme from "themes";
+import { BlankCard } from "components/card";
+import { AessetTable } from "components/table";
 import { AddressTitleTypo } from "./styles";
 
 function AssetCard({ assetData }) {

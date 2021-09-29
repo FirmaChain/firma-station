@@ -1,8 +1,8 @@
 import React from "react";
 import { PieChart, Pie, Cell } from "recharts";
 
-import theme from "../../theme";
-import { BlankCard } from "../../components/card";
+import theme from "themes";
+import { BlankCard } from "components/card";
 import { StakingWrap, StakingTextWrap, StakingTitleTypo, StakingContentTypo } from "./styles";
 
 function StakingCard({ stakingData }) {

@@ -1,6 +1,6 @@
 import React from "react";
-import theme from "../theme";
-import { AccountCard, AssetCard, StakingCard, ChainCard, HistoryCard } from "../organisms/home";
+import theme from "themes";
+import { AccountCard, AssetCard, StakingCard, ChainCard, HistoryCard } from "organisms/home";
 import {
   ContentContainer,
   CardWrap,
@@ -9,7 +9,7 @@ import {
   RightCardTopWrap,
   RightCardMiddleWrap,
   RightCardBottomWrap,
-} from "../styles/home";
+} from "styles/home";
 
 const userInfo = {
   address: "firma1nssuz67am2uwc2hjgvphg0fmj3k9l6cx65ux9u",

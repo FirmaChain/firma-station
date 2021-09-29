@@ -1,9 +1,9 @@
 import { bindActionCreators } from "redux";
 
-import * as statusAction from "./actions/statusAction";
+import * as modalAction from "./actions/modalAction";
 
 import store from "./store";
 
 const { dispatch } = store;
 
-export const StatusAction = bindActionCreators(statusAction, dispatch);
+export const modalActions = bindActionCreators(modalAction, dispatch);

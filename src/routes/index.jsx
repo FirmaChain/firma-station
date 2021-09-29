@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import Home from "../pages/home";
-import Coming from "../pages/coming";
+import Home from "pages/home";
+import Coming from "pages/coming";
 
 const routePublic = (path, component) => ({
   path,

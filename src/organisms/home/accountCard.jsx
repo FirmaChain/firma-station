@@ -1,7 +1,7 @@
 import React from "react";
 
-import theme from "../../theme";
-import { BlankCard } from "../../components/card";
+import theme from "themes";
+import { BlankCard } from "components/card";
 import { AddressTitleTypo, CopyIconImg, UserAddressTypo, DenomTitleTypo, UserBalanceTypo } from "./styles";
 
 function AccountCard({ userInfo }) {

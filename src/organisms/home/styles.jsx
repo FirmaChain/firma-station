@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
 
 export const AddressTitleTypo = styled.div`
   color: ${({ theme }) => theme.colors.realWhite};
