@@ -27,7 +27,7 @@ export const ModalLabel = styled.div`
   width: 100%;
   height: 30px;
   line-height: 30px;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 8px;
 `;
 
@@ -86,4 +86,17 @@ export const NextButton = styled.div`
   background-color: #3550de;
   border-radius: 4px;
   cursor: pointer;
+`;
+
+export const CreateButton = styled.div`
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  margin: 10px auto 0 auto;
+  color: white;
+  background-color: #3550de;
+  border-radius: 4px;
+  cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
 `;

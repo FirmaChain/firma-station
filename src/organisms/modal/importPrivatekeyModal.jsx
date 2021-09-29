@@ -15,15 +15,15 @@ import {
 } from "./styles";
 
 function ImportPrivatekeyModal() {
-  const importPrivatekeyModalState = useSelector((state) => state.modal.importPrivatekeyModal);
+  const importPrivatekeyModalState = useSelector((state) => state.modal.importPrivatekey);
 
   const closeImportPrivatekeyModal = () => {
-    modalActions.handleImportPrivatekeyModal(false);
+    modalActions.handleModalImportPrivatekey(false);
   };
 
   const prevModal = () => {
     closeImportPrivatekeyModal();
-    modalActions.handleLoginModal(true);
+    modalActions.handleModalLogin(true);
   };
 
   return (

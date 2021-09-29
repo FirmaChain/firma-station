@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import theme from "themes";
 import { AccountCard, AssetCard, StakingCard, ChainCard, HistoryCard } from "organisms/home";
 import {
@@ -10,24 +11,6 @@ import {
   RightCardMiddleWrap,
   RightCardBottomWrap,
 } from "styles/home";
-
-const userInfo = {
-  address: "firma1nssuz67am2uwc2hjgvphg0fmj3k9l6cx65ux9u",
-  denom: "FCT",
-  balance: "10010",
-};
-
-const assetData = {
-  columns: [
-    { name: "Name", align: "center" },
-    { name: "Balances", align: "center" },
-  ],
-  data: [
-    ["FCT", 10010],
-    ["NFT [#300]", 1],
-    ["NFT [#301]", 1],
-  ],
-};
 
 const historyData = {
   columns: [
@@ -67,12 +50,26 @@ const chainData = [
 ];
 
 function Home() {
+  const { address, balance } = useSelector((state) => state.wallet);
+
   return (
     <ContentContainer>
       <CardWrap>
         <LeftCardWrap>
-          <AccountCard userInfo={userInfo} />
-          <AssetCard assetData={assetData} />
+          <AccountCard accountInfo={{ address, denom: "FCT", balance }} />
+          <AssetCard
+            assetData={{
+              columns: [
+                { name: "Name", align: "center" },
+                { name: "Balances", align: "center" },
+              ],
+              data: [
+                ["FCT", balance],
+                ["NFT [#300]", 1],
+                ["NFT [#301]", 1],
+              ],
+            }}
+          />
         </LeftCardWrap>
         <RightCardWrap>
           <RightCardTopWrap>

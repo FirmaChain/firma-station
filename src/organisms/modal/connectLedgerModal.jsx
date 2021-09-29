@@ -7,15 +7,15 @@ import { modalActions } from "redux/action";
 import { ModalContainer, ModalTitle, ModalContent, ModalLabel, ModalInput, NextButton } from "./styles";
 
 function ConnectLedgerModal() {
-  const connectLedgerModalState = useSelector((state) => state.modal.connectLedgerModal);
+  const connectLedgerModalState = useSelector((state) => state.modal.connectLedger);
 
   const closeConnectLedgerModal = () => {
-    modalActions.handleConnectLedgerModal(false);
+    modalActions.handleModalConnectLedger(false);
   };
 
   const prevModal = () => {
     closeConnectLedgerModal();
-    modalActions.handleLoginModal(true);
+    modalActions.handleModalLogin(true);
   };
 
   return (

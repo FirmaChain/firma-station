@@ -17,6 +17,7 @@ export const MenuItem = styled.div`
   height: 26px;
   line-height: 26px;
   margin: 24px 0;
+  cursor: pointer;
   padding: 3px 10px 1px 10px;
   color: ${({ theme }) => theme.colors.defaultFont};
   font-size: ${({ theme }) => theme.sizes.headerContent};

@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
+
+import useFirma from "utils/firma";
 
 import {
   ModalContainer,
@@ -18,16 +20,29 @@ import {
 } from "./styles";
 
 function NewWalletModal() {
-  const newWalletModalState = useSelector((state) => state.modal.newWalletModal);
+  const newWalletModalState = useSelector((state) => state.modal.newWallet);
+  const { mnemonic, privateKey, address } = useSelector((state) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
+  const { generateWallet } = useFirma();
+
+  useEffect(() => {
+    if (newWalletModalState) {
+      generateWallet();
+    }
+  }, [newWalletModalState]);
 
   const closeNewWalletModal = () => {
-    modalActions.handleNewWalletModal(false);
+    modalActions.handleModalNewWallet(false);
   };
 
-  const prevModal = async () => {
+  const openConfirmModal = () => {
     closeNewWalletModal();
-    modalActions.handleLoginModal(true);
+    modalActions.handleModalConfirmWallet(true);
+  };
+
+  const prevModal = () => {
+    closeNewWalletModal();
+    modalActions.handleModalLogin(true);
   };
 
   return (
@@ -37,7 +52,7 @@ function NewWalletModal() {
       maskClosable={true}
       onClose={closeNewWalletModal}
       prev={prevModal}
-      width={"600px"}
+      width={"650px"}
     >
       <ModalContainer>
         <ModalTitle>New Wallet</ModalTitle>
@@ -53,19 +68,19 @@ function NewWalletModal() {
               }}
             />
             <MnemonicContainter>
-              {/* {sampleMnemonic.map((data, index) => ( */}
-              <Mnemonic>{"TEST"}</Mnemonic>
-              {/* ))} */}
+              {mnemonic.split(" ").map((data, index) => (
+                <Mnemonic key={index}>{data}</Mnemonic>
+              ))}
             </MnemonicContainter>
           </ModalInput>
 
           <ModalLabel>Private Key</ModalLabel>
-          <ModalInput>0x13a408e48871ccde7c587f7e7dc2e7e62f772025fa47bc611c321fe75f3a7c9f</ModalInput>
+          <ModalInput>{privateKey}</ModalInput>
 
           <ModalLabel>Address</ModalLabel>
-          <ModalInput>firma10mncyt5t9e2l8zavssfdqyvs0uw4wu069fpuew</ModalInput>
+          <ModalInput>{address}</ModalInput>
 
-          <NextButton onClick={() => closeNewWalletModal()}>Next</NextButton>
+          <NextButton onClick={() => openConfirmModal()}>NEXT</NextButton>
         </ModalContent>
       </ModalContainer>
     </Modal>

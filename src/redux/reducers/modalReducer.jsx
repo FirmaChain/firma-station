@@ -1,50 +1,58 @@
 import { handleActions } from "redux-actions";
 import {
-  HANDLE_LOGIN_MODAL,
-  HANDLE_NEWWALLET_MODAL,
-  HANDLE_RECOVERMNEMONIC_MODAL,
-  HANDLE_IMPORTPRIVATEKEY_MODAL,
-  HANDLE_CONNECTLEDGER_MODAL,
+  HANDLE_MODAL_LOGIN,
+  HANDLE_MODAL_NEWWALLET,
+  HANDLE_MODAL_CONFIRMWALLET,
+  HANDLE_MODAL_RECOVERMNEMONIC,
+  HANDLE_MODAL_IMPORTPRIVATEKEY,
+  HANDLE_MODAL_CONNECTLEDGER,
 } from "../types";
 
 const initialState = {
-  loginModal: false,
-  newWalletModal: false,
-  recoverMnemonicModal: false,
-  importPrivatekeyModal: false,
-  connectLedgerModal: false,
+  login: false,
+  newWallet: false,
+  confirmWallet: false,
+  recoverMnemonic: false,
+  importPrivatekey: false,
+  connectLedger: false,
 };
 
 export default handleActions(
   {
-    [HANDLE_LOGIN_MODAL]: (state, { isVisible }) => {
+    [HANDLE_MODAL_LOGIN]: (state, { isVisible }) => {
       return {
         ...state,
-        loginModal: isVisible,
+        login: isVisible,
       };
     },
-    [HANDLE_NEWWALLET_MODAL]: (state, { isVisible }) => {
+    [HANDLE_MODAL_NEWWALLET]: (state, { isVisible }) => {
       return {
         ...state,
-        newWalletModal: isVisible,
+        newWallet: isVisible,
       };
     },
-    [HANDLE_RECOVERMNEMONIC_MODAL]: (state, { isVisible }) => {
+    [HANDLE_MODAL_CONFIRMWALLET]: (state, { isVisible }) => {
       return {
         ...state,
-        recoverMnemonicModal: isVisible,
+        confirmWallet: isVisible,
       };
     },
-    [HANDLE_IMPORTPRIVATEKEY_MODAL]: (state, { isVisible }) => {
+    [HANDLE_MODAL_RECOVERMNEMONIC]: (state, { isVisible }) => {
       return {
         ...state,
-        importPrivatekeyModal: isVisible,
+        recoverMnemonic: isVisible,
       };
     },
-    [HANDLE_CONNECTLEDGER_MODAL]: (state, { isVisible }) => {
+    [HANDLE_MODAL_IMPORTPRIVATEKEY]: (state, { isVisible }) => {
       return {
         ...state,
-        connectLedgerModal: isVisible,
+        importPrivatekey: isVisible,
+      };
+    },
+    [HANDLE_MODAL_CONNECTLEDGER]: (state, { isVisible }) => {
+      return {
+        ...state,
+        connectLedger: isVisible,
       };
     },
   },

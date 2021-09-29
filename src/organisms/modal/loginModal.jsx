@@ -11,10 +11,10 @@ import ImportPrivateKeyIcon from "@mui/icons-material/ImportExport";
 import ConnectLedgerIcon from "@mui/icons-material/Usb";
 
 const menuList = [
-  { name: "New\nWallet", icon: NewWalletIcon, modalAction: modalActions.handleNewWalletModal },
-  { name: "Recover from Mnemonic", icon: RecoverMnemonicIcon, modalAction: modalActions.handleRecoverMnemonicModal },
-  { name: "Import\nPrivate Key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleImportPrivatekeyModal },
-  { name: "Connection to Ledger", icon: ConnectLedgerIcon, modalAction: modalActions.handleConnectLedgerModal },
+  { name: "New\nWallet", icon: NewWalletIcon, modalAction: modalActions.handleModalNewWallet },
+  { name: "Recover from Mnemonic", icon: RecoverMnemonicIcon, modalAction: modalActions.handleModalRecoverMnemonic },
+  { name: "Import\nPrivate Key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalImportPrivatekey },
+  { name: "Connection to Ledger", icon: ConnectLedgerIcon, modalAction: modalActions.handleModalConnectLedger },
 ];
 
 const MenuListWrap = styled.div`
@@ -52,10 +52,10 @@ const MenuIconImg = styled.div`
 `;
 
 function LoginModal() {
-  const loginModalState = useSelector((state) => state.modal.loginModal);
+  const loginModalState = useSelector((state) => state.modal.login);
 
   const closeLoginModal = () => {
-    modalActions.handleLoginModal(false);
+    modalActions.handleModalLogin(false);
   };
 
   const openSubModal = (modalAction) => {

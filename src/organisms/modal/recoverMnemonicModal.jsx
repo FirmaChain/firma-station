@@ -15,15 +15,17 @@ import {
 } from "./styles";
 
 function RecoverMnemonicModal() {
-  const recoverMnemonicModalState = useSelector((state) => state.modal.recoverMnemonicModal);
+  const recoverMnemonicModalState = useSelector((state) => state.modal.recoverMnemonic);
+  const { mnemonic, privateKey, address } = useSelector((state) => state.wallet);
+  // const { generateWallet } = useFirma();
 
   const closeRecoverMnemonicModal = () => {
-    modalActions.handleRecoverMnemonicModal(false);
+    modalActions.handleModalRecoverMnemonic(false);
   };
 
   const prevModal = () => {
     closeRecoverMnemonicModal();
-    modalActions.handleLoginModal(true);
+    modalActions.handleModalLogin(true);
   };
 
   return (

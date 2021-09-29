@@ -1,13 +1,15 @@
 import {
-  HANDLE_LOGIN_MODAL,
-  HANDLE_NEWWALLET_MODAL,
-  HANDLE_RECOVERMNEMONIC_MODAL,
-  HANDLE_IMPORTPRIVATEKEY_MODAL,
-  HANDLE_CONNECTLEDGER_MODAL,
+  HANDLE_MODAL_LOGIN,
+  HANDLE_MODAL_NEWWALLET,
+  HANDLE_MODAL_CONFIRMWALLET,
+  HANDLE_MODAL_RECOVERMNEMONIC,
+  HANDLE_MODAL_IMPORTPRIVATEKEY,
+  HANDLE_MODAL_CONNECTLEDGER,
 } from "../types";
 
-export const handleLoginModal = (isVisible) => ({ type: HANDLE_LOGIN_MODAL, isVisible });
-export const handleNewWalletModal = (isVisible) => ({ type: HANDLE_NEWWALLET_MODAL, isVisible });
-export const handleRecoverMnemonicModal = (isVisible) => ({ type: HANDLE_RECOVERMNEMONIC_MODAL, isVisible });
-export const handleImportPrivatekeyModal = (isVisible) => ({ type: HANDLE_IMPORTPRIVATEKEY_MODAL, isVisible });
-export const handleConnectLedgerModal = (isVisible) => ({ type: HANDLE_CONNECTLEDGER_MODAL, isVisible });
+export const handleModalLogin = (isVisible) => ({ type: HANDLE_MODAL_LOGIN, isVisible });
+export const handleModalNewWallet = (isVisible) => ({ type: HANDLE_MODAL_NEWWALLET, isVisible });
+export const handleModalConfirmWallet = (isVisible) => ({ type: HANDLE_MODAL_CONFIRMWALLET, isVisible });
+export const handleModalRecoverMnemonic = (isVisible) => ({ type: HANDLE_MODAL_RECOVERMNEMONIC, isVisible });
+export const handleModalImportPrivatekey = (isVisible) => ({ type: HANDLE_MODAL_IMPORTPRIVATEKEY, isVisible });
+export const handleModalConnectLedger = (isVisible) => ({ type: HANDLE_MODAL_CONNECTLEDGER, isVisible });
