@@ -45,6 +45,24 @@ function NewWalletModal() {
     modalActions.handleModalLogin(true);
   };
 
+  const copyMnemonic = () => {
+    const textarea = document.createElement("textarea");
+    textarea.value = mnemonic;
+    textarea.style.top = 0;
+    textarea.style.left = 0;
+    textarea.style.position = "fixed";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+
+    enqueueSnackbar("Copied", {
+      variant: "success",
+      autoHideDuration: 1000,
+    });
+  };
+
   return (
     <Modal
       visible={newWalletModalState}
@@ -59,14 +77,7 @@ function NewWalletModal() {
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>
-            <CopyIcon
-              onClick={() => {
-                enqueueSnackbar("Copied", {
-                  variant: "success",
-                  autoHideDuration: 1000,
-                });
-              }}
-            />
+            <CopyIcon onClick={() => copyMnemonic()} />
             <MnemonicContainter>
               {mnemonic.split(" ").map((data, index) => (
                 <Mnemonic key={index}>{data}</Mnemonic>
