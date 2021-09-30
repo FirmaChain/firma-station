@@ -70,6 +70,7 @@
   "build": {
     "appId": "com.firmachain.wallet",
     "files": [
+      "public/**/*",
       "build/**/*",
       "node_modules/**/*"
     ],

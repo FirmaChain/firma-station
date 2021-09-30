@@ -1,6 +1,11 @@
 const { app, BrowserWindow, shell } = require("electron");
+const url = require("url");
 const electron = require("electron");
 const path = require("path");
+
+electron.app.setPath("userData", path.join(electron.app.getPath("home"), ".firma-station"));
+
+const loadUrlPath = process.platform === "darwin" ? "./build/index.html" : `file://${__dirname}/../build/index.html`;
 
 function initialize() {
   function createWindow() {
@@ -26,7 +31,13 @@ function initialize() {
     };
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.setMenu(null);
-    mainWindow.loadURL("http://localhost:3000");
+    mainWindow.loadURL(
+      url.format({
+        pathname: path.join(__dirname, "/../build/index.html"),
+        protocol: "file",
+        slashes: true,
+      })
+    );
 
     mainWindow.once("ready-to-show", () => {
       mainWindow.show();

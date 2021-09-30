@@ -46,10 +46,10 @@ const sizes = {
 };
 
 const urls = {
-  logo: "/images/white_logo.svg",
-  bgLogo: "/images/bgLogo.png",
-  fullLogo: "/images/firma_chain_title.svg",
-  qr: "/images/qr.png",
+  logo: process.env.PUBLIC_URL + "/images/white_logo.svg",
+  bgLogo: process.env.PUBLIC_URL + "/images/bgLogo.png",
+  fullLogo: process.env.PUBLIC_URL + "/images/firma_chain_title.svg",
+  qr: process.env.PUBLIC_URL + "/images/qr.png",
 };
 
 const theme = {

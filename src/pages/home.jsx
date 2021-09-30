@@ -50,26 +50,20 @@ const chainData = [
 ];
 
 const Home = () => {
-  const { address, balance, isInit } = useSelector((state) => state.wallet);
+  const { balance } = useSelector((state) => state.wallet);
 
   return (
     <ContentContainer>
       <CardWrap>
         <LeftCardWrap>
-          <AccountCard
-            accountInfo={{ address: isInit ? address : "", denom: "FCT", balance: isInit ? balance : "0" }}
-          />
+          <AccountCard />
           <AssetCard
             assetData={{
               columns: [
                 { name: "Name", align: "center" },
                 { name: "Balances", align: "center" },
               ],
-              data: [
-                ["FCT", balance],
-                ["NFT [#300]", 1],
-                ["NFT [#301]", 1],
-              ],
+              data: [["FCT", balance]],
             }}
           />
         </LeftCardWrap>

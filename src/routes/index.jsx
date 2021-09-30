@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 
 import Home from "pages/home";
 import Coming from "pages/coming";
@@ -35,6 +35,7 @@ const route = () => (
     {Object.values(routes).map((x, i) => (
       <CustomRoute key={i} exact path={x.path} component={x.component} />
     ))}
+    <Route render={() => <Redirect to="/" />} />
   </Switch>
 );
 

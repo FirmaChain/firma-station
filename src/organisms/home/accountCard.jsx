@@ -1,14 +1,17 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import theme from "themes";
 import { BlankCard } from "components/card";
 import { AddressTitleTypo, CopyIconImg, UserAddressTypo, DenomTitleTypo, UserBalanceTypo } from "./styles";
 
-const AccountCard = ({ accountInfo }) => {
+const AccountCard = ({}) => {
+  const { address, balance, isInit } = useSelector((state) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
+
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(accountInfo.address);
+    navigator.clipboard.writeText(address);
 
     enqueueSnackbar("Copied", {
       variant: "success",
@@ -20,9 +23,9 @@ const AccountCard = ({ accountInfo }) => {
     <BlankCard bgColor={theme.colors.mainblue} height="168px" backgroundLogo={true}>
       <AddressTitleTypo>Address</AddressTitleTypo>
       <CopyIconImg onClick={copyToClipboard} />
-      <UserAddressTypo>{accountInfo.address}</UserAddressTypo>
-      <DenomTitleTypo>{accountInfo.denom}</DenomTitleTypo>
-      <UserBalanceTypo>{`${accountInfo.balance} ${accountInfo.denom}`}</UserBalanceTypo>
+      <UserAddressTypo>{address}</UserAddressTypo>
+      <DenomTitleTypo>{"FCT"}</DenomTitleTypo>
+      <UserBalanceTypo>{`${balance} ${"FCT"}`}</UserBalanceTypo>
     </BlankCard>
   );
 };
