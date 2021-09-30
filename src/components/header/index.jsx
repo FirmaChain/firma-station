@@ -16,12 +16,12 @@ function Header() {
   const { isInit } = useSelector((state) => state.wallet);
   const { resetWallet } = useFirma();
 
-  function login() {
+  const login = () => {
     modalActions.handleModalLogin(true);
-  }
-  function logout() {
+  };
+  const logout = () => {
     resetWallet();
-  }
+  };
 
   return (
     <HeaderContainer>

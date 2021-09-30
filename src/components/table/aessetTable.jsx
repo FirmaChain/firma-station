@@ -9,7 +9,7 @@ import {
   TableRowStyled,
 } from "./styles";
 
-function AessetTable({ columns, assets, size }) {
+const AessetTable = ({ columns, assets, size }) => {
   return (
     <TableContainerStyled elevation={0}>
       <TableStyled size={size}>
@@ -36,6 +36,6 @@ function AessetTable({ columns, assets, size }) {
       </TableStyled>
     </TableContainerStyled>
   );
-}
+};
 
 export default AessetTable;

@@ -4,7 +4,7 @@ import theme from "themes";
 import { BlankCard } from "components/card";
 import { AddressTitleTypo, CopyIconImg, UserAddressTypo, DenomTitleTypo, UserBalanceTypo } from "./styles";
 
-function AccountCard({ accountInfo }) {
+const AccountCard = ({ accountInfo }) => {
   return (
     <BlankCard bgColor={theme.colors.mainblue} height="168px" backgroundLogo={true}>
       <AddressTitleTypo>Address</AddressTitleTypo>
@@ -14,6 +14,6 @@ function AccountCard({ accountInfo }) {
       <UserBalanceTypo>{`${accountInfo.balance} ${accountInfo.denom}`}</UserBalanceTypo>
     </BlankCard>
   );
-}
+};
 
 export default AccountCard;

@@ -5,7 +5,7 @@ import theme from "themes";
 import { BlankCard } from "components/card";
 import { StakingWrap, StakingTextWrap, StakingTitleTypo, StakingContentTypo } from "./styles";
 
-function StakingCard({ stakingData }) {
+const StakingCard = ({ stakingData }) => {
   return (
     <BlankCard bgColor={theme.colors.backgroundSideBar} height="168px" flex="2.08">
       <PieChart width={140} height={140} style={{ float: "left" }}>
@@ -25,6 +25,6 @@ function StakingCard({ stakingData }) {
       </StakingWrap>
     </BlankCard>
   );
-}
+};
 
 export default StakingCard;

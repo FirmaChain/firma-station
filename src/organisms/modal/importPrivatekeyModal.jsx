@@ -5,6 +5,7 @@ import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
 import {
+  importPrivateKeyModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -14,7 +15,7 @@ import {
   NextButton,
 } from "./styles";
 
-function ImportPrivatekeyModal() {
+const ImportPrivatekeyModal = () => {
   const importPrivatekeyModalState = useSelector((state) => state.modal.importPrivatekey);
 
   const closeImportPrivatekeyModal = () => {
@@ -33,7 +34,7 @@ function ImportPrivatekeyModal() {
       maskClosable={true}
       onClose={closeImportPrivatekeyModal}
       prev={prevModal}
-      width={"600px"}
+      width={importPrivateKeyModalWidth}
     >
       <ModalContainer>
         <ModalTitle>Import Private Key</ModalTitle>
@@ -47,6 +48,6 @@ function ImportPrivatekeyModal() {
       </ModalContainer>
     </Modal>
   );
-}
+};
 
 export default ImportPrivatekeyModal;

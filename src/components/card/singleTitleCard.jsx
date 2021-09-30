@@ -2,7 +2,7 @@ import React from "react";
 
 import { SingleTitleCardStyled, SingleTitleCardContentStyled, SingleTitleTypo, SingleContentType } from "./styles";
 
-function SingleTitleCard({ title, content, background, height = "auto" }) {
+const SingleTitleCard = ({ title, content, background, height = "auto" }) => {
   return (
     <SingleTitleCardStyled $height={height} elevation={0}>
       <SingleTitleCardContentStyled $height={height} $background={background}>
@@ -11,6 +11,6 @@ function SingleTitleCard({ title, content, background, height = "auto" }) {
       </SingleTitleCardContentStyled>
     </SingleTitleCardStyled>
   );
-}
+};
 
 export default SingleTitleCard;

@@ -4,9 +4,17 @@ import { useSelector } from "react-redux";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import { ModalContainer, ModalTitle, ModalContent, ModalLabel, ModalInput, NextButton } from "./styles";
+import {
+  connectLedgerModalWidth,
+  ModalContainer,
+  ModalTitle,
+  ModalContent,
+  ModalLabel,
+  ModalInput,
+  NextButton,
+} from "./styles";
 
-function ConnectLedgerModal() {
+const ConnectLedgerModal = () => {
   const connectLedgerModalState = useSelector((state) => state.modal.connectLedger);
 
   const closeConnectLedgerModal = () => {
@@ -25,18 +33,18 @@ function ConnectLedgerModal() {
       maskClosable={true}
       onClose={closeConnectLedgerModal}
       prev={prevModal}
-      width={"600px"}
+      width={connectLedgerModalWidth}
     >
       <ModalContainer>
         <ModalTitle>Connecting to Ledger</ModalTitle>
         <ModalContent>
-          <ModalLabel>USB</ModalLabel>
+          <ModalLabel></ModalLabel>
           <ModalInput></ModalInput>
           <NextButton onClick={() => closeConnectLedgerModal()}>Connect</NextButton>
         </ModalContent>
       </ModalContainer>
     </Modal>
   );
-}
+};
 
 export default ConnectLedgerModal;

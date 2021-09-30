@@ -49,7 +49,7 @@ const chainData = [
   { title: "Inflation", content: "13.56 %", bgColor: theme.colors.backgroundSideBar },
 ];
 
-function Home() {
+const Home = () => {
   const { address, balance, isInit } = useSelector((state) => state.wallet);
 
   return (
@@ -87,6 +87,6 @@ function Home() {
       </CardWrap>
     </ContentContainer>
   );
-}
+};
 
 export default React.memo(Home);

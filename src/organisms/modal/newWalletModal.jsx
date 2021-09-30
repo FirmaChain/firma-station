@@ -8,6 +8,7 @@ import { modalActions } from "redux/action";
 import useFirma from "utils/firma";
 
 import {
+  newWalletModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -19,7 +20,7 @@ import {
   NextButton,
 } from "./styles";
 
-function NewWalletModal() {
+const NewWalletModal = () => {
   const newWalletModalState = useSelector((state) => state.modal.newWallet);
   const { mnemonic, privateKey, address } = useSelector((state) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
@@ -45,17 +46,8 @@ function NewWalletModal() {
     modalActions.handleModalLogin(true);
   };
 
-  const copyMnemonic = () => {
-    const textarea = document.createElement("textarea");
-    textarea.value = mnemonic;
-    textarea.style.top = 0;
-    textarea.style.left = 0;
-    textarea.style.position = "fixed";
-    document.body.appendChild(textarea);
-    textarea.focus();
-    textarea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textarea);
+  const copyToClipboard = (value) => {
+    navigator.clipboard.writeText(value);
 
     enqueueSnackbar("Copied", {
       variant: "success",
@@ -70,14 +62,14 @@ function NewWalletModal() {
       maskClosable={true}
       onClose={closeNewWalletModal}
       prev={prevModal}
-      width={"650px"}
+      width={newWalletModalWidth}
     >
       <ModalContainer>
         <ModalTitle>New Wallet</ModalTitle>
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>
-            <CopyIcon onClick={() => copyMnemonic()} />
+            <CopyIcon onClick={() => copyToClipboard(mnemonic)} />
             <MnemonicContainter>
               {mnemonic.split(" ").map((data, index) => (
                 <Mnemonic key={index}>{data}</Mnemonic>
@@ -86,7 +78,10 @@ function NewWalletModal() {
           </ModalInput>
 
           <ModalLabel>Private Key</ModalLabel>
-          <ModalInput>{privateKey}</ModalInput>
+          <ModalInput>
+            <CopyIcon onClick={() => copyToClipboard(privateKey)} />
+            {privateKey}
+          </ModalInput>
 
           <ModalLabel>Address</ModalLabel>
           <ModalInput>{address}</ModalInput>
@@ -96,6 +91,6 @@ function NewWalletModal() {
       </ModalContainer>
     </Modal>
   );
-}
+};
 
 export default NewWalletModal;

@@ -12,48 +12,48 @@ function useFirma() {
     setFirmaSDK(new FirmaSDK(FirmaConfig.DevNetConfig));
   }, []);
 
-  async function generateWallet() {
+  const generateWallet = async () => {
     setWalletState(await firmaSDK.Wallet.newWallet());
-  }
+  };
 
-  async function recoverWalletFromMnemonic(mnemonic) {
+  const recoverWalletFromMnemonic = async (mnemonic) => {
     setWalletState(await firmaSDK.Wallet.fromMnemonic(mnemonic, 0));
-  }
+  };
 
-  async function recoverWalletFromPrivateKey(privateKey) {
+  const recoverWalletFromPrivateKey = async (privateKey) => {
     setWalletState(await firmaSDK.Wallet.fromPrivateKey(privateKey));
-  }
+  };
 
-  async function resetWallet() {
+  const resetWallet = async () => {
     walletActions.handleWalletMnemonic("");
     walletActions.handleWalletPrivateKey("");
     walletActions.handleWalletAddress("");
     walletActions.handleWalletBalance(0);
     walletActions.handleWalletInit(false);
-  }
+  };
 
-  function initWallet() {
+  const initWallet = () => {
     walletActions.handleWalletInit(true);
-  }
+  };
 
-  async function setWalletState(wallet) {
+  const setWalletState = async (wallet) => {
     walletActions.handleWalletMnemonic(await wallet.getMnemonic());
     walletActions.handleWalletPrivateKey(await wallet.getPrivateKey());
     walletActions.handleWalletAddress(await wallet.getAddress());
     walletActions.handleWalletBalance(Number(await firmaSDK.Bank.getBalance(await wallet.getAddress())));
-  }
+  };
 
-  async function sendFCT(address, amount, memo) {
+  const sendFCT = async (address, amount, memo) => {
     if (!isInit) return;
 
     const wallet = await firmaSDK.Wallet.fromPrivateKey(privateKey);
     const sendResult = await firmaSDK.Wallet.send(wallet, address, Number(amount), new TxMisc(memo));
     return sendResult;
-  }
+  };
 
-  function convertToFct(uFctAmount) {
+  const convertToFct = (uFctAmount) => {
     return (Number(uFctAmount) / 1000000).toString();
-  }
+  };
 
   return {
     generateWallet,

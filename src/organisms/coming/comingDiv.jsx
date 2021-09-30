@@ -2,13 +2,13 @@ import React from "react";
 
 import { BackgroundImg, ComingTextTypo } from "./styles";
 
-function ComingDiv() {
+const ComingDiv = () => {
   return (
     <>
       <BackgroundImg />
       <ComingTextTypo>Under Development</ComingTextTypo>
     </>
   );
-}
+};
 
 export default ComingDiv;

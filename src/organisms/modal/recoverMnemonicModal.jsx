@@ -5,6 +5,7 @@ import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
 import {
+  recoverMnemonicModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -14,9 +15,9 @@ import {
   NextButton,
 } from "./styles";
 
-function RecoverMnemonicModal() {
+const RecoverMnemonicModal = () => {
   const recoverMnemonicModalState = useSelector((state) => state.modal.recoverMnemonic);
-  const { mnemonic, privateKey, address } = useSelector((state) => state.wallet);
+  // const { mnemonic, privateKey, address } = useSelector((state) => state.wallet);
   // const { generateWallet } = useFirma();
 
   const closeRecoverMnemonicModal = () => {
@@ -35,7 +36,7 @@ function RecoverMnemonicModal() {
       maskClosable={true}
       onClose={closeRecoverMnemonicModal}
       prev={prevModal}
-      width={"600px"}
+      width={recoverMnemonicModalWidth}
     >
       <ModalContainer>
         <ModalTitle>Recover from Mnemonic</ModalTitle>
@@ -49,6 +50,6 @@ function RecoverMnemonicModal() {
       </ModalContainer>
     </Modal>
   );
-}
+};
 
 export default RecoverMnemonicModal;
