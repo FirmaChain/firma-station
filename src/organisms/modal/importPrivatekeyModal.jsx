@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
@@ -24,6 +24,8 @@ const ImportPrivatekeyModal = () => {
   const [inputWords, setInputWords] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const { resetWallet, initWallet, recoverWalletFromPrivateKey } = useFirma();
+
+  const inputRef = useRef();
 
   const importWallet = () => {
     recoverWalletFromPrivateKey(inputWords)
@@ -55,6 +57,7 @@ const ImportPrivatekeyModal = () => {
   };
 
   const closeModal = () => {
+    inputRef.current.value = "";
     activeImportButton(false);
     setInputWords("");
     modalActions.handleModalImportPrivatekey(false);
@@ -69,7 +72,7 @@ const ImportPrivatekeyModal = () => {
     e.target.value = e.target.value.replace(/[^A-Za-z0-9]/gi, "");
 
     const checkValue = e.target.value.replace(/ +/g, " ").replace(/^\s+|\s+$/g, "");
-    activeImportButton(checkValue.length == 66);
+    activeImportButton(checkValue.length === 66);
     setInputWords(checkValue);
   };
 
@@ -87,7 +90,7 @@ const ImportPrivatekeyModal = () => {
         <ModalContent>
           <ModalLabel>Private Key</ModalLabel>
           <ModalInput>
-            <PrivatekeyTextArea onChange={checkWords} />
+            <PrivatekeyTextArea onChange={checkWords} ref={inputRef} />
           </ModalInput>
           <ImportButton
             active={isActiveImportButton}
@@ -95,7 +98,7 @@ const ImportPrivatekeyModal = () => {
               if (isActiveImportButton) importWallet();
             }}
           >
-            Import
+            IMPORT
           </ImportButton>
         </ModalContent>
       </ModalContainer>

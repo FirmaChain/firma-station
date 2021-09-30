@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
@@ -24,6 +24,8 @@ const RecoverMnemonicModal = () => {
   const [inputWords, setInputWords] = useState("");
   const { enqueueSnackbar } = useSnackbar();
   const { resetWallet, initWallet, recoverWalletFromMnemonic } = useFirma();
+
+  const inputRef = useRef();
 
   const recoverWallet = () => {
     recoverWalletFromMnemonic(inputWords)
@@ -55,6 +57,10 @@ const RecoverMnemonicModal = () => {
   };
 
   const closeModal = () => {
+    console.log(inputRef);
+    // inputRef.target.value = "";
+    inputRef.current.value = "";
+
     activeRecoverButton(false);
     setInputWords("");
     modalActions.handleModalRecoverMnemonic(false);
@@ -87,7 +93,7 @@ const RecoverMnemonicModal = () => {
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>
-            <MnemonicTextArea onChange={checkWords} />
+            <MnemonicTextArea onChange={checkWords} ref={inputRef} />
           </ModalInput>
           <RecoverButton
             active={isActiveRecoverButton}

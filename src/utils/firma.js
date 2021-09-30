@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { FirmaSDK, FirmaConfig, TxMisc } from "@firmachain/firma-js";
+import { FirmaSDK, FirmaConfig } from "@firmachain/firma-js";
 
 import { walletActions } from "redux/action";
 
@@ -40,14 +40,14 @@ function useFirma() {
     walletActions.handleWalletMnemonic(await wallet.getMnemonic());
     walletActions.handleWalletPrivateKey(await wallet.getPrivateKey());
     walletActions.handleWalletAddress(await wallet.getAddress());
-    walletActions.handleWalletBalance(Number(await firmaSDK.Bank.getBalance(await wallet.getAddress())));
+    walletActions.handleWalletBalance(convertToFct(Number(await firmaSDK.Bank.getBalance(await wallet.getAddress()))));
   };
 
   const sendFCT = async (address, amount, memo) => {
     if (!isInit) return;
 
     const wallet = await firmaSDK.Wallet.fromPrivateKey(privateKey);
-    const sendResult = await firmaSDK.Wallet.send(wallet, address, Number(amount), new TxMisc(memo));
+    const sendResult = await firmaSDK.Bank.send(wallet, address, Number(amount), { memo });
     return sendResult;
   };
 
