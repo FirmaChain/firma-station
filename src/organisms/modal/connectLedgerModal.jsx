@@ -18,12 +18,16 @@ const ConnectLedgerModal = () => {
   const connectLedgerModalState = useSelector((state) => state.modal.connectLedger);
 
   const closeConnectLedgerModal = () => {
-    modalActions.handleModalConnectLedger(false);
+    closeModal();
   };
 
   const prevModal = () => {
-    closeConnectLedgerModal();
+    closeModal();
     modalActions.handleModalLogin(true);
+  };
+
+  const closeModal = () => {
+    modalActions.handleModalConnectLedger(false);
   };
 
   return (
@@ -31,7 +35,7 @@ const ConnectLedgerModal = () => {
       visible={connectLedgerModalState}
       closable={true}
       maskClosable={true}
-      onClose={closeConnectLedgerModal}
+      onClose={closeModal}
       prev={prevModal}
       width={connectLedgerModalWidth}
     >

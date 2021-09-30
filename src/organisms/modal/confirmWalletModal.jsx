@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
@@ -24,6 +25,7 @@ import useFirma from "utils/firma";
 const ConfirmWalletModal = () => {
   const confirmWalletModalState = useSelector((state) => state.modal.confirmWallet);
   const { mnemonic } = useSelector((state) => state.wallet);
+  const { enqueueSnackbar } = useSnackbar();
   const { resetWallet, initWallet } = useFirma();
 
   const [inputTarget, setInputTarget] = useState([]);
@@ -65,25 +67,34 @@ const ConfirmWalletModal = () => {
 
       setInputTarget(inputTargetList);
       setSelectTarget(selectTargetList);
-    } else {
-      activeCreateButton(false);
-      setCurrentWordIndex(0);
     }
   }, [confirmWalletModalState]);
 
   const cancelWallet = () => {
     resetWallet();
-    modalActions.handleModalConfirmWallet(false);
+    closeModal();
   };
 
   const confirmWallet = () => {
+    enqueueSnackbar("Success Create Wallet", {
+      variant: "success",
+      autoHideDuration: 1000,
+    });
     initWallet();
-    modalActions.handleModalConfirmWallet(false);
+    closeModal();
   };
 
   const prevModal = () => {
-    modalActions.handleModalConfirmWallet(false);
+    cancelWallet();
     modalActions.handleModalLogin(true);
+  };
+
+  const closeModal = () => {
+    setInputTarget([]);
+    setSelectTarget([]);
+    setCurrentWordIndex(0);
+    activeCreateButton(false);
+    modalActions.handleModalConfirmWallet(false);
   };
 
   const putWord = (mnemonic) => {

@@ -9,7 +9,7 @@ export const loginModalWidth = "900px";
 export const newWalletModalWidth = "650px";
 export const confirmWalletModalWidth = "650px";
 export const recoverMnemonicModalWidth = "600px";
-export const importPrivateKeyModalWidth = "600px";
+export const importPrivatekeyModalWidth = "600px";
 export const connectLedgerModalWidth = "600px";
 
 export const ModalContainer = styled.div`
@@ -71,9 +71,22 @@ export const Mnemonic = styled.div`
 `;
 
 export const MnemonicTextArea = styled.textarea`
-  width: 100%;
+  width: calc(100% - 20px);
   height: 100px;
+  padding: 10px;
   resize: none;
+  font-size: 16px;
+  border-radius: 4px;
+  background-color: #1b1c22;
+  color: white;
+`;
+
+export const PrivatekeyTextArea = styled.textarea`
+  width: calc(100% - 20px);
+  height: 100px;
+  padding: 10px;
+  resize: none;
+  font-size: 16px;
   border-radius: 4px;
   background-color: #1b1c22;
   color: white;
@@ -100,6 +113,32 @@ export const NextButton = styled.div`
 `;
 
 export const CreateButton = styled.div`
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  margin: 30px auto 0 auto;
+  color: white;
+  background-color: #3550de;
+  border-radius: 4px;
+  cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+`;
+
+export const RecoverButton = styled.div`
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  margin: 30px auto 0 auto;
+  color: white;
+  background-color: #3550de;
+  border-radius: 4px;
+  cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+`;
+
+export const ImportButton = styled.div`
   width: 100px;
   height: 40px;
   line-height: 40px;

@@ -24,7 +24,7 @@ const NewWalletModal = () => {
   const newWalletModalState = useSelector((state) => state.modal.newWallet);
   const { mnemonic, privateKey, address } = useSelector((state) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
-  const { generateWallet } = useFirma();
+  const { generateWallet, resetWallet } = useFirma();
 
   useEffect(() => {
     if (newWalletModalState) {
@@ -33,17 +33,22 @@ const NewWalletModal = () => {
   }, [newWalletModalState]);
 
   const closeNewWalletModal = () => {
-    modalActions.handleModalNewWallet(false);
+    resetWallet();
+    closeModal();
   };
 
   const openConfirmModal = () => {
-    closeNewWalletModal();
+    closeModal();
     modalActions.handleModalConfirmWallet(true);
   };
 
   const prevModal = () => {
     closeNewWalletModal();
     modalActions.handleModalLogin(true);
+  };
+
+  const closeModal = () => {
+    modalActions.handleModalNewWallet(false);
   };
 
   const copyToClipboard = (value) => {
