@@ -20,7 +20,7 @@ const AccountCard = () => {
   };
 
   return (
-    <BlankCard bgColor={theme.colors.mainblue} height="168px" backgroundLogo={true}>
+    <BlankCard bgColor={theme.colors.mainblue} height="130px" backgroundLogo={true}>
       <AddressTitleTypo>Address</AddressTitleTypo>
       <CopyIconImg onClick={copyToClipboard} />
       <UserAddressTypo>{address}</UserAddressTypo>

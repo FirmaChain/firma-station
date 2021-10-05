@@ -35,9 +35,9 @@ export const RightCardWrap = styled.div`
 
 export const RightCardTopWrap = styled.div`
   width: 100%;
-  min-height: 168px;
-  max-height: 168px;
-  height: 168px;
+  min-height: 130px;
+  max-height: 130px;
+  height: 130px;
   display: flex;
   gap: 0 30px;
 `;

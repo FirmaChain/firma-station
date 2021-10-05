@@ -5,6 +5,8 @@
   "homepage": "./",
   "main": "./public/electron.js",
   "dependencies": {
+    "@apollo/client": "^3.4.16",
+    "@apollo/react-hooks": "^4.0.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@firmachain/firma-js": "^0.2.0",
@@ -14,7 +16,9 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "apollo-boost": "^0.4.9",
     "electron-is-dev": "^2.0.0",
+    "graphql": "^15.6.0",
     "i18next": "^20.6.1",
     "notistack": "^2.0.2",
     "react": "^17.0.2",

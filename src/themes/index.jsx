@@ -35,7 +35,7 @@ const sizes = {
   singleCardContent: "32px",
   footerContent: "12px",
   headerContent: "13px",
-  accountCardSize1: "20px",
+  accountCardSize1: "18px",
   accountCardSize2: "11px",
   accountCardSize3: "16px",
   stakingCardSize1: "16px",

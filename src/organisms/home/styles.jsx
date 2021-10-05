@@ -3,15 +3,14 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 
 export const AddressTitleTypo = styled.div`
   color: ${({ theme }) => theme.colors.realWhite};
-  height: 35px;
-  line-height: 35px;
+  height: 30px;
+  line-height: 30px;
   font-size: ${({ theme }) => theme.sizes.accountCardSize1};
   margin-right: 6px;
   float: left;
 `;
 
 export const UserAddressTypo = styled.div`
-  margin-top: 5px;
   width: 100%;
   height: 30px;
   line-height: 30px;
@@ -24,7 +23,7 @@ export const UserBalanceTypo = styled.div`
   height: 20px;
   line-height: 20px;
   width: 100%;
-  margin-top: 46px;
+  margin-top: 20px;
   font-size: ${({ theme }) => theme.sizes.accountCardSize1};
   float: left;
   text-align: left;
@@ -33,10 +32,7 @@ export const UserBalanceTypo = styled.div`
 `;
 
 export const CopyIconImg = styled(FileCopyIcon)`
-  height: 35px;
-  line-height: 35px;
-  margin-top: 3px;
-  font-size: 20px;
+  margin-top: 2px;
   float: left;
   cursor: pointer;
   color: ${({ theme }) => theme.colors.realWhite};
