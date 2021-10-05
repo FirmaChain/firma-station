@@ -20,23 +20,11 @@ export const UserAddressTypo = styled.div`
   float: left;
 `;
 
-export const DenomTitleTypo = styled.div`
-  height: 20px;
-  line-height: 20px;
-  margin-top: 18px;
-  margin-bottom: 4px;
-  width: 100%;
-  font-size: ${({ theme }) => theme.sizes.accountCardSize3};
-  float: left;
-  text-align: left;
-  color: ${({ theme }) => theme.colors.realWhite};
-  font-weight: 400;
-`;
-
 export const UserBalanceTypo = styled.div`
   height: 20px;
   line-height: 20px;
   width: 100%;
+  margin-top: 46px;
   font-size: ${({ theme }) => theme.sizes.accountCardSize1};
   float: left;
   text-align: left;

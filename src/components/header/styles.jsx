@@ -7,13 +7,51 @@ export const HeaderContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
 `;
 
-export const MenuList = styled.div`
+export const HeaderRightWrapper = styled.div`
   height: 100%;
   display: inline-flex;
   justify-content: flex-end;
   float: right;
 `;
-export const MenuItem = styled.div`
+
+export const NetworkButton = styled.div`
+  height: 26px;
+  line-height: 26px;
+  margin: 24px 0;
+  margin-right: 12px;
+  cursor: pointer;
+  padding: 3px 10px 1px 10px;
+`;
+
+export const NetworkStatus = styled.div`
+  width: 13px;
+  height: 13px;
+  margin: 5px 8px;
+  border-radius: 13px;
+  background-color: ${({ theme }) => theme.colors.maingreen};
+  float: left;
+`;
+
+export const NetworkText = styled.div`
+  float: left;
+  color: ${({ theme }) => theme.colors.defaultFont};
+  font-size: ${({ theme }) => theme.sizes.headerContent};
+`;
+
+export const FaucetButton = styled.div`
+  height: 26px;
+  line-height: 26px;
+  margin: 24px 10px 24px 0;
+  cursor: pointer;
+  padding: 3px 10px 1px 10px;
+  color: ${({ theme }) => theme.colors.defaultFont};
+  font-size: ${({ theme }) => theme.sizes.headerContent};
+  background-color: ${({ theme }) => theme.colors.buttonBackground};
+  border: 1px solid ${({ theme }) => theme.colors.buttonBorder};
+  border-radius: 4px;
+`;
+
+export const LoginoutButton = styled.div`
   height: 26px;
   line-height: 26px;
   margin: 24px 0;
@@ -21,28 +59,12 @@ export const MenuItem = styled.div`
   padding: 3px 10px 1px 10px;
   color: ${({ theme }) => theme.colors.defaultFont};
   font-size: ${({ theme }) => theme.sizes.headerContent};
-
-  &:nth-child(1) {
-    margin-right: 12px;
-  }
-
-  &:nth-child(2) {
-    background-color: ${({ theme }) => theme.colors.buttonBackground};
-    border: 1px solid ${({ theme }) => theme.colors.buttonBorder};
-    border-radius: 4px;
-  }
+  background-color: ${({ theme }) => theme.colors.buttonBackground};
+  border: 1px solid ${({ theme }) => theme.colors.buttonBorder};
+  border-radius: 4px;
 `;
 
-export const Badge = styled.div`
-  width: 13px;
-  height: 13px;
-  margin: 5px 8px;
-  border-radius: 13px;
-  background-color: ${({ theme }) => theme.colors.mainGreen};
-  float: left;
-`;
-
-export const QrWapper = styled.div`
+export const HeaderLeftWrapper = styled.div`
   float: left;
   display: inline-block;
   margin-top: 35px;

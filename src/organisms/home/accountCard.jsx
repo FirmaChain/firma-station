@@ -4,10 +4,10 @@ import { useSnackbar } from "notistack";
 
 import theme from "themes";
 import { BlankCard } from "components/card";
-import { AddressTitleTypo, CopyIconImg, UserAddressTypo, DenomTitleTypo, UserBalanceTypo } from "./styles";
+import { AddressTitleTypo, CopyIconImg, UserAddressTypo, UserBalanceTypo } from "./styles";
 
-const AccountCard = ({}) => {
-  const { address, balance, isInit } = useSelector((state) => state.wallet);
+const AccountCard = () => {
+  const { address, balance } = useSelector((state) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const copyToClipboard = () => {
@@ -24,7 +24,6 @@ const AccountCard = ({}) => {
       <AddressTitleTypo>Address</AddressTitleTypo>
       <CopyIconImg onClick={copyToClipboard} />
       <UserAddressTypo>{address}</UserAddressTypo>
-      <DenomTitleTypo>{"FCT"}</DenomTitleTypo>
       <UserBalanceTypo>{`${balance} ${"FCT"}`}</UserBalanceTypo>
     </BlankCard>
   );

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FirmaSDK, FirmaConfig } from "@firmachain/firma-js";
 
-import { walletActions } from "redux/action";
+import { walletActions, nftActions } from "redux/action";
 
 function useFirma() {
   const [firmaSDK, setFirmaSDK] = useState(null);
@@ -30,6 +30,8 @@ function useFirma() {
     walletActions.handleWalletAddress("");
     walletActions.handleWalletBalance(0);
     walletActions.handleWalletInit(false);
+
+    nftActions.handleNFTList([]);
   };
 
   const initWallet = () => {
@@ -39,8 +41,11 @@ function useFirma() {
   const setWalletState = async (wallet) => {
     walletActions.handleWalletMnemonic(await wallet.getMnemonic());
     walletActions.handleWalletPrivateKey(await wallet.getPrivateKey());
-    walletActions.handleWalletAddress(await wallet.getAddress());
-    walletActions.handleWalletBalance(convertToFct(Number(await firmaSDK.Bank.getBalance(await wallet.getAddress()))));
+
+    const address = await wallet.getAddress();
+    walletActions.handleWalletAddress(address);
+    walletActions.handleWalletBalance(convertToFct(await firmaSDK.Bank.getBalance(address)));
+    nftActions.handleNFTList(convertNFTList(await firmaSDK.Nft.getNftItemAllFromAddress(address)));
   };
 
   const sendFCT = async (address, amount, memo) => {
@@ -53,6 +58,10 @@ function useFirma() {
 
   const convertToFct = (uFctAmount) => {
     return (Number(uFctAmount) / 1000000).toString();
+  };
+
+  const convertNFTList = (nftResponse) => {
+    return nftResponse.dataList;
   };
 
   return {

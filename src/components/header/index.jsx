@@ -1,6 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { HeaderContainer, MenuList, MenuItem, Badge, QrWapper, QrImage, QrText } from "./styles";
+import {
+  HeaderContainer,
+  HeaderRightWrapper,
+  HeaderLeftWrapper,
+  NetworkButton,
+  FaucetButton,
+  LoginoutButton,
+  NetworkText,
+  NetworkStatus,
+  QrImage,
+  QrText,
+} from "./styles";
 import {
   LoginModal,
   NewWalletModal,
@@ -25,17 +36,30 @@ function Header() {
 
   return (
     <HeaderContainer>
-      <QrWapper>
+      <HeaderLeftWrapper>
         <QrImage />
         <QrText>Export QR Code</QrText>
-      </QrWapper>
-      <MenuList>
-        <MenuItem>
-          <Badge />
-          IMPERIUM-2
-        </MenuItem>
-        {isInit ? <MenuItem onClick={logout}>LOGOUT</MenuItem> : <MenuItem onClick={login}>LOGIN</MenuItem>}
-      </MenuList>
+      </HeaderLeftWrapper>
+      <HeaderRightWrapper>
+        <NetworkButton>
+          <NetworkStatus />
+          <NetworkText>IMPERIUM-2</NetworkText>
+        </NetworkButton>
+
+        <FaucetButton
+          onClick={() => {
+            window.open("https://faucet-devnet.firmachain.org/");
+          }}
+        >
+          FAUCET
+        </FaucetButton>
+
+        {isInit ? (
+          <LoginoutButton onClick={logout}>LOGOUT</LoginoutButton>
+        ) : (
+          <LoginoutButton onClick={login}>LOGIN</LoginoutButton>
+        )}
+      </HeaderRightWrapper>
 
       <LoginModal />
       <NewWalletModal />

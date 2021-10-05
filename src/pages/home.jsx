@@ -50,22 +50,12 @@ const chainData = [
 ];
 
 const Home = () => {
-  const { balance } = useSelector((state) => state.wallet);
-
   return (
     <ContentContainer>
       <CardWrap>
         <LeftCardWrap>
           <AccountCard />
-          <AssetCard
-            assetData={{
-              columns: [
-                { name: "Name", align: "center" },
-                { name: "Balances", align: "center" },
-              ],
-              data: [["FCT", balance]],
-            }}
-          />
+          <AssetCard />
         </LeftCardWrap>
         <RightCardWrap>
           <RightCardTopWrap>

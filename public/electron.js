@@ -5,8 +5,6 @@ const path = require("path");
 
 electron.app.setPath("userData", path.join(electron.app.getPath("home"), ".firma-station"));
 
-const loadUrlPath = process.platform === "darwin" ? "./build/index.html" : `file://${__dirname}/../build/index.html`;
-
 function initialize() {
   function createWindow() {
     const size = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -25,6 +23,7 @@ function initialize() {
         nodeIntegration: false,
         enableRemoteModule: false,
         nativeWindowOpen: true,
+        webSecurity: false,
         preload: path.resolve(__dirname, "preload.js"),
       },
       resizable: true,
