@@ -35,7 +35,7 @@ const VotingPowerDetailWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 30px 0;
+  gap: 24px 0;
 `;
 
 const VotingPowerDetail = styled.div`

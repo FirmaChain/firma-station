@@ -31,11 +31,12 @@ function initialize() {
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.setMenu(null);
     mainWindow.loadURL(
-      url.format({
-        pathname: path.join(__dirname, "/../build/index.html"),
-        protocol: "file",
-        slashes: true,
-      })
+      "http://localhost:3000"
+      // url.format({
+      //   pathname: path.join(__dirname, "/../build/index.html"),
+      //   protocol: "file",
+      //   slashes: true,
+      // })
     );
 
     mainWindow.once("ready-to-show", () => {

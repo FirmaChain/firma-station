@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useBlockDataQuery, useVotingPowerQuery } from "apollo/gqls";
+import { useBlockDataQuery, useVotingPowerQuery, useTokenomicsQuery } from "apollo/gqls";
 
 import useFirma from "utils/firma";
 
@@ -16,6 +16,12 @@ export const useBlockData = () => {
     height: 0,
     votingPower: 0,
     totalVotingPower: 0,
+  });
+
+  const [tokenomicsState, setTokenomicsState] = useState({
+    bonded: 0,
+    unbonded: 0,
+    unbonding: 0,
   });
 
   useBlockDataQuery({
@@ -36,6 +42,18 @@ export const useBlockData = () => {
         height: formatBlockHeight2(data),
         votingPower: formatVotingPower(data),
         totalVotingPower: formatTotalVotingPower(data),
+      }));
+    },
+  });
+
+  useTokenomicsQuery({
+    onCompleted: (data) => {
+      setTokenomicsState((prevState) => ({
+        ...prevState,
+        supply: formatSupply(data),
+        bonded: formatBonded(data),
+        unbonded: formatUnbonded(data),
+        unbonding: formatUnBonding(data),
       }));
     },
   });
@@ -61,11 +79,27 @@ export const useBlockData = () => {
   };
 
   const formatTotalVotingPower = (data) => {
-    return Number(convertToFct(data.stakingPool[0].bonded));
+    return convertToFct(data.stakingPool[0].bonded);
+  };
+
+  const formatSupply = (data) => {
+    return convertToFct(data.supply[0].coins[0].amount);
+  };
+  const formatBonded = (data) => {
+    return convertToFct(data.stakingPool[0].bonded);
+  };
+
+  const formatUnbonded = (data) => {
+    return convertToFct(data.supply[0].coins[0].amount - data.stakingPool[0].bonded - data.stakingPool[0].unbonded);
+  };
+
+  const formatUnBonding = (data) => {
+    return convertToFct(data.stakingPool[0].unbonded);
   };
 
   return {
     blockState,
     votingPowerState,
+    tokenomicsState,
   };
 };
