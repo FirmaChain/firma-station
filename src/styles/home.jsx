@@ -44,9 +44,9 @@ export const RightCardTopWrap = styled.div`
 
 export const RightCardMiddleWrap = styled.div`
   width: 100%;
-  min-height: 120px;
-  max-height: 120px;
-  height: 120px;
+  min-height: 100%;
+  max-height: 100%;
+  height: 100%;
   display: flex;
   gap: 0 30px;
   box-shadow: 0;

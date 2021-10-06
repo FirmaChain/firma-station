@@ -1,17 +1,26 @@
 import { useState } from "react";
 
-import { useBlockDataQuery } from "apollo/gqls";
+import { useBlockDataQuery, useVotingPowerQuery } from "apollo/gqls";
+
+import useFirma from "utils/firma";
 
 export const useBlockData = () => {
-  const [state, setState] = useState({
+  const { convertToFct } = useFirma();
+  const [blockState, setBlockState] = useState({
     height: 0,
     transactions: 0,
     inflation: 0,
   });
 
+  const [votingPowerState, setVotingPowerState] = useState({
+    height: 0,
+    votingPower: 0,
+    totalVotingPower: 0,
+  });
+
   useBlockDataQuery({
     onCompleted: (data) => {
-      setState((prevState) => ({
+      setBlockState((prevState) => ({
         ...prevState,
         height: formatBlockHeight(data),
         transactions: formatTransactions(data),
@@ -20,8 +29,23 @@ export const useBlockData = () => {
     },
   });
 
+  useVotingPowerQuery({
+    onCompleted: (data) => {
+      setVotingPowerState((prevState) => ({
+        ...prevState,
+        height: formatBlockHeight2(data),
+        votingPower: formatVotingPower(data),
+        totalVotingPower: formatTotalVotingPower(data),
+      }));
+    },
+  });
+
   const formatBlockHeight = (data) => {
     return data.height[0].height;
+  };
+
+  const formatBlockHeight2 = (data) => {
+    return data.block[0].height;
   };
 
   const formatTransactions = (data) => {
@@ -32,7 +56,16 @@ export const useBlockData = () => {
     return (data.inflation[0].value * 100).toFixed(2) + " %";
   };
 
+  const formatVotingPower = (data) => {
+    return data.block[0].validatorVotingPowersAggregate.aggregate.sum.votingPower;
+  };
+
+  const formatTotalVotingPower = (data) => {
+    return Number(convertToFct(data.stakingPool[0].bonded));
+  };
+
   return {
-    state,
+    blockState,
+    votingPowerState,
   };
 };

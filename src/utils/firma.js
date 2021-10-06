@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { FirmaSDK, FirmaConfig } from "@firmachain/firma-js";
 

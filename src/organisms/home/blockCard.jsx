@@ -5,7 +5,7 @@ import { SingleTitleCard } from "components/card";
 import { useBlockData } from "./hooks";
 
 const BlockCard = () => {
-  const { state } = useBlockData();
+  const { blockState } = useBlockData();
   const blockLabelData = [
     { title: "Latest Block", bgColor: theme.colors.backgroundSideBar },
     { title: "Transactions", bgColor: theme.colors.backgroundSideBar },
@@ -14,8 +14,8 @@ const BlockCard = () => {
   const [dashboradData, setBlockData] = useState([0, 0, 0]);
 
   useEffect(() => {
-    setBlockData([state.height, state.transactions, state.inflation]);
-  }, [state]);
+    setBlockData([blockState.height, blockState.transactions, blockState.inflation]);
+  }, [blockState]);
 
   return (
     <>

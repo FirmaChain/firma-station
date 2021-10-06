@@ -1,5 +1,5 @@
 import React from "react";
-import { AccountCard, AssetCard, BlockCard } from "organisms/home";
+import { AccountCard, AssetCard, BlockCard, VotingPowerCard } from "organisms/home";
 import {
   ContentContainer,
   CardWrap,
@@ -21,7 +21,9 @@ const Home = () => {
           <RightCardTopWrap>
             <BlockCard />
           </RightCardTopWrap>
-          <RightCardMiddleWrap></RightCardMiddleWrap>
+          <RightCardMiddleWrap>
+            <VotingPowerCard />
+          </RightCardMiddleWrap>
         </RightCardWrap>
       </CardWrap>
     </ContentContainer>

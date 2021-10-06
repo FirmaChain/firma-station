@@ -50,8 +50,8 @@ export const SingleTitleCardContentStyled = styled(CardContent)`
 
 export const SingleTitleTypo = styled.div`
   color: ${({ theme }) => theme.colors.defaultDarkGray};
-  font-size: ${({ theme }) => theme.sizes.singleCardTitle};
-  padding-top: 24px;
+  font-size: ${({ theme }) => theme.sizes.accountCardSize1};
+  padding-top: 22px;
 `;
 
 export const SingleContentType = styled.div`
