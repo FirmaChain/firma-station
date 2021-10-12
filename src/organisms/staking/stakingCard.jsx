@@ -5,7 +5,14 @@ import theme from "themes";
 import { BlankCard } from "components/card";
 import { StakingWrap, StakingTextWrap, StakingTitleTypo, StakingContentTypo } from "./styles";
 
-const StakingCard = ({ stakingData }) => {
+const StakingCard = () => {
+  const stakingData = [
+    { name: "Available", value: 9000, color: theme.colors.mainblue },
+    { name: "Delegated", value: 1000, color: theme.colors.mainpurple },
+    { name: "Unbonding", value: 0, color: theme.colors.maingreen },
+    { name: "Staking Reward", value: 350, color: theme.colors.mainred },
+  ];
+
   return (
     <BlankCard bgColor={theme.colors.backgroundSideBar} height="168px" flex="2.08">
       <PieChart width={140} height={140} style={{ float: "left" }}>

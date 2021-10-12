@@ -9,14 +9,19 @@ import {
   RightCardMiddleWrap,
 } from "styles/home";
 
+import { useSelector } from "react-redux";
+
 const Home = () => {
+  const { isInit } = useSelector((state) => state.wallet);
   return (
     <ContentContainer>
       <CardWrap>
-        <LeftCardWrap>
-          <AccountCard />
-          <AssetCard />
-        </LeftCardWrap>
+        {isInit && (
+          <LeftCardWrap>
+            <AccountCard />
+            <AssetCard />
+          </LeftCardWrap>
+        )}
         <RightCardWrap>
           <RightCardTopWrap>
             <BlockCard />

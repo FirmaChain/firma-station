@@ -3,6 +3,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 
 import Home from "pages/home";
 import Coming from "pages/coming";
+import Staking from "pages/staking";
 
 const routePublic = (path, component) => ({
   path,
@@ -13,7 +14,7 @@ const routes = {
   Home: routePublic("/", Home),
   Accounts: routePublic("/accounts", Coming),
   History: routePublic("/history", Coming),
-  Staking: routePublic("/staking", Coming),
+  Staking: routePublic("/staking", Staking),
   Government: routePublic("/government", Coming),
   Swap: routePublic("/swap", Coming),
   News: routePublic("/news", Coming),
