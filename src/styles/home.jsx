@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 export const ContentContainer = styled.div`
   z-index: 2;
-  width: 100%;
+  width: calc(100% - 80px);
+  height: 100%;
   padding: 0 40px;
-  height: calc(100% - 130px);
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
 `;

@@ -1,9 +1,7 @@
 import React from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 
-import Home from "pages/home";
-import Coming from "pages/coming";
-import Staking from "pages/staking";
+import { Home, Coming, Staking, Accounts, Validators } from "pages";
 
 const routePublic = (path, component) => ({
   path,
@@ -12,9 +10,10 @@ const routePublic = (path, component) => ({
 
 const routes = {
   Home: routePublic("/", Home),
-  Accounts: routePublic("/accounts", Coming),
+  Accounts: routePublic("/accounts", Accounts),
   History: routePublic("/history", Coming),
   Staking: routePublic("/staking", Staking),
+  Validators: routePublic("/staking/validators/:address", Validators),
   Government: routePublic("/government", Coming),
   Swap: routePublic("/swap", Coming),
   News: routePublic("/news", Coming),

@@ -1,6 +1,6 @@
 import React from "react";
 import { ContentContainer } from "styles/staking";
-import { StakingCard, Validators } from "organisms/staking";
+import { StakingCard, ValidatorsCard } from "organisms/staking";
 import { useSelector } from "react-redux";
 
 const Staking = () => {
@@ -8,7 +8,7 @@ const Staking = () => {
   return (
     <ContentContainer>
       {isInit && <StakingCard />}
-      <Validators />
+      <ValidatorsCard />
     </ContentContainer>
   );
 };

@@ -4,6 +4,7 @@ import ConfirmWalletModal from "./confirmWalletModal";
 import RecoverMnemonicModal from "./recoverMnemonicModal";
 import ImportPrivatekeyModal from "./importPrivatekeyModal";
 import ConnectLedgerModal from "./connectLedgerModal";
+import DelegateModal from "./delegateModal";
 
 export {
   LoginModal,
@@ -12,4 +13,5 @@ export {
   RecoverMnemonicModal,
   ImportPrivatekeyModal,
   ConnectLedgerModal,
+  DelegateModal,
 };

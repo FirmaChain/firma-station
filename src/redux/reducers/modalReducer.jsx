@@ -6,6 +6,7 @@ import {
   HANDLE_MODAL_RECOVERMNEMONIC,
   HANDLE_MODAL_IMPORTPRIVATEKEY,
   HANDLE_MODAL_CONNECTLEDGER,
+  HANDLE_MODAL_DELEGATE,
 } from "../types";
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   recoverMnemonic: false,
   importPrivatekey: false,
   connectLedger: false,
+  delegate: false,
 };
 
 export default handleActions(
@@ -53,6 +55,12 @@ export default handleActions(
       return {
         ...state,
         connectLedger: isVisible,
+      };
+    },
+    [HANDLE_MODAL_DELEGATE]: (state, { isVisible }) => {
+      return {
+        ...state,
+        delegate: isVisible,
       };
     },
   },

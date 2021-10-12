@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const HeaderContainer = styled.div`
-  width: 100%;
+  width: calc(100% - 80px);
   height: 80px;
   padding: 0 40px;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};

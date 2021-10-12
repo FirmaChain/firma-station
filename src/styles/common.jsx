@@ -9,7 +9,7 @@ export const MainContainer = styled.div`
 `;
 
 export const RightContainer = styled.div`
-  flex-grow: 1;
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 `;

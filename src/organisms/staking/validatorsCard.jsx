@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 import styled from "styled-components";
@@ -52,14 +53,16 @@ const ListWrapper = styled.div`
 
 const Row = ({ index, style }) => {
   return (
-    <ItemWrapper style={style}>
-      <ItemColumn>{index}</ItemColumn>
-      <ItemColumn>firma-node-1</ItemColumn>
-      <ItemColumn>30%</ItemColumn>
-      <ItemColumn>100%</ItemColumn>
-      <ItemColumn>10%</ItemColumn>
-      <ItemColumn>100%</ItemColumn>
-    </ItemWrapper>
+    <Link to={{ pathname: "/staking/validators/1234" }}>
+      <ItemWrapper style={style}>
+        <ItemColumn>{index}</ItemColumn>
+        <ItemColumn>firma-node-1</ItemColumn>
+        <ItemColumn>30%</ItemColumn>
+        <ItemColumn>100%</ItemColumn>
+        <ItemColumn>10%</ItemColumn>
+        <ItemColumn>100%</ItemColumn>
+      </ItemWrapper>
+    </Link>
   );
 };
 

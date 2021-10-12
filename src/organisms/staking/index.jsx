@@ -1,4 +1,4 @@
 import StakingCard from "./stakingCard";
-import Validators from "./validators";
+import ValidatorsCard from "./validatorsCard";
 
-export { StakingCard, Validators };
+export { StakingCard, ValidatorsCard };

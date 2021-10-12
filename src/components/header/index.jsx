@@ -19,6 +19,7 @@ import {
   RecoverMnemonicModal,
   ImportPrivatekeyModal,
   ConnectLedgerModal,
+  DelegateModal,
 } from "organisms/modal";
 import { modalActions } from "redux/action";
 import useFirma from "utils/firma";
@@ -67,6 +68,7 @@ function Header() {
       <RecoverMnemonicModal />
       <ImportPrivatekeyModal />
       <ConnectLedgerModal />
+      <DelegateModal />
     </HeaderContainer>
   );
 }
