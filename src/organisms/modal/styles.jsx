@@ -52,6 +52,45 @@ export const ModalInput = styled.div`
   }
 `;
 
+export const ConfirmWrapper = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+export const ConfirmLabel = styled.div`
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-size: 16px;
+`;
+
+export const ConfirmInput = styled.div`
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: right;
+  position: relative;
+  font-size: 14px;
+  color: #ccc;
+`;
+
+export const InputBoxDefault = styled.input`
+  width: calc(100% - 24px);
+  height: 30px;
+  line-height: 30px;
+  margin: 0;
+  padding: 0 10px;
+  color: white;
+  background-color: #1b1c22;
+  border: 1px solid #324ab8aa;
+  border-radius: 4px;
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+`;
+
 export const MnemonicContainter = styled.div`
   display: flex;
   position: relative;
@@ -110,6 +149,7 @@ export const NextButton = styled.div`
   background-color: #3550de;
   border-radius: 4px;
   cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
 `;
 
 export const CreateButton = styled.div`

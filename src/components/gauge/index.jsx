@@ -1,18 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 
-const GaugeWrapper = styled.div`
-  width: 100%;
-  height: 10px;
-  display: flex;
-  overflow: hidden;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.colors.mainblue}50;
-`;
-const GaugePercent = styled.div`
-  width: ${(props) => props.percent};
-  background: ${({ theme }) => theme.colors.mainblue};
-`;
+import { GaugeWrapper, GaugePercent } from "./styles";
 
 const Gauge = ({ percent }) => {
   return (

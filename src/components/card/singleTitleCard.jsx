@@ -4,7 +4,7 @@ import { SingleTitleCardStyled, SingleTitleCardContentStyled, SingleTitleTypo, S
 
 const SingleTitleCard = ({ title, content, background, height = "auto" }) => {
   return (
-    <SingleTitleCardStyled $height={height} elevation={0}>
+    <SingleTitleCardStyled $height={height} elevation={0} $background={background}>
       <SingleTitleCardContentStyled $height={height} $background={background}>
         <SingleTitleTypo>{title}</SingleTitleTypo>
         <SingleContentType>{content}</SingleContentType>

@@ -14,8 +14,8 @@ import {
   InputBoxDefault,
 } from "./styles";
 
-const DelegateModal = () => {
-  const delegateModalState = useSelector((state) => state.modal.delegate);
+const UndelegateModal = () => {
+  const undelegateModalState = useSelector((state) => state.modal.undelegate);
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
 
@@ -23,7 +23,7 @@ const DelegateModal = () => {
 
   const closeModal = () => {
     resetModal();
-    modalActions.handleModalDelegate(false);
+    modalActions.handleModalUndelegate(false);
   };
 
   const resetModal = () => {
@@ -40,9 +40,9 @@ const DelegateModal = () => {
 
   const nextStep = () => {
     modalActions.handleModalData({
-      action: "Delegate",
-      data: { amount },
-      prevModalAction: modalActions.handleModalDelegate,
+      action: "Undelegate",
+      data: { amount: amount },
+      prevModalAction: modalActions.handleModalUndelegate,
     });
 
     closeModal();
@@ -50,9 +50,9 @@ const DelegateModal = () => {
   };
 
   return (
-    <Modal visible={delegateModalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={undelegateModalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
       <ModalContainer>
-        <ModalTitle>Delegate</ModalTitle>
+        <ModalTitle>Undelegate</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>{available} FCT</ModalInput>
@@ -75,4 +75,4 @@ const DelegateModal = () => {
   );
 };
 
-export default DelegateModal;
+export default UndelegateModal;

@@ -3,10 +3,16 @@ import React, { useEffect } from "react";
 import Portal from "./portal";
 import { ModalOverlay, ModalWrapper, ModalInner, PrevButton, CloseButton } from "./styles";
 
-function Modal({ onClose, closable, visible, prev, width, children }) {
+function Modal({ onClose, closable, visible, prev, width, maskClosable, children }) {
   const close = () => {
     if (onClose) {
       onClose();
+    }
+  };
+
+  const onMaskClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose(e);
     }
   };
 
@@ -22,7 +28,7 @@ function Modal({ onClose, closable, visible, prev, width, children }) {
   return (
     <Portal elementId="modal-root">
       <ModalOverlay visible={visible} />
-      <ModalWrapper tabIndex={-1} visible={visible}>
+      <ModalWrapper tabIndex={-1} visible={visible} onClick={maskClosable ? onMaskClick : null}>
         <ModalInner tabIndex={0} width={width}>
           {prev && <PrevButton onClick={prev} />}
           {closable && <CloseButton onClick={close} />}

@@ -91,7 +91,9 @@ const NewWalletModal = () => {
           <ModalLabel>Address</ModalLabel>
           <ModalInput>{address}</ModalInput>
 
-          <NextButton onClick={() => openConfirmModal()}>NEXT</NextButton>
+          <NextButton onClick={() => openConfirmModal()} active={true}>
+            NEXT
+          </NextButton>
         </ModalContent>
       </ModalContainer>
     </Modal>

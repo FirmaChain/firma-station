@@ -5,6 +5,12 @@ import RecoverMnemonicModal from "./recoverMnemonicModal";
 import ImportPrivatekeyModal from "./importPrivatekeyModal";
 import ConnectLedgerModal from "./connectLedgerModal";
 import DelegateModal from "./delegateModal";
+import RedelegateModal from "./redelegateModal";
+import UndelegateModal from "./undelegateModal";
+import WithdrawModal from "./withdrawModal";
+import ConfirmTxModal from "./confirmTxModal";
+import QueueTxModal from "./queueTxModal";
+import ResultTxModal from "./resultTxModal";
 
 export {
   LoginModal,
@@ -14,4 +20,10 @@ export {
   ImportPrivatekeyModal,
   ConnectLedgerModal,
   DelegateModal,
+  RedelegateModal,
+  UndelegateModal,
+  WithdrawModal,
+  ConfirmTxModal,
+  QueueTxModal,
+  ResultTxModal,
 };

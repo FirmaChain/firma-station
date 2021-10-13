@@ -20,6 +20,12 @@ import {
   ImportPrivatekeyModal,
   ConnectLedgerModal,
   DelegateModal,
+  RedelegateModal,
+  UndelegateModal,
+  WithdrawModal,
+  ConfirmTxModal,
+  QueueTxModal,
+  ResultTxModal,
 } from "organisms/modal";
 import { modalActions } from "redux/action";
 import useFirma from "utils/firma";
@@ -69,6 +75,12 @@ function Header() {
       <ImportPrivatekeyModal />
       <ConnectLedgerModal />
       <DelegateModal />
+      <RedelegateModal />
+      <UndelegateModal />
+      <WithdrawModal />
+      <ConfirmTxModal />
+      <QueueTxModal />
+      <ResultTxModal />
     </HeaderContainer>
   );
 }

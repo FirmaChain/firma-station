@@ -57,8 +57,6 @@ const RecoverMnemonicModal = () => {
   };
 
   const closeModal = () => {
-    console.log(inputRef);
-    // inputRef.target.value = "";
     inputRef.current.value = "";
 
     activeRecoverButton(false);

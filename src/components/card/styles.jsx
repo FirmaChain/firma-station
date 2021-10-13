@@ -39,6 +39,11 @@ export const SingleTitleCardStyled = styled(Card)`
   width: 100%;
   position: relative;
   height: ${(props) => props.$height};
+  background-color: transparent !important;
+  box-shadow: none !important;
+  & > * {
+    box-shadow: none !important;
+  }
 `;
 
 export const SingleTitleCardContentStyled = styled(CardContent)`
