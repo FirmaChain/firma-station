@@ -28,7 +28,7 @@ import {
   ResultTxModal,
 } from "organisms/modal";
 import { modalActions } from "redux/action";
-import useFirma from "utils/firma";
+import useFirma from "utils/wallet";
 
 function Header() {
   const { isInit } = useSelector((state) => state.wallet);

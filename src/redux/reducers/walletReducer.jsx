@@ -5,6 +5,7 @@ import {
   HANDLE_WALLET_ADDRESS,
   HANDLE_WALLET_BALANCE,
   HANDLE_WALLET_INIT,
+  HANDLE_WALLET_SELECTVALIDATOR,
 } from "../types";
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   address: "",
   balance: 0,
   isInit: false,
+  targetValidator: "",
 };
 
 export default handleActions(
@@ -45,6 +47,12 @@ export default handleActions(
       return {
         ...state,
         isInit,
+      };
+    },
+    [HANDLE_WALLET_SELECTVALIDATOR]: (state, { validatorAddress }) => {
+      return {
+        ...state,
+        targetValidator: validatorAddress,
       };
     },
   },

@@ -1,8 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
 import styled from "styled-components";
+
+import { walletActions } from "redux/action";
 
 const RowWrapper = styled.div`
   display: flex;
@@ -51,22 +53,33 @@ const ListWrapper = styled.div`
   height: 100%;
 `;
 
-const Row = ({ index, style }) => {
+const Row = ({ data, index, style }) => {
+  const currentValidator = data[index];
+
   return (
-    <Link to={{ pathname: "/staking/validators/1234" }}>
+    <Link
+      to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}
+      onClick={() => {
+        walletActions.handleWalletSelectValidator(currentValidator.validatorAddress);
+      }}
+    >
       <ItemWrapper style={style}>
-        <ItemColumn>{index}</ItemColumn>
-        <ItemColumn>firma-node-1</ItemColumn>
-        <ItemColumn>30%</ItemColumn>
-        <ItemColumn>100%</ItemColumn>
-        <ItemColumn>10%</ItemColumn>
-        <ItemColumn>100%</ItemColumn>
+        <ItemColumn>{index + 1}</ItemColumn>
+        <ItemColumn>{currentValidator.validatorAddress}</ItemColumn>
+        <ItemColumn>{`${currentValidator.votingPowerPercent} %`}</ItemColumn>
+        <ItemColumn>{`${currentValidator.selfPercent} %`}</ItemColumn>
+        <ItemColumn>{`${currentValidator.commission} %`}</ItemColumn>
+        <ItemColumn>{`${currentValidator.condition} %`}</ItemColumn>
       </ItemWrapper>
     </Link>
   );
 };
 
-const Validators = () => {
+const Validators = ({ validatorsState }) => {
+  useEffect(() => {
+    walletActions.handleWalletSelectValidator("");
+  }, [validatorsState]);
+
   return (
     <ListWrapper>
       <AutoSizer>
@@ -80,7 +93,13 @@ const Validators = () => {
               <HeaderColumn>Validator Commission</HeaderColumn>
               <HeaderColumn>UpTime</HeaderColumn>
             </HeaderWrapper>
-            <List width={width} height={height - 70} itemCount={10} itemSize={50}>
+            <List
+              width={width}
+              height={height - 70}
+              itemCount={validatorsState.validators.length}
+              itemSize={50}
+              itemData={validatorsState.validators}
+            >
               {Row}
             </List>
           </>

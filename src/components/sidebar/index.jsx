@@ -78,7 +78,7 @@ function Sidebar() {
                 component={Link}
                 to={menu.path}
                 key={index}
-                $isSelected={location.pathname === menu.path}
+                $isSelected={"/" + location.pathname.split("/")[1] === menu.path}
               >
                 <ListItemIconStyled>
                   <menu.icon />

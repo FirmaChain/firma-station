@@ -4,6 +4,7 @@ import {
   HANDLE_WALLET_ADDRESS,
   HANDLE_WALLET_BALANCE,
   HANDLE_WALLET_INIT,
+  HANDLE_WALLET_SELECTVALIDATOR,
 } from "../types";
 
 export const handleWalletMnemonic = (mnemonic) => ({ type: HANDLE_WALLET_MNEMONIC, mnemonic });
@@ -11,3 +12,7 @@ export const handleWalletPrivateKey = (privateKey) => ({ type: HANDLE_WALLET_PRI
 export const handleWalletAddress = (address) => ({ type: HANDLE_WALLET_ADDRESS, address });
 export const handleWalletBalance = (balance) => ({ type: HANDLE_WALLET_BALANCE, balance });
 export const handleWalletInit = (isInit) => ({ type: HANDLE_WALLET_INIT, isInit });
+export const handleWalletSelectValidator = (validatorAddress) => ({
+  type: HANDLE_WALLET_SELECTVALIDATOR,
+  validatorAddress,
+});

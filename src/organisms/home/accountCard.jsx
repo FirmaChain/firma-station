@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import numeral from "numeral";
 
 import theme from "themes";
 import { BlankCard } from "components/card";
@@ -24,7 +25,7 @@ const AccountCard = () => {
       <AddressTitleTypo>Address</AddressTitleTypo>
       <CopyIconImg onClick={copyToClipboard} />
       <UserAddressTypo>{address}</UserAddressTypo>
-      <UserBalanceTypo>{`${balance} ${"FCT"}`}</UserBalanceTypo>
+      <UserBalanceTypo>{`${numeral(balance).format("0,0.000")} ${"FCT"}`}</UserBalanceTypo>
     </BlankCard>
   );
 };

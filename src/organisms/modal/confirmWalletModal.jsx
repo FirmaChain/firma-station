@@ -20,7 +20,7 @@ import {
   CreateButton,
 } from "./styles";
 
-import useFirma from "utils/firma";
+import useFirma from "utils/wallet";
 
 const ConfirmWalletModal = () => {
   const confirmWalletModalState = useSelector((state) => state.modal.confirmWallet);
@@ -54,8 +54,6 @@ const ConfirmWalletModal = () => {
         selectTargetList.push(mnemonicArray[randomIndex].mnemonic);
         mnemonicArray.splice(randomIndex, 1);
       }
-
-      console.log(inputTargetList);
 
       for (let i = 0; i < 4; i++) {
         const randomIndex = Math.floor(Math.random() * mnemonicArray.length);

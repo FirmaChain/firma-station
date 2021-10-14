@@ -1,14 +1,17 @@
 import React from "react";
 import { useSelector } from "react-redux";
+
 import { ContentContainer } from "styles/validstors";
-import { ValidatorCard, DelegationCard } from "organisms/validators";
+import { ValidatorCard, DelegationCard } from "organisms/staking/validators";
+import { useStakingData } from "organisms/staking/hooks";
 
 const Validators = (props) => {
-  const { params } = props.match;
   const { isInit } = useSelector((state) => state.wallet);
+  const { targetStakingState } = useStakingData();
+
   return (
     <ContentContainer>
-      {isInit && <DelegationCard />}
+      {isInit && <DelegationCard targetStakingState={targetStakingState} />}
       <ValidatorCard />
     </ContentContainer>
   );

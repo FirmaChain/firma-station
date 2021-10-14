@@ -1,5 +1,6 @@
 import React from "react";
 import { AccountCard, AssetCard, BlockCard, VotingPowerCard, TokenomicsCard } from "organisms/home";
+import { useBlockData } from "organisms/home/hooks";
 import {
   ContentContainer,
   CardWrap,
@@ -13,6 +14,8 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const { isInit } = useSelector((state) => state.wallet);
+  const { blockState, tokenomicsState, votingPowerState } = useBlockData();
+
   return (
     <ContentContainer>
       <CardWrap>
@@ -24,11 +27,11 @@ const Home = () => {
         )}
         <RightCardWrap>
           <RightCardTopWrap>
-            <BlockCard />
+            <BlockCard blockState={blockState} />
           </RightCardTopWrap>
           <RightCardMiddleWrap>
-            <VotingPowerCard />
-            <TokenomicsCard />
+            <VotingPowerCard votingPowerState={votingPowerState} />
+            <TokenomicsCard tokenomicsState={tokenomicsState} />
           </RightCardMiddleWrap>
         </RightCardWrap>
       </CardWrap>

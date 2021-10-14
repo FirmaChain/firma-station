@@ -5,7 +5,7 @@ import { useSnackbar } from "notistack";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import useFirma from "utils/firma";
+import useFirma from "utils/wallet";
 
 import {
   newWalletModalWidth,

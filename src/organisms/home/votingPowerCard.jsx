@@ -1,68 +1,28 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import numeral from "numeral";
+
 import theme from "themes";
-import { BlankCard } from "components/card";
 import Gauge from "components/gauge";
-import { useBlockData } from "./hooks";
+import { BlankCard } from "components/card";
 
-const VotingPowerTitleTypo = styled.div`
-  color: ${({ theme }) => theme.colors.defaultDarkGray};
-  margin-top: 14px;
-  padding: 0 14px;
-  height: 30px;
-  line-height: 30px;
-  font-size: ${({ theme }) => theme.sizes.accountCardSize1};
-`;
+import {
+  VotingPowerTitleTypo,
+  VotingPowerContainer,
+  VotingPowerPercentTypo,
+  VotingPowerGaugeWrapper,
+  VotingPowerDetailWrapper,
+  VotingPowerDetail,
+  VotingPowerDetailTitle,
+  VotingPowerDetailContent,
+} from "./styles";
 
-const VotingPowerContainer = styled.div`
-  padding: 0 14px;
-  margin-top: 10px;
-`;
-
-const VotingPowerPercentTypo = styled.div`
-  font-size: 30px;
-`;
-
-const VotingPowerGaugeWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  height: auto;
-  margin-top: 10px;
-  margin-bottom: 40px;
-`;
-
-const VotingPowerDetailWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px 0;
-`;
-
-const VotingPowerDetail = styled.div`
-  width: 100%;
-  display: flex;
-`;
-
-const VotingPowerDetailTitle = styled.div`
-  width: 100%;
-  flex: 1;
-  color: ${({ theme }) => theme.colors.defaultDarkGray};
-  font-size: 16px;
-`;
-const VotingPowerDetailContent = styled.div`
-  width: 100%;
-  flex: 1;
-  text-align: right;
-  font-size: 16px;
-`;
-
-const VotingPowerCard = () => {
-  const { votingPowerState } = useBlockData();
-
+const VotingPowerCard = ({ votingPowerState }) => {
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
-    setPercent(Math.floor((votingPowerState.votingPower / votingPowerState.totalVotingPower) * 10000) / 100);
+    let p = Math.floor((votingPowerState.votingPower / votingPowerState.totalVotingPower) * 10000) / 100;
+    if (isNaN(p)) p = 0;
+    setPercent(p);
   }, [votingPowerState]);
 
   return (
@@ -76,7 +36,7 @@ const VotingPowerCard = () => {
         <VotingPowerDetailWrapper>
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Block</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>{votingPowerState.height}</VotingPowerDetailContent>
+            <VotingPowerDetailContent>{numeral(votingPowerState.height).format("0,0")}</VotingPowerDetailContent>
           </VotingPowerDetail>
 
           <VotingPowerDetail>
@@ -86,12 +46,14 @@ const VotingPowerCard = () => {
 
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Voting Power</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>{votingPowerState.votingPower}</VotingPowerDetailContent>
+            <VotingPowerDetailContent>{numeral(votingPowerState.votingPower).format("0,0")}</VotingPowerDetailContent>
           </VotingPowerDetail>
 
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Total Voting Power</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>{votingPowerState.totalVotingPower}</VotingPowerDetailContent>
+            <VotingPowerDetailContent>
+              {numeral(votingPowerState.totalVotingPower).format("0,0")}
+            </VotingPowerDetailContent>
           </VotingPowerDetail>
         </VotingPowerDetailWrapper>
       </VotingPowerContainer>

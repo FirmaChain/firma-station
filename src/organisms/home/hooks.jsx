@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useBlockDataQuery, useVotingPowerQuery, useTokenomicsQuery } from "apollo/gqls";
 
-import useFirma from "utils/firma";
+import useFirma from "utils/wallet";
 
 export const useBlockData = () => {
-  const { convertToFct } = useFirma();
+  const { convertToFct, refreshWallet } = useFirma();
   const [blockState, setBlockState] = useState({
     height: 0,
     transactions: 0,
@@ -19,10 +19,14 @@ export const useBlockData = () => {
   });
 
   const [tokenomicsState, setTokenomicsState] = useState({
-    bonded: 0,
-    unbonded: 0,
-    unbonding: 0,
+    delegated: 0,
+    undelegated: 0,
+    undelegate: 0,
   });
+
+  useInterval(() => {
+    refreshWallet();
+  }, 5000);
 
   useBlockDataQuery({
     onCompleted: (data) => {
@@ -51,9 +55,9 @@ export const useBlockData = () => {
       setTokenomicsState((prevState) => ({
         ...prevState,
         supply: formatSupply(data),
-        bonded: formatBonded(data),
-        unbonded: formatUnbonded(data),
-        unbonding: formatUnBonding(data),
+        delegated: formatDelegated(data),
+        undelegated: formatUndelegated(data),
+        undelegate: formatUndelegate(data),
       }));
     },
   });
@@ -85,15 +89,15 @@ export const useBlockData = () => {
   const formatSupply = (data) => {
     return convertToFct(data.supply[0].coins[0].amount);
   };
-  const formatBonded = (data) => {
+  const formatDelegated = (data) => {
     return convertToFct(data.stakingPool[0].bonded);
   };
 
-  const formatUnbonded = (data) => {
+  const formatUndelegated = (data) => {
     return convertToFct(data.supply[0].coins[0].amount - data.stakingPool[0].bonded - data.stakingPool[0].unbonded);
   };
 
-  const formatUnBonding = (data) => {
+  const formatUndelegate = (data) => {
     return convertToFct(data.stakingPool[0].unbonded);
   };
 
@@ -103,3 +107,24 @@ export const useBlockData = () => {
     tokenomicsState,
   };
 };
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      tick();
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}

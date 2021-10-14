@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import numeral from "numeral";
 
 import { modalActions } from "redux/action";
 
@@ -49,7 +50,9 @@ const Button = styled.div`
   border-radius: 4px;
 `;
 
-const DelegationCard = () => {
+const DENOM = "FCT";
+
+const DelegationCard = ({ targetStakingState }) => {
   const delegate = () => {
     modalActions.handleModalDelegate(true);
   };
@@ -72,7 +75,7 @@ const DelegationCard = () => {
     <CardWrapper>
       <InnerWrapper>
         <Title>My Delegations</Title>
-        <Content>1.5123 FCT</Content>
+        <Content>{`${numeral(targetStakingState.delegated).format("0,0.000")} FCT`}</Content>
         <Buttons>
           <Button onClick={delegate}>Delegate</Button>
           <Button onClick={redelegate}>Redelgate</Button>
@@ -81,7 +84,7 @@ const DelegationCard = () => {
       </InnerWrapper>
       <InnerWrapper>
         <Title>Rewards</Title>
-        <Content>1.5232 FCT</Content>
+        <Content>{`${numeral(targetStakingState.stakingReward).format("0,0.000")} FCT`}</Content>
         <Buttons>
           <Button onClick={withdraw}>Withdraw</Button>
         </Buttons>

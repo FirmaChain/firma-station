@@ -12,6 +12,8 @@ export const recoverMnemonicModalWidth = "600px";
 export const importPrivatekeyModalWidth = "600px";
 export const connectLedgerModalWidth = "600px";
 
+export const confirmTxModalWidth = "400px";
+
 export const ModalContainer = styled.div`
   width: 100%;
   display: flex;

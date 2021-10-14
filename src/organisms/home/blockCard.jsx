@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import theme from "themes";
 import { SingleTitleCard } from "components/card";
-import { useBlockData } from "./hooks";
 
-const BlockCard = () => {
-  const { blockState } = useBlockData();
+const BlockCard = ({ blockState }) => {
   const blockLabelData = [
     { title: "Latest Block", bgColor: theme.colors.backgroundSideBar },
     { title: "Transactions", bgColor: theme.colors.backgroundSideBar },

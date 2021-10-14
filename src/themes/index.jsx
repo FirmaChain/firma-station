@@ -43,6 +43,10 @@ const sizes = {
   sideMenuDrawer: "230px",
   modalTitle: "20px",
   modalLabel: "16px",
+  tokenomicsDetail: "16px",
+  votingpowerSize1: "30px",
+  votingpowerSize2: "18px",
+  votingpowerSize3: "16px",
 };
 
 const urls = {

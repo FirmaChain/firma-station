@@ -1,10 +1,12 @@
 import React from "react";
+import numeral from "numeral";
 import { useSelector } from "react-redux";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
 import {
+  confirmTxModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -14,9 +16,13 @@ import {
   NextButton,
 } from "./styles";
 
+const DENOM = "FCT";
+
 const ConfirmTxModal = () => {
   const confirmTxModalState = useSelector((state) => state.modal.confirmTx);
-  const { action, prevModalAction, data } = useSelector((state) => state.modal.data);
+  const modalData = useSelector((state) => state.modal.data);
+
+  const fee = 0.002;
 
   const closeConfirmTxModal = () => {
     modalActions.handleModalConfirmTx(false);
@@ -24,7 +30,7 @@ const ConfirmTxModal = () => {
 
   const prevModal = () => {
     closeConfirmTxModal();
-    prevModalAction(true);
+    modalData.prevModalAction && modalData.prevModalAction(true);
   };
 
   const queueTx = () => {
@@ -39,18 +45,20 @@ const ConfirmTxModal = () => {
       maskClosable={true}
       onClose={closeConfirmTxModal}
       prev={prevModal}
-      width={"400px"}
+      width={confirmTxModalWidth}
     >
       <ModalContainer>
         <ModalTitle>Confirm</ModalTitle>
         <ModalContent>
           <ConfirmWrapper>
             <ConfirmLabel>Amount</ConfirmLabel>
-            <ConfirmInput>{Number(data.amount).toFixed(6)} FCT</ConfirmInput>
+            <ConfirmInput>
+              {modalData && `${numeral(modalData.data.amount).format("0,0.000000")} ${DENOM}`}
+            </ConfirmInput>
           </ConfirmWrapper>
           <ConfirmWrapper>
             <ConfirmLabel>Fee</ConfirmLabel>
-            <ConfirmInput>0.002000 FCT</ConfirmInput>
+            <ConfirmInput>{`${numeral(fee).format("0,0.000000")} ${DENOM}`}</ConfirmInput>
           </ConfirmWrapper>
           <NextButton
             style={{ marginTop: "50px" }}
@@ -59,7 +67,7 @@ const ConfirmTxModal = () => {
             }}
             active={true}
           >
-            {action}
+            {modalData && modalData.action}
           </NextButton>
         </ModalContent>
       </ModalContainer>
