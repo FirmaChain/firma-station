@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 import { Modal } from "components/modal";
@@ -16,11 +17,23 @@ const LoadingWrapper = styled.div`
 
 const QueueTxModal = () => {
   const queueTxModalState = useSelector((state) => state.modal.queueTx);
+  const modalData = useSelector((state) => state.modal.data);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (queueTxModalState) {
+      modalData.txAction(endTx);
     }
   }, [queueTxModalState]);
+
+  const endTx = () => {
+    closeQueueTxModal();
+    enqueueSnackbar("Success Transaction", {
+      variant: "success",
+      autoHideDuration: 1000,
+    });
+  };
 
   const closeQueueTxModal = () => {
     modalActions.handleModalQueueTx(false);

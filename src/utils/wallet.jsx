@@ -63,7 +63,8 @@ function useFirma() {
     const balance = await getFirmaSDK().Bank.getBalance(address);
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const undelegationList = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
-    const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
+    // const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
+    const totalReward = { total: 0 };
 
     const delegationBalanceList = delegationList.map((value) => {
       return value.balance.amount;
@@ -81,14 +82,16 @@ function useFirma() {
 
     const available = FirmaUtil.getFCTStringFromUFCTStr(balance);
     const delegated = FirmaUtil.getFCTStringFromUFCTStr(
-      delegationBalanceList.reduce((acc, current) => {
-        return acc + current;
-      })
+      delegationBalanceList.length > 0 &&
+        delegationBalanceList.reduce((acc, current) => {
+          return acc + current;
+        })
     );
     const undelegate = FirmaUtil.getFCTStringFromUFCTStr(
-      undelegationBalanceList.reduce((acc, current) => {
-        return acc + current;
-      })
+      undelegationBalanceList.length > 0 &&
+        undelegationBalanceList.reduce((acc, current) => {
+          return acc + current;
+        })
     );
     const stakingReward = FirmaUtil.getFCTStringFromUFCTStr(totalReward.total);
 
@@ -108,7 +111,8 @@ function useFirma() {
     const balance = await getFirmaSDK().Bank.getBalance(address);
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const undelegationList = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
-    const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
+    // const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
+    const totalReward = { rewards: [], total: 0 };
 
     const targetDelegation = delegationList.find((value) => value.delegation.validator_address === validatorAddress);
     const targetUndelegate = undelegationList.find((value) => value.validator_address === validatorAddress);

@@ -5,6 +5,8 @@ import Select from "react-select";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
+import useFirma from "utils/wallet";
+
 import {
   ModalContainer,
   ModalTitle,
@@ -54,12 +56,17 @@ const customStyles = {
 
 const RedelegateModal = () => {
   const redelegateModalState = useSelector((state) => state.modal.redelegate);
+  const { balance, targetValidator } = useSelector((state) => state.wallet);
+
+  const { redelegate } = useFirma();
+
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
   const [sourceValidator, setSourceValidator] = useState(null);
 
   const selectInputRef = useRef();
   const available = 993;
+  const destValidator = "";
 
   const closeModal = () => {
     resetModal();
@@ -81,6 +88,12 @@ const RedelegateModal = () => {
     setActiveButton(amount > 0 && amount <= available);
   };
 
+  const redelegateTx = (callback) => {
+    redelegate(targetValidator, destValidator, amount).then(() => {
+      callback();
+    });
+  };
+
   const onChangeValidator = (e) => {
     if (e == null) return;
     const { value } = e;
@@ -94,6 +107,7 @@ const RedelegateModal = () => {
       action: "Redelegate",
       data: { amount },
       prevModalAction: modalActions.handleModalRedelegate,
+      txAction: redelegateTx,
     });
 
     closeModal();

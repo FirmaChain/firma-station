@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import numeral from "numeral";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
+
+import useFirma from "utils/wallet";
 
 import {
   ModalContainer,
@@ -16,10 +19,12 @@ import {
 
 const DelegateModal = () => {
   const delegateModalState = useSelector((state) => state.modal.delegate);
+  const { balance, targetValidator } = useSelector((state) => state.wallet);
+
+  const { delegate } = useFirma();
+
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
-
-  const available = 993;
 
   const closeModal = () => {
     resetModal();
@@ -35,7 +40,13 @@ const DelegateModal = () => {
     const amount = value.replace(/[^0-9.]/g, "");
 
     setAmount(amount);
-    setActiveButton(amount > 0 && amount <= available);
+    setActiveButton(amount > 0 && amount <= numeral(balance).value());
+  };
+
+  const delegateTx = (callback) => {
+    delegate(targetValidator, amount).then(() => {
+      callback();
+    });
   };
 
   const nextStep = () => {
@@ -43,6 +54,7 @@ const DelegateModal = () => {
       action: "Delegate",
       data: { amount },
       prevModalAction: modalActions.handleModalDelegate,
+      txAction: delegateTx,
     });
 
     closeModal();
@@ -55,7 +67,7 @@ const DelegateModal = () => {
         <ModalTitle>Delegate</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{available} FCT</ModalInput>
+          <ModalInput>{balance} FCT</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>

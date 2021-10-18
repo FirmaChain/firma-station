@@ -53,7 +53,7 @@ const ConfirmTxModal = () => {
           <ConfirmWrapper>
             <ConfirmLabel>Amount</ConfirmLabel>
             <ConfirmInput>
-              {modalData && `${numeral(modalData.data.amount).format("0,0.000000")} ${DENOM}`}
+              {modalData.data && `${numeral(modalData.data.amount).format("0,0.000000")} ${DENOM}`}
             </ConfirmInput>
           </ConfirmWrapper>
           <ConfirmWrapper>

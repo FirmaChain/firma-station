@@ -75,7 +75,7 @@ const DelegationCard = ({ targetStakingState }) => {
     <CardWrapper>
       <InnerWrapper>
         <Title>My Delegations</Title>
-        <Content>{`${numeral(targetStakingState.delegated).format("0,0.000")} FCT`}</Content>
+        <Content>{`${numeral(targetStakingState.delegated).format("0,0.000")} ${DENOM}`}</Content>
         <Buttons>
           <Button onClick={delegate}>Delegate</Button>
           <Button onClick={redelegate}>Redelgate</Button>
@@ -84,7 +84,7 @@ const DelegationCard = ({ targetStakingState }) => {
       </InnerWrapper>
       <InnerWrapper>
         <Title>Rewards</Title>
-        <Content>{`${numeral(targetStakingState.stakingReward).format("0,0.000")} FCT`}</Content>
+        <Content>{`${numeral(targetStakingState.stakingReward).format("0,0.000")} ${DENOM}`}</Content>
         <Buttons>
           <Button onClick={withdraw}>Withdraw</Button>
         </Buttons>

@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
+import useFirma from "utils/wallet";
+
 import {
   ModalContainer,
   ModalTitle,
@@ -16,10 +18,14 @@ import {
 
 const UndelegateModal = () => {
   const undelegateModalState = useSelector((state) => state.modal.undelegate);
+  const { targetValidator } = useSelector((state) => state.wallet);
+
+  const { undelegate } = useFirma();
+
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
 
-  const available = 993;
+  const available = 9999;
 
   const closeModal = () => {
     resetModal();
@@ -38,11 +44,18 @@ const UndelegateModal = () => {
     setActiveButton(amount > 0 && amount <= available);
   };
 
+  const undelegateTx = (callback) => {
+    undelegate(targetValidator, amount).then(() => {
+      callback();
+    });
+  };
+
   const nextStep = () => {
     modalActions.handleModalData({
       action: "Undelegate",
       data: { amount: amount },
       prevModalAction: modalActions.handleModalUndelegate,
+      txAction: undelegateTx,
     });
 
     closeModal();
