@@ -23,16 +23,24 @@ const QueueTxModal = () => {
 
   useEffect(() => {
     if (queueTxModalState) {
-      modalData.txAction(endTx);
+      modalData.txAction(resolveTx, rejectTx);
     }
   }, [queueTxModalState]);
 
-  const endTx = () => {
-    closeQueueTxModal();
+  const resolveTx = () => {
     enqueueSnackbar("Success Transaction", {
       variant: "success",
       autoHideDuration: 1000,
     });
+    closeQueueTxModal();
+  };
+
+  const rejectTx = () => {
+    enqueueSnackbar("Failed Transaction", {
+      variant: "error",
+      autoHideDuration: 1000,
+    });
+    closeQueueTxModal();
   };
 
   const closeQueueTxModal = () => {

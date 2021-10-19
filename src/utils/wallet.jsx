@@ -63,8 +63,7 @@ function useFirma() {
     const balance = await getFirmaSDK().Bank.getBalance(address);
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const undelegationList = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
-    // const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
-    const totalReward = { total: 0 };
+    const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
 
     const delegationBalanceList = delegationList.map((value) => {
       return value.balance.amount;
@@ -111,8 +110,7 @@ function useFirma() {
     const balance = await getFirmaSDK().Bank.getBalance(address);
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const undelegationList = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
-    // const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
-    const totalReward = { rewards: [], total: 0 };
+    const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
 
     const targetDelegation = delegationList.find((value) => value.delegation.validator_address === validatorAddress);
     const targetUndelegate = undelegationList.find((value) => value.validator_address === validatorAddress);
@@ -131,12 +129,19 @@ function useFirma() {
     };
   };
 
+  const checkVlidateResult = (result) => {
+    if (result.code === undefined) throw "INVALID TX";
+    if (result.code !== 0) throw "FAILED TX";
+  };
+
   const sendFCT = async (address, amount, memo) => {
     if (!isInit) return;
 
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const sendResult = await getFirmaSDK().Bank.send(wallet, address, Number(amount), { memo });
-    return sendResult;
+    const result = await getFirmaSDK().Bank.send(wallet, address, Number(amount), { memo });
+    console.log(result);
+
+    checkVlidateResult(result);
   };
 
   const delegate = async (validatorAddress, amount) => {
@@ -145,6 +150,8 @@ function useFirma() {
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Staking.delegate(wallet, validatorAddress, amount);
     console.log(result);
+
+    checkVlidateResult(result);
   };
 
   const redelegate = async (validatorAddressSrc, validatorAddressDst, amount) => {
@@ -156,6 +163,8 @@ function useFirma() {
       gas: 300000,
     });
     console.log(result);
+
+    checkVlidateResult(result);
   };
 
   const undelegate = async (validatorAddress, amount) => {
@@ -164,6 +173,8 @@ function useFirma() {
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Staking.undelegate(wallet, validatorAddress, amount);
     console.log(result);
+
+    checkVlidateResult(result);
   };
 
   const withdraw = async (validatorAddress) => {
@@ -171,6 +182,71 @@ function useFirma() {
 
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Distribution.withdrawAllRewards(wallet, validatorAddress);
+    console.log(result);
+
+    checkVlidateResult(result);
+  };
+
+  const vote = async (proposalId, votingType) => {
+    if (!isInit) return;
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const result = await getFirmaSDK().Gov.vote(wallet, proposalId, votingType);
+    console.log(result);
+
+    checkVlidateResult(result);
+  };
+
+  const deposit = async (proposalId, amount) => {
+    if (!isInit) return;
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const result = await getFirmaSDK().Gov.deposit(wallet, proposalId, amount);
+    console.log(result);
+
+    checkVlidateResult(result);
+  };
+
+  const submitParameterChangeProposal = async (title, description, initialDeposit, paramList) => {
+    if (!isInit) return;
+    // paramList {
+    // subspace:
+    // key:
+    // value:
+    // }
+    // proposer 지갑주소
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const result = await getFirmaSDK().Gov.submitParameterChangeProposal(
+      wallet,
+      title,
+      description,
+      initialDeposit,
+      paramList
+    );
+    console.log(result);
+  };
+
+  const submitCommunityPoolSpendProposal = async (title, description, initialDeposit, amount, recipient) => {
+    if (!isInit) return;
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const result = await getFirmaSDK().Gov.submitCommunityPoolSpendProposal(
+      wallet,
+      title,
+      description,
+      initialDeposit,
+      amount,
+      recipient
+    );
+    console.log(result);
+  };
+
+  const submitTextProposal = async (title, description, initialDeposit) => {
+    if (!isInit) return;
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const result = await getFirmaSDK().Gov.submitTextProposal(wallet, title, description, initialDeposit);
     console.log(result);
   };
 
@@ -196,6 +272,10 @@ function useFirma() {
     redelegate,
     undelegate,
     withdraw,
+    submitParameterChangeProposal,
+    submitCommunityPoolSpendProposal,
+    submitTextProposal,
+    vote,
     refreshWallet,
   };
 }

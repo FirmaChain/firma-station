@@ -6,9 +6,9 @@ export const GaugeWrapper = styled.div`
   display: flex;
   overflow: hidden;
   border-radius: 4px;
-  background: ${({ theme }) => theme.colors.mainblue}50;
+  background: ${(props) => props.$bgColor}50;
 `;
 export const GaugePercent = styled.div`
   width: ${(props) => props.percent};
-  background: ${({ theme }) => theme.colors.mainblue};
+  background: ${(props) => props.$bgColor};
 `;

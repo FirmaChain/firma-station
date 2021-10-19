@@ -56,7 +56,7 @@ const customStyles = {
 
 const RedelegateModal = () => {
   const redelegateModalState = useSelector((state) => state.modal.redelegate);
-  const { balance, targetValidator } = useSelector((state) => state.wallet);
+  const { targetValidator } = useSelector((state) => state.wallet);
 
   const { redelegate } = useFirma();
 

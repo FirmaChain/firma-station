@@ -122,6 +122,18 @@ export const MnemonicTextArea = styled.textarea`
   color: white;
 `;
 
+export const TextAreaDefault = styled.textarea`
+  width: calc(100% - 20px);
+  height: 100px;
+  padding: 10px;
+  resize: none;
+  font-size: 16px;
+  border-radius: 4px;
+  background-color: #1b1c22;
+  border: 1px solid #324ab8aa;
+  color: white;
+`;
+
 export const PrivatekeyTextArea = styled.textarea`
   width: calc(100% - 20px);
   height: 100px;

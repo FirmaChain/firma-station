@@ -2,10 +2,12 @@ import React from "react";
 
 import { GaugeWrapper, GaugePercent } from "./styles";
 
-const Gauge = ({ percent }) => {
+import theme from "themes";
+
+const Gauge = ({ percent, bgColor = theme.colors.mainblue }) => {
   return (
-    <GaugeWrapper>
-      <GaugePercent percent={percent} />
+    <GaugeWrapper $bgColor={bgColor}>
+      <GaugePercent percent={percent} $bgColor={bgColor} />
     </GaugeWrapper>
   );
 };

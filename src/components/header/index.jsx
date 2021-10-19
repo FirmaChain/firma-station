@@ -23,6 +23,8 @@ import {
   RedelegateModal,
   UndelegateModal,
   WithdrawModal,
+  VotingModal,
+  NewProposalModal,
   ConfirmTxModal,
   QueueTxModal,
   ResultTxModal,
@@ -78,6 +80,8 @@ function Header() {
       <RedelegateModal />
       <UndelegateModal />
       <WithdrawModal />
+      <VotingModal />
+      <NewProposalModal />
       <ConfirmTxModal />
       <QueueTxModal />
       <ResultTxModal />

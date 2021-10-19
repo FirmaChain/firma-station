@@ -107,3 +107,53 @@ export const useValidatorsQuery = ({ onCompleted }) => {
     { onCompleted, pollInterval: 5000, notifyOnNetworkStatusChange: true }
   );
 };
+
+export const useGovernmentQuery = ({ onCompleted }) => {
+  return useQuery(
+    gql`
+      query {
+        proposals: proposal(order_by: { id: desc }) {
+          title
+          proposalId: id
+          status
+          description
+        }
+      }
+    `,
+    { onCompleted, pollInterval: 10000, notifyOnNetworkStatusChange: true }
+  );
+};
+
+export const useProposalQuery = ({ proposalId, onCompleted }) => {
+  return useQuery(
+    gql`
+      query {
+        proposal (where: {id: {_eq: ${proposalId}}}) {
+          title
+          description
+          status
+          content
+          proposalId: id
+          submitTime: submit_time
+          depositEndTime: deposit_end_time
+          votingStartTime: voting_start_time
+          votingEndTime: voting_end_time
+          proposalDeposits: proposal_deposits {
+            amount
+            depositorAddress: depositor_address
+          }
+        }
+        govParams: gov_params (limit: 1, order_by: {height: desc}) {
+          depositParams: deposit_params
+          tallyParams: tally_params
+          votingParams: voting_params
+        }
+        proposalVote: proposal_vote(where: {proposal_id: {_eq:  ${proposalId}}}) {
+          option
+          voterAddress: voter_address
+        }
+      }
+    `,
+    { onCompleted, pollInterval: 10000, notifyOnNetworkStatusChange: true }
+  );
+};

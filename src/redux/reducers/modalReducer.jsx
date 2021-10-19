@@ -11,6 +11,8 @@ import {
   HANDLE_MODAL_REDELEGATE,
   HANDLE_MODAL_UNDELEGATE,
   HANDLE_MODAL_WITHDRAW,
+  HANDLE_MODAL_VOTING,
+  HANDLE_MODAL_NEWPROPOSAL,
   HANDLE_MODAL_CONFIRMTX,
   HANDLE_MODAL_QUEUETX,
   HANDLE_MODAL_RESULTTX,
@@ -28,6 +30,8 @@ const initialState = {
   redelegate: false,
   undelegate: false,
   withdraw: false,
+  voting: false,
+  newProposal: false,
   confirmTx: false,
   queueTx: false,
   resultTx: false,
@@ -99,6 +103,18 @@ export default handleActions(
       return {
         ...state,
         withdraw: isVisible,
+      };
+    },
+    [HANDLE_MODAL_VOTING]: (state, { isVisible }) => {
+      return {
+        ...state,
+        voting: isVisible,
+      };
+    },
+    [HANDLE_MODAL_NEWPROPOSAL]: (state, { isVisible }) => {
+      return {
+        ...state,
+        newProposal: isVisible,
       };
     },
     [HANDLE_MODAL_CONFIRMTX]: (state, { isVisible }) => {
