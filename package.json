@@ -9,7 +9,7 @@
     "@apollo/react-hooks": "^4.0.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-    "@firmachain/firma-js": "^0.2.5",
+    "@firmachain/firma-js": "^0.2.6",
     "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.1",
     "@mui/styled-engine-sc": "^5.0.0",
