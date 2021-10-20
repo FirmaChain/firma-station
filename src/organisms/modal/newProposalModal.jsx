@@ -143,8 +143,6 @@ const NewProposalModal = () => {
   };
 
   const newProposalTx = (resolveTx, rejectTx) => {
-    console.log(paramList);
-
     switch (proposalType) {
       case "TEXT_PROPOSAL":
         submitTextProposal(title, description, initialDeposit)
@@ -307,7 +305,6 @@ const NewProposalModal = () => {
                     <Param>Value</Param>
                     <Param>X</Param>
                   </ParamHeader>
-                  {console.log(paramList)}
                   {paramList.map((param, index) => (
                     <ParamBody key={index}>
                       <Param>

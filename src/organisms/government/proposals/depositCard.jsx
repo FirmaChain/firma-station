@@ -3,6 +3,9 @@ import moment from "moment";
 import numeral from "numeral";
 import styled from "styled-components";
 
+import Gauge from "components/gauge";
+import { modalActions } from "redux/action";
+
 const CardWrapper = styled.div`
   display: flex;
   padding: 24px;
@@ -64,7 +67,7 @@ const DepositCard = ({ proposalState }) => {
     let totalDeposit = 0;
     for (let value of deposits) totalDeposit += numeral(value.amount[0].amount).value();
 
-    return totalDeposit / 1000000;
+    return totalDeposit;
   };
 
   return (
@@ -84,18 +87,24 @@ const DepositCard = ({ proposalState }) => {
         <DetailItem>
           <Label>Current Deposit</Label>
           <Content bigSize={true}>
-            {`${numeral(getCurrentDeposit(proposalState.proposalDeposits)).format("0.00")} FCT`}
+            {`${numeral(getCurrentDeposit(proposalState.depositors) / 1000000).format("0.00")} FCT`}
           </Content>
         </DetailItem>
       </DetailWrapper>
+      {/* <Gauge
+        percent={`${numeral(
+          (getCurrentDeposit(proposalState.depositors) / proposalState.paramMinDepositAmount) * 100
+        ).format("0.00")}%`}
+        bgColor={"#808080"}
+      /> */}
       {proposalState.status === "PROPOSAL_STATUS_DEPOSIT_PERIOD" && (
         <DepositButton
           active={true}
           onClick={() => {
-            //   modalActions.handleModalData({
-            //     proposalId: "4",
-            //   });
-            //   modalActions.handleModalVoting(true);
+            modalActions.handleModalData({
+              proposalId: proposalState.proposalId,
+            });
+            modalActions.handleModalDeposit(true);
           }}
         >
           Deposit

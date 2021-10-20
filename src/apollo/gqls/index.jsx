@@ -152,6 +152,15 @@ export const useProposalQuery = ({ proposalId, onCompleted }) => {
           option
           voterAddress: voter_address
         }
+        stakingPool: staking_pool(limit: 1, order_by: { height: desc }) {
+          totalVotingPower: bonded_tokens
+        }
+        proposalTallyResult: proposal_tally_result(where: {proposal_id: {_eq: ${proposalId}}}) {
+          yes
+          no
+          noWithVeto: no_with_veto
+          abstain
+        }
       }
     `,
     { onCompleted, pollInterval: 10000, notifyOnNetworkStatusChange: true }

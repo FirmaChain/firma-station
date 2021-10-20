@@ -4,6 +4,8 @@ import styled from "styled-components";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 
+import { PROPOSAL_STATUS } from "constants/government";
+
 const ListWrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -72,32 +74,8 @@ const StatusTypo = styled.div`
 `;
 
 const Row = ({ data, index, style }) => {
-  // const currentValidator = data[index];
   const getStatusTypo = (status) => {
-    let typo = "";
-    switch (status) {
-      case "PROPOSAL_STATUS_DEPOSIT_PERIOD":
-        typo = "DEPOSIT";
-        break;
-      case "PROPOSAL_STATUS_VOTING_PERIOD":
-        typo = "VOTING";
-        break;
-      case "PROPOSAL_STATUS_PASSED":
-        typo = "PASSED";
-        break;
-      case "PROPOSAL_STATUS_REJECTED":
-        typo = "REJECTED";
-        break;
-      case "PROPOSAL_STATUS_FAILED":
-        typo = "FAILED";
-        break;
-      case "PROPOSAL_STATUS_INVALID":
-        typo = "INVALID";
-        break;
-      default:
-        typo = "UNKNOWN";
-    }
-
+    const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : "UNKNOWN";
     return <StatusTypo>{typo}</StatusTypo>;
   };
 

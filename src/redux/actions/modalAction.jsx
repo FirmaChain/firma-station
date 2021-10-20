@@ -10,6 +10,7 @@ import {
   HANDLE_MODAL_REDELEGATE,
   HANDLE_MODAL_UNDELEGATE,
   HANDLE_MODAL_WITHDRAW,
+  HANDLE_MODAL_DEPOSIT,
   HANDLE_MODAL_VOTING,
   HANDLE_MODAL_NEWPROPOSAL,
   HANDLE_MODAL_CONFIRMTX,
@@ -30,6 +31,7 @@ export const handleModalDelegate = (isVisible) => ({ type: HANDLE_MODAL_DELEGATE
 export const handleModalRedelegate = (isVisible) => ({ type: HANDLE_MODAL_REDELEGATE, isVisible });
 export const handleModalUndelegate = (isVisible) => ({ type: HANDLE_MODAL_UNDELEGATE, isVisible });
 export const handleModalWithdraw = (isVisible) => ({ type: HANDLE_MODAL_WITHDRAW, isVisible });
+export const handleModalDeposit = (isVisible) => ({ type: HANDLE_MODAL_DEPOSIT, isVisible });
 export const handleModalVoting = (isVisible) => ({ type: HANDLE_MODAL_VOTING, isVisible });
 export const handleModalNewProposal = (isVisible) => ({ type: HANDLE_MODAL_NEWPROPOSAL, isVisible });
 

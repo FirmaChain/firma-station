@@ -23,6 +23,7 @@ import {
   RedelegateModal,
   UndelegateModal,
   WithdrawModal,
+  DepositModal,
   VotingModal,
   NewProposalModal,
   ConfirmTxModal,
@@ -30,6 +31,8 @@ import {
   ResultTxModal,
 } from "organisms/modal";
 import { modalActions } from "redux/action";
+import { FIRMACHAIN_NAME } from "config";
+
 import useFirma from "utils/wallet";
 
 function Header() {
@@ -52,7 +55,7 @@ function Header() {
       <HeaderRightWrapper>
         <NetworkButton>
           <NetworkStatus />
-          <NetworkText>IMPERIUM-2</NetworkText>
+          <NetworkText>{FIRMACHAIN_NAME.toUpperCase()}</NetworkText>
         </NetworkButton>
 
         <FaucetButton
@@ -80,6 +83,7 @@ function Header() {
       <RedelegateModal />
       <UndelegateModal />
       <WithdrawModal />
+      <DepositModal />
       <VotingModal />
       <NewProposalModal />
       <ConfirmTxModal />

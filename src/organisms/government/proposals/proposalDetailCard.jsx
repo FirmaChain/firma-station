@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+import numeral from "numeral";
 import styled from "styled-components";
 
 const CardWrapper = styled.div`
@@ -107,6 +108,9 @@ const ProposalDetailCard = ({ proposalState }) => {
       case "/cosmos.distribution.v1beta1.CommunityPoolSpendProposal":
         typo = "Spend Community Pools";
         break;
+      case "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal":
+        typo = "Software Upgrade Proposal";
+        break;
       default:
         typo = "UNKNOWN";
     }
@@ -114,15 +118,27 @@ const ProposalDetailCard = ({ proposalState }) => {
     return typo;
   };
 
+  const isSpendCommunityPools = (type) => {
+    return getProposalTypeTypo(type) === "Spend Community Pools";
+  };
+
+  const isChangeParameter = (type) => {
+    return getProposalTypeTypo(type) === "Change Parameter";
+  };
+
+  const isSoftwareUpgrade = (type) => {
+    return getProposalTypeTypo(type) === "Software Upgrade Proposal";
+  };
+
   const getTimeFormat = (time) => {
-    return moment(time).format("YYYY-MM-DD HH:mm:ss:ms");
+    return moment(time).format("YYYY-MM-DD HH:mm:ss");
   };
 
   return (
     <CardWrapper>
-      {console.log(proposalState)}
       <MainTitle>Proposal</MainTitle>
       <TitleWrapper>
+        {console.log(proposalState)}
         <ProposalID>#{proposalState.proposalId}</ProposalID>
         <Title>{proposalState.title}</Title>
         <Status>{getStatusTypo(proposalState.status)}</Status>
@@ -140,6 +156,44 @@ const ProposalDetailCard = ({ proposalState }) => {
           <Label>Description</Label>
           <Content>{proposalState.description}</Content>
         </DetailItem>
+
+        {/* Spend Community Pools */}
+        {isSpendCommunityPools(proposalState.proposalType) && (
+          <>
+            <DetailItem>
+              <Label>Recipient</Label>
+              <Content>{proposalState.extraData.recipient}</Content>
+            </DetailItem>
+            <DetailItem>
+              <Label>Amount</Label>
+              <Content>{`${numeral(proposalState.extraData.amount / 1000000).format("0,0.00")} FCT`}</Content>
+            </DetailItem>
+          </>
+        )}
+        {/* Change Parameters */}
+        {isChangeParameter(proposalState.proposalType) && (
+          <DetailItem>
+            <Label>Change Prameters</Label>
+            <Content>{JSON.stringify(proposalState.extraData.changes)}</Content>
+          </DetailItem>
+        )}
+        {/* Software Upgrade Proposal */}
+        {isSoftwareUpgrade(proposalState.proposalType) && (
+          <>
+            <DetailItem>
+              <Label>Height</Label>
+              <Content>{proposalState.extraData.height}</Content>
+            </DetailItem>
+            <DetailItem>
+              <Label>Version</Label>
+              <Content>{proposalState.extraData.name}</Content>
+            </DetailItem>
+            <DetailItem>
+              <Label>Info</Label>
+              <Content>{proposalState.extraData.info ? proposalState.extraData.info : "-"}</Content>
+            </DetailItem>
+          </>
+        )}
       </DetailWrapper>
     </CardWrapper>
   );

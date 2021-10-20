@@ -8,6 +8,7 @@ import DelegateModal from "./delegateModal";
 import RedelegateModal from "./redelegateModal";
 import UndelegateModal from "./undelegateModal";
 import WithdrawModal from "./withdrawModal";
+import DepositModal from "./depositModal";
 import VotingModal from "./votingModal";
 import NewProposalModal from "./newProposalModal";
 import ConfirmTxModal from "./confirmTxModal";
@@ -25,6 +26,7 @@ export {
   RedelegateModal,
   UndelegateModal,
   WithdrawModal,
+  DepositModal,
   VotingModal,
   NewProposalModal,
   ConfirmTxModal,

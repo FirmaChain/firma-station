@@ -83,13 +83,13 @@ function useFirma() {
     const delegated = FirmaUtil.getFCTStringFromUFCTStr(
       delegationBalanceList.length > 0 &&
         delegationBalanceList.reduce((acc, current) => {
-          return acc + current;
+          return numeral(acc).value() + numeral(current).value();
         })
     );
     const undelegate = FirmaUtil.getFCTStringFromUFCTStr(
       undelegationBalanceList.length > 0 &&
         undelegationBalanceList.reduce((acc, current) => {
-          return acc + current;
+          return numeral(acc).value() + numeral(current).value();
         })
     );
     const stakingReward = FirmaUtil.getFCTStringFromUFCTStr(totalReward.total);
@@ -130,8 +130,8 @@ function useFirma() {
   };
 
   const checkVlidateResult = (result) => {
-    if (result.code === undefined) throw "INVALID TX";
-    if (result.code !== 0) throw "FAILED TX";
+    if (result.code === undefined) throw new Error("INVALID TX");
+    if (result.code !== 0) throw new Error("FAILED TX");
   };
 
   const sendFCT = async (address, amount, memo) => {
@@ -139,6 +139,7 @@ function useFirma() {
 
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Bank.send(wallet, address, Number(amount), { memo });
+
     console.log(result);
 
     checkVlidateResult(result);
@@ -275,6 +276,7 @@ function useFirma() {
     submitParameterChangeProposal,
     submitCommunityPoolSpendProposal,
     submitTextProposal,
+    deposit,
     vote,
     refreshWallet,
   };
