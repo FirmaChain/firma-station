@@ -78,9 +78,9 @@ const DeleteButton = styled.div`
 `;
 
 const options = [
-  { value: "TEXT_PROPOSAL", label: "Text Proposal" },
-  { value: "COMMUNITY_POOL_SPEND_PROPOSAL", label: "Spend Community Pools" },
-  { value: "PARAMETER_CHANGE_PROPOSAL", label: "Change Parameter" },
+  { value: "TEXT_PROPOSAL", label: "Text" },
+  { value: "COMMUNITY_POOL_SPEND_PROPOSAL", label: "CommunityPoolSpend" },
+  { value: "PARAMETER_CHANGE_PROPOSAL", label: "ParameterChange" },
 ];
 
 const customStyles = {

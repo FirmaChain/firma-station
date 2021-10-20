@@ -117,6 +117,7 @@ export const useGovernmentQuery = ({ onCompleted }) => {
           proposalId: id
           status
           description
+          proposalType: proposal_type
         }
       }
     `,

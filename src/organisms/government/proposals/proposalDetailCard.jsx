@@ -100,16 +100,16 @@ const ProposalDetailCard = ({ proposalState }) => {
     let typo = "";
     switch (proposalType) {
       case "/cosmos.gov.v1beta1.TextProposal":
-        typo = "Text Proposal";
+        typo = "Text";
         break;
       case "/cosmos.params.v1beta1.ParameterChangeProposal":
-        typo = "Change Parameter";
+        typo = "ParameterChange";
         break;
       case "/cosmos.distribution.v1beta1.CommunityPoolSpendProposal":
-        typo = "Spend Community Pools";
+        typo = "CommunityPoolSpend";
         break;
       case "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal":
-        typo = "Software Upgrade Proposal";
+        typo = "SoftwareUpgrade";
         break;
       default:
         typo = "UNKNOWN";
@@ -138,7 +138,6 @@ const ProposalDetailCard = ({ proposalState }) => {
     <CardWrapper>
       <MainTitle>Proposal</MainTitle>
       <TitleWrapper>
-        {console.log(proposalState)}
         <ProposalID>#{proposalState.proposalId}</ProposalID>
         <Title>{proposalState.title}</Title>
         <Status>{getStatusTypo(proposalState.status)}</Status>

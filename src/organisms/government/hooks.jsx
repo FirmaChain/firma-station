@@ -43,7 +43,6 @@ export const useProposalData = (proposalId) => {
   };
 
   const formatExtraData = (data) => {
-    console.log(data.proposal[0].content.plan);
     if (data.proposal[0].content.plan) {
       return {
         height: data.proposal[0].content.plan.height,
@@ -71,7 +70,6 @@ export const useProposalData = (proposalId) => {
   useProposalQuery({
     proposalId,
     onCompleted: (data) => {
-      console.log(data);
       setProposalState((prevState) => ({
         ...prevState,
         proposalId: data.proposal[0].proposalId,

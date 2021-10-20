@@ -30,6 +30,9 @@ const ItemColumn = styled.div`
     line-height: 50px;
   }
   &:nth-child(2) {
+    text-align: center;
+    flex: 1 1 150px;
+    line-height: 50px;
   }
   &:nth-child(3) {
     text-align: center;
@@ -82,13 +85,15 @@ const Row = ({ data, index, style }) => {
   return (
     <ItemWrapper style={style}>
       <ItemColumn>{`# ${data[index].proposalId}`}</ItemColumn>
+      <ItemColumn>{getStatusTypo(data[index].status)}</ItemColumn>
+      <ItemColumn>{data[index].proposalType}</ItemColumn>
+
       <ItemColumn>
         <TitleTypo>
           <Link to={{ pathname: `/government/proposals/${data[index].proposalId}` }}>{data[index].title}</Link>
         </TitleTypo>
         <DescriptionTypo>{data[index].description}</DescriptionTypo>
       </ItemColumn>
-      <ItemColumn>{getStatusTypo(data[index].status)}</ItemColumn>
     </ItemWrapper>
   );
 };
