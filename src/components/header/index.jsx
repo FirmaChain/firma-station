@@ -25,6 +25,7 @@ import {
   DepositModal,
   VotingModal,
   NewProposalModal,
+  SendModal,
   ConfirmTxModal,
   QueueTxModal,
   ResultTxModal,
@@ -50,6 +51,7 @@ function Header() {
     deposit,
     voting,
     newProposal,
+    send,
     confirmTx,
     queueTx,
     resultTx,
@@ -101,6 +103,7 @@ function Header() {
       {deposit && <DepositModal />}
       {voting && <VotingModal />}
       {newProposal && <NewProposalModal />}
+      {send && <SendModal />}
       {confirmTx && <ConfirmTxModal />}
       {queueTx && <QueueTxModal />}
       {resultTx && <ResultTxModal />}

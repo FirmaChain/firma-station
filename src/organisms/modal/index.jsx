@@ -10,6 +10,7 @@ import UndelegateModal from "./undelegateModal";
 import DepositModal from "./depositModal";
 import VotingModal from "./votingModal";
 import NewProposalModal from "./newProposalModal";
+import SendModal from "./sendModal";
 import ConfirmTxModal from "./confirmTxModal";
 import QueueTxModal from "./queueTxModal";
 import ResultTxModal from "./resultTxModal";
@@ -27,6 +28,7 @@ export {
   DepositModal,
   VotingModal,
   NewProposalModal,
+  SendModal,
   ConfirmTxModal,
   QueueTxModal,
   ResultTxModal,

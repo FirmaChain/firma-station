@@ -13,6 +13,7 @@ import {
   HANDLE_MODAL_DEPOSIT,
   HANDLE_MODAL_VOTING,
   HANDLE_MODAL_NEWPROPOSAL,
+  HANDLE_MODAL_SEND,
   HANDLE_MODAL_CONFIRMTX,
   HANDLE_MODAL_QUEUETX,
   HANDLE_MODAL_RESULTTX,
@@ -32,6 +33,7 @@ const initialState = {
   deposit: false,
   voting: false,
   newProposal: false,
+  send: false,
   confirmTx: false,
   queueTx: false,
   resultTx: false,
@@ -115,6 +117,12 @@ export default handleActions(
       return {
         ...state,
         newProposal: isVisible,
+      };
+    },
+    [HANDLE_MODAL_SEND]: (state, { isVisible }) => {
+      return {
+        ...state,
+        send: isVisible,
       };
     },
     [HANDLE_MODAL_CONFIRMTX]: (state, { isVisible }) => {

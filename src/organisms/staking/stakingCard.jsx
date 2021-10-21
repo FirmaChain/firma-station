@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Cell } from "recharts";
 import numeral from "numeral";
 
 import theme from "themes";

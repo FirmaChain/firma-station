@@ -177,13 +177,11 @@ function useFirma() {
     if (result.code !== 0) throw new Error("FAILED TX");
   };
 
-  const sendFCT = async (address, amount, memo) => {
+  const sendFCT = async (address, amount, memo = "") => {
     if (!isInit) return;
 
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Bank.send(wallet, address, Number(amount), { memo });
-
-    console.log(result);
 
     checkVlidateResult(result);
   };
