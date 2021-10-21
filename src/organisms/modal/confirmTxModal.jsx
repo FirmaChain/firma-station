@@ -44,7 +44,6 @@ const ConfirmTxModal = () => {
     <Modal
       visible={confirmTxModalState}
       closable={true}
-      maskClosable={true}
       onClose={closeConfirmTxModal}
       prev={prevModal}
       width={confirmTxModalWidth}

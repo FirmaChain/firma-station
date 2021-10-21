@@ -80,7 +80,6 @@ const ImportPrivatekeyModal = () => {
     <Modal
       visible={importPrivatekeyModalState}
       closable={true}
-      maskClosable={true}
       onClose={cancelWallet}
       prev={prevModal}
       width={importPrivatekeyModalWidth}

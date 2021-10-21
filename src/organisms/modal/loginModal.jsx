@@ -36,13 +36,7 @@ const LoginModal = () => {
   };
 
   return (
-    <Modal
-      visible={loginModalState}
-      closable={true}
-      maskClosable={true}
-      onClose={closeLoginModal}
-      width={loginModalWidth}
-    >
+    <Modal visible={loginModalState} closable={true} onClose={closeLoginModal} width={loginModalWidth}>
       <MenuListWrap>
         {menuList.map((menu, index) => {
           return (

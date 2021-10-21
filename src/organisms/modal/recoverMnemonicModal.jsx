@@ -81,7 +81,6 @@ const RecoverMnemonicModal = () => {
     <Modal
       visible={recoverMnemonicModalState}
       closable={true}
-      maskClosable={true}
       onClose={cancelWallet}
       prev={prevModal}
       width={recoverMnemonicModalWidth}

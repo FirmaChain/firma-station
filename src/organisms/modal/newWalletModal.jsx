@@ -64,7 +64,6 @@ const NewWalletModal = () => {
     <Modal
       visible={newWalletModalState}
       closable={true}
-      maskClosable={true}
       onClose={closeNewWalletModal}
       prev={prevModal}
       width={newWalletModalWidth}

@@ -67,7 +67,7 @@ const DelegateModal = () => {
   };
 
   return (
-    <Modal visible={delegateModalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={delegateModalState} closable={true} onClose={closeModal} width={"500px"}>
       <ModalContainer>
         <ModalTitle>Delegate</ModalTitle>
         <ModalContent>

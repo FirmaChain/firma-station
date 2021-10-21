@@ -138,7 +138,6 @@ const ConfirmWalletModal = () => {
     <Modal
       visible={confirmWalletModalState}
       closable={true}
-      maskClosable={true}
       onClose={cancelWallet}
       prev={prevModal}
       width={confirmWalletModalWidth}

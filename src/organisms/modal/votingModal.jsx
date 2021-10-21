@@ -65,7 +65,7 @@ const VotingModal = () => {
   };
 
   return (
-    <Modal visible={votingModalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={votingModalState} closable={true} onClose={closeModal} width={"500px"}>
       <ModalContainer>
         <ModalTitle>Voting</ModalTitle>
         <ModalContent>

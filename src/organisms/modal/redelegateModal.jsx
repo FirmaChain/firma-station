@@ -116,7 +116,7 @@ const RedelegateModal = () => {
   };
 
   return (
-    <Modal visible={redelegateModalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={redelegateModalState} closable={true} onClose={closeModal} width={"500px"}>
       <ModalContainer>
         <ModalTitle>Redelegate</ModalTitle>
         <ModalContent>

@@ -67,12 +67,14 @@ const UndelegateModal = () => {
   };
 
   return (
-    <Modal visible={undelegateModalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={undelegateModalState} closable={true} onClose={closeModal} width={"500px"}>
       <ModalContainer>
         <ModalTitle>Undelegate</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{isValid(modalData.data)?numeral(modalData.data.delegation.amount / 1000000).format("0,0.000"):0} FCT</ModalInput>
+          <ModalInput>
+            {isValid(modalData.data) ? numeral(modalData.data.delegation.amount / 1000000).format("0,0.000") : 0} FCT
+          </ModalInput>
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />

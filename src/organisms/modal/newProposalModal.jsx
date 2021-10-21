@@ -266,7 +266,7 @@ const NewProposalModal = () => {
   };
 
   return (
-    <Modal visible={newProposalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={newProposalState} closable={true} onClose={closeModal} width={"500px"}>
       <ModalContainer>
         <ModalTitle>New Proposal</ModalTitle>
         <ModalContent>

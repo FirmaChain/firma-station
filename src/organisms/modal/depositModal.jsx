@@ -67,7 +67,7 @@ const DepositModal = () => {
   };
 
   return (
-    <Modal visible={depositModalState} closable={true} maskClosable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={depositModalState} closable={true} onClose={closeModal} width={"500px"}>
       <ModalContainer>
         <ModalTitle>Deposit</ModalTitle>
         <ModalContent>

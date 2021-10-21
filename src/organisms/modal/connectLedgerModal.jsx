@@ -34,7 +34,6 @@ const ConnectLedgerModal = () => {
     <Modal
       visible={connectLedgerModalState}
       closable={true}
-      maskClosable={true}
       onClose={closeModal}
       prev={prevModal}
       width={connectLedgerModalWidth}
