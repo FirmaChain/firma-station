@@ -7,7 +7,6 @@ import ConnectLedgerModal from "./connectLedgerModal";
 import DelegateModal from "./delegateModal";
 import RedelegateModal from "./redelegateModal";
 import UndelegateModal from "./undelegateModal";
-import WithdrawModal from "./withdrawModal";
 import DepositModal from "./depositModal";
 import VotingModal from "./votingModal";
 import NewProposalModal from "./newProposalModal";
@@ -25,7 +24,6 @@ export {
   DelegateModal,
   RedelegateModal,
   UndelegateModal,
-  WithdrawModal,
   DepositModal,
   VotingModal,
   NewProposalModal,

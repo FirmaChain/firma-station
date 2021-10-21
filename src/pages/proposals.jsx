@@ -7,11 +7,16 @@ import { useProposalData } from "organisms/government/hooks";
 const Proposals = () => {
   const proposalId = window.location.pathname.replace("/government/proposals/", "");
   const { proposalState } = useProposalData(proposalId);
+
   return (
     <ContentContainer>
-      <ProposalDetailCard proposalState={proposalState} />
-      <VotingCard proposalState={proposalState} />
-      <DepositCard proposalState={proposalState} />
+      {proposalState && (
+        <>
+          <ProposalDetailCard proposalState={proposalState} />
+          <VotingCard proposalState={proposalState} />
+          <DepositCard proposalState={proposalState} />
+        </>
+      )}
     </ContentContainer>
   );
 };

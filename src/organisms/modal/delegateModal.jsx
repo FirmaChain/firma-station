@@ -19,7 +19,8 @@ import {
 
 const DelegateModal = () => {
   const delegateModalState = useSelector((state) => state.modal.delegate);
-  const { balance, targetValidator } = useSelector((state) => state.wallet);
+  const modalData = useSelector((state) => state.modal.data);
+  const { balance } = useSelector((state) => state.wallet);
 
   const { delegate } = useFirma();
 
@@ -43,10 +44,14 @@ const DelegateModal = () => {
     setActiveButton(amount > 0 && amount <= numeral(balance).value());
   };
 
-  const delegateTx = (callback) => {
-    delegate(targetValidator, amount).then(() => {
-      callback();
-    });
+  const delegateTx = (resolveTx, rejectTx) => {
+    delegate(modalData.data.targetValidator, amount)
+      .then(() => {
+        resolveTx();
+      })
+      .catch(() => {
+        rejectTx();
+      });
   };
 
   const nextStep = () => {

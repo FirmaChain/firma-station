@@ -10,7 +10,6 @@ import {
   HANDLE_MODAL_DELEGATE,
   HANDLE_MODAL_REDELEGATE,
   HANDLE_MODAL_UNDELEGATE,
-  HANDLE_MODAL_WITHDRAW,
   HANDLE_MODAL_DEPOSIT,
   HANDLE_MODAL_VOTING,
   HANDLE_MODAL_NEWPROPOSAL,
@@ -30,7 +29,6 @@ const initialState = {
   delegate: false,
   redelegate: false,
   undelegate: false,
-  withdraw: false,
   deposit: false,
   voting: false,
   newProposal: false,
@@ -99,12 +97,6 @@ export default handleActions(
       return {
         ...state,
         undelegate: isVisible,
-      };
-    },
-    [HANDLE_MODAL_WITHDRAW]: (state, { isVisible }) => {
-      return {
-        ...state,
-        withdraw: isVisible,
       };
     },
     [HANDLE_MODAL_DEPOSIT]: (state, { isVisible }) => {

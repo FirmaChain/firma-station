@@ -79,20 +79,26 @@ function useFirma() {
         });
     });
 
-    const available = FirmaUtil.getFCTStringFromUFCTStr(balance);
-    const delegated = FirmaUtil.getFCTStringFromUFCTStr(
-      delegationBalanceList.length > 0 &&
-        delegationBalanceList.reduce((acc, current) => {
-          return numeral(acc).value() + numeral(current).value();
-        })
-    );
-    const undelegate = FirmaUtil.getFCTStringFromUFCTStr(
-      undelegationBalanceList.length > 0 &&
-        undelegationBalanceList.reduce((acc, current) => {
-          return numeral(acc).value() + numeral(current).value();
-        })
-    );
-    const stakingReward = FirmaUtil.getFCTStringFromUFCTStr(totalReward.total);
+    const available = numeral(FirmaUtil.getFCTStringFromUFCTStr(balance)).value();
+    const delegated = numeral(
+      FirmaUtil.getFCTStringFromUFCTStr(
+        delegationBalanceList.length > 0
+          ? delegationBalanceList.reduce((acc, current) => {
+              return numeral(acc).value() + numeral(current).value();
+            })
+          : 0
+      )
+    ).value();
+    const undelegate = numeral(
+      FirmaUtil.getFCTStringFromUFCTStr(
+        undelegationBalanceList.length > 0
+          ? undelegationBalanceList.reduce((acc, current) => {
+              return numeral(acc).value() + numeral(current).value();
+            })
+          : 0
+      )
+    ).value();
+    const stakingReward = numeral(FirmaUtil.getFCTStringFromUFCTStr(totalReward.total ? totalReward.total : 0)).value();
 
     return {
       available,
@@ -109,11 +115,11 @@ function useFirma() {
     const address = await wallet.getAddress();
     const balance = await getFirmaSDK().Bank.getBalance(address);
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
-    const undelegationList = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
+    // const undelegationList = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
     const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
 
     const targetDelegation = delegationList.find((value) => value.delegation.validator_address === validatorAddress);
-    const targetUndelegate = undelegationList.find((value) => value.validator_address === validatorAddress);
+    // const targetUndelegate = undelegationList.find((value) => value.validator_address === validatorAddress);
     const targetReward = totalReward.rewards.find((value) => value.validator_address === validatorAddress);
 
     const available = FirmaUtil.getFCTStringFromUFCTStr(balance);
@@ -127,6 +133,43 @@ function useFirma() {
       undelegate,
       stakingReward,
     };
+  };
+
+  const getDelegationList = async () => {
+    if (!isInit) return;
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const address = await wallet.getAddress();
+    const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
+
+    const parseList = delegationList.map((value) => {
+      return {
+        value: value.delegation.validator_address,
+        label: value.delegation.validator_address,
+        amount: value.delegation.shares,
+      };
+    });
+
+    return parseList;
+  };
+
+  const getDelegation = async (targetValidator) => {
+    if (!isInit) return;
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const address = await wallet.getAddress();
+    const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
+
+    const [delegation] = delegationList
+      .filter((value) => value.delegation.validator_address === targetValidator)
+      .map((value) => {
+        return {
+          value: value.delegation.validator_address,
+          amount: value.delegation.shares,
+        };
+      });
+
+    return delegation;
   };
 
   const checkVlidateResult = (result) => {
@@ -267,6 +310,8 @@ function useFirma() {
     initWallet,
     getStaking,
     getStakingFromValidator,
+    getDelegationList,
+    getDelegation,
     sendFCT,
     convertToFct,
     delegate,

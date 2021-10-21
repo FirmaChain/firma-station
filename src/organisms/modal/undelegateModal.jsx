@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import numeral from "numeral";
 import { useSelector } from "react-redux";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
 import useFirma from "utils/wallet";
+import { isValid } from "utils/common";
 
 import {
   ModalContainer,
@@ -18,14 +20,12 @@ import {
 
 const UndelegateModal = () => {
   const undelegateModalState = useSelector((state) => state.modal.undelegate);
-  const { targetValidator } = useSelector((state) => state.wallet);
+  const modalData = useSelector((state) => state.modal.data);
 
   const { undelegate } = useFirma();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
-
-  const available = 9999;
 
   const closeModal = () => {
     resetModal();
@@ -41,13 +41,17 @@ const UndelegateModal = () => {
     const amount = value.replace(/[^0-9.]/g, "");
 
     setAmount(amount);
-    setActiveButton(amount > 0 && amount <= available);
+    setActiveButton(amount > 0 && amount <= numeral(modalData.data.delegation.amount / 1000000).value());
   };
 
-  const undelegateTx = (callback) => {
-    undelegate(targetValidator, amount).then(() => {
-      callback();
-    });
+  const undelegateTx = (resolveTx, rejectTx) => {
+    undelegate(modalData.data.targetValidator, amount)
+      .then(() => {
+        resolveTx();
+      })
+      .catch(() => {
+        rejectTx();
+      });
   };
 
   const nextStep = () => {
@@ -68,8 +72,7 @@ const UndelegateModal = () => {
         <ModalTitle>Undelegate</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{available} FCT</ModalInput>
-
+          <ModalInput>{isValid(modalData.data)?numeral(modalData.data.delegation.amount / 1000000).format("0,0.000"):0} FCT</ModalInput>
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />

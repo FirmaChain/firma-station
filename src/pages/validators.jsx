@@ -11,7 +11,7 @@ const Validators = (props) => {
 
   return (
     <ContentContainer>
-      {isInit && <DelegationCard targetStakingState={targetStakingState} />}
+      {isInit && targetStakingState && <DelegationCard targetStakingState={targetStakingState} />}
       <ValidatorCard />
     </ContentContainer>
   );

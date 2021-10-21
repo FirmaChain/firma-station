@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
+import numeral from "numeral";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
 import useFirma from "utils/wallet";
+import { isValid } from "utils/common";
 
 import {
   ModalContainer,
@@ -23,12 +25,6 @@ const SelectWrapper = styled.div`
   width: 100%;
   margin-bottom: 30px;
 `;
-
-const options = [
-  { value: "chocolate", label: "firma-node-1" },
-  { value: "strawberry", label: "firma-node-2" },
-  { value: "vanilla", label: "firma-node-3" },
-];
 
 const customStyles = {
   control: (provided) => ({
@@ -56,17 +52,16 @@ const customStyles = {
 
 const RedelegateModal = () => {
   const redelegateModalState = useSelector((state) => state.modal.redelegate);
-  const { targetValidator } = useSelector((state) => state.wallet);
+  const modalData = useSelector((state) => state.modal.data);
 
   const { redelegate } = useFirma();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
   const [sourceValidator, setSourceValidator] = useState(null);
+  const [sourceAmount, setSourceAmount] = useState(null);
 
   const selectInputRef = useRef();
-  const available = 993;
-  const destValidator = "";
 
   const closeModal = () => {
     resetModal();
@@ -78,6 +73,7 @@ const RedelegateModal = () => {
     setActiveButton(false);
     setAmount("");
     setSourceValidator(null);
+    setSourceAmount(0);
   };
 
   const onChangeAmount = (e) => {
@@ -85,21 +81,26 @@ const RedelegateModal = () => {
     const amount = value.replace(/[^0-9.]/g, "");
 
     setAmount(amount);
-    setActiveButton(amount > 0 && amount <= available);
+    setActiveButton(amount > 0 && amount <= sourceAmount);
   };
 
-  const redelegateTx = (callback) => {
-    redelegate(targetValidator, destValidator, amount).then(() => {
-      callback();
-    });
+  const redelegateTx = (resolveTx, rejectTx) => {
+    redelegate(sourceValidator, modalData.data.targetValidator, amount)
+      .then(() => {
+        resolveTx();
+      })
+      .catch(() => {
+        rejectTx();
+      });
   };
 
   const onChangeValidator = (e) => {
     if (e == null) return;
-    const { value } = e;
+    const { value, amount } = e;
 
     setAmount("");
     setSourceValidator(value);
+    setSourceAmount(numeral(amount / 1000000).value());
   };
 
   const nextStep = () => {
@@ -119,14 +120,23 @@ const RedelegateModal = () => {
       <ModalContainer>
         <ModalTitle>Redelegate</ModalTitle>
         <ModalContent>
-          <ModalLabel>Source Validator</ModalLabel>
-          <SelectWrapper>
-            <Select options={options} styles={customStyles} onChange={onChangeValidator} ref={selectInputRef} />
-          </SelectWrapper>
+          {isValid(modalData.data) && (
+            <>
+              <ModalLabel>Source Validator</ModalLabel>
+              <SelectWrapper>
+                <Select
+                  options={modalData.data.delegationList.filter((v) => v.value !== modalData.data.targetValidator)}
+                  styles={customStyles}
+                  onChange={onChangeValidator}
+                  ref={selectInputRef}
+                />
+              </SelectWrapper>
+            </>
+          )}
           {sourceValidator && (
             <>
               <ModalLabel>Available</ModalLabel>
-              <ModalInput>{available} FCT</ModalInput>
+              <ModalInput>{numeral(sourceAmount).format("0,0.000")} FCT</ModalInput>
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>

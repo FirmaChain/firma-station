@@ -31,7 +31,7 @@ export const useProposalData = (proposalId) => {
       abstain: 0,
     };
 
-    if (data.proposalTallyResult)
+    if (data.proposalTallyResult.length > 1)
       result = {
         yes: data.proposalTallyResult[0].yes,
         no: data.proposalTallyResult[0].no,

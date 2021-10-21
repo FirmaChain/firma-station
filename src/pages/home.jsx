@@ -26,12 +26,10 @@ const Home = () => {
           </LeftCardWrap>
         )}
         <RightCardWrap>
-          <RightCardTopWrap>
-            <BlockCard blockState={blockState} />
-          </RightCardTopWrap>
+          <RightCardTopWrap>{blockState && <BlockCard blockState={blockState} />}</RightCardTopWrap>
           <RightCardMiddleWrap>
-            <VotingPowerCard votingPowerState={votingPowerState} />
-            <TokenomicsCard tokenomicsState={tokenomicsState} />
+            {votingPowerState && <VotingPowerCard votingPowerState={votingPowerState} />}
+            {tokenomicsState && <TokenomicsCard tokenomicsState={tokenomicsState} />}
           </RightCardMiddleWrap>
         </RightCardWrap>
       </CardWrap>

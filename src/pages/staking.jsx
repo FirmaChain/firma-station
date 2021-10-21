@@ -10,8 +10,8 @@ const Staking = () => {
 
   return (
     <ContentContainer>
-      {isInit && <StakingCard totalStakingState={totalStakingState} />}
-      <ValidatorsCard validatorsState={validatorsState} />
+      {isInit && totalStakingState && <StakingCard totalStakingState={totalStakingState} />}
+      {validatorsState && <ValidatorsCard validatorsState={validatorsState} />}
     </ContentContainer>
   );
 };

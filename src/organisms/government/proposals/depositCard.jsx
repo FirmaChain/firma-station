@@ -3,7 +3,6 @@ import moment from "moment";
 import numeral from "numeral";
 import styled from "styled-components";
 
-import Gauge from "components/gauge";
 import { modalActions } from "redux/action";
 
 const CardWrapper = styled.div`
@@ -91,12 +90,6 @@ const DepositCard = ({ proposalState }) => {
           </Content>
         </DetailItem>
       </DetailWrapper>
-      {/* <Gauge
-        percent={`${numeral(
-          (getCurrentDeposit(proposalState.depositors) / proposalState.paramMinDepositAmount) * 100
-        ).format("0.00")}%`}
-        bgColor={"#808080"}
-      /> */}
       {proposalState.status === "PROPOSAL_STATUS_DEPOSIT_PERIOD" && (
         <DepositButton
           active={true}

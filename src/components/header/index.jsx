@@ -22,7 +22,6 @@ import {
   DelegateModal,
   RedelegateModal,
   UndelegateModal,
-  WithdrawModal,
   DepositModal,
   VotingModal,
   NewProposalModal,
@@ -38,11 +37,28 @@ import useFirma from "utils/wallet";
 function Header() {
   const { isInit } = useSelector((state) => state.wallet);
   const { resetWallet } = useFirma();
+  const {
+    login,
+    newWallet,
+    confirmWallet,
+    recoverMnemonic,
+    importPrivatekey,
+    connectLedger,
+    delegate,
+    redelegate,
+    undelegate,
+    deposit,
+    voting,
+    newProposal,
+    confirmTx,
+    queueTx,
+    resultTx,
+  } = useSelector((state) => state.modal);
 
-  const login = () => {
+  const onLogin = () => {
     modalActions.handleModalLogin(true);
   };
-  const logout = () => {
+  const onLogout = () => {
     resetWallet();
   };
 
@@ -67,28 +83,27 @@ function Header() {
         </FaucetButton>
 
         {isInit ? (
-          <LoginoutButton onClick={logout}>LOGOUT</LoginoutButton>
+          <LoginoutButton onClick={onLogout}>LOGOUT</LoginoutButton>
         ) : (
-          <LoginoutButton onClick={login}>LOGIN</LoginoutButton>
+          <LoginoutButton onClick={onLogin}>LOGIN</LoginoutButton>
         )}
       </HeaderRightWrapper>
 
-      <LoginModal />
-      <NewWalletModal />
-      <ConfirmWalletModal />
-      <RecoverMnemonicModal />
-      <ImportPrivatekeyModal />
-      <ConnectLedgerModal />
-      <DelegateModal />
-      <RedelegateModal />
-      <UndelegateModal />
-      <WithdrawModal />
-      <DepositModal />
-      <VotingModal />
-      <NewProposalModal />
-      <ConfirmTxModal />
-      <QueueTxModal />
-      <ResultTxModal />
+      {login && <LoginModal />}
+      {newWallet && <NewWalletModal />}
+      {confirmWallet && <ConfirmWalletModal />}
+      {recoverMnemonic && <RecoverMnemonicModal />}
+      {importPrivatekey && <ImportPrivatekeyModal />}
+      {connectLedger && <ConnectLedgerModal />}
+      {delegate && <DelegateModal />}
+      {redelegate && <RedelegateModal />}
+      {undelegate && <UndelegateModal />}
+      {deposit && <DepositModal />}
+      {voting && <VotingModal />}
+      {newProposal && <NewProposalModal />}
+      {confirmTx && <ConfirmTxModal />}
+      {queueTx && <QueueTxModal />}
+      {resultTx && <ResultTxModal />}
     </HeaderContainer>
   );
 }
