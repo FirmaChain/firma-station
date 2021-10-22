@@ -91,8 +91,6 @@ const VotingCard = ({ proposalState }) => {
   };
 
   const getTallyPercent = (proposalState, targetKey) => {
-    if (Object.keys(proposalState).length === 0) return 0;
-
     let currentVoting = 0;
     for (let value in proposalState.tally) {
       if (value === "abstain") continue;
@@ -103,8 +101,6 @@ const VotingCard = ({ proposalState }) => {
   };
 
   const getTallyValue = (proposalState, targetKey) => {
-    if (Object.keys(proposalState).length === 0) return 0;
-
     return proposalState.tally[targetKey] / 1000000;
   };
 
@@ -147,55 +143,51 @@ const VotingCard = ({ proposalState }) => {
 
   return (
     <CardWrapper>
-      {Object.keys(proposalState).length && (
-        <>
-          <MainTitle>Voting</MainTitle>
-          <DetailWrapper>
-            <DetailItem>
-              <Label>Voting Time</Label>
-              <Content>
-                {getTimeFormat(proposalState.votingStartTime)} ~ {getTimeFormat(proposalState.votingEndTime)}
-              </Content>
-            </DetailItem>
-            <DetailItem>
-              <Label>Quorum</Label>
-              <Content bigSize={true}>{numeral(proposalState.paramQuorum * 100).format("0.00")}%</Content>
-            </DetailItem>
-            <DetailItem>
-              <Label>Current Turnout</Label>
-              <Content bigSize={true}>
-                {numeral(getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower)).format("0.00")}%
-              </Content>
-            </DetailItem>
-          </DetailWrapper>
-          <VotingWrapper>
-            {votingData.map((voting, index) => (
-              <VotingData key={index}>
-                <VotingType color={voting.color}>{voting.type}</VotingType>
-                <VotingGauge>
-                  <Gauge percent={`${numeral(voting.percent * 100).format("0.00")}%`} bgColor={voting.color} />
-                </VotingGauge>
-                <VotingPercent>
-                  {voting.type !== "Abstain" ? `${numeral(voting.percent * 100).format("0.00")}%` : "ㅤ"}
-                </VotingPercent>
-                <VotingValue>{numeral(voting.value).format("0,0.00")}</VotingValue>
-              </VotingData>
-            ))}
-          </VotingWrapper>
-          {proposalState.status === "PROPOSAL_STATUS_VOTING_PERIOD" && (
-            <VotingButton
-              active={true}
-              onClick={() => {
-                modalActions.handleModalData({
-                  proposalId: proposalState.proposalId,
-                });
-                modalActions.handleModalVoting(true);
-              }}
-            >
-              Vote
-            </VotingButton>
-          )}
-        </>
+      <MainTitle>Voting</MainTitle>
+      <DetailWrapper>
+        <DetailItem>
+          <Label>Voting Time</Label>
+          <Content>
+            {getTimeFormat(proposalState.votingStartTime)} ~ {getTimeFormat(proposalState.votingEndTime)}
+          </Content>
+        </DetailItem>
+        <DetailItem>
+          <Label>Quorum</Label>
+          <Content bigSize={true}>{numeral(proposalState.paramQuorum * 100).format("0.00")}%</Content>
+        </DetailItem>
+        <DetailItem>
+          <Label>Current Turnout</Label>
+          <Content bigSize={true}>
+            {numeral(getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower)).format("0.00")}%
+          </Content>
+        </DetailItem>
+      </DetailWrapper>
+      <VotingWrapper>
+        {votingData.map((voting, index) => (
+          <VotingData key={index}>
+            <VotingType color={voting.color}>{voting.type}</VotingType>
+            <VotingGauge>
+              <Gauge percent={`${numeral(voting.percent * 100).format("0.00")}%`} bgColor={voting.color} />
+            </VotingGauge>
+            <VotingPercent>
+              {voting.type !== "Abstain" ? `${numeral(voting.percent * 100).format("0.00")}%` : "ㅤ"}
+            </VotingPercent>
+            <VotingValue>{numeral(voting.value).format("0,0.00")}</VotingValue>
+          </VotingData>
+        ))}
+      </VotingWrapper>
+      {proposalState.status === "PROPOSAL_STATUS_VOTING_PERIOD" && (
+        <VotingButton
+          active={true}
+          onClick={() => {
+            modalActions.handleModalData({
+              proposalId: proposalState.proposalId,
+            });
+            modalActions.handleModalVoting(true);
+          }}
+        >
+          Vote
+        </VotingButton>
       )}
     </CardWrapper>
   );

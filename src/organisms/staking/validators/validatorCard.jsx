@@ -68,7 +68,11 @@ const StatusContent = styled.div`
 `;
 const StatusSubContent = styled.div``;
 
-const ValidatorCard = () => {
+const ValidatorCard = ({ validatorsState }) => {
+  // const targetValidatorData = validatorsState.validators.map();
+  const getValidatorAddress = () => {
+    return window.location.pathname.replace("/staking/validators/", "");
+  };
   return (
     <CardWrapper>
       <ProfileWrapper>

@@ -21,7 +21,7 @@ export const useGovernmentData = () => {
 };
 
 export const useProposalData = (proposalId) => {
-  const [proposalState, setProposalState] = useState({});
+  const [proposalState, setProposalState] = useState(null);
 
   const formatTally = (data) => {
     let result = {
@@ -31,7 +31,7 @@ export const useProposalData = (proposalId) => {
       abstain: 0,
     };
 
-    if (data.proposalTallyResult.length > 1)
+    if (data.proposalTallyResult.length > 0)
       result = {
         yes: data.proposalTallyResult[0].yes,
         no: data.proposalTallyResult[0].no,

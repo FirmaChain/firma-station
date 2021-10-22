@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import numeral from "numeral";
 import { useSelector } from "react-redux";
+import { FirmaUtil } from "@firmachain/firma-js";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
@@ -51,6 +52,8 @@ const SendModal = () => {
   const onChangeTargetAddress = (e) => {
     const { value } = e.target;
     const address = value.replace(/ /g, "");
+
+    const isValid = FirmaUtil.isValidAddress(address);
 
     setTargetAddress(address);
   };
