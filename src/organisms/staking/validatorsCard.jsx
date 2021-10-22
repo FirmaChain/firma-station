@@ -65,7 +65,7 @@ const Row = ({ data, index, style }) => {
     >
       <ItemWrapper style={style}>
         <ItemColumn>{index + 1}</ItemColumn>
-        <ItemColumn>{currentValidator.validatorAddress}</ItemColumn>
+        <ItemColumn>{currentValidator.validatorMoniker}</ItemColumn>
         <ItemColumn>{`${currentValidator.votingPowerPercent} %`}</ItemColumn>
         <ItemColumn>{`${currentValidator.selfPercent} %`}</ItemColumn>
         <ItemColumn>{`${currentValidator.commission} %`}</ItemColumn>

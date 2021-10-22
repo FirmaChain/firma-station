@@ -98,6 +98,10 @@ export const useValidatorsQuery = ({ onCompleted }) => {
           validatorSigningInfos: validator_signing_infos(order_by: { height: desc }, limit: 1) {
             missedBlocksCounter: missed_blocks_counter
           }
+          validator_descriptions {
+            avatar_url
+            moniker
+          }
         }
         slashingParams: slashing_params(order_by: { height: desc }, limit: 1) {
           params

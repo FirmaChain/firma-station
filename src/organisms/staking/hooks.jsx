@@ -48,7 +48,7 @@ export const useStakingData = () => {
 
       const validators = data.validator.map((validator) => {
         const validatorAddress = validator.validatorInfo.operatorAddress;
-        const validatorMoniker = validator.moniker;
+        const validatorMoniker = validator.validator_descriptions[0].moniker;
         const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
         const votingPower = validator.validatorVotingPowers[0].votingPower;
         const votingPowerPercent = numeral((votingPower / totalVotingPower) * 100).format("0.00");
@@ -61,7 +61,7 @@ export const useStakingData = () => {
         const self = numeral(selfDelegation.amount.amount).value();
         const selfPercent = numeral((self / (totalDelegations || 1)) * 100).format("0.00");
         const missedBlockCounter = validator.validatorSigningInfos[0].missedBlocksCounter;
-        const commission = validator.validatorCommissions[0].commission * 100;
+        const commission = numeral(validator.validatorCommissions[0].commission * 100).value();
         const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
         const status = validator.validatorStatuses[0].status;
         const jailed = validator.validatorStatuses[0].jailed;
