@@ -1,4 +1,5 @@
 import React from "react";
+import numeral from "numeral";
 import styled from "styled-components";
 
 const CardWrapper = styled.div`
@@ -33,6 +34,10 @@ const ProfileImage = styled.div`
   border-radius: 40px;
   background-color: gray;
   margin-top: 8px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  ${(props) => props.src && `background-image:url('${props.src}')`}
 `;
 const DescriptionWrap = styled.div`
   width: 100%;
@@ -69,48 +74,51 @@ const StatusContent = styled.div`
 const StatusSubContent = styled.div``;
 
 const ValidatorCard = ({ validatorsState }) => {
-  // const targetValidatorData = validatorsState.validators.map();
   const getValidatorAddress = () => {
     return window.location.pathname.replace("/staking/validators/", "");
   };
+
+  const [targetValidatorData] = validatorsState.validators.filter(
+    (value) => value.validatorAddress === getValidatorAddress()
+  );
+
   return (
     <CardWrapper>
-      <ProfileWrapper>
-        <ProfileImageWrap>
-          <ProfileImage />
-        </ProfileImageWrap>
-        <DescriptionWrap>
-          <NameTypo>firma-node-1</NameTypo>
-          <DescriptionTypo>
-            <div>https://firmachain.org</div>
-            <div>[firma node 1] validator</div>
-            <div>[firma node 1] validator</div>
-
-            <div>[firma node 1] validator</div>
-            <div>[firma node 1] validator</div>
-          </DescriptionTypo>
-        </DescriptionWrap>
-      </ProfileWrapper>
-      <StatusWrapper>
-        <StatusItem>
-          <StatusTitle>Voting Power</StatusTitle>
-          <StatusContent>33.3%</StatusContent>
-          <StatusSubContent>1,293,123</StatusSubContent>
-        </StatusItem>
-        <StatusItem>
-          <StatusTitle>Self-delegation</StatusTitle>
-          <StatusContent>100%</StatusContent>
-          <StatusSubContent>1,293,123</StatusSubContent>
-        </StatusItem>
-        <StatusItem>
-          <StatusTitle>Commission</StatusTitle>
-          <StatusContent>10%</StatusContent>
-        </StatusItem>
-        <StatusItem>
-          <StatusTitle>Uptime</StatusTitle>
-          <StatusContent>100%</StatusContent>
-        </StatusItem>
-      </StatusWrapper>
+      {targetValidatorData && (
+        <>
+          <ProfileWrapper>
+            <ProfileImageWrap>
+              <ProfileImage src={targetValidatorData.validatorAvatar} />
+            </ProfileImageWrap>
+            <DescriptionWrap>
+              <NameTypo>{targetValidatorData.validatorMoniker}</NameTypo>
+              <DescriptionTypo>{targetValidatorData.validatorDetail}</DescriptionTypo>
+            </DescriptionWrap>
+          </ProfileWrapper>
+          <StatusWrapper>
+            <StatusItem>
+              <StatusTitle>Voting Power</StatusTitle>
+              <StatusContent>{`${numeral(targetValidatorData.votingPowerPercent * 1).format("0.00")} %`}</StatusContent>
+              <StatusSubContent>{`${numeral(targetValidatorData.votingPower).format("0,0.00")} FCT`}</StatusSubContent>
+            </StatusItem>
+            <StatusItem>
+              <StatusTitle>Self-delegation</StatusTitle>
+              <StatusContent>{`${numeral(targetValidatorData.selfPercent * 1).format("0.00")} %`}</StatusContent>
+              <StatusSubContent>{`${numeral(targetValidatorData.self / 1000000).format(
+                "0,0.00"
+              )} FCT`}</StatusSubContent>
+            </StatusItem>
+            <StatusItem>
+              <StatusTitle>Commission</StatusTitle>
+              <StatusContent>{`${numeral(targetValidatorData.commission * 1).format("0.00")} %`}</StatusContent>
+            </StatusItem>
+            <StatusItem>
+              <StatusTitle>Uptime</StatusTitle>
+              <StatusContent>{`${numeral(targetValidatorData.condition * 1).format("0.00")} %`}</StatusContent>
+            </StatusItem>
+          </StatusWrapper>
+        </>
+      )}
     </CardWrapper>
   );
 };

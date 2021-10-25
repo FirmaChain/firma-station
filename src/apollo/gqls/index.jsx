@@ -101,6 +101,8 @@ export const useValidatorsQuery = ({ onCompleted }) => {
           validator_descriptions {
             avatar_url
             moniker
+            details
+            website
           }
         }
         slashingParams: slashing_params(order_by: { height: desc }, limit: 1) {

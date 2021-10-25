@@ -1,4 +1,5 @@
 import ValidatorCard from "./validatorCard";
 import DelegationCard from "./delegationCard";
+import DelegatorsCard from "./delegatorsCard";
 
-export { ValidatorCard, DelegationCard };
+export { ValidatorCard, DelegationCard, DelegatorsCard };

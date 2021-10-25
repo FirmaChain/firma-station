@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
@@ -53,6 +54,23 @@ const ListWrapper = styled.div`
   height: 100%;
 `;
 
+const ProfileImage = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: gray;
+  margin-top: 10px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  float: left;
+  ${(props) => props.src && `background-image:url('${props.src}')`}
+`;
+const MonikerTypo = styled.div`
+  margin-left: 10px;
+  float: left;
+`;
+
 const Row = ({ data, index, style }) => {
   const currentValidator = data[index];
 
@@ -65,11 +83,14 @@ const Row = ({ data, index, style }) => {
     >
       <ItemWrapper style={style}>
         <ItemColumn>{index + 1}</ItemColumn>
-        <ItemColumn>{currentValidator.validatorMoniker}</ItemColumn>
-        <ItemColumn>{`${currentValidator.votingPowerPercent} %`}</ItemColumn>
-        <ItemColumn>{`${currentValidator.selfPercent} %`}</ItemColumn>
-        <ItemColumn>{`${currentValidator.commission} %`}</ItemColumn>
-        <ItemColumn>{`${currentValidator.condition} %`}</ItemColumn>
+        <ItemColumn>
+          <ProfileImage src={currentValidator.validatorAvatar} />
+          <MonikerTypo>{currentValidator.validatorMoniker}</MonikerTypo>
+        </ItemColumn>
+        <ItemColumn>{`${numeral(currentValidator.votingPowerPercent).format("0,0.00")} %`}</ItemColumn>
+        <ItemColumn>{`${numeral(currentValidator.selfPercent).format("0,0.00")} %`}</ItemColumn>
+        <ItemColumn>{`${numeral(currentValidator.commission).format("0,0.00")} %`}</ItemColumn>
+        <ItemColumn>{`${numeral(currentValidator.condition).format("0,0.00")} %`}</ItemColumn>
       </ItemWrapper>
     </Link>
   );

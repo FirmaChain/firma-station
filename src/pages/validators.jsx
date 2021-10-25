@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import { ContentContainer } from "styles/validstors";
-import { ValidatorCard, DelegationCard } from "organisms/staking/validators";
+import { ValidatorCard, DelegationCard, DelegatorsCard } from "organisms/staking/validators";
 import { useStakingData } from "organisms/staking/hooks";
 
 const Validators = () => {
@@ -12,7 +12,12 @@ const Validators = () => {
   return (
     <ContentContainer>
       {targetStakingState && isInit && <DelegationCard targetStakingState={targetStakingState} />}
-      {validatorsState && <ValidatorCard validatorsState={validatorsState} />}
+      {validatorsState && (
+        <>
+          <ValidatorCard validatorsState={validatorsState} />
+          <DelegatorsCard validatorsState={validatorsState} />
+        </>
+      )}
     </ContentContainer>
   );
 };

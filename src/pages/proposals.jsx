@@ -10,7 +10,6 @@ const Proposals = () => {
 
   return (
     <ContentContainer>
-      {console.log(proposalState)}
       {proposalState && (
         <>
           <ProposalDetailCard proposalState={proposalState} />
