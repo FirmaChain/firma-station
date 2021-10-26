@@ -13,6 +13,7 @@ import {
   QrText,
 } from "./styles";
 import {
+  NetworksModal,
   LoginModal,
   NewWalletModal,
   ConfirmWalletModal,
@@ -31,7 +32,7 @@ import {
   ResultTxModal,
 } from "organisms/modal";
 import { modalActions } from "redux/action";
-import { FIRMACHAIN_CONFIG } from "config";
+import { FIRMACHAIN_CONFIG, FAUCET_URI } from "config";
 
 import useFirma from "utils/wallet";
 
@@ -39,6 +40,7 @@ function Header() {
   const { isInit } = useSelector((state) => state.wallet);
   const { resetWallet } = useFirma();
   const {
+    network,
     login,
     newWallet,
     confirmWallet,
@@ -63,7 +65,9 @@ function Header() {
   const onLogout = () => {
     resetWallet();
   };
-
+  const onNetwork = () => {
+    modalActions.handleModalNetwork(true);
+  };
   return (
     <HeaderContainer>
       <HeaderLeftWrapper>
@@ -71,18 +75,19 @@ function Header() {
         <QrText>Export QR Code</QrText>
       </HeaderLeftWrapper>
       <HeaderRightWrapper>
-        <NetworkButton>
+        <NetworkButton onClick={onNetwork}>
           <NetworkStatus />
           <NetworkText>{FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
         </NetworkButton>
-
-        <FaucetButton
-          onClick={() => {
-            window.open("https://faucet-devnet.firmachain.org/");
-          }}
-        >
-          FAUCET
-        </FaucetButton>
+        {FAUCET_URI && (
+          <FaucetButton
+            onClick={() => {
+              window.open(FAUCET_URI);
+            }}
+          >
+            FAUCET
+          </FaucetButton>
+        )}
 
         {isInit ? (
           <LoginoutButton onClick={onLogout}>LOGOUT</LoginoutButton>
@@ -91,6 +96,7 @@ function Header() {
         )}
       </HeaderRightWrapper>
 
+      {network && <NetworksModal />}
       {login && <LoginModal />}
       {newWallet && <NewWalletModal />}
       {confirmWallet && <ConfirmWalletModal />}

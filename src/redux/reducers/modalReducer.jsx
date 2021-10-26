@@ -1,6 +1,7 @@
 import { handleActions } from "redux-actions";
 import {
   HANDLE_MODAL_DATA,
+  HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
   HANDLE_MODAL_NEWWALLET,
   HANDLE_MODAL_CONFIRMWALLET,
@@ -21,6 +22,7 @@ import {
 
 const initialState = {
   data: {},
+  network: false,
   login: false,
   newWallet: false,
   confirmWallet: false,
@@ -45,6 +47,12 @@ export default handleActions(
       return {
         ...state,
         data: data,
+      };
+    },
+    [HANDLE_MODAL_NETWORK]: (state, { isVisible }) => {
+      return {
+        ...state,
+        network: isVisible,
       };
     },
     [HANDLE_MODAL_LOGIN]: (state, { isVisible }) => {

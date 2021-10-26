@@ -13,6 +13,7 @@ import BuyFirmaIcon from "@mui/icons-material/Payment";
 import ExplorerIcon from "@mui/icons-material/Archive";
 import SettingsIcon from "@mui/icons-material/Settings";
 
+import { EXPLORER_URI } from "config";
 import {
   DrawerStyled,
   LogoImg,
@@ -44,7 +45,7 @@ const menus = [
     name: "Explorer",
     path: "/explorer",
     icon: ExplorerIcon,
-    externalLink: "https://explorer-devnet.firmachain.org/",
+    externalLink: EXPLORER_URI,
   },
 ];
 

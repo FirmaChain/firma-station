@@ -1,5 +1,6 @@
 import {
   HANDLE_MODAL_DATA,
+  HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
   HANDLE_MODAL_NEWWALLET,
   HANDLE_MODAL_CONFIRMWALLET,
@@ -20,6 +21,7 @@ import {
 
 export const handleModalData = (data) => ({ type: HANDLE_MODAL_DATA, data });
 
+export const handleModalNetwork = (isVisible) => ({ type: HANDLE_MODAL_NETWORK, isVisible });
 export const handleModalLogin = (isVisible) => ({ type: HANDLE_MODAL_LOGIN, isVisible });
 export const handleModalNewWallet = (isVisible) => ({ type: HANDLE_MODAL_NEWWALLET, isVisible });
 export const handleModalConfirmWallet = (isVisible) => ({ type: HANDLE_MODAL_CONFIRMWALLET, isVisible });

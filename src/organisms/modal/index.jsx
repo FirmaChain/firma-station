@@ -1,3 +1,4 @@
+import NetworksModal from "./networksModal";
 import LoginModal from "./loginModal";
 import NewWalletModal from "./newWalletModal";
 import ConfirmWalletModal from "./confirmWalletModal";
@@ -16,6 +17,7 @@ import QueueTxModal from "./queueTxModal";
 import ResultTxModal from "./resultTxModal";
 
 export {
+  NetworksModal,
   LoginModal,
   NewWalletModal,
   ConfirmWalletModal,
