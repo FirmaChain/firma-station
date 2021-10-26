@@ -31,7 +31,7 @@ import {
   ResultTxModal,
 } from "organisms/modal";
 import { modalActions } from "redux/action";
-import { FIRMACHAIN_NAME } from "config";
+import { FIRMACHAIN_CONFIG } from "config";
 
 import useFirma from "utils/wallet";
 
@@ -73,7 +73,7 @@ function Header() {
       <HeaderRightWrapper>
         <NetworkButton>
           <NetworkStatus />
-          <NetworkText>{FIRMACHAIN_NAME.toUpperCase()}</NetworkText>
+          <NetworkText>{FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
         </NetworkButton>
 
         <FaucetButton

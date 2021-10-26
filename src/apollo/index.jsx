@@ -1,9 +1,9 @@
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink, concat } from "@apollo/client";
 
-import { GRAPHQL_URI } from "config";
+import { GRAPHQL_CONFIG } from "config";
 
-const httpLink = new HttpLink({ uri: GRAPHQL_URI });
+const httpLink = new HttpLink({ uri: GRAPHQL_CONFIG.URI });
 const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
@@ -15,7 +15,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 });
 
 const client = new ApolloClient({
-  uri: GRAPHQL_URI,
+  uri: GRAPHQL_CONFIG.URI,
   link: concat(authMiddleware, httpLink),
   cache: new InMemoryCache({}),
 });
