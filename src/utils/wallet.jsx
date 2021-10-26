@@ -13,10 +13,15 @@ function useFirma() {
   };
 
   const generateWallet = async () => {
-    setWalletState(await getFirmaSDK().Wallet.newWallet());
+    const newWallet = await getFirmaSDK().Wallet.newWallet();
+    walletActions.handleWalletMnemonic(newWallet.getMnemonic());
+
+    setWalletState(newWallet);
   };
 
   const recoverWalletFromMnemonic = async (mnemonic) => {
+    walletActions.handleWalletMnemonic(mnemonic);
+
     setWalletState(await getFirmaSDK().Wallet.fromMnemonic(mnemonic, 0));
   };
 
@@ -39,7 +44,6 @@ function useFirma() {
   };
 
   const setWalletState = async (wallet) => {
-    walletActions.handleWalletMnemonic(await wallet.getMnemonic());
     walletActions.handleWalletPrivateKey(await wallet.getPrivateKey());
 
     const address = await wallet.getAddress();

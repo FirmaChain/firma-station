@@ -18,7 +18,7 @@ export const useBlockDataQuery = ({ onCompleted }) => {
         }
       }
     `,
-    { onCompleted, pollInterval: 5000, notifyOnNetworkStatusChange: true }
+    { onCompleted, pollInterval: 3000, notifyOnNetworkStatusChange: true }
   );
 };
 
@@ -41,7 +41,7 @@ export const useVotingPowerQuery = ({ onCompleted }) => {
         }
       }
     `,
-    { onCompleted, pollInterval: 5000, notifyOnNetworkStatusChange: true }
+    { onCompleted, pollInterval: 3000, notifyOnNetworkStatusChange: true }
   );
 };
 
@@ -61,7 +61,7 @@ export const useTokenomicsQuery = ({ onCompleted }) => {
         }
       }
     `,
-    { onCompleted, pollInterval: 5000, notifyOnNetworkStatusChange: true }
+    { onCompleted, pollInterval: 3000, notifyOnNetworkStatusChange: true }
   );
 };
 
@@ -110,7 +110,7 @@ export const useValidatorsQuery = ({ onCompleted }) => {
         }
       }
     `,
-    { onCompleted, pollInterval: 5000, notifyOnNetworkStatusChange: true }
+    { onCompleted, pollInterval: 3000, notifyOnNetworkStatusChange: true }
   );
 };
 
@@ -127,7 +127,7 @@ export const useGovernmentQuery = ({ onCompleted }) => {
         }
       }
     `,
-    { onCompleted, pollInterval: 10000, notifyOnNetworkStatusChange: true }
+    { onCompleted, pollInterval: 3000, notifyOnNetworkStatusChange: true }
   );
 };
 
@@ -170,6 +170,38 @@ export const useProposalQuery = ({ proposalId, onCompleted }) => {
         }
       }
     `,
-    { onCompleted, pollInterval: 10000, notifyOnNetworkStatusChange: true }
+    { onCompleted, pollInterval: 3000, notifyOnNetworkStatusChange: true }
+  );
+};
+
+export const useHistoryByAddressQuery = ({ onCompleted, address }) => {
+  return useQuery(
+    gql`
+      query GetMessagesByAddress($address: _text, $limit: bigint = 50, $offset: bigint = 0, $types: _text = "{}") {
+        messagesByAddress: messages_by_address(
+          args: { addresses: $address, types: $types, limit: $limit, offset: $offset }
+        ) {
+          transaction {
+            height
+            hash
+            success
+            messages
+            block {
+              height
+              timestamp
+            }
+          }
+        }
+      }
+    `,
+    {
+      onCompleted,
+      pollInterval: 10000,
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        address,
+        limit: 99999,
+      },
+    }
   );
 };
