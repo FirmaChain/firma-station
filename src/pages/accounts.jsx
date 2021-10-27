@@ -1,32 +1,41 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
-import { ContentContainer } from "styles/accounts";
-
-import { modalActions } from "redux/action";
-
-export const NextButton = styled.div`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  margin: 10px auto 0 auto;
-  color: white;
-  background-color: #3550de;
-  border-radius: 4px;
-  cursor: pointer;
-`;
+import { AccountCard, AssetCard, SendCard, TransferHistoryCard } from "organisms/accounts";
+import { useTransferHistoryByAddress } from "organisms/accounts/hooks";
+import {
+  ContentContainer,
+  CardWrap,
+  LeftCardWrap,
+  RightCardWrap,
+  RightCardTopWrap,
+  RightCardBottomWrap,
+} from "styles/accounts";
 
 const Accounts = () => {
+  const { isInit } = useSelector((state) => state.wallet);
+  const { transferHistoryByAddressState } = useTransferHistoryByAddress();
   return (
     <ContentContainer>
-      <NextButton
-        onClick={() => {
-          modalActions.handleModalSend(true);
-        }}
-      >
-        SEND
-      </NextButton>
+      <CardWrap>
+        {isInit && (
+          <LeftCardWrap>
+            <AccountCard />
+            <AssetCard />
+          </LeftCardWrap>
+        )}
+        <RightCardWrap>
+          <RightCardTopWrap>
+            <SendCard />
+          </RightCardTopWrap>
+          <RightCardBottomWrap>
+            {transferHistoryByAddressState && (
+              <TransferHistoryCard transferHistoryByAddressState={transferHistoryByAddressState} />
+            )}
+          </RightCardBottomWrap>
+        </RightCardWrap>
+      </CardWrap>
     </ContentContainer>
   );
 };
