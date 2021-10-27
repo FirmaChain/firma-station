@@ -5,15 +5,8 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
-import { ModalContainer, ModalTitle, ModalContent } from "./styles";
-import styled from "styled-components";
 
-const LoadingWrapper = styled.div`
-  width: 100%;
-  margin: 20px 0;
-  display: flex;
-  justify-content: center;
-`;
+import { queueTxModalWidth, ModalContainer, ModalTitle, ModalContent, LoadingWrapper } from "./styles";
 
 const QueueTxModal = () => {
   const queueTxModalState = useSelector((state) => state.modal.queueTx);
@@ -48,7 +41,7 @@ const QueueTxModal = () => {
   };
 
   return (
-    <Modal visible={queueTxModalState} closable={true} onClose={closeQueueTxModal} width={"500px"}>
+    <Modal visible={queueTxModalState} closable={true} onClose={closeQueueTxModal} width={queueTxModalWidth}>
       <ModalContainer>
         <ModalTitle>Broadcasting Transaction</ModalTitle>
         <ModalContent>

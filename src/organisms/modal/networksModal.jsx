@@ -1,25 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Modal } from "components/modal";
-import { modalActions } from "redux/action";
-import { ModalContainer, ModalTitle, ModalContent } from "./styles";
-import styled from "styled-components";
 
 import { NETWORK_INFO_LIST } from "config";
+import { Modal } from "components/modal";
+import { modalActions } from "redux/action";
 
-const NetworkList = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-  text-align: center;
-  gap: 20px 0;
-`;
-const NetworkItem = styled.div`
-  width: 100%;
-  text-align: center;
-  cursor: pointer;
-`;
+import { networksModalWidth, ModalContainer, ModalTitle, ModalContent, NetworkList, NetworkItem } from "./styles";
 
 const NetworksModal = () => {
   const networkModalState = useSelector((state) => state.modal.network);
@@ -29,7 +15,7 @@ const NetworksModal = () => {
   };
 
   return (
-    <Modal visible={networkModalState} closable={true} onClose={closeNetworksModal} width={"500px"}>
+    <Modal visible={networkModalState} closable={true} onClose={closeNetworksModal} width={networksModalWidth}>
       <ModalContainer>
         <ModalTitle>Networks</ModalTitle>
         <ModalContent>

@@ -1,11 +1,10 @@
 import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import useFirma from "utils/wallet";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
-
-import useFirma from "utils/wallet";
 
 import {
   importPrivatekeyModalWidth,

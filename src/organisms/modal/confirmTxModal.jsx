@@ -2,10 +2,9 @@ import React from "react";
 import numeral from "numeral";
 import { useSelector } from "react-redux";
 
+import { isValid } from "utils/common";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
-
-import { isValid } from "utils/common";
 
 import {
   confirmTxModalWidth,

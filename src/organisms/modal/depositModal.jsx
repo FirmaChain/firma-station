@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import numeral from "numeral";
+import { useSelector } from "react-redux";
+import useFirma from "utils/wallet";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import useFirma from "utils/wallet";
-
 import {
+  depositModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -67,7 +67,7 @@ const DepositModal = () => {
   };
 
   return (
-    <Modal visible={depositModalState} closable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={depositModalState} closable={true} onClose={closeModal} width={depositModalWidth}>
       <ModalContainer>
         <ModalTitle>Deposit</ModalTitle>
         <ModalContent>

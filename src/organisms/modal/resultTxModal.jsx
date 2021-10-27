@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import { ModalContainer, ModalTitle, ModalContent } from "./styles";
+import { resultTxModalWidth, ModalContainer, ModalTitle, ModalContent } from "./styles";
 
 const ResultTxModal = () => {
   const resultTxModalState = useSelector((state) => state.modal.resultTx);
@@ -14,7 +14,7 @@ const ResultTxModal = () => {
   };
 
   return (
-    <Modal visible={resultTxModalState} closable={true} onClose={closeResultTxModal} width={"500px"}>
+    <Modal visible={resultTxModalState} closable={true} onClose={closeResultTxModal} width={resultTxModalWidth}>
       <ModalContainer>
         <ModalTitle>Result</ModalTitle>
         <ModalContent>Success</ModalContent>

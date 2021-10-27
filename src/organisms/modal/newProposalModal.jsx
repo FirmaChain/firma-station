@@ -1,14 +1,14 @@
 import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
-import Select from "react-select";
 import { useSnackbar } from "notistack";
-
+import Select from "react-select";
 import useFirma from "utils/wallet";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
+
 import {
+  newProposalModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -17,65 +17,14 @@ import {
   InputBoxDefault,
   TextAreaDefault,
   NextButton,
+  SelectWrapper,
+  ParamTable,
+  ParamHeader,
+  ParamBody,
+  Param,
+  AddButton,
+  DeleteButton,
 } from "./styles";
-
-const SelectWrapper = styled.div`
-  width: 100%;
-  margin-bottom: 30px;
-`;
-
-const ParamTable = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ParamHeader = styled.div`
-  display: flex;
-  border-top: 1px solid #888;
-  border-bottom: 1px solid #888;
-`;
-
-const ParamBody = styled.div`
-  display: flex;
-`;
-
-const Param = styled.div`
-  width: 30%;
-  padding: 5px 10px;
-  height: 30px;
-  line-height: 30px;
-  text-align: center;
-  &:last-child {
-    width: 10%;
-  }
-`;
-
-const AddButton = styled.div`
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  text-align: center;
-  color: white;
-  background-color: #3550de;
-  border-radius: 4px;
-  cursor: pointer;
-  position: absolute;
-  top: -35px;
-  left: 70px;
-`;
-
-const DeleteButton = styled.div`
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  margin-top: 4px;
-  margin-left: 3px;
-  text-align: center;
-  color: white;
-  background-color: #d8424a;
-  border-radius: 4px;
-  cursor: pointer;
-`;
 
 const options = [
   { value: "TEXT_PROPOSAL", label: "Text" },
@@ -266,7 +215,7 @@ const NewProposalModal = () => {
   };
 
   return (
-    <Modal visible={newProposalState} closable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={newProposalState} closable={true} onClose={closeModal} width={newProposalModalWidth}>
       <ModalContainer>
         <ModalTitle>New Proposal</ModalTitle>
         <ModalContent>

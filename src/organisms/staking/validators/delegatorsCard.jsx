@@ -7,7 +7,7 @@ import { FixedSizeList as List } from "react-window";
 const CardWrapper = styled.div`
   display: flex;
   padding: 24px;
-  background-color: #1b1c22;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   flex-direction: column;
 `;
 

@@ -1,30 +1,19 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
-
 import useFirma from "utils/wallet";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import { ModalContainer, ModalTitle, ModalContent, NextButton } from "./styles";
-
-const VotingWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 30px;
-`;
-const VotingItem = styled.div`
-  width: calc(50% - 12px);
-  height: 50px;
-  line-height: 50px;
-  cursor: pointer;
-  border-radius: 4px;
-  border: 1px solid #3550de80;
-  text-align: center;
-  ${(props) => props.active && "background-color:#3550DE80"}
-`;
+import {
+  votingModalWidth,
+  ModalContainer,
+  ModalTitle,
+  ModalContent,
+  NextButton,
+  VotingWrapper,
+  VotingItem,
+} from "./styles";
 
 const VotingModal = () => {
   const votingModalState = useSelector((state) => state.modal.voting);
@@ -65,7 +54,7 @@ const VotingModal = () => {
   };
 
   return (
-    <Modal visible={votingModalState} closable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={votingModalState} closable={true} onClose={closeModal} width={votingModalWidth}>
       <ModalContainer>
         <ModalTitle>Voting</ModalTitle>
         <ModalContent>

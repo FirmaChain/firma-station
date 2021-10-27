@@ -2,14 +2,14 @@ import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import numeral from "numeral";
+import useFirma from "utils/wallet";
 
+import { isValid } from "utils/common";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import useFirma from "utils/wallet";
-import { isValid } from "utils/common";
-
 import {
+  redelegateModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -116,7 +116,7 @@ const RedelegateModal = () => {
   };
 
   return (
-    <Modal visible={redelegateModalState} closable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={redelegateModalState} closable={true} onClose={closeModal} width={redelegateModalWidth}>
       <ModalContainer>
         <ModalTitle>Redelegate</ModalTitle>
         <ModalContent>

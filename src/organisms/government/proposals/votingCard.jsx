@@ -1,89 +1,25 @@
 import React from "react";
 import numeral from "numeral";
 import moment from "moment";
-import styled from "styled-components";
 
 import Gauge from "components/gauge";
+import {
+  CardWrapper,
+  VotingDetailWrapper,
+  VotingDetailItem,
+  VotingLabel,
+  VotingContent,
+  VotingMainTitle,
+  VotingWrapper,
+  VotingData,
+  VotingType,
+  VotingGauge,
+  VotingPercent,
+  VotingValue,
+  VotingButton,
+} from "./styles";
+
 import { modalActions } from "redux/action";
-
-const CardWrapper = styled.div`
-  display: flex;
-  padding: 24px;
-  background-color: #1b1c22;
-  flex-direction: column;
-`;
-
-const DetailWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px 0;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-`;
-
-const DetailItem = styled.div`
-  width: 100%;
-  display: flex;
-  font-size: 16px;
-`;
-
-const Label = styled.div`
-  width: 200px;
-  color: #808080;
-`;
-
-const Content = styled.div`
-  width: 100%;
-  color: #bbb;
-  ${(props) => props.bigSize && "font-size:18px;color:#eee"}
-`;
-
-const MainTitle = styled.div`
-  font-size: 20px;
-  color: #aaa;
-  margin-bottom: 30px;
-`;
-
-const VotingWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const VotingData = styled.div`
-  width: calc(50% - 60px);
-  padding: 20px 30px;
-`;
-const VotingType = styled.div`
-  font-size: 18px;
-  ${(props) => props.color && `color:${props.color};`}
-`;
-const VotingGauge = styled.div`
-  margin: 10px 0;
-`;
-const VotingPercent = styled.div`
-  width: 50%;
-  float: left;
-  color: #aaa;
-`;
-const VotingValue = styled.div`
-  width: 50%;
-  float: left;
-  text-align: right;
-  color: #aaa;
-`;
-
-const VotingButton = styled.div`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  margin: 30px auto 0 auto;
-  color: white;
-  background-color: #3550de;
-  border-radius: 4px;
-  cursor: pointer;
-  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
-`;
 
 const VotingCard = ({ proposalState }) => {
   const getTimeFormat = (time) => {
@@ -143,25 +79,25 @@ const VotingCard = ({ proposalState }) => {
 
   return (
     <CardWrapper>
-      <MainTitle>Voting</MainTitle>
-      <DetailWrapper>
-        <DetailItem>
-          <Label>Voting Time</Label>
-          <Content>
+      <VotingMainTitle>Voting</VotingMainTitle>
+      <VotingDetailWrapper>
+        <VotingDetailItem>
+          <VotingLabel>Voting Time</VotingLabel>
+          <VotingContent>
             {getTimeFormat(proposalState.votingStartTime)} ~ {getTimeFormat(proposalState.votingEndTime)}
-          </Content>
-        </DetailItem>
-        <DetailItem>
-          <Label>Quorum</Label>
-          <Content bigSize={true}>{numeral(proposalState.paramQuorum * 100).format("0.00")}%</Content>
-        </DetailItem>
-        <DetailItem>
-          <Label>Current Turnout</Label>
-          <Content bigSize={true}>
+          </VotingContent>
+        </VotingDetailItem>
+        <VotingDetailItem>
+          <VotingLabel>Quorum</VotingLabel>
+          <VotingContent bigSize={true}>{numeral(proposalState.paramQuorum * 100).format("0.00")}%</VotingContent>
+        </VotingDetailItem>
+        <VotingDetailItem>
+          <VotingLabel>Current Turnout</VotingLabel>
+          <VotingContent bigSize={true}>
             {numeral(getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower)).format("0.00")}%
-          </Content>
-        </DetailItem>
-      </DetailWrapper>
+          </VotingContent>
+        </VotingDetailItem>
+      </VotingDetailWrapper>
       <VotingWrapper>
         {votingData.map((voting, index) => (
           <VotingData key={index}>

@@ -12,7 +12,7 @@ const CardWrapper = styled.div`
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
-  background-color: #1b1c22;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   display: flex;
   justify-content: flex-start;
   gap: 0 30px;
@@ -49,7 +49,7 @@ const Button = styled.div`
   color: white;
   text-align: center;
   cursor: pointer;
-  background-color: #3550de;
+  background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
 `;
 

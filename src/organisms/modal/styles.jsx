@@ -11,8 +11,17 @@ export const confirmWalletModalWidth = "650px";
 export const recoverMnemonicModalWidth = "600px";
 export const importPrivatekeyModalWidth = "600px";
 export const connectLedgerModalWidth = "600px";
-
 export const confirmTxModalWidth = "400px";
+export const delegateModalWidth = "500px";
+export const depositModalWidth = "500px";
+export const networksModalWidth = "500px";
+export const newProposalModalWidth = "500px";
+export const queueTxModalWidth = "500px";
+export const redelegateModalWidth = "500px";
+export const resultTxModalWidth = "500px";
+export const sendModalWidth = "500px";
+export const undelegateModalWidth = "500px";
+export const votingModalWidth = "500px";
 
 export const ModalContainer = styled.div`
   width: 100%;
@@ -83,7 +92,7 @@ export const InputBoxDefault = styled.input`
   margin: 0;
   padding: 0 10px;
   color: white;
-  background-color: #1b1c22;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   border: 1px solid #324ab8aa;
   border-radius: 4px;
   ::-webkit-outer-spin-button,
@@ -107,7 +116,7 @@ export const Mnemonic = styled.div`
   line-height: 40px;
   text-align: center;
   border-radius: 4px;
-  background-color: #3550de40;
+  background-color: ${({ theme }) => theme.colors.mainblue}40;
   color: #ccc;
 `;
 
@@ -118,7 +127,7 @@ export const MnemonicTextArea = styled.textarea`
   resize: none;
   font-size: 16px;
   border-radius: 4px;
-  background-color: #1b1c22;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   color: white;
 `;
 
@@ -129,7 +138,7 @@ export const TextAreaDefault = styled.textarea`
   resize: none;
   font-size: 16px;
   border-radius: 4px;
-  background-color: #1b1c22;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   border: 1px solid #324ab8aa;
   color: white;
 `;
@@ -141,7 +150,7 @@ export const PrivatekeyTextArea = styled.textarea`
   resize: none;
   font-size: 16px;
   border-radius: 4px;
-  background-color: #1b1c22;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   color: white;
 `;
 
@@ -160,7 +169,7 @@ export const NextButton = styled.div`
   text-align: center;
   margin: 10px auto 0 auto;
   color: white;
-  background-color: #3550de;
+  background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   cursor: pointer;
   ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
@@ -173,7 +182,7 @@ export const CreateButton = styled.div`
   text-align: center;
   margin: 30px auto 0 auto;
   color: white;
-  background-color: #3550de;
+  background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   cursor: pointer;
   ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
@@ -186,7 +195,7 @@ export const RecoverButton = styled.div`
   text-align: center;
   margin: 30px auto 0 auto;
   color: white;
-  background-color: #3550de;
+  background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   cursor: pointer;
   ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
@@ -199,7 +208,7 @@ export const ImportButton = styled.div`
   text-align: center;
   margin: 30px auto 0 auto;
   color: white;
-  background-color: #3550de;
+  background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   cursor: pointer;
   ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
@@ -255,7 +264,7 @@ export const InputBox = styled.div`
   padding-left: 10px;
   line-height: 35px;
   color: #777;
-  background-color: #1b1c22;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   border-radius: 4px;
   cursor: pointer;
   ${(props) => (props.active ? `border: 1px solid #324ab8;` : `border: 1px solid #555;`)}
@@ -275,13 +284,109 @@ export const SelectMnemonic = styled.div`
   line-height: 40px;
   text-align: center;
   border-radius: 4px;
-  background-color: #3550de40;
+  background-color: ${({ theme }) => theme.colors.mainblue}40;
   color: #ccc;
   margin-bottom: 10px;
   cursor: pointer;
   &:hover {
-    background-color: #3550de80;
+    background-color: ${({ theme }) => theme.colors.mainblue}80;
   }
+`;
+
+export const LoadingWrapper = styled.div`
+  width: 100%;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+`;
+
+export const NetworkList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  text-align: center;
+  gap: 20px 0;
+`;
+export const NetworkItem = styled.div`
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+`;
+
+export const SelectWrapper = styled.div`
+  width: 100%;
+  margin-bottom: 30px;
+`;
+
+export const ParamTable = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ParamHeader = styled.div`
+  display: flex;
+  border-top: 1px solid #888;
+  border-bottom: 1px solid #888;
+`;
+
+export const ParamBody = styled.div`
+  display: flex;
+`;
+
+export const Param = styled.div`
+  width: 30%;
+  padding: 5px 10px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  &:last-child {
+    width: 10%;
+  }
+`;
+
+export const AddButton = styled.div`
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.mainblue};
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  top: -35px;
+  left: 70px;
+`;
+
+export const DeleteButton = styled.div`
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  margin-top: 4px;
+  margin-left: 3px;
+  text-align: center;
+  color: white;
+  background-color: #d8424a;
+  border-radius: 4px;
+  cursor: pointer;
+`;
+
+export const VotingWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+`;
+export const VotingItem = styled.div`
+  width: calc(50% - 12px);
+  height: 50px;
+  line-height: 50px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.colors.mainblue}80;
+  text-align: center;
+  ${(props) => props.active && "background-color:${({ theme }) => theme.colors.mainblue}80"};
 `;
 
 export { NewWalletIcon, RecoverMnemonicIcon, ImportPrivateKeyIcon, ConnectLedgerIcon };

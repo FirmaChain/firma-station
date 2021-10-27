@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
-// import { FirmaUtil } from "@firmachain/firma-js";
+import numeral from "numeral";
+import useFirma from "utils/wallet";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import useFirma from "utils/wallet";
-
 import {
+  sendModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -53,8 +52,6 @@ const SendModal = () => {
     const { value } = e.target;
     const address = value.replace(/ /g, "");
 
-    // const isValid = FirmaUtil.isValidAddress(address);
-
     setTargetAddress(address);
   };
 
@@ -91,7 +88,7 @@ const SendModal = () => {
   };
 
   return (
-    <Modal visible={sendModalState} closable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={sendModalState} closable={true} onClose={closeModal} width={sendModalWidth}>
       <ModalContainer>
         <ModalTitle>Send</ModalTitle>
         <ModalContent>

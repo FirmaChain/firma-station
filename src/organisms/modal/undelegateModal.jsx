@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
+import numeral from "numeral";
+import useFirma from "utils/wallet";
 
+import { isValid } from "utils/common";
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import useFirma from "utils/wallet";
-import { isValid } from "utils/common";
-
 import {
+  undelegateModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -67,7 +67,7 @@ const UndelegateModal = () => {
   };
 
   return (
-    <Modal visible={undelegateModalState} closable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={undelegateModalState} closable={true} onClose={closeModal} width={undelegateModalWidth}>
       <ModalContainer>
         <ModalTitle>Undelegate</ModalTitle>
         <ModalContent>

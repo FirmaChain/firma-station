@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import numeral from "numeral";
+import { useSelector } from "react-redux";
+import useFirma from "utils/wallet";
 
 import { Modal } from "components/modal";
 import { modalActions } from "redux/action";
 
-import useFirma from "utils/wallet";
-
 import {
+  delegateModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -67,7 +67,7 @@ const DelegateModal = () => {
   };
 
   return (
-    <Modal visible={delegateModalState} closable={true} onClose={closeModal} width={"500px"}>
+    <Modal visible={delegateModalState} closable={true} onClose={closeModal} width={delegateModalWidth}>
       <ModalContainer>
         <ModalTitle>Delegate</ModalTitle>
         <ModalContent>
