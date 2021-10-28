@@ -12,7 +12,7 @@
 /build
 /dist
 
-/src/config.js
+/src/config.ts
 
 # misc
 .DS_Store
