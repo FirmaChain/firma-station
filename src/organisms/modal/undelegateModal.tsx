@@ -3,6 +3,7 @@ import numeral from "numeral";
 import { useSelector } from "react-redux";
 
 import useFirma from "../../utils/wallet";
+import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
 import { Modal } from "../../components/modal";
@@ -24,6 +25,7 @@ const UndelegateModal = () => {
   const modalData = useSelector((state: rootState) => state.modal.data);
 
   const { undelegate } = useFirma();
+  const { reFetchObservableQueries } = useApolloClient();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
@@ -48,6 +50,7 @@ const UndelegateModal = () => {
   const undelegateTx = (resolveTx: () => void, rejectTx: () => void) => {
     undelegate(modalData.data.targetValidator, convertNumber(amount))
       .then(() => {
+        reFetchObservableQueries();
         resolveTx();
       })
       .catch(() => {

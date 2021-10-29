@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 import useFirma from "../../utils/wallet";
+import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -22,6 +23,7 @@ const VotingModal = () => {
   const [votingType, setVotingType] = useState(0);
 
   const { vote } = useFirma();
+  const { reFetchObservableQueries } = useApolloClient();
 
   const closeModal = () => {
     resetModal();
@@ -35,6 +37,7 @@ const VotingModal = () => {
   const votingTx = (resolveTx: () => void, rejectTx: () => void) => {
     vote(modalData.proposalId, votingType)
       .then(() => {
+        reFetchObservableQueries();
         resolveTx();
       })
       .catch(() => {

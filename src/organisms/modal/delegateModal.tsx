@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 import useFirma from "../../utils/wallet";
+import { useApolloClient } from "@apollo/client";
 import { convertNumber } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
@@ -24,6 +25,7 @@ const DelegateModal = () => {
   const { balance } = useSelector((state: rootState) => state.wallet);
 
   const { delegate } = useFirma();
+  const { reFetchObservableQueries } = useApolloClient();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
@@ -48,6 +50,7 @@ const DelegateModal = () => {
   const delegateTx = (resolveTx: () => void, rejectTx: () => void) => {
     delegate(modalData.data.targetValidator, convertNumber(amount))
       .then(() => {
+        reFetchObservableQueries();
         resolveTx();
       })
       .catch(() => {

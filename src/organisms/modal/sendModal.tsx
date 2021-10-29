@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import useFirma from "../../utils/wallet";
+import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -21,8 +22,8 @@ import { convertNumber } from "../../utils/common";
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance } = useSelector((state: rootState) => state.wallet);
-
   const { sendFCT } = useFirma();
+  const { reFetchObservableQueries } = useApolloClient();
 
   const [amount, setAmount] = useState("");
   const [targetAddress, setTargetAddress] = useState("");
@@ -69,6 +70,7 @@ const SendModal = () => {
   const sendTx = (resolveTx: () => void, rejectTx: () => void) => {
     sendFCT(targetAddress, amount, memo)
       .then(() => {
+        reFetchObservableQueries();
         resolveTx();
       })
       .catch(() => {

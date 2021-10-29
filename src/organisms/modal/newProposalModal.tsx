@@ -4,6 +4,7 @@ import { useSnackbar } from "notistack";
 import Select from "react-select";
 
 import useFirma from "../../utils/wallet";
+import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -71,6 +72,7 @@ const NewProposalModal = () => {
   const [paramList, setParamList] = useState<Array<any>>([]);
 
   const { submitParameterChangeProposal, submitCommunityPoolSpendProposal, submitTextProposal } = useFirma();
+  const { reFetchObservableQueries } = useApolloClient();
 
   const closeModal = () => {
     resetModal();
@@ -97,6 +99,7 @@ const NewProposalModal = () => {
       case "TEXT_PROPOSAL":
         submitTextProposal(title, description, initialDeposit)
           .then(() => {
+            reFetchObservableQueries();
             resolveTx();
           })
           .catch(() => {
@@ -106,6 +109,7 @@ const NewProposalModal = () => {
       case "COMMUNITY_POOL_SPEND_PROPOSAL":
         submitCommunityPoolSpendProposal(title, description, initialDeposit, amount, recipient)
           .then(() => {
+            reFetchObservableQueries();
             resolveTx();
           })
           .catch(() => {
@@ -118,6 +122,7 @@ const NewProposalModal = () => {
         );
         submitParameterChangeProposal(title, description, initialDeposit, validParamList)
           .then(() => {
+            reFetchObservableQueries();
             resolveTx();
           })
           .catch(() => {
