@@ -21,16 +21,17 @@ const NetworksModal = () => {
         <ModalTitle>Networks</ModalTitle>
         <ModalContent>
           <NetworkList>
-            {NETWORK_INFO_LIST.map((network, index) => (
-              <NetworkItem
-                key={index}
-                onClick={() => {
-                  window.open(network.stationURI);
-                }}
-              >
-                {network.chainName.toUpperCase()}
-              </NetworkItem>
-            ))}
+            {NETWORK_INFO_LIST.length > 0 &&
+              NETWORK_INFO_LIST.map((network: any, index) => (
+                <NetworkItem
+                  key={index}
+                  onClick={() => {
+                    window.open(network.stationURI);
+                  }}
+                >
+                  {network.chainName.toUpperCase()}
+                </NetworkItem>
+              ))}
           </NetworkList>
         </ModalContent>
       </ModalContainer>
