@@ -6,25 +6,25 @@ import { rootState } from "../../redux/reducers";
 
 import useFirma from "../../utils/wallet";
 
-// import {
-//   NetworksModal,
-//   LoginModal,
-//   NewWalletModal,
-//   ConfirmWalletModal,
-//   RecoverMnemonicModal,
-//   ImportPrivatekeyModal,
-//   ConnectLedgerModal,
-//   DelegateModal,
-//   RedelegateModal,
-//   UndelegateModal,
-//   DepositModal,
-//   VotingModal,
-//   NewProposalModal,
-//   SendModal,
-//   ConfirmTxModal,
-//   QueueTxModal,
-//   ResultTxModal,
-// } from "../modal";
+import {
+  NetworksModal,
+  LoginModal,
+  NewWalletModal,
+  ConfirmWalletModal,
+  RecoverMnemonicModal,
+  ImportPrivatekeyModal,
+  ConnectLedgerModal,
+  DelegateModal,
+  RedelegateModal,
+  UndelegateModal,
+  DepositModal,
+  VotingModal,
+  NewProposalModal,
+  SendModal,
+  ConfirmTxModal,
+  QueueTxModal,
+  ResultTxModal,
+} from "../modal";
 
 import {
   HeaderContainer,
@@ -42,25 +42,25 @@ import {
 function Header() {
   const { isInit } = useSelector((state: rootState) => state.wallet);
   const { resetWallet } = useFirma();
-  // const {
-  //   network,
-  //   login,
-  //   newWallet,
-  //   confirmWallet,
-  //   recoverMnemonic,
-  //   importPrivatekey,
-  //   connectLedger,
-  //   delegate,
-  //   redelegate,
-  //   undelegate,
-  //   deposit,
-  //   voting,
-  //   newProposal,
-  //   send,
-  //   confirmTx,
-  //   queueTx,
-  //   resultTx,
-  // } = useSelector((state: rootState) => state.modal);
+  const {
+    network,
+    login,
+    newWallet,
+    confirmWallet,
+    recoverMnemonic,
+    importPrivatekey,
+    connectLedger,
+    delegate,
+    redelegate,
+    undelegate,
+    deposit,
+    voting,
+    newProposal,
+    send,
+    confirmTx,
+    queueTx,
+    resultTx,
+  } = useSelector((state: rootState) => state.modal);
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);
@@ -99,7 +99,7 @@ function Header() {
         )}
       </HeaderRightWrapper>
 
-      {/* {network && <NetworksModal />}
+      {network && <NetworksModal />}
       {login && <LoginModal />}
       {newWallet && <NewWalletModal />}
       {confirmWallet && <ConfirmWalletModal />}
@@ -115,7 +115,7 @@ function Header() {
       {send && <SendModal />}
       {confirmTx && <ConfirmTxModal />}
       {queueTx && <QueueTxModal />}
-      {resultTx && <ResultTxModal />} */}
+      {resultTx && <ResultTxModal />}
     </HeaderContainer>
   );
 }
