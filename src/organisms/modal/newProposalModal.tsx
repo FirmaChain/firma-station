@@ -4,6 +4,7 @@ import { useSnackbar } from "notistack";
 import Select from "react-select";
 
 import useFirma from "../../utils/wallet";
+import { convertNumber } from "../../utils/common";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
@@ -32,6 +33,7 @@ const options = [
   { value: "TEXT_PROPOSAL", label: "Text" },
   { value: "COMMUNITY_POOL_SPEND_PROPOSAL", label: "CommunityPoolSpend" },
   { value: "PARAMETER_CHANGE_PROPOSAL", label: "ParameterChange" },
+  { value: "SOFTWARE_UPGRADE", label: "SoftwareUpgrade" },
 ];
 
 const customStyles = {
@@ -69,9 +71,12 @@ const NewProposalModal = () => {
   const [initialDeposit, setInitialDeposit] = useState(0);
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState(0);
+  const [upgradeName, setUpgradeName] = useState("");
+  const [height, setHeight] = useState(1);
   const [paramList, setParamList] = useState<Array<any>>([]);
 
-  const { submitParameterChangeProposal, submitCommunityPoolSpendProposal, submitTextProposal } = useFirma();
+  const { submitParameterChangeProposal, submitCommunityPoolSpendProposal, submitTextProposal, submitSoftwareUpgrade } =
+    useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const closeModal = () => {
@@ -116,11 +121,9 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
-      case "PARAMETER_CHANGE_PROPOSAL":
-        const validParamList = paramList.filter(
-          (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
-        );
-        submitParameterChangeProposal(title, description, initialDeposit, validParamList)
+
+      case "SOFTWARE_UPGRADE":
+        submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height))
           .then(() => {
             reFetchObservableQueries();
             resolveTx();
@@ -168,6 +171,16 @@ const NewProposalModal = () => {
     setAmount(e.target.value);
   };
 
+  const onChangeUpgradeName = (e: any) => {
+    if (e === null) return;
+    setUpgradeName(e.target.value);
+  };
+
+  const onChangeHeight = (e: any) => {
+    if (e === null) return;
+    setHeight(e.target.value);
+  };
+
   const onChangeSubspace = (e: any, index: number) => {
     setParamList((prevState) => [
       ...prevState.map((item, i) => (i === index ? { ...item, subspace: e.target.value } : item)),
@@ -201,8 +214,9 @@ const NewProposalModal = () => {
     const isCommunityPoolInvalid =
       proposalType === "COMMUNITY_POOL_SPEND_PROPOSAL" && (recipient === "" || amount === 0);
     const isParameterChangeInvalid = proposalType === "PARAMETER_CHANGE_PROPOSAL" && validParamList.length === 0;
+    const isSoftwareUpgradeInvalid = proposalType === "SOFTWARE_UPGRADE" && (upgradeName === "" || height <= 0);
 
-    if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid) {
+    if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid || isSoftwareUpgradeInvalid) {
       enqueueSnackbar("Invalid Parameters", {
         variant: "error",
         autoHideDuration: 1000,
@@ -309,6 +323,21 @@ const NewProposalModal = () => {
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
                 <InputBoxDefault type="number" placeholder="" value={amount} onChange={onChangeAmount} />
+              </ModalInput>
+            </>
+          )}
+
+          {/* CommunityPool */}
+          {proposalType === "SOFTWARE_UPGRADE" && (
+            <>
+              <ModalLabel>Upgrade Name</ModalLabel>
+              <ModalInput>
+                <InputBoxDefault type="text" placeholder="v0.1.0" value={upgradeName} onChange={onChangeUpgradeName} />
+              </ModalInput>
+
+              <ModalLabel>Height</ModalLabel>
+              <ModalInput>
+                <InputBoxDefault type="number" placeholder="1" value={height} onChange={onChangeHeight} />
               </ModalInput>
             </>
           )}

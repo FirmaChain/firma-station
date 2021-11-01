@@ -322,6 +322,27 @@ function useFirma() {
     console.log(result);
   };
 
+  const submitSoftwareUpgrade = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    upgradeName: string,
+    height: number
+  ) => {
+    if (!isInit) return;
+
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const result = await getFirmaSDK().Gov.submitSoftwareUpgradeProposalByHeight(
+      wallet,
+      title,
+      description,
+      initialDeposit,
+      upgradeName,
+      height
+    );
+    console.log(result);
+  };
+
   const convertNFTList = (nftResponse: any) => {
     return nftResponse.dataList;
   };
@@ -344,6 +365,7 @@ function useFirma() {
     submitParameterChangeProposal,
     submitCommunityPoolSpendProposal,
     submitTextProposal,
+    submitSoftwareUpgrade,
     deposit,
     vote,
     refreshWallet,
