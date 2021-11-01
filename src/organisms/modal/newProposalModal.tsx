@@ -121,7 +121,18 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
-
+      case "PARAMETER_CHANGE_PROPOSAL":
+        const validParamList = paramList.filter(
+          (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
+        );
+        submitParameterChangeProposal(title, description, initialDeposit, validParamList)
+          .then(() => {
+            resolveTx();
+          })
+          .catch(() => {
+            rejectTx();
+          });
+        break;
       case "SOFTWARE_UPGRADE":
         submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height))
           .then(() => {
@@ -135,9 +146,6 @@ const NewProposalModal = () => {
       default:
         break;
     }
-    // TEXT_PROPOSAL
-    // COMMUNITY_POOL_SPEND_PROPOSAL
-    // PARAMETER_CHANGE_PROPOSAL
   };
 
   const onChangeType = (e: any) => {
