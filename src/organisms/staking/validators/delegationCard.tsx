@@ -1,10 +1,8 @@
 import React from "react";
 import numeral from "numeral";
-import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../../utils/wallet";
-import { rootState } from "../../../redux/reducers";
 import { ITargetStakingState } from "../hooks";
 import { modalActions } from "../../../redux/action";
 
@@ -17,9 +15,7 @@ interface IProps {
 const DENOM = "FCT";
 
 const DelegationCard = ({ targetStakingState }: IProps) => {
-  //TODO : TARGET
-  // const { targetValidator } = useSelector((state: rootState) => state.wallet);
-  const targetValidator = "";
+  const targetValidator = window.location.pathname.replace("/staking/validators/", "");
   const { getDelegationList, getDelegation, withdraw } = useFirma();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -112,4 +108,4 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
   );
 };
 
-export default DelegationCard;
+export default React.memo(DelegationCard);

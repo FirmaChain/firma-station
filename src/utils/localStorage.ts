@@ -3,7 +3,7 @@ import { Key, Wallet } from "./types";
 
 const USER_STORE = "USER_STORE";
 const FIRMA_STORE = "FIRMA_STORE";
-const FIRMA_KEY = process.env.REACT_APP_FIRMA_KEY ?? "F";
+const FIRMA_KEY = process.env.REACT_APP_FIRMA_KEY;
 
 export const loadKeys = (keyName: string): Key => {
   return JSON.parse(localStorage?.getItem(keyName) ?? "{}");

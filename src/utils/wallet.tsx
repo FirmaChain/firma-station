@@ -10,7 +10,6 @@ import { getRandomKey } from "./keystore";
 import { storeKey, storeKeyFirma, getStoredWallet, getStoredWalletFirma, clearKeys, loadKeys } from "./localStorage";
 
 import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
-import numeral from "numeral";
 
 function useFirma() {
   const { isInit, timeKey } = useSelector((state: rootState) => state.wallet);

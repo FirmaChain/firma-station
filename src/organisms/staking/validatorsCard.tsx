@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
 
 import { IValidatorsState } from "./hooks";
-import { walletActions } from "../../redux/action";
 
 import { ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, ListWrapper, ProfileImage, MonikerTypo } from "./styles";
 
@@ -17,13 +16,7 @@ const Row = ({ data, index, style }: any) => {
   const currentValidator = data[index];
 
   return (
-    <Link
-      to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}
-      onClick={() => {
-        //TODO : SELECT VALIDATOR
-        // walletActions.handleWalletSelectValidator(currentValidator.validatorAddress);
-      }}
-    >
+    <Link to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}>
       <ItemWrapper style={style}>
         <ItemColumn>{index + 1}</ItemColumn>
         <ItemColumn>
@@ -40,11 +33,6 @@ const Row = ({ data, index, style }: any) => {
 };
 
 const Validators = ({ validatorsState }: IProps) => {
-  useEffect(() => {
-    //TODO : SELECT VALIDATOR
-    // walletActions.handleWalletSelectValidator("");
-  }, [validatorsState]);
-
   return (
     <ListWrapper>
       <AutoSizer>
@@ -74,4 +62,4 @@ const Validators = ({ validatorsState }: IProps) => {
   );
 };
 
-export default Validators;
+export default React.memo(Validators);

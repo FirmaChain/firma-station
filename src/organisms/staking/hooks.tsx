@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import numeral from "numeral";
-import { useSelector } from "react-redux";
 
 import useFirma from "../../utils/wallet";
 import { convertNumber, convertToFctNumber } from "../../utils/common";
-import { rootState } from "../../redux/reducers";
 import { useValidatorsQuery } from "../../apollo/gqls";
 
 export interface IValidatorsState {
@@ -26,11 +24,32 @@ export interface ITargetStakingState {
   stakingReward: number;
 }
 
+export const useStakingDataFromTarget = () => {
+  const { getStakingFromValidator } = useFirma();
+  const targetValidator = window.location.pathname.replace("/staking/validators/", "");
+
+  const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
+    available: 0,
+    delegated: 0,
+    undelegate: 0,
+    stakingReward: 0,
+  });
+
+  useInterval(() => {
+    if (targetValidator !== "") {
+      getStakingFromValidator(targetValidator).then((result: ITargetStakingState | undefined) => {
+        if (result) setTargetStakingState(result);
+      });
+    }
+  }, 5000);
+
+  return {
+    targetStakingState,
+  };
+};
+
 export const useStakingData = () => {
-  const { getStaking, getStakingFromValidator } = useFirma();
-  //TODO : TARGET
-  // const { targetValidator } = useSelector((state: rootState) => state.wallet);
-  const targetValidator = "";
+  const { getStaking } = useFirma();
 
   const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
     totalVotingPower: 0,
@@ -44,23 +63,10 @@ export const useStakingData = () => {
     stakingReward: 0,
   });
 
-  const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
-    available: 0,
-    delegated: 0,
-    undelegate: 0,
-    stakingReward: 0,
-  });
-
   useInterval(() => {
     getStaking().then((result: ITotalStakingState | undefined) => {
       if (result) setTotalStakingState(result);
     });
-
-    if (targetValidator !== "") {
-      getStakingFromValidator(targetValidator).then((result: ITargetStakingState | undefined) => {
-        if (result) setTargetStakingState(result);
-      });
-    }
   }, 5000);
 
   useValidatorsQuery({
@@ -123,7 +129,6 @@ export const useStakingData = () => {
   return {
     validatorsState,
     totalStakingState,
-    targetStakingState,
   };
 };
 

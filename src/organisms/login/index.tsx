@@ -25,9 +25,7 @@ const LoginCard = () => {
     if (password === "") return;
 
     loginWallet(password)
-      .then(() => {
-        console.log("LOGIN");
-      })
+      .then(() => {})
       .catch(() => {
         enqueueSnackbar("Invalid Password", {
           variant: "error",
