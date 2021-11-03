@@ -28,7 +28,9 @@ export interface ITargetStakingState {
 
 export const useStakingData = () => {
   const { getStaking, getStakingFromValidator } = useFirma();
-  const { targetValidator } = useSelector((state: rootState) => state.wallet);
+  //TODO : TARGET
+  // const { targetValidator } = useSelector((state: rootState) => state.wallet);
+  const targetValidator = "";
 
   const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
     totalVotingPower: 0,

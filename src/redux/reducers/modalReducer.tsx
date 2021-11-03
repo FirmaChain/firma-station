@@ -1,5 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import {
+  HANDLE_MODAL_RESET,
   HANDLE_MODAL_DATA,
   HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
@@ -63,6 +64,11 @@ const initialState: IModalState = {
 };
 
 export default createReducer(initialState, {
+  [HANDLE_MODAL_RESET]: (state: IModalState) => {
+    return {
+      ...initialState,
+    };
+  },
   [HANDLE_MODAL_DATA]: (state: IModalState, { data }) => {
     state.data = data;
   },

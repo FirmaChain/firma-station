@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
+import { copyToClipboard } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+
+import Password from "./password";
 
 import {
   newWalletModalWidth,
@@ -22,24 +25,36 @@ import {
 
 const NewWalletModal = () => {
   const newWalletModalState = useSelector((state: rootState) => state.modal.newWallet);
-  const { mnemonic, privateKey, address } = useSelector((state: rootState) => state.wallet);
+  // const { mnemonic, privateKey, address } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
-  const { generateWallet, resetWallet } = useFirma();
+  const { getNewMnemonic } = useFirma();
+
+  const [mnemonic, setMnemonic] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (newWalletModalState) {
-      generateWallet();
+      getNewMnemonic().then((mnemonic) => {
+        setMnemonic(mnemonic);
+      });
     }
   }, [newWalletModalState]);
 
   const closeNewWalletModal = () => {
-    resetWallet();
     closeModal();
   };
 
   const openConfirmModal = () => {
-    closeModal();
-    modalActions.handleModalConfirmWallet(true);
+    if (password !== "") {
+      closeModal();
+      modalActions.handleModalData({ mnemonic, password });
+      modalActions.handleModalConfirmWallet(true);
+    } else {
+      enqueueSnackbar("Incorrect Password", {
+        variant: "error",
+        autoHideDuration: 1000,
+      });
+    }
   };
 
   const prevModal = () => {
@@ -51,13 +66,19 @@ const NewWalletModal = () => {
     modalActions.handleModalNewWallet(false);
   };
 
-  const copyToClipboard = (value: string) => {
-    if (navigator) navigator.clipboard.writeText(value);
+  const clipboard = (value: string) => {
+    if (value === "") return;
+
+    copyToClipboard(value);
 
     enqueueSnackbar("Copied", {
       variant: "success",
       autoHideDuration: 1000,
     });
+  };
+
+  const onChangePassword = (password: string) => {
+    setPassword(password);
   };
 
   return (
@@ -73,22 +94,13 @@ const NewWalletModal = () => {
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>
-            <CopyIcon onClick={() => copyToClipboard(mnemonic)} />
+            <CopyIcon onClick={() => clipboard(mnemonic)} />
             <MnemonicContainter>
-              {mnemonic.split(" ").map((data, index) => (
-                <Mnemonic key={index}>{data}</Mnemonic>
-              ))}
+              {mnemonic !== "" && mnemonic.split(" ").map((data, index) => <Mnemonic key={index}>{data}</Mnemonic>)}
             </MnemonicContainter>
           </ModalInput>
 
-          <ModalLabel>Private Key</ModalLabel>
-          <ModalInput>
-            <CopyIcon onClick={() => copyToClipboard(privateKey)} />
-            {privateKey}
-          </ModalInput>
-
-          <ModalLabel>Address</ModalLabel>
-          <ModalInput>{address}</ModalInput>
+          <Password onChange={onChangePassword} />
 
           <NextButton onClick={() => openConfirmModal()} active={true}>
             NEXT

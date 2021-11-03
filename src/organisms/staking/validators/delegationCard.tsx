@@ -17,7 +17,9 @@ interface IProps {
 const DENOM = "FCT";
 
 const DelegationCard = ({ targetStakingState }: IProps) => {
-  const { targetValidator } = useSelector((state: rootState) => state.wallet);
+  //TODO : TARGET
+  // const { targetValidator } = useSelector((state: rootState) => state.wallet);
+  const targetValidator = "";
   const { getDelegationList, getDelegation, withdraw } = useFirma();
   const { enqueueSnackbar } = useSnackbar();
 

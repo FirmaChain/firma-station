@@ -1,4 +1,5 @@
 import {
+  HANDLE_MODAL_RESET,
   HANDLE_MODAL_DATA,
   HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
@@ -19,6 +20,7 @@ import {
   HANDLE_MODAL_RESULTTX,
 } from "../types";
 
+export const handleModalReset = () => ({ type: HANDLE_MODAL_RESET });
 export const handleModalData = (data: any) => ({ type: HANDLE_MODAL_DATA, data });
 
 export const handleModalNetwork = (isVisible: boolean) => ({ type: HANDLE_MODAL_NETWORK, isVisible });

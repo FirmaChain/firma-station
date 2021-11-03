@@ -3,10 +3,13 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
+import { isValidString } from "../../utils/common";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+
+import Password from "./password";
 
 import {
   importPrivatekeyModalWidth,
@@ -21,33 +24,42 @@ import {
 
 const ImportPrivatekeyModal = () => {
   const importPrivatekeyModalState = useSelector((state: rootState) => state.modal.importPrivatekey);
+
+  const { enqueueSnackbar } = useSnackbar();
+  const { initWallet, resetWallet, storeWalletFromPrivateKey } = useFirma();
+  const { reFetchObservableQueries } = useApolloClient();
+
   const [isActiveImportButton, activeImportButton] = useState(false);
   const [inputWords, setInputWords] = useState("");
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { resetWallet, initWallet, recoverWalletFromPrivateKey } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const [password, setPassword] = useState("");
 
   const inputRef = useRef<HTMLTextAreaElement>();
 
   const importWallet = () => {
-    recoverWalletFromPrivateKey(inputWords)
-      .then(() => {
-        enqueueSnackbar("Success Import Your Wallet", {
-          variant: "success",
-          autoHideDuration: 1000,
+    if (isValidString(password)) {
+      storeWalletFromPrivateKey(password, inputWords)
+        .then(() => {
+          enqueueSnackbar("Success Import Your Wallet", {
+            variant: "success",
+            autoHideDuration: 1000,
+          });
+          reFetchObservableQueries();
+          initWallet();
+          closeModal();
+        })
+        .catch((error: any) => {
+          console.log(error);
+          enqueueSnackbar("Invalidate Private Key", {
+            variant: "error",
+            autoHideDuration: 1000,
+          });
         });
-        reFetchObservableQueries();
-        initWallet();
-        closeModal();
-      })
-      .catch((error: any) => {
-        console.log(error);
-        enqueueSnackbar("Invalidate Private Key", {
-          variant: "error",
-          autoHideDuration: 1000,
-        });
+    } else {
+      enqueueSnackbar("Invalid input fields", {
+        variant: "error",
+        autoHideDuration: 1000,
       });
+    }
   };
 
   const cancelWallet = () => {
@@ -81,6 +93,10 @@ const ImportPrivatekeyModal = () => {
     setInputWords(checkValue);
   };
 
+  const onChangePassword = (password: string) => {
+    setPassword(password);
+  };
+
   return (
     <Modal
       visible={importPrivatekeyModalState}
@@ -96,10 +112,13 @@ const ImportPrivatekeyModal = () => {
           <ModalInput>
             <PrivatekeyTextArea onChange={checkWords} ref={inputRef} />
           </ModalInput>
+
+          <Password onChange={onChangePassword} />
+
           <ImportButton
-            active={isActiveImportButton}
+            active={isActiveImportButton && isValidString(password)}
             onClick={() => {
-              if (isActiveImportButton) importWallet();
+              if (isActiveImportButton && isValidString(password)) importWallet();
             }}
           >
             IMPORT

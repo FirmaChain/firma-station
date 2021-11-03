@@ -10,8 +10,11 @@ import { BlankCard } from "../../components/card";
 import { AddressTitleTypo, CopyIconImg, UserAddressTypo, UserBalanceTypo } from "./styles";
 
 const AccountCard = () => {
-  const { address, balance } = useSelector((state: rootState) => state.wallet);
+  //TODO : BALANCE
+  const { address } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
+
+  const balance = 0;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(address);

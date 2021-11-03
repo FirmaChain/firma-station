@@ -21,7 +21,9 @@ import { convertNumber } from "../../utils/common";
 
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
-  const { balance } = useSelector((state: rootState) => state.wallet);
+  //TODO : BALANCE
+  // const { balance } = useSelector((state: rootState) => state.wallet);
+  const balance = 0;
   const { sendFCT } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 

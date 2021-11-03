@@ -30,9 +30,9 @@ interface IInputTarget {
 
 const ConfirmWalletModal = () => {
   const confirmWalletModalState = useSelector((state: rootState) => state.modal.confirmWallet);
-  const { mnemonic } = useSelector((state: rootState) => state.wallet);
+  const { mnemonic, password } = useSelector((state: rootState) => state.modal.data);
   const { enqueueSnackbar } = useSnackbar();
-  const { resetWallet, initWallet } = useFirma();
+  const { initWallet, storeWalletFromMnemonic, resetWallet } = useFirma();
 
   const [inputTarget, setInputTarget] = useState<Array<IInputTarget>>([]);
   const [selectTarget, setSelectTarget] = useState<Array<string>>([]);
@@ -41,10 +41,10 @@ const ConfirmWalletModal = () => {
 
   useEffect(() => {
     if (confirmWalletModalState) {
-      let mnemonicArray = mnemonic.split(" ").map((mnemonic, index) => {
+      let mnemonicArray = mnemonic.split(" ").map((mnemonicWord: string, index: number) => {
         return {
           index,
-          mnemonic,
+          mnemonic: mnemonicWord,
         };
       });
       let inputTargetList = [];
@@ -80,12 +80,14 @@ const ConfirmWalletModal = () => {
   };
 
   const confirmWallet = () => {
-    enqueueSnackbar("Success Create Wallet", {
-      variant: "success",
-      autoHideDuration: 1000,
+    storeWalletFromMnemonic(password, mnemonic).then(() => {
+      enqueueSnackbar("Success Create Wallet", {
+        variant: "success",
+        autoHideDuration: 1000,
+      });
+      initWallet();
+      closeModal();
     });
-    initWallet();
-    closeModal();
   };
 
   const prevModal = () => {
@@ -99,6 +101,7 @@ const ConfirmWalletModal = () => {
     setCurrentWordIndex(0);
     activeCreateButton(false);
     modalActions.handleModalConfirmWallet(false);
+    modalActions.handleModalData({});
   };
 
   const putWord = (mnemonic: string) => {

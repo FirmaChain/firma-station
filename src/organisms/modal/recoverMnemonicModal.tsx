@@ -3,10 +3,13 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
+import { isValidString } from "../../utils/common";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+
+import Password from "./password";
 
 import {
   recoverMnemonicModalWidth,
@@ -21,33 +24,42 @@ import {
 
 const RecoverMnemonicModal = () => {
   const recoverMnemonicModalState = useSelector((state: rootState) => state.modal.recoverMnemonic);
+
+  const { enqueueSnackbar } = useSnackbar();
+  const { initWallet, resetWallet, storeWalletFromMnemonic } = useFirma();
+  const { reFetchObservableQueries } = useApolloClient();
+
   const [isActiveRecoverButton, activeRecoverButton] = useState(false);
   const [inputWords, setInputWords] = useState("");
-  const { enqueueSnackbar } = useSnackbar();
-
-  const { resetWallet, initWallet, recoverWalletFromMnemonic } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const [password, setPassword] = useState("");
 
   const inputRef = useRef<HTMLTextAreaElement>();
 
   const recoverWallet = () => {
-    recoverWalletFromMnemonic(inputWords)
-      .then(() => {
-        enqueueSnackbar("Success Recovered Your Wallet", {
-          variant: "success",
-          autoHideDuration: 1000,
+    if (isValidString(password)) {
+      storeWalletFromMnemonic(password, inputWords)
+        .then(() => {
+          enqueueSnackbar("Success Recovered Your Wallet", {
+            variant: "success",
+            autoHideDuration: 1000,
+          });
+          reFetchObservableQueries();
+          initWallet();
+          closeModal();
+        })
+        .catch((error) => {
+          console.log(error);
+          enqueueSnackbar("Invalidate Mnemonic Words", {
+            variant: "error",
+            autoHideDuration: 1000,
+          });
         });
-        reFetchObservableQueries();
-        initWallet();
-        closeModal();
-      })
-      .catch((error) => {
-        console.log(error);
-        enqueueSnackbar("Invalidate Mnemonic Words", {
-          variant: "error",
-          autoHideDuration: 1000,
-        });
+    } else {
+      enqueueSnackbar("Invalid input fields", {
+        variant: "error",
+        autoHideDuration: 1000,
       });
+    }
   };
 
   const cancelWallet = () => {
@@ -81,6 +93,10 @@ const RecoverMnemonicModal = () => {
     setInputWords(checkValue);
   };
 
+  const onChangePassword = (password: string) => {
+    setPassword(password);
+  };
+
   return (
     <Modal
       visible={recoverMnemonicModalState}
@@ -96,10 +112,13 @@ const RecoverMnemonicModal = () => {
           <ModalInput>
             <MnemonicTextArea onChange={checkWords} ref={inputRef} />
           </ModalInput>
+
+          <Password onChange={onChangePassword} />
+
           <RecoverButton
-            active={isActiveRecoverButton}
+            active={isActiveRecoverButton && isValidString(password)}
             onClick={() => {
-              if (isActiveRecoverButton) recoverWallet();
+              if (isActiveRecoverButton && isValidString(password)) recoverWallet();
             }}
           >
             RECOVER

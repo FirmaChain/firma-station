@@ -9,7 +9,9 @@ import { AessetTable } from "../../components/table";
 import { AddressTitleTypo } from "./styles";
 
 const AssetCard = () => {
-  const { balance } = useSelector((state: rootState) => state.wallet);
+  //TODO : BALANCE
+  // const { balance } = useSelector((state: rootState) => state.wallet);
+  const balance = "0";
   const { nftList } = useSelector((state: rootState) => state.nft);
 
   return (

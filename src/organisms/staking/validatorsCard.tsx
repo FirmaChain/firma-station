@@ -20,7 +20,8 @@ const Row = ({ data, index, style }: any) => {
     <Link
       to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}
       onClick={() => {
-        walletActions.handleWalletSelectValidator(currentValidator.validatorAddress);
+        //TODO : SELECT VALIDATOR
+        // walletActions.handleWalletSelectValidator(currentValidator.validatorAddress);
       }}
     >
       <ItemWrapper style={style}>
@@ -40,7 +41,8 @@ const Row = ({ data, index, style }: any) => {
 
 const Validators = ({ validatorsState }: IProps) => {
   useEffect(() => {
-    walletActions.handleWalletSelectValidator("");
+    //TODO : SELECT VALIDATOR
+    // walletActions.handleWalletSelectValidator("");
   }, [validatorsState]);
 
   return (

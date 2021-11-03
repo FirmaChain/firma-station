@@ -5,6 +5,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import { rootState } from "../redux/reducers";
 
 import { Home, Coming, Staking, Accounts, History, Validators, Government, Proposals } from "../pages";
+import useFirma from "../utils/wallet";
 
 const routePublic = (path: string, component: React.FC) => ({
   path,
@@ -42,6 +43,7 @@ interface IProps {
 
 const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
+  const { isNeedLogin } = useFirma();
   const { address } = useSelector((state: rootState) => state.wallet);
 
   const renderFunc = (props: any) => {
@@ -55,6 +57,9 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
         return <Redirect to={{ pathname: "/" }} />;
       }
     }
+
+    if (isNeedLogin()) return <Redirect to={{ pathname: "/" }} />;
+
     return <Component {...props} />;
   };
 

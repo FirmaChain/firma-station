@@ -1,31 +1,44 @@
+import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
+import { getRandomKey } from "./utils/keystore";
+import { walletActions, modalActions } from "./redux/action";
+import useFirma from "./utils/wallet";
 import Routes from "./routes";
-
-import theme from "./themes";
 
 import Sidebar from "./organisms/sidebar";
 import Header from "./organisms/header";
 import Footer from "./organisms/footer";
+import LoginCard from "./organisms/login";
 
+import "./default.css";
+import theme from "./themes";
 import { RightContainer, MainContainer } from "./styles/common";
 
-import "./App.css";
+const App = () => {
+  const { isNeedLogin } = useFirma();
 
-const App = () => (
-  <BrowserRouter>
-    <ThemeProvider theme={theme}>
-      <MainContainer>
-        <Sidebar />
-        <RightContainer>
-          <Header />
-          <Routes />
-          <Footer />
-        </RightContainer>
-      </MainContainer>
-    </ThemeProvider>
-  </BrowserRouter>
-);
+  useEffect(() => {
+    walletActions.handleWalletTimeKey(getRandomKey());
+    modalActions.handleModalReset();
+  }, []);
+
+  return (
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        {isNeedLogin() && <LoginCard />}
+        <MainContainer>
+          <Sidebar />
+          <RightContainer>
+            <Header />
+            <Routes />
+            <Footer />
+          </RightContainer>
+        </MainContainer>
+      </ThemeProvider>
+    </BrowserRouter>
+  );
+};
 
 export default App;
