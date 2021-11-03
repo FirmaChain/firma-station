@@ -10,10 +10,4 @@ const persistConfig = {
   storage,
 };
 
-export default createStore(
-  persistReducer(persistConfig, reducers),
-  compose(
-    applyMiddleware(ReduxThunk),
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
-  )
-);
+export default createStore(persistReducer(persistConfig, reducers), applyMiddleware(ReduxThunk));
