@@ -41,7 +41,7 @@ export const useStakingDataFromTarget = () => {
         if (result) setTargetStakingState(result);
       });
     }
-  }, 5000);
+  }, 2000);
 
   return {
     targetStakingState,
@@ -67,7 +67,7 @@ export const useStakingData = () => {
     getStaking().then((result: ITotalStakingState | undefined) => {
       if (result) setTotalStakingState(result);
     });
-  }, 5000);
+  }, 2000);
 
   useValidatorsQuery({
     onCompleted: (data) => {

@@ -25,7 +25,6 @@ import {
 
 const NewWalletModal = () => {
   const newWalletModalState = useSelector((state: rootState) => state.modal.newWallet);
-  // const { mnemonic, privateKey, address } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
   const { getNewMnemonic } = useFirma();
 

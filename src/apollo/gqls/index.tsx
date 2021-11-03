@@ -202,7 +202,7 @@ export const useHistoryByAddressQuery = ({ onCompleted, address }: IQueryParam) 
     `,
     {
       onCompleted,
-      pollInterval: 10000,
+      pollInterval: 3000,
       notifyOnNetworkStatusChange: true,
       variables: {
         address,
@@ -235,7 +235,7 @@ export const useTransferHistoryByAddressQuery = ({ onCompleted, address }: IQuer
     `,
     {
       onCompleted,
-      pollInterval: 10000,
+      pollInterval: 3000,
       notifyOnNetworkStatusChange: true,
       variables: {
         address,

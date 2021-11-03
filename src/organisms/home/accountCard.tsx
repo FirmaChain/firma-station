@@ -3,6 +3,7 @@ import numeral from "numeral";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
+import { copyToClipboard } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 
 import theme from "../../themes";
@@ -15,8 +16,8 @@ const AccountCard = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(address);
+  const clipboard = () => {
+    copyToClipboard(address);
 
     enqueueSnackbar("Copied", {
       variant: "success",
@@ -27,7 +28,7 @@ const AccountCard = () => {
   return (
     <BlankCard bgColor={theme.colors.mainblue} height="130px" backgroundLogo={true}>
       <AddressTitleTypo>Address</AddressTitleTypo>
-      <CopyIconImg onClick={copyToClipboard} />
+      <CopyIconImg onClick={clipboard} />
       <UserAddressTypo>{address}</UserAddressTypo>
       <UserBalanceTypo>{`${numeral(balance).format("0,0.000")} ${"FCT"}`}</UserBalanceTypo>
     </BlankCard>

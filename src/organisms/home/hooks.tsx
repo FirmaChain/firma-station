@@ -46,7 +46,7 @@ export const useBlockData = () => {
 
   useInterval(() => {
     setUserData();
-  }, 5000);
+  }, 2000);
 
   useBlockDataQuery({
     onCompleted: (data) => {
