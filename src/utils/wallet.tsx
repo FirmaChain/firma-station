@@ -3,13 +3,14 @@ import { FirmaSDK } from "@firmachain/firma-js";
 
 import { Wallet } from "./types";
 import { FIRMACHAIN_CONFIG } from "../config";
-import { convertNumber, convertToFctNumber, isValid } from "./common";
+import { convertNumber, convertToFctNumber, convertToFctString, isValid } from "./common";
 import { rootState } from "../redux/reducers";
-import { walletActions } from "../redux/action";
+import { userActions, walletActions } from "../redux/action";
 import { getRandomKey } from "./keystore";
 import { storeKey, storeKeyFirma, getStoredWallet, getStoredWalletFirma, clearKeys, loadKeys } from "./localStorage";
 
 import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
+import numeral from "numeral";
 
 function useFirma() {
   const { isInit, timeKey } = useSelector((state: rootState) => state.wallet);
@@ -24,74 +25,33 @@ function useFirma() {
     return newWallet.getMnemonic();
   };
 
-  const storeWalletFromMnemonic = async (password: string, mnemonic: string) => {
-    const walletService = await getFirmaSDK().Wallet.fromMnemonic(mnemonic);
-    const privateKey = walletService.getPrivateKey();
-    const address = await walletService.getAddress();
-
+  const storeWallet = (password: string, mnemonic: string, privateKey: string, address: string, timeKey: string) => {
     const wallet: Wallet = {
       mnemonic,
       privateKey,
       address,
     };
 
-    storeKey(password, wallet);
-    storeKeyFirma(timeKey, wallet);
-
-    walletActions.handleWalletInit(true);
     walletActions.handleWalletAddress(address);
-  };
-
-  const storeWalletFromPrivateKey = async (password: string, privateKey: string) => {
-    const walletService = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const address = await walletService.getAddress();
-
-    const wallet: Wallet = {
-      mnemonic: "",
-      privateKey,
-      address,
-    };
 
     storeKey(password, wallet);
     storeKeyFirma(timeKey, wallet);
-
-    walletActions.handleWalletInit(true);
-    walletActions.handleWalletAddress(address);
+    initWallet(true);
   };
 
-  const refreshWalletFromMnemonic = async (password: string, mnemonic: string, timeKey: string) => {
+  const storeWalletFromMnemonic = async (password: string, mnemonic: string, newTimeKey: string = "") => {
     const walletService = await getFirmaSDK().Wallet.fromMnemonic(mnemonic);
     const privateKey = walletService.getPrivateKey();
     const address = await walletService.getAddress();
 
-    const wallet: Wallet = {
-      mnemonic,
-      privateKey,
-      address,
-    };
-
-    storeKey(password, wallet);
-    storeKeyFirma(timeKey, wallet);
-
-    walletActions.handleWalletInit(true);
-    walletActions.handleWalletAddress(address);
+    storeWallet(password, mnemonic, privateKey, address, newTimeKey !== "" ? newTimeKey : timeKey);
   };
 
-  const refreshWalletFromPrivateKey = async (password: string, privateKey: string, timeKey: string) => {
+  const storeWalletFromPrivateKey = async (password: string, privateKey: string, newTimeKey: string = "") => {
     const walletService = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await walletService.getAddress();
 
-    const wallet: Wallet = {
-      mnemonic: "",
-      privateKey,
-      address,
-    };
-
-    storeKey(password, wallet);
-    storeKeyFirma(timeKey, wallet);
-
-    walletActions.handleWalletInit(true);
-    walletActions.handleWalletAddress(address);
+    storeWallet(password, "", privateKey, address, newTimeKey !== "" ? newTimeKey : timeKey);
   };
 
   const loginWallet = async (password: string) => {
@@ -99,33 +59,48 @@ function useFirma() {
     const timeKey = getRandomKey();
 
     walletActions.handleWalletTimeKey(timeKey);
+
     if (wallet.mnemonic !== "") {
-      await refreshWalletFromMnemonic(password, wallet.mnemonic, timeKey);
+      await storeWalletFromMnemonic(password, wallet.mnemonic, timeKey);
     } else {
-      await refreshWalletFromPrivateKey(password, wallet.privateKey, timeKey);
+      await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
     }
   };
 
   const isNeedLogin = () => {
     if (isValid(loadKeys("USER_STORE"))) {
       const wallet = getStoredWalletFirma(timeKey);
-      walletActions.handleWalletInit(wallet !== null);
+
+      initWallet(wallet !== null);
+
       return wallet === null;
     } else {
       return false;
     }
   };
 
-  const initWallet = () => {
-    walletActions.handleWalletInit(true);
+  const initWallet = (isInit: boolean) => {
+    walletActions.handleWalletInit(isInit);
   };
 
   const resetWallet = () => {
-    walletActions.handleWalletInit(false);
+    initWallet(false);
+
     walletActions.handleWalletAddress("");
     walletActions.handleWalletTimeKey(getRandomKey());
 
     clearKeys();
+  };
+
+  const setUserData = async () => {
+    if (!isInit) return;
+
+    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const address = await wallet.getAddress();
+    const balance = await getFirmaSDK().Bank.getBalance(address);
+
+    userActions.handleUserBalance(convertToFctString(balance));
   };
 
   const getStaking = async () => {
@@ -406,11 +381,10 @@ function useFirma() {
     getNewMnemonic,
     storeWalletFromMnemonic,
     storeWalletFromPrivateKey,
-    refreshWalletFromMnemonic,
-    initWallet,
     resetWallet,
     loginWallet,
     isNeedLogin,
+    setUserData,
     getStaking,
     getStakingFromValidator,
     getDelegationList,

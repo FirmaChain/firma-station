@@ -22,9 +22,7 @@ import {
 const DepositModal = () => {
   const depositModalState = useSelector((state: rootState) => state.modal.deposit);
   const modalData = useSelector((state: rootState) => state.modal.data);
-  //TODO : BALANCE
-  // const { balance } = useSelector((state: rootState) => state.wallet);
-  const balance = 0;
+  const { balance } = useSelector((state: rootState) => state.user);
 
   const { deposit } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();

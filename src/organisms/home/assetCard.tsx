@@ -9,10 +9,7 @@ import { AessetTable } from "../../components/table";
 import { AddressTitleTypo } from "./styles";
 
 const AssetCard = () => {
-  //TODO : BALANCE
-  // const { balance } = useSelector((state: rootState) => state.wallet);
-  const balance = "0";
-  const { nftList } = useSelector((state: rootState) => state.nft);
+  const { balance, nftList } = useSelector((state: rootState) => state.user);
 
   return (
     <BlankCard bgColor={theme.colors.backgroundSideBar} height="100%">

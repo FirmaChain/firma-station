@@ -32,7 +32,7 @@ const ConfirmWalletModal = () => {
   const confirmWalletModalState = useSelector((state: rootState) => state.modal.confirmWallet);
   const { mnemonic, password } = useSelector((state: rootState) => state.modal.data);
   const { enqueueSnackbar } = useSnackbar();
-  const { initWallet, storeWalletFromMnemonic, resetWallet } = useFirma();
+  const { storeWalletFromMnemonic } = useFirma();
 
   const [inputTarget, setInputTarget] = useState<Array<IInputTarget>>([]);
   const [selectTarget, setSelectTarget] = useState<Array<string>>([]);
@@ -75,7 +75,6 @@ const ConfirmWalletModal = () => {
   }, [confirmWalletModalState]);
 
   const cancelWallet = () => {
-    resetWallet();
     closeModal();
   };
 
@@ -85,7 +84,6 @@ const ConfirmWalletModal = () => {
         variant: "success",
         autoHideDuration: 1000,
       });
-      initWallet();
       closeModal();
     });
   };

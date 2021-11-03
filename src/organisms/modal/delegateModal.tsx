@@ -22,9 +22,7 @@ import {
 const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
-  //TODO : BALANCE
-  // const { balance } = useSelector((state: rootState) => state.wallet);
-  const balance = 0;
+  const { balance } = useSelector((state: rootState) => state.user);
 
   const { delegate } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();

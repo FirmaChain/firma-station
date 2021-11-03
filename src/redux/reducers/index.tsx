@@ -1,16 +1,16 @@
 import { combineReducers } from "redux";
 import modalReducer, { IModalState } from "./modalReducer";
 import walletReducer, { IWalletState } from "./walletReducer";
-import nftReducer, { INftState } from "./nftReducer";
+import userReducer, { IUserState } from "./userReducer";
 
 export interface rootState {
   modal: IModalState;
   wallet: IWalletState;
-  nft: INftState;
+  user: IUserState;
 }
 
 export default combineReducers({
   modal: modalReducer,
   wallet: walletReducer,
-  nft: nftReducer,
+  user: userReducer,
 });

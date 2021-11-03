@@ -26,7 +26,7 @@ const RecoverMnemonicModal = () => {
   const recoverMnemonicModalState = useSelector((state: rootState) => state.modal.recoverMnemonic);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { initWallet, resetWallet, storeWalletFromMnemonic } = useFirma();
+  const { storeWalletFromMnemonic } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const [isActiveRecoverButton, activeRecoverButton] = useState(false);
@@ -44,7 +44,6 @@ const RecoverMnemonicModal = () => {
             autoHideDuration: 1000,
           });
           reFetchObservableQueries();
-          initWallet();
           closeModal();
         })
         .catch((error) => {
@@ -63,7 +62,6 @@ const RecoverMnemonicModal = () => {
   };
 
   const cancelWallet = () => {
-    resetWallet();
     closeModal();
   };
 

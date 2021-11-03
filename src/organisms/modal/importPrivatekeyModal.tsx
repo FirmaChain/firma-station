@@ -26,7 +26,7 @@ const ImportPrivatekeyModal = () => {
   const importPrivatekeyModalState = useSelector((state: rootState) => state.modal.importPrivatekey);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { initWallet, resetWallet, storeWalletFromPrivateKey } = useFirma();
+  const { storeWalletFromPrivateKey } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const [isActiveImportButton, activeImportButton] = useState(false);
@@ -44,7 +44,6 @@ const ImportPrivatekeyModal = () => {
             autoHideDuration: 1000,
           });
           reFetchObservableQueries();
-          initWallet();
           closeModal();
         })
         .catch((error: any) => {
@@ -63,7 +62,6 @@ const ImportPrivatekeyModal = () => {
   };
 
   const cancelWallet = () => {
-    resetWallet();
     closeModal();
   };
 

@@ -24,8 +24,7 @@ export interface ITokenomicsState {
 }
 
 export const useBlockData = () => {
-  //TODO : REFRESH
-  // const { refreshWallet } = useFirma();
+  const { setUserData } = useFirma();
   const [blockState, setBlockState] = useState<IBlockState>({
     height: 0,
     transactions: 0,
@@ -45,9 +44,9 @@ export const useBlockData = () => {
     undelegate: 0,
   });
 
-  // useInterval(() => {
-  //   refreshWallet();
-  // }, 5000);
+  useInterval(() => {
+    setUserData();
+  }, 5000);
 
   useBlockDataQuery({
     onCompleted: (data) => {
