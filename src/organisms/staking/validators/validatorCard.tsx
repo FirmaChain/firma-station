@@ -48,23 +48,23 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
           <StatusWrapper>
             <StatusItem>
               <StatusTitle>Voting Power</StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.votingPowerPercent * 1).format("0.00")} %`}</StatusContent>
+              <StatusContent>{`${numeral(targetValidatorData.votingPowerPercent).format("0.00")} %`}</StatusContent>
               <StatusSubContent>{`${numeral(targetValidatorData.votingPower).format("0,0.00")} FCT`}</StatusSubContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Self-delegation</StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.selfPercent * 1).format("0.00")} %`}</StatusContent>
+              <StatusContent>{`${numeral(targetValidatorData.selfPercent).format("0.00")} %`}</StatusContent>
               <StatusSubContent>{`${numeral(convertToFctNumber(targetValidatorData.self)).format(
                 "0,0.00"
               )} FCT`}</StatusSubContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Commission</StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.commission * 1).format("0.00")} %`}</StatusContent>
+              <StatusContent>{`${numeral(targetValidatorData.commission).format("0.00")} %`}</StatusContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Uptime</StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.condition * 1).format("0.00")} %`}</StatusContent>
+              <StatusContent>{`${numeral(targetValidatorData.condition).format("0.00")} %`}</StatusContent>
             </StatusItem>
           </StatusWrapper>
         </>

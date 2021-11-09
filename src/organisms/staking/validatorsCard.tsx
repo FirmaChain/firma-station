@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { Link } from "react-router-dom";

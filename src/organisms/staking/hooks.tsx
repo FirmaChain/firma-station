@@ -82,7 +82,7 @@ export const useStakingData = () => {
         const validatorDetail = validator.validator_descriptions[0].details;
         const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
         const votingPower = validator.validatorVotingPowers[0].votingPower;
-        const votingPowerPercent = numeral((votingPower / totalVotingPower) * 100).format("0.00");
+        const votingPowerPercent = numeral(convertNumber((votingPower / totalVotingPower) * 100)).format("0.00");
         const totalDelegations = validator.delegations.reduce((prev: number, current: any) => {
           return prev + convertNumber(current.amount.amount);
         }, 0);
@@ -90,12 +90,12 @@ export const useStakingData = () => {
           return y.delegatorAddress === validator.validatorInfo.selfDelegateAddress;
         });
         const self = convertNumber(selfDelegation.amount.amount);
-        const selfPercent = numeral((self / (totalDelegations || 1)) * 100).format("0.00");
+        const selfPercent = numeral(convertNumber((self / (totalDelegations || 1)) * 100)).format("0.00");
         const delegations = validator.delegations.map((value: any) => {
-          return { address: value.delegatorAddress, amount: numeral(value.amount.amount).value() };
+          return { address: value.delegatorAddress, amount: convertNumber(value.amount.amount) };
         });
         const missedBlockCounter = validator.validatorSigningInfos[0].missedBlocksCounter;
-        const commission = numeral(validator.validatorCommissions[0].commission * 100).value();
+        const commission = numeral(convertNumber(validator.validatorCommissions[0].commission * 100)).value();
         const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
         const status = validator.validatorStatuses[0].status;
         const jailed = validator.validatorStatuses[0].jailed;
