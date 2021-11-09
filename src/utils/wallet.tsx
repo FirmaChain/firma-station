@@ -1,9 +1,16 @@
 import { useSelector } from "react-redux";
-import { FirmaSDK } from "@firmachain/firma-js";
+import { FirmaSDK, FirmaUtil } from "@firmachain/firma-js";
 
 import { Wallet } from "./types";
 import { FIRMACHAIN_CONFIG } from "../config";
-import { convertNumber, convertToFctNumber, convertToFctString, isValid } from "./common";
+import {
+  convertNumber,
+  convertToFctNumber,
+  convertToFctString,
+  convertToTokenNumber,
+  convertToTokenString,
+  isValid,
+} from "./common";
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
 import { getRandomKey } from "./keystore";
@@ -98,8 +105,21 @@ function useFirma() {
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const balance = await getFirmaSDK().Bank.getBalance(address);
+    const nftList = await getFirmaSDK().Nft.getNftItemAllFromAddress(address);
+    const tokenList = await getFirmaSDK().Bank.getTokenBalanceList(address);
+    const tokenDataList = [];
+    for (let token of tokenList) {
+      const tokenData = await getFirmaSDK().Token.getTokenData(token.denom);
+      tokenDataList.push({
+        denom: token.denom,
+        balance: convertToTokenString(token.amount, tokenData.decimal),
+        symbol: tokenData.symbol,
+        decimal: tokenData.decimal,
+      });
+    }
 
     userActions.handleUserBalance(convertToFctString(balance));
+    userActions.handleUserTokenList(tokenDataList);
   };
 
   const getStaking = async () => {

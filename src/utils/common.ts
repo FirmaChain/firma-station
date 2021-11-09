@@ -27,6 +27,14 @@ export const convertNumber = (value: string | number) => {
   return Number(value);
 };
 
+export const convertToTokenString = (amount: string, decimal: number) => {
+  return FirmaUtil.getTokenStringFromUToken(convertNumber(amount), convertNumber(decimal));
+};
+
+export const convertToTokenNumber = (amount: number | string, decimal: string) => {
+  return convertNumber(FirmaUtil.getTokenStringFromUToken(convertNumber(amount), convertNumber(decimal)));
+};
+
 export const convertToFctString = (uFctAmount: string) => {
   return FirmaUtil.getFCTStringFromUFCT(convertNumber(uFctAmount));
 };
