@@ -8,7 +8,6 @@ import theme from "../../themes";
 import { BlankCard } from "../../components/card";
 import { AessetTable } from "../../components/table";
 import { AddressTitleTypo } from "./styles";
-import { convertNumber } from "../../utils/common";
 
 const AssetCard = () => {
   const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);

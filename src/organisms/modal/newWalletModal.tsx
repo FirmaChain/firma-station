@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { copyToClipboard } from "../../utils/common";
+import { copyToClipboard, isValidString } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -101,7 +101,7 @@ const NewWalletModal = () => {
 
           <Password onChange={onChangePassword} />
 
-          <NextButton onClick={() => openConfirmModal()} active={true}>
+          <NextButton onClick={() => openConfirmModal()} active={isValidString(password)}>
             NEXT
           </NextButton>
         </ModalContent>

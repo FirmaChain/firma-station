@@ -114,9 +114,9 @@ const RecoverMnemonicModal = () => {
           <Password onChange={onChangePassword} />
 
           <RecoverButton
-            active={isActiveRecoverButton && isValidString(password)}
+            active={isActiveRecoverButton}
             onClick={() => {
-              if (isActiveRecoverButton && isValidString(password)) recoverWallet();
+              if (isActiveRecoverButton) recoverWallet();
             }}
           >
             RECOVER

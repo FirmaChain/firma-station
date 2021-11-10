@@ -1,16 +1,9 @@
 import { useSelector } from "react-redux";
-import { FirmaSDK, FirmaUtil } from "@firmachain/firma-js";
+import { FirmaSDK } from "@firmachain/firma-js";
 
 import { Wallet } from "./types";
 import { FIRMACHAIN_CONFIG } from "../config";
-import {
-  convertNumber,
-  convertToFctNumber,
-  convertToFctString,
-  convertToTokenNumber,
-  convertToTokenString,
-  isValid,
-} from "./common";
+import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValid } from "./common";
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
 import { getRandomKey } from "./keystore";
@@ -105,7 +98,7 @@ function useFirma() {
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const balance = await getFirmaSDK().Bank.getBalance(address);
-    const nftList = await getFirmaSDK().Nft.getNftItemAllFromAddress(address);
+    // const nftList = await getFirmaSDK().Nft.getNftItemAllFromAddress(address);
     const tokenList = await getFirmaSDK().Bank.getTokenBalanceList(address);
     const tokenDataList = [];
     for (let token of tokenList) {
@@ -120,6 +113,24 @@ function useFirma() {
 
     userActions.handleUserBalance(convertToFctString(balance));
     userActions.handleUserTokenList(tokenDataList);
+  };
+
+  const getTokenData = async (denom: string) => {
+    if (denom !== "ufct") {
+      const tokenData = await getFirmaSDK().Token.getTokenData(denom);
+
+      return {
+        denom: denom,
+        symbol: tokenData.symbol,
+        decimal: tokenData.decimal,
+      };
+    }
+
+    return {
+      denom: "ufct",
+      symbol: "FCT",
+      decimal: 6,
+    };
   };
 
   const getStaking = async () => {
@@ -418,6 +429,7 @@ function useFirma() {
     loginWallet,
     isNeedLogin,
     setUserData,
+    getTokenData,
     getStaking,
     getStakingFromValidator,
     getDelegationList,

@@ -16,7 +16,7 @@ import {
 
 const Accounts = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
-  const { transferHistoryByAddressState } = useTransferHistoryByAddress();
+  const { transferHistoryByAddressState, tokenDataState } = useTransferHistoryByAddress();
   return (
     <ContentContainer>
       <CardWrap>
@@ -32,7 +32,10 @@ const Accounts = () => {
           </RightCardTopWrap>
           <RightCardBottomWrap>
             {transferHistoryByAddressState && (
-              <TransferHistoryCard transferHistoryByAddressState={transferHistoryByAddressState} />
+              <TransferHistoryCard
+                transferHistoryByAddressState={transferHistoryByAddressState}
+                tokenDataState={tokenDataState}
+              />
             )}
           </RightCardBottomWrap>
         </RightCardWrap>

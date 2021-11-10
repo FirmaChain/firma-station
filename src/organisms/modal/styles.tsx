@@ -85,7 +85,7 @@ export const ConfirmInput = styled.div`
   color: #ccc;
 `;
 
-export const InputBoxDefault = styled.input`
+export const InputBoxDefault = styled.input<{ isInvalid?: boolean }>`
   width: calc(100% - 24px);
   height: 30px;
   line-height: 30px;
@@ -93,13 +93,21 @@ export const InputBoxDefault = styled.input`
   padding: 0 10px;
   color: white;
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
-  border: 1px solid #324ab8aa;
+  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}` : "#324ab8aa")};
   border-radius: 4px;
   ::-webkit-outer-spin-button,
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
+`;
+
+export const InputMessageText = styled.div`
+  width: 100%;
+  height: 10px;
+  line-height: 10px;
+  margin-top: 10px;
+  padding: 0 5px;
 `;
 
 export const MnemonicContainter = styled.div`
