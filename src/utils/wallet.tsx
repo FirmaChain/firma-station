@@ -53,6 +53,15 @@ function useFirma() {
     storeWallet(password, "", privateKey, address, newTimeKey !== "" ? newTimeKey : timeKey);
   };
 
+  const isCorrectPassword = (password: string) => {
+    try {
+      getStoredWallet(password);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
   const loginWallet = async (password: string) => {
     const wallet = getStoredWallet(password);
     const timeKey = getRandomKey();
@@ -426,6 +435,7 @@ function useFirma() {
     resetWallet,
     loginWallet,
     isNeedLogin,
+    isCorrectPassword,
     setUserData,
     getTokenData,
     getStaking,

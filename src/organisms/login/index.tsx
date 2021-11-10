@@ -49,6 +49,7 @@ const LoginCard = () => {
             onKeyDown={onKeyDownPassword}
             value={password}
             onChange={onChangePassword}
+            autoFocus={true}
           />
           <LoginButton active={password !== ""} onClick={login}>
             LOGIN

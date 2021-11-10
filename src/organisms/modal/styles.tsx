@@ -397,4 +397,10 @@ export const VotingItem = styled.div<{ active: boolean }>`
   ${(props) => props.active && `background-color:${props.theme.colors.mainblue}80`};
 `;
 
+export const PasswordWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  margin-top: 40px;
+`;
+
 export { NewWalletIcon, RecoverMnemonicIcon, ImportPrivateKeyIcon, ConnectLedgerIcon };
