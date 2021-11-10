@@ -267,8 +267,6 @@ function useFirma() {
 
     const privateKey = getStoredWalletFirma(timeKey).privateKey;
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    console.log(tokenID);
-    console.log(amount);
     const result = await getFirmaSDK().Bank.sendToken(wallet, address, tokenID, convertNumber(amount), decimal, {
       memo,
     });

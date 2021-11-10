@@ -72,7 +72,7 @@ const ConfirmWalletModal = () => {
       setInputTarget(inputTargetList);
       setSelectTarget(selectTargetList);
     }
-  }, [confirmWalletModalState]);
+  }, [confirmWalletModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const cancelWallet = () => {
     closeModal();

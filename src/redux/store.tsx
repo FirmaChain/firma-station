@@ -8,6 +8,7 @@ import reducers from "./reducers";
 const persistConfig = {
   key: "root",
   storage,
+  blacklist: ["modal"],
 };
 
 export default createStore(persistReducer(persistConfig, reducers), applyMiddleware(ReduxThunk));

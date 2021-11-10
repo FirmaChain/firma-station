@@ -12,7 +12,7 @@ import NewsIcon from "@mui/icons-material/Chat";
 import SupportsIcon from "@mui/icons-material/Help";
 import BuyFirmaIcon from "@mui/icons-material/Payment";
 import ExplorerIcon from "@mui/icons-material/Archive";
-import SettingsIcon from "@mui/icons-material/Settings";
+// import SettingsIcon from "@mui/icons-material/Settings";
 
 import {
   DrawerStyled,
@@ -21,9 +21,9 @@ import {
   ListItemStyled,
   ListItemIconStyled,
   ListItemTextStyled,
-  BottomWrap,
-  BottomMenuTypo,
-  BottomIcon,
+  // BottomWrap,
+  // BottomMenuTypo,
+  // BottomIcon,
 } from "./styles";
 
 const menus = [
@@ -91,12 +91,12 @@ function Sidebar() {
         })}
       </ListStyled>
 
-      <BottomWrap>
+      {/* <BottomWrap>
         <BottomIcon>
           <SettingsIcon />
         </BottomIcon>
         <BottomMenuTypo>Settings</BottomMenuTypo>
-      </BottomWrap>
+      </BottomWrap> */}
     </DrawerStyled>
   );
 }

@@ -19,7 +19,7 @@ const QueueTxModal = () => {
     if (queueTxModalState) {
       modalData.txAction(resolveTx, rejectTx);
     }
-  }, [queueTxModalState]);
+  }, [queueTxModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const resolveTx = () => {
     enqueueSnackbar("Success Transaction", {

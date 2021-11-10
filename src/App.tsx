@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
 import { getRandomKey } from "./utils/keystore";
-import { walletActions, modalActions } from "./redux/action";
+import { walletActions } from "./redux/action";
 import useFirma from "./utils/wallet";
 import Routes from "./routes";
 
@@ -21,13 +21,11 @@ const App = () => {
 
   useEffect(() => {
     walletActions.handleWalletTimeKey(getRandomKey());
-    modalActions.handleModalReset();
   }, []);
 
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        {isNeedLogin() && <LoginCard />}
         <MainContainer>
           <Sidebar />
           <RightContainer>
@@ -36,6 +34,7 @@ const App = () => {
             <Footer />
           </RightContainer>
         </MainContainer>
+        {isNeedLogin() && <LoginCard />}
       </ThemeProvider>
     </BrowserRouter>
   );

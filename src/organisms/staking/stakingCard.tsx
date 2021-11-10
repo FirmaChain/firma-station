@@ -29,7 +29,7 @@ const StakingCard = ({ totalStakingState }: IProps) => {
       newData[3].value = totalStakingState.stakingReward;
       setStakingData(newData);
     }
-  }, [totalStakingState]);
+  }, [totalStakingState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <BlankCard bgColor={theme.colors.backgroundSideBar} height="168px">

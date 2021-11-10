@@ -37,7 +37,7 @@ const NewWalletModal = () => {
         setMnemonic(mnemonic);
       });
     }
-  }, [newWalletModalState]);
+  }, [newWalletModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeNewWalletModal = () => {
     closeModal();

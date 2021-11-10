@@ -81,7 +81,7 @@ const SendModal = () => {
 
   useEffect(() => {
     checkParams();
-  }, [amount, targetAddress, memo]);
+  }, [amount, targetAddress, memo]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
