@@ -6,8 +6,8 @@ import { FixedSizeList as List } from "react-window";
 import { Link } from "react-router-dom";
 
 import { EXPLORER_URI } from "../../config";
-import { convertToFctNumber } from "../../utils/common";
-import { ITransferHistoryByAddressState } from "./hooks";
+// import { convertToFctNumber } from "../../utils/common";
+import { ITransferHistoryByAddressState, ITokensState } from "./hooks";
 
 import theme from "../../themes";
 import { BlankCard } from "../../components/card";
@@ -15,6 +15,7 @@ import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, Titl
 
 interface IProps {
   transferHistoryByAddressState: ITransferHistoryByAddressState;
+  tokenDataState: ITokensState;
 }
 
 const Row = ({ data, index, style }: any) => {
@@ -28,8 +29,8 @@ const Row = ({ data, index, style }: any) => {
     return address.substr(0, 16) + "...";
   };
 
-  const getAmount = (amount: number) => {
-    return `${numeral(convertToFctNumber(amount)).format("0,0.000")} FCT`;
+  const getAmount = (denom: string, amount: number) => {
+    return `${numeral(amount).format("0,0.000")} ${denom}`;
   };
 
   const getResult = (result: boolean) => {
@@ -57,7 +58,7 @@ const Row = ({ data, index, style }: any) => {
           {getAddress(currentHistory.to)}
         </Link>
       </ItemColumn>
-      <ItemColumn>{getAmount(currentHistory.amount)}</ItemColumn>
+      <ItemColumn>{getAmount(currentHistory.denom, currentHistory.amount)}</ItemColumn>
       <ItemColumn>{getResult(currentHistory.success)}</ItemColumn>
       <ItemColumn>{currentHistory.memo}</ItemColumn>
       <ItemColumn>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
@@ -65,7 +66,7 @@ const Row = ({ data, index, style }: any) => {
   );
 };
 
-const TransferHistoryCard = ({ transferHistoryByAddressState }: IProps) => {
+const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState }: IProps) => {
   return (
     <BlankCard bgColor={theme.colors.backgroundSideBar} height={"100%"}>
       <TitleTypo>Send History</TitleTypo>

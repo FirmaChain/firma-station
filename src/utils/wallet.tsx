@@ -251,6 +251,20 @@ function useFirma() {
     checkVlidateResult(result);
   };
 
+  const sendToken = async (address: string, amount: string, tokenID: string, decimal: number, memo = "") => {
+    if (!isInit) return;
+
+    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    console.log(tokenID);
+    console.log(amount);
+    const result = await getFirmaSDK().Bank.sendToken(wallet, address, tokenID, convertNumber(amount), decimal, {
+      memo,
+    });
+
+    checkVlidateResult(result);
+  };
+
   const delegate = async (validatorAddress: string, amount: number) => {
     if (!isInit) return;
 
@@ -409,6 +423,7 @@ function useFirma() {
     getDelegationList,
     getDelegation,
     sendFCT,
+    sendToken,
     delegate,
     redelegate,
     undelegate,
