@@ -18,7 +18,7 @@ interface IProps {
   tokenDataState: ITokensState;
 }
 
-const Row = ({ data, index, style }: any) => {
+const Row = ({ data, index, style, tokenDataState }: any) => {
   const currentHistory = data[index];
 
   const getHash = (hash: string) => {
@@ -26,11 +26,11 @@ const Row = ({ data, index, style }: any) => {
   };
 
   const getAddress = (address: string) => {
-    return address.substr(0, 16) + "...";
+    return address.substr(0, 10) + "...";
   };
 
   const getAmount = (denom: string, amount: number) => {
-    return `${numeral(amount).format("0,0.000")} ${denom}`;
+    return `${numeral(amount / 10 ** tokenDataState[denom].decimal).format("0,0.000")} ${tokenDataState[denom].symbol}`;
   };
 
   const getResult = (result: boolean) => {
@@ -90,7 +90,7 @@ const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState }: 
                 itemSize={50}
                 itemData={transferHistoryByAddressState.historyList}
               >
-                {Row}
+                {(props) => Row({ ...props, tokenDataState })}
               </List>
             </>
           )}

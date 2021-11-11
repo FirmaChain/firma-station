@@ -43,7 +43,7 @@ const Validators = ({ validatorsState }: IProps) => {
               <HeaderColumn>Moniker</HeaderColumn>
               <HeaderColumn>Voting Power</HeaderColumn>
               <HeaderColumn>Self Delegation</HeaderColumn>
-              <HeaderColumn>Validator Commission</HeaderColumn>
+              <HeaderColumn>Commission</HeaderColumn>
               <HeaderColumn>UpTime</HeaderColumn>
             </HeaderWrapper>
             <List

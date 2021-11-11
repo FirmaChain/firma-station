@@ -79,13 +79,16 @@ export const Column = styled.div`
     flex: 1 1 300px;
   }
   &:nth-child(2) {
-    flex: 1 1 800px;
+    flex: 1 1 350px;
   }
   &:nth-child(3) {
-    flex: 1 1 800px;
+    flex: 1 1 350px;
   }
   &:nth-child(5) {
     flex: 1 1 300px;
+  }
+  &:nth-child(6) {
+    flex: 1 1 400px;
   }
   &:nth-child(7) {
     flex: 1 1 800px;
