@@ -5,7 +5,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 import { rootState } from "../redux/reducers";
 import { useApolloClient } from "@apollo/client";
 
-import { Home, Coming, Staking, Accounts, History, Validators, Government, Proposals } from "../pages";
+import { Home, Staking, Accounts, History, Validators, Government, Proposals, Community } from "../pages";
 import useFirma from "../utils/wallet";
 
 const routePublic = (path: string, component: React.FC) => ({
@@ -28,11 +28,7 @@ const routes = {
   Validators: routePublic("/staking/validators/:address", Validators),
   Government: routePublic("/government", Government),
   Proposals: routePublic("/government/proposals/:id", Proposals),
-  Swap: routePublic("/swap", Coming),
-  News: routePublic("/news", Coming),
-  Supports: routePublic("/supports", Coming),
-  BuyFirma: routePublic("/market", Coming),
-  Explorer: routePublic("/explorer", Coming),
+  Community: routePublic("/community", Community),
 };
 
 interface IProps {

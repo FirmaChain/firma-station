@@ -6,5 +6,6 @@ import Staking from "./staking";
 import Validators from "./validators";
 import Government from "./government";
 import Proposals from "./proposals";
+import Community from "./community";
 
-export { Home, Coming, Accounts, History, Staking, Validators, Government, Proposals };
+export { Home, Coming, Accounts, History, Staking, Validators, Government, Proposals, Community };

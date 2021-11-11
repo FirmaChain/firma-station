@@ -70,6 +70,10 @@ const urls = {
   bgLogo: process.env.PUBLIC_URL + "/images/bgLogo.png",
   fullLogo: process.env.PUBLIC_URL + "/images/firma_chain_title.svg",
   qr: process.env.PUBLIC_URL + "/images/qr.png",
+  telegram: process.env.PUBLIC_URL + "/images/ic_telegram.svg",
+  github: process.env.PUBLIC_URL + "/images/ic_github.svg",
+  twitter: process.env.PUBLIC_URL + "/images/ic_twitter.svg",
+  medium: process.env.PUBLIC_URL + "/images/ic_medium.svg",
 };
 
 const theme = {

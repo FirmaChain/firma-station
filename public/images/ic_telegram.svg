@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120px" height="120px" viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>icon_Telegram</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Community" transform="translate(-1032.000000, -326.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="Group-3" transform="translate(528.000000, 326.000000)">
+                <g id="icon_Telegram" transform="translate(504.000000, 0.000000)">
+                    <path d="M60,120 C93.137085,120 120,93.137085 120,60 C120,26.862915 93.137085,0 60,0 C26.862915,0 1.13686838e-13,26.862915 1.13686838e-13,60 C1.13686838e-13,93.137085 26.862915,120 60,120 Z M85.3005,36.452 C87.9405,35.2535 90.488,37.0865 89.4805,41.1265 L89.4805,41.1265 L79.638,87.508 C78.9505,90.8035 76.9595,91.592 74.2,90.0695 L74.2,90.0695 L59.2063314,78.9919907 L52,86 C51.2117647,86.7661176 50.5785467,87.4188512 49.2562182,87.4929925 L49,87.5 C47.056,87.5 47.3865,86.766 46.716,84.915 L41.6153314,68.1299907 L26.7865,63.5015 C23.6444245,62.5395 23.5625185,60.4026221 27.2864312,58.8277237 L27.5055,58.7375 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -7,9 +7,7 @@ import AccountsIcon from "@mui/icons-material/AccountBalanceWallet";
 import HistoryIcon from "@mui/icons-material/History";
 import StakingIcon from "@mui/icons-material/Inbox";
 import GovernmentIcon from "@mui/icons-material/AccountBalance";
-import SwapIcon from "@mui/icons-material/SwapHoriz";
-import NewsIcon from "@mui/icons-material/Chat";
-import SupportsIcon from "@mui/icons-material/Help";
+import ForumIcon from "@mui/icons-material/Forum";
 import BuyFirmaIcon from "@mui/icons-material/Payment";
 import ExplorerIcon from "@mui/icons-material/Archive";
 // import SettingsIcon from "@mui/icons-material/Settings";
@@ -32,9 +30,7 @@ const menus = [
   { name: "History", path: "/history", icon: HistoryIcon, externalLink: "" },
   { name: "Staking", path: "/staking", icon: StakingIcon, externalLink: "" },
   { name: "Government", path: "/government", icon: GovernmentIcon, externalLink: "" },
-  { name: "Swap", path: "/swap", icon: SwapIcon, externalLink: "" },
-  { name: "News", path: "/news", icon: NewsIcon, externalLink: "" },
-  { name: "Supports", path: "/supports", icon: SupportsIcon, externalLink: "" },
+  { name: "Community", path: "/community", icon: ForumIcon, externalLink: "" },
   {
     name: "Buy Firma",
     path: "/market",
@@ -101,4 +97,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default React.memo(Sidebar);
