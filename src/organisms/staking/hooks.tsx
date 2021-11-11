@@ -80,6 +80,7 @@ export const useStakingData = () => {
         const validatorMoniker = validator.validator_descriptions[0].moniker;
         const validatorAvatar = validator.validator_descriptions[0].avatar_url;
         const validatorDetail = validator.validator_descriptions[0].details;
+        const validatorWebsite = validator.validator_descriptions[0].website;
         const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
         const votingPower = validator.validatorVotingPowers[0].votingPower;
         const votingPowerPercent = numeral(convertNumber((votingPower / totalVotingPower) * 100)).format("0.00");
@@ -105,6 +106,7 @@ export const useStakingData = () => {
           validatorMoniker,
           validatorAvatar,
           validatorDetail,
+          validatorWebsite,
           selfDelegateAddress,
           votingPower,
           votingPowerPercent,

@@ -165,3 +165,8 @@ export const StatusContent = styled.div`
   color: #eee;
 `;
 export const StatusSubContent = styled.div``;
+
+export const LinkTypo = styled.a`
+  line-height: 30px;
+  text-decoration: none;
+`;

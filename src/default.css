@@ -150,7 +150,6 @@ a:hover,
 a:active {
   text-decoration: none;
   color: #fff;
-  background-color: #fff;
 }
 
 ::-webkit-scrollbar {

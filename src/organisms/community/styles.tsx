@@ -31,6 +31,12 @@ export const CommunityItem = styled.div`
   width: 150px;
   cursor: pointer;
   text-align: center;
+  opacity: 0.8;
+
+  &:hover {
+    font-weight: 600;
+    opacity: 1;
+  }
 `;
 
 export const CommunityItemIcon = styled.div<{ icon: string }>`
@@ -46,4 +52,5 @@ export const CommunityItemIcon = styled.div<{ icon: string }>`
 export const CommunityItemTypo = styled.div`
   width: 100%;
   margin-top: 20px;
+  color: #eee;
 `;

@@ -16,6 +16,7 @@ import {
   StatusTitle,
   StatusContent,
   StatusSubContent,
+  LinkTypo,
 } from "./styles";
 import { convertToFctNumber } from "../../../utils/common";
 
@@ -42,7 +43,14 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
             </ProfileImageWrap>
             <DescriptionWrap>
               <NameTypo>{targetValidatorData.validatorMoniker}</NameTypo>
-              <DescriptionTypo>{targetValidatorData.validatorDetail}</DescriptionTypo>
+              <DescriptionTypo>
+                <div>{targetValidatorData.validatorDetail}</div>
+                {targetValidatorData.validatorWebsite && (
+                  <LinkTypo href={targetValidatorData.validatorWebsite} target="_blank">
+                    {targetValidatorData.validatorWebsite}
+                  </LinkTypo>
+                )}
+              </DescriptionTypo>
             </DescriptionWrap>
           </ProfileWrapper>
           <StatusWrapper>
