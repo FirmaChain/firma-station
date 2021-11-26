@@ -3,18 +3,19 @@ import numeral from "numeral";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../../utils/wallet";
-import { ITargetStakingState } from "../hooks";
+import { ITargetStakingState, IValidatorsState } from "../hooks";
 import { modalActions } from "../../../redux/action";
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from "./styles";
 
 interface IProps {
   targetStakingState: ITargetStakingState;
+  validatorsState: IValidatorsState;
 }
 
 const DENOM = "FCT";
 
-const DelegationCard = ({ targetStakingState }: IProps) => {
+const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const targetValidator = window.location.pathname.replace("/staking/validators/", "");
   const { getDelegationList, getDelegation, withdraw } = useFirma();
   const { enqueueSnackbar } = useSnackbar();
@@ -29,7 +30,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
   };
 
   const redelegateAction = async () => {
-    const delegationList = await getDelegationList();
+    let delegationList = await getDelegationList();
 
     if (delegationList && delegationList.length === 0) {
       enqueueSnackbar("There is no target that has been delegated", {
@@ -39,12 +40,29 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
       return;
     }
 
+    if (delegationList !== undefined) {
+      for (let i = 0; i < delegationList.length; i++) {
+        delegationList[i].label = getMoniker(delegationList[i].value);
+      }
+    }
+
     modalActions.handleModalData({
       action: "Redelegate",
       data: { targetValidator, delegationList },
     });
 
     modalActions.handleModalRedelegate(true);
+  };
+
+  const getMoniker = (validatorAddress: string) => {
+    let moniker = validatorAddress;
+
+    for (let i = 0; i < validatorsState.validators.length; i++) {
+      if (validatorsState.validators[i].validatorAddress === validatorAddress)
+        moniker = validatorsState.validators[i].validatorMoniker;
+    }
+
+    return moniker;
   };
 
   const undelegateAction = async () => {

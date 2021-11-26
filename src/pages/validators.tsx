@@ -14,7 +14,9 @@ const Validators = () => {
 
   return (
     <ContentContainer>
-      {targetStakingState && isInit && <DelegationCard targetStakingState={targetStakingState} />}
+      {targetStakingState && validatorsState && isInit && (
+        <DelegationCard targetStakingState={targetStakingState} validatorsState={validatorsState} />
+      )}
       {validatorsState && (
         <>
           <ValidatorCard validatorsState={validatorsState} />
