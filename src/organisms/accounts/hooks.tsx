@@ -41,17 +41,6 @@ export const useTransferHistoryByAddress = () => {
   const { address } = useSelector((state: rootState) => state.wallet);
   const { getTokenData } = useFirma();
 
-  useTransferHistoryByAddressQuery({
-    onCompleted: async (data) => {
-      await updateTokenData(data);
-
-      setTransferHistoryByAddressState({
-        historyList: formatHistoryList(data),
-      });
-    },
-    address: `{${address}}`,
-  });
-
   const updateTokenData = async (data: any) => {
     for (let message of data.messagesByAddress) {
       const denom = message.transaction.messages[0].amount[0].denom;
@@ -94,6 +83,17 @@ export const useTransferHistoryByAddress = () => {
       };
     });
   };
+
+  useTransferHistoryByAddressQuery({
+    onCompleted: async (data) => {
+      await updateTokenData(data);
+
+      setTransferHistoryByAddressState({
+        historyList: formatHistoryList(data),
+      });
+    },
+    address: `{${address}}`,
+  });
 
   return {
     transferHistoryByAddressState,

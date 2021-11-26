@@ -44,41 +44,6 @@ export const useBlockData = () => {
     undelegate: 0,
   });
 
-  useInterval(() => {
-    setUserData();
-  }, 2000);
-
-  useBlockDataQuery({
-    onCompleted: (data) => {
-      setBlockState({
-        height: formatBlockHeight(data),
-        transactions: formatTransactions(data),
-        inflation: formatInflation(data),
-      });
-    },
-  });
-
-  useVotingPowerQuery({
-    onCompleted: (data) => {
-      setVotingPowerState({
-        height: formatBlockHeight2(data),
-        votingPower: formatVotingPower(data),
-        totalVotingPower: formatTotalVotingPower(data),
-      });
-    },
-  });
-
-  useTokenomicsQuery({
-    onCompleted: (data) => {
-      setTokenomicsState({
-        supply: formatSupply(data),
-        delegated: formatDelegated(data),
-        undelegated: formatUndelegated(data),
-        undelegate: formatUndelegate(data),
-      });
-    },
-  });
-
   const formatBlockHeight = (data: any) => {
     return data.height[0].height;
   };
@@ -119,6 +84,41 @@ export const useBlockData = () => {
   const formatUndelegate = (data: any) => {
     return convertToFctNumber(data.stakingPool[0].unbonded);
   };
+
+  useInterval(() => {
+    setUserData();
+  }, 2000);
+
+  useBlockDataQuery({
+    onCompleted: (data) => {
+      setBlockState({
+        height: formatBlockHeight(data),
+        transactions: formatTransactions(data),
+        inflation: formatInflation(data),
+      });
+    },
+  });
+
+  useVotingPowerQuery({
+    onCompleted: (data) => {
+      setVotingPowerState({
+        height: formatBlockHeight2(data),
+        votingPower: formatVotingPower(data),
+        totalVotingPower: formatTotalVotingPower(data),
+      });
+    },
+  });
+
+  useTokenomicsQuery({
+    onCompleted: (data) => {
+      setTokenomicsState({
+        supply: formatSupply(data),
+        delegated: formatDelegated(data),
+        undelegated: formatUndelegated(data),
+        undelegate: formatUndelegate(data),
+      });
+    },
+  });
 
   return {
     blockState,

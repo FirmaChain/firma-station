@@ -22,15 +22,6 @@ export const useHistoryByAddress = () => {
   });
   const { address } = useSelector((state: rootState) => state.wallet);
 
-  useHistoryByAddressQuery({
-    onCompleted: (data) => {
-      setHistoryByAddressState({
-        historyList: formatHistoryList(data),
-      });
-    },
-    address: `{${address}}`,
-  });
-
   const formatHistoryList = (data: any) => {
     return data.messagesByAddress.map((message: any) => {
       return {
@@ -42,6 +33,15 @@ export const useHistoryByAddress = () => {
       };
     });
   };
+
+  useHistoryByAddressQuery({
+    onCompleted: (data) => {
+      setHistoryByAddressState({
+        historyList: formatHistoryList(data),
+      });
+    },
+    address: `{${address}}`,
+  });
 
   return {
     historyByAddressState,
