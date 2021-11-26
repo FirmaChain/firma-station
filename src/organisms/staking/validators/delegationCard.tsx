@@ -92,16 +92,34 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
         <Title>My Delegations</Title>
         <Content>{`${numeral(targetStakingState.delegated).format("0,0.000")} ${DENOM}`}</Content>
         <Buttons>
-          <Button onClick={delegateAction}>Delegate</Button>
-          <Button onClick={redelegateAction}>Redelgate</Button>
-          <Button onClick={undelegateAction}>Undelegate</Button>
+          <Button onClick={delegateAction} isActive={true}>
+            Delegate
+          </Button>
+          <Button onClick={redelegateAction} isActive={true}>
+            Redelegate
+          </Button>
+          <Button
+            onClick={() => {
+              if (targetStakingState.delegated > 0) undelegateAction();
+            }}
+            isActive={targetStakingState.delegated > 0}
+          >
+            Undelegate
+          </Button>
         </Buttons>
       </InnerWrapper>
       <InnerWrapper>
         <Title>Rewards</Title>
         <Content>{`${numeral(targetStakingState.stakingReward).format("0,0.000")} ${DENOM}`}</Content>
         <Buttons>
-          <Button onClick={withdrawAction}>Withdraw</Button>
+          <Button
+            onClick={() => {
+              if (targetStakingState.stakingReward > 0) withdrawAction();
+            }}
+            isActive={targetStakingState.stakingReward > 0}
+          >
+            Withdraw
+          </Button>
         </Buttons>
       </InnerWrapper>
     </CardWrapper>

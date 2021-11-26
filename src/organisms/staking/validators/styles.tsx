@@ -35,7 +35,7 @@ export const Buttons = styled.div`
   justify-content: center;
 `;
 
-export const Button = styled.div`
+export const Button = styled.div<{ isActive?: boolean }>`
   width: 100px;
   height: 35px;
   line-height: 35px;
@@ -44,6 +44,7 @@ export const Button = styled.div`
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
+  ${(props) => (props.isActive ? `` : `background-color: #444;color:#777`)}
 `;
 
 export const DelegatorsCardWrapper = styled.div`

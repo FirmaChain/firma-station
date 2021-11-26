@@ -44,6 +44,7 @@ const customStyles = {
   }),
   option: (provided: any) => ({
     ...provided,
+    color: "#3550DE",
   }),
   singleValue: (provided: any) => ({
     ...provided,

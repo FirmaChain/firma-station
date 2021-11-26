@@ -90,7 +90,10 @@ export const useStakingData = () => {
         const [selfDelegation] = validator.delegations.filter((y: any) => {
           return y.delegatorAddress === validator.validatorInfo.selfDelegateAddress;
         });
-        const self = convertNumber(selfDelegation.amount.amount);
+
+        let self = 0;
+        if (selfDelegation) self = convertNumber(selfDelegation.amount.amount);
+
         const selfPercent = numeral(convertNumber((self / (totalDelegations || 1)) * 100)).format("0.00");
         const delegations = validator.delegations.map((value: any) => {
           return { address: value.delegatorAddress, amount: convertNumber(value.amount.amount) };
