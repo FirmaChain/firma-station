@@ -75,7 +75,7 @@ export const useStakingData = () => {
       const totalVotingPower = convertToFctNumber(data.stakingPool[0].bondedTokens);
       const { signed_blocks_window } = slashingParams;
 
-      const validators = data.validator.map((validator: any) => {
+      const validatorsList = data.validator.map((validator: any) => {
         const validatorAddress = validator.validatorInfo.operatorAddress;
 
         let validatorMoniker = "";
@@ -131,6 +131,8 @@ export const useStakingData = () => {
           jailed,
         };
       });
+
+      const validators = validatorsList.sort((a: any, b: any) => b.votingPower - a.votingPower);
 
       setValidatorsState((prevState) => ({
         ...prevState,
