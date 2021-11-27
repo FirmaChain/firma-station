@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import numeral from "numeral";
 
 import useFirma from "../../utils/wallet";
-import { convertNumber, convertToFctNumber } from "../../utils/common";
+import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
 import { useValidatorsQuery } from "../../apollo/gqls";
 
 export interface IValidatorsState {
@@ -77,10 +77,19 @@ export const useStakingData = () => {
 
       const validators = data.validator.map((validator: any) => {
         const validatorAddress = validator.validatorInfo.operatorAddress;
-        const validatorMoniker = validator.validator_descriptions[0].moniker;
-        const validatorAvatar = validator.validator_descriptions[0].avatar_url;
-        const validatorDetail = validator.validator_descriptions[0].details;
-        const validatorWebsite = validator.validator_descriptions[0].website;
+
+        let validatorMoniker = "";
+        let validatorAvatar = "";
+        let validatorDetail = "";
+        let validatorWebsite = "";
+
+        if (isValid(validator.validator_descriptions[0])) {
+          validatorMoniker = validator.validator_descriptions[0].moniker;
+          validatorAvatar = validator.validator_descriptions[0].avatar_url;
+          validatorDetail = validator.validator_descriptions[0].details;
+          validatorWebsite = validator.validator_descriptions[0].website;
+        }
+
         const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
         const votingPower = validator.validatorVotingPowers[0].votingPower;
         const votingPowerPercent = numeral(convertNumber((votingPower / totalVotingPower) * 100)).format("0.00");
