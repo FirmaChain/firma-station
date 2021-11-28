@@ -69,7 +69,7 @@ export const useBlockData = () => {
   };
 
   const formatSupply = (data: any) => {
-    return convertToFctNumber(data.supply[0].coins[0].amount);
+    return convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount);
   };
   const formatDelegated = (data: any) => {
     return convertToFctNumber(data.stakingPool[0].bonded);
@@ -77,7 +77,9 @@ export const useBlockData = () => {
 
   const formatUndelegated = (data: any) => {
     return convertToFctNumber(
-      data.supply[0].coins[0].amount - data.stakingPool[0].bonded - data.stakingPool[0].unbonded
+      data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount -
+        data.stakingPool[0].bonded -
+        data.stakingPool[0].unbonded
     );
   };
 
