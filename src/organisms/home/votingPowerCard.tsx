@@ -25,7 +25,7 @@ const VotingPowerCard = ({ votingPowerState }: IProps) => {
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
-    let p = Math.floor((votingPowerState.votingPower / votingPowerState.totalVotingPower) * 10000) / 100;
+    let p = Math.round((votingPowerState.votingPower / votingPowerState.totalVotingPower) * 10000) / 100;
     if (isNaN(p)) p = 0;
     setPercent(p);
   }, [votingPowerState]);
