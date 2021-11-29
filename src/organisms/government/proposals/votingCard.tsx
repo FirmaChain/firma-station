@@ -64,12 +64,6 @@ const VotingCard = ({ proposalState }: IProps) => {
       color: "#2BA891",
     },
     {
-      type: "Abstain",
-      percent: getTallyPercent(proposalState, "abstain"),
-      value: getTallyValue(proposalState, "abstain"),
-      color: "#9438DC",
-    },
-    {
       type: "NO",
       percent: getTallyPercent(proposalState, "no"),
       value: getTallyValue(proposalState, "no"),
@@ -80,6 +74,12 @@ const VotingCard = ({ proposalState }: IProps) => {
       percent: getTallyPercent(proposalState, "noWithVeto"),
       value: getTallyValue(proposalState, "noWithVeto"),
       color: "#E79720",
+    },
+    {
+      type: "Abstain",
+      percent: getTallyPercent(proposalState, "abstain"),
+      value: getTallyValue(proposalState, "abstain"),
+      color: "#9438DC",
     },
   ];
 
