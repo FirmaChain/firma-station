@@ -155,18 +155,18 @@ a:active {
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-  background: #404040;
+  background: #252525;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #252525;
+  background: #404040;
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner,
 ::-webkit-resizer {
-  background: #404040;
+  background: #252525;
 }
 
 * {
