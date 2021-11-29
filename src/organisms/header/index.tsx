@@ -1,12 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
+
 import { FIRMACHAIN_CONFIG, FAUCET_URI } from "../../config";
 import { modalActions } from "../../redux/action";
 import { rootState } from "../../redux/reducers";
-
 import useFirma from "../../utils/wallet";
 
 import {
+  QRCodeModal,
   NetworksModal,
   LoginModal,
   NewWalletModal,
@@ -35,6 +36,7 @@ import {
   LoginoutButton,
   NetworkText,
   NetworkStatus,
+  QrWrap,
   QrImage,
   QrText,
 } from "./styles";
@@ -43,6 +45,7 @@ function Header() {
   const { isInit } = useSelector((state: rootState) => state.wallet);
   const { resetWallet } = useFirma();
   const {
+    qrcode,
     network,
     login,
     newWallet,
@@ -71,11 +74,17 @@ function Header() {
   const onNetwork = () => {
     modalActions.handleModalNetwork(true);
   };
+
+  const onQRCode = () => {
+    modalActions.handleModalQRCode(true);
+  };
   return (
     <HeaderContainer>
       <HeaderLeftWrapper>
-        <QrImage />
-        <QrText>Export QR Code</QrText>
+        <QrWrap onClick={onQRCode}>
+          <QrImage />
+          <QrText>Export QR Code</QrText>
+        </QrWrap>
       </HeaderLeftWrapper>
       <HeaderRightWrapper>
         <NetworkButton onClick={onNetwork}>
@@ -99,6 +108,7 @@ function Header() {
         )}
       </HeaderRightWrapper>
 
+      {qrcode && <QRCodeModal />}
       {network && <NetworksModal />}
       {login && <LoginModal />}
       {newWallet && <NewWalletModal />}

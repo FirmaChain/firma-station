@@ -71,6 +71,10 @@ export const HeaderLeftWrapper = styled.div`
   color: ${({ theme }) => theme.colors.defaultDarkGray};
 `;
 
+export const QrWrap = styled.div`
+  cursor: pointer;
+`;
+
 export const QrImage = styled.img`
   width: 15px;
   height: 15px;
@@ -80,7 +84,7 @@ export const QrImage = styled.img`
 `;
 
 export const QrText = styled.div`
-  width: 300px;
+  width: 100px;
   height: 15px;
   float: left;
   margin-left: 6px;

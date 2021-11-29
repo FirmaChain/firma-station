@@ -5,6 +5,7 @@ import RecoverMnemonicIcon from "@mui/icons-material/Restore";
 import ImportPrivateKeyIcon from "@mui/icons-material/ImportExport";
 import ConnectLedgerIcon from "@mui/icons-material/Usb";
 
+export const qrCodeModalWidth = "500px";
 export const loginModalWidth = "900px";
 export const newWalletModalWidth = "650px";
 export const confirmWalletModalWidth = "650px";
@@ -43,6 +44,31 @@ export const ModalContent = styled.div`
   height: 100%;
   padding: 0 30px;
   font-size: ${({ theme }) => theme.sizes.modalLabel};
+`;
+
+export const QRContent = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const QRCodeWrap = styled.div`
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  & > div {
+    margin: auto;
+  }
+`;
+
+export const AddressTypo = styled.div`
+  margin-top: 20px;
+  font-size: 14px;
 `;
 
 export const ModalLabel = styled.div`
