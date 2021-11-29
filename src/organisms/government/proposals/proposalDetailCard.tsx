@@ -58,6 +58,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
 
   return (
     <CardWrapper>
+      {console.log(proposalState)}
       <ProposalMainTitle>Proposal</ProposalMainTitle>
       <TitleWrapper>
         <ProposalID>#{proposalState.proposalId}</ProposalID>
@@ -75,7 +76,16 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
         </ProposalDetailItem>
         <ProposalDetailItem>
           <Label>Description</Label>
-          <ProposalContent>{proposalState.description}</ProposalContent>
+          <ProposalContent>
+            {proposalState.description.split("\n").map((line, index) => {
+              return (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              );
+            })}
+          </ProposalContent>
         </ProposalDetailItem>
 
         {/* Spend Community Pools */}
