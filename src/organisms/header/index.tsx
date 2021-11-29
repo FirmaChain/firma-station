@@ -81,10 +81,12 @@ function Header() {
   return (
     <HeaderContainer>
       <HeaderLeftWrapper>
-        <QrWrap onClick={onQRCode}>
-          <QrImage />
-          <QrText>Export QR Code</QrText>
-        </QrWrap>
+        {isInit && (
+          <QrWrap onClick={onQRCode}>
+            <QrImage />
+            <QrText>Export QR Code</QrText>
+          </QrWrap>
+        )}
       </HeaderLeftWrapper>
       <HeaderRightWrapper>
         <NetworkButton onClick={onNetwork}>
