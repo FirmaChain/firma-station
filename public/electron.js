@@ -31,7 +31,7 @@ function initialize() {
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.setMenu(null);
     mainWindow.loadURL(
-      "http://localhost:3000"
+      "https://station-colosseum.firmachain.dev"
       // url.format({
       //   pathname: path.join(__dirname, "/../build/index.html"),
       //   protocol: "file",
