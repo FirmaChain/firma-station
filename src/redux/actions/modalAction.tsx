@@ -4,10 +4,14 @@ import {
   HANDLE_MODAL_QRCODE,
   HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
+  HANDLE_MODAL_SETTINGS,
   HANDLE_MODAL_NEWWALLET,
   HANDLE_MODAL_CONFIRMWALLET,
   HANDLE_MODAL_RECOVERMNEMONIC,
   HANDLE_MODAL_IMPORTPRIVATEKEY,
+  HANDLE_MODAL_EXPORTPRIVATEKEY,
+  HANDLE_MODAL_EXPORTMNEMONIC,
+  HANDLE_MODAL_CHANGEPASSWORD,
   HANDLE_MODAL_CONNECTLEDGER,
   HANDLE_MODAL_DELEGATE,
   HANDLE_MODAL_REDELEGATE,
@@ -27,10 +31,14 @@ export const handleModalData = (data: any) => ({ type: HANDLE_MODAL_DATA, data }
 export const handleModalQRCode = (isVisible: boolean) => ({ type: HANDLE_MODAL_QRCODE, isVisible });
 export const handleModalNetwork = (isVisible: boolean) => ({ type: HANDLE_MODAL_NETWORK, isVisible });
 export const handleModalLogin = (isVisible: boolean) => ({ type: HANDLE_MODAL_LOGIN, isVisible });
+export const handleModalSettings = (isVisible: boolean) => ({ type: HANDLE_MODAL_SETTINGS, isVisible });
 export const handleModalNewWallet = (isVisible: boolean) => ({ type: HANDLE_MODAL_NEWWALLET, isVisible });
 export const handleModalConfirmWallet = (isVisible: boolean) => ({ type: HANDLE_MODAL_CONFIRMWALLET, isVisible });
 export const handleModalRecoverMnemonic = (isVisible: boolean) => ({ type: HANDLE_MODAL_RECOVERMNEMONIC, isVisible });
 export const handleModalImportPrivatekey = (isVisible: boolean) => ({ type: HANDLE_MODAL_IMPORTPRIVATEKEY, isVisible });
+export const handleModalExportPrivatekey = (isVisible: boolean) => ({ type: HANDLE_MODAL_EXPORTPRIVATEKEY, isVisible });
+export const handleModalExportMnemonic = (isVisible: boolean) => ({ type: HANDLE_MODAL_EXPORTMNEMONIC, isVisible });
+export const handleModalChangePassword = (isVisible: boolean) => ({ type: HANDLE_MODAL_CHANGEPASSWORD, isVisible });
 export const handleModalConnectLedger = (isVisible: boolean) => ({ type: HANDLE_MODAL_CONNECTLEDGER, isVisible });
 
 export const handleModalDelegate = (isVisible: boolean) => ({ type: HANDLE_MODAL_DELEGATE, isVisible });

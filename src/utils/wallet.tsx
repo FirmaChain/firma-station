@@ -102,6 +102,16 @@ function useFirma() {
     clearKeys();
   };
 
+  const getDecryptPrivateKey = (): string => {
+    if (!isInit) return "";
+    return getStoredWalletFirma(timeKey).privateKey;
+  };
+
+  const getDecryptMnemonic = (): string => {
+    if (!isInit) return "";
+    return getStoredWalletFirma(timeKey).mnemonic;
+  };
+
   const setUserData = async () => {
     if (!isInit) return;
 
@@ -449,6 +459,8 @@ function useFirma() {
     storeWalletFromPrivateKey,
     resetWallet,
     loginWallet,
+    getDecryptPrivateKey,
+    getDecryptMnemonic,
     isNeedLogin,
     isCorrectPassword,
     setUserData,

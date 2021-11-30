@@ -4,13 +4,17 @@ import NewWalletIcon from "@mui/icons-material/AddBox";
 import RecoverMnemonicIcon from "@mui/icons-material/Restore";
 import ImportPrivateKeyIcon from "@mui/icons-material/ImportExport";
 import ConnectLedgerIcon from "@mui/icons-material/Usb";
+import QrCodeIcon from "@mui/icons-material/QrCode";
 
 export const qrCodeModalWidth = "500px";
 export const loginModalWidth = "900px";
+export const exportWalletModalWidth = "700px";
 export const newWalletModalWidth = "650px";
 export const confirmWalletModalWidth = "650px";
 export const recoverMnemonicModalWidth = "600px";
 export const importPrivatekeyModalWidth = "600px";
+export const exportPrivatekeyModalWidth = "600px";
+export const exportMnemonicModalWidth = "600px";
 export const connectLedgerModalWidth = "600px";
 export const confirmTxModalWidth = "400px";
 export const delegateModalWidth = "500px";
@@ -204,6 +208,32 @@ export const NextButton = styled.div<{ active: boolean }>`
   line-height: 40px;
   text-align: center;
   margin: 10px auto 0 auto;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.mainblue};
+  border-radius: 4px;
+  cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+`;
+
+export const ExportButton = styled.div<{ active: boolean }>`
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  margin: 10px auto 30px auto;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.mainblue};
+  border-radius: 4px;
+  cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+`;
+
+export const ChangeButton = styled.div<{ active: boolean }>`
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  margin: 10px auto 30px auto;
   color: white;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
@@ -431,4 +461,10 @@ export const PasswordWrapper = styled.div`
   margin-top: 40px;
 `;
 
-export { NewWalletIcon, RecoverMnemonicIcon, ImportPrivateKeyIcon, ConnectLedgerIcon };
+export const ExportPasswordWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  margin-bottom: 30px;
+`;
+
+export { NewWalletIcon, RecoverMnemonicIcon, ImportPrivateKeyIcon, ConnectLedgerIcon, QrCodeIcon };

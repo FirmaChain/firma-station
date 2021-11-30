@@ -40,7 +40,7 @@ const sizes = {
   footerContent: "12px",
   headerContent: "13px",
   accountCardSize1: "18px",
-  accountCardSize2: "11px",
+  accountCardSize2: "14px",
   accountCardSize3: "16px",
   accountCardSize4: "14px",
   accountCardSize5: "12px",

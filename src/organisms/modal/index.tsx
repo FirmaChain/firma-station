@@ -1,10 +1,14 @@
 import QRCodeModal from "./qrcodeModal";
 import NetworksModal from "./networksModal";
 import LoginModal from "./loginModal";
+import SettingsModal from "./settingsModal";
 import NewWalletModal from "./newWalletModal";
 import ConfirmWalletModal from "./confirmWalletModal";
 import RecoverMnemonicModal from "./recoverMnemonicModal";
 import ImportPrivatekeyModal from "./importPrivatekeyModal";
+import ExportPrivatekeyModal from "./exportPrivatekeyModal";
+import ExportMnemonicModal from "./exportMnemonicModal";
+import ChangePasswordModal from "./changePasswordModal";
 import ConnectLedgerModal from "./connectLedgerModal";
 import DelegateModal from "./delegateModal";
 import RedelegateModal from "./redelegateModal";
@@ -21,10 +25,14 @@ export {
   QRCodeModal,
   NetworksModal,
   LoginModal,
+  SettingsModal,
   NewWalletModal,
   ConfirmWalletModal,
   RecoverMnemonicModal,
   ImportPrivatekeyModal,
+  ExportPrivatekeyModal,
+  ExportMnemonicModal,
+  ChangePasswordModal,
   ConnectLedgerModal,
   DelegateModal,
   RedelegateModal,

@@ -19,11 +19,21 @@ export const UserAddressTypo = styled.div`
   float: left;
 `;
 
+export const QrImage = styled.img`
+  width: 16px;
+  height: 16px;
+  float: left;
+  margin-top: 6px;
+  margin-left: 5px;
+  cursor: pointer;
+  background-image: url("${({ theme }) => theme.urls.qr}");
+  background-size: contain;
+`;
 export const UserBalanceTypo = styled.div`
   height: 20px;
   line-height: 20px;
+  margin-top: 8px;
   width: 100%;
-  margin-top: 20px;
   font-size: ${({ theme }) => theme.sizes.accountCardSize1};
   float: left;
   text-align: left;
@@ -32,10 +42,30 @@ export const UserBalanceTypo = styled.div`
 `;
 
 export const CopyIconImg = styled(FileCopyIcon)`
-  margin-top: 2px;
+  margin-top: 5px;
+  width: 18px !important;
+  height: 18px !important;
   float: left;
   cursor: pointer;
   color: ${({ theme }) => theme.colors.realWhite};
+`;
+
+export const UsdTypo = styled.div`
+  width: 50%;
+  margin-top: 8px;
+  font-size: ${({ theme }) => theme.sizes.accountCardSize2};
+  color: ${({ theme }) => theme.colors.defaultGray2};
+  float: right;
+  text-align: right;
+`;
+
+export const PriceTypo = styled.div`
+  width: 100%;
+  margin-top: 30px;
+  font-size: ${({ theme }) => theme.sizes.accountCardSize2};
+  color: ${({ theme }) => theme.colors.defaultGray2};
+  float: left;
+  text-align: left;
 `;
 
 export const TokenomicsTitleTypo = styled.div`

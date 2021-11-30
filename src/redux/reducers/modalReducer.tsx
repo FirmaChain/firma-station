@@ -5,10 +5,14 @@ import {
   HANDLE_MODAL_QRCODE,
   HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
+  HANDLE_MODAL_SETTINGS,
   HANDLE_MODAL_NEWWALLET,
   HANDLE_MODAL_CONFIRMWALLET,
   HANDLE_MODAL_RECOVERMNEMONIC,
   HANDLE_MODAL_IMPORTPRIVATEKEY,
+  HANDLE_MODAL_EXPORTPRIVATEKEY,
+  HANDLE_MODAL_EXPORTMNEMONIC,
+  HANDLE_MODAL_CHANGEPASSWORD,
   HANDLE_MODAL_CONNECTLEDGER,
   HANDLE_MODAL_DELEGATE,
   HANDLE_MODAL_REDELEGATE,
@@ -27,10 +31,14 @@ export interface IModalState {
   qrcode: boolean;
   network: boolean;
   login: boolean;
+  settings: boolean;
   newWallet: boolean;
   confirmWallet: boolean;
   recoverMnemonic: boolean;
   importPrivatekey: boolean;
+  exportPrivatekey: boolean;
+  exportMnemonic: boolean;
+  changePassword: boolean;
   connectLedger: boolean;
   delegate: boolean;
   redelegate: boolean;
@@ -49,10 +57,14 @@ const initialState: IModalState = {
   qrcode: false,
   network: false,
   login: false,
+  settings: false,
   newWallet: false,
   confirmWallet: false,
   recoverMnemonic: false,
   importPrivatekey: false,
+  exportPrivatekey: false,
+  exportMnemonic: false,
+  changePassword: false,
   connectLedger: false,
   delegate: false,
   redelegate: false,
@@ -84,6 +96,9 @@ export default createReducer(initialState, {
   [HANDLE_MODAL_LOGIN]: (state: IModalState, { isVisible }) => {
     state.login = isVisible;
   },
+  [HANDLE_MODAL_SETTINGS]: (state: IModalState, { isVisible }) => {
+    state.settings = isVisible;
+  },
   [HANDLE_MODAL_NEWWALLET]: (state: IModalState, { isVisible }) => {
     state.newWallet = isVisible;
   },
@@ -95,6 +110,15 @@ export default createReducer(initialState, {
   },
   [HANDLE_MODAL_IMPORTPRIVATEKEY]: (state: IModalState, { isVisible }) => {
     state.importPrivatekey = isVisible;
+  },
+  [HANDLE_MODAL_EXPORTPRIVATEKEY]: (state: IModalState, { isVisible }) => {
+    state.exportPrivatekey = isVisible;
+  },
+  [HANDLE_MODAL_EXPORTMNEMONIC]: (state: IModalState, { isVisible }) => {
+    state.exportMnemonic = isVisible;
+  },
+  [HANDLE_MODAL_CHANGEPASSWORD]: (state: IModalState, { isVisible }) => {
+    state.changePassword = isVisible;
   },
   [HANDLE_MODAL_CONNECTLEDGER]: (state: IModalState, { isVisible }) => {
     state.connectLedger = isVisible;

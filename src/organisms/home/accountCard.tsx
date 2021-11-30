@@ -1,36 +1,24 @@
 import React from "react";
 import numeral from "numeral";
 import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import { convertNumber } from "../../utils/common";
 
-import { copyToClipboard } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 
 import theme from "../../themes";
 import { BlankCard } from "../../components/card";
-import { AddressTitleTypo, CopyIconImg, UserAddressTypo, UserBalanceTypo } from "./styles";
+import { AddressTitleTypo, UsdTypo, UserBalanceTypo, PriceTypo } from "./styles";
 
 const AccountCard = () => {
-  const { address } = useSelector((state: rootState) => state.wallet);
   const { balance } = useSelector((state: rootState) => state.user);
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const clipboard = () => {
-    copyToClipboard(address);
-
-    enqueueSnackbar("Copied", {
-      variant: "success",
-      autoHideDuration: 1000,
-    });
-  };
+  const currentUSDPrice = 0.21;
 
   return (
     <BlankCard bgColor={theme.colors.mainblue} height="130px" backgroundLogo={true}>
-      <AddressTitleTypo>Address</AddressTitleTypo>
-      <CopyIconImg onClick={clipboard} />
-      <UserAddressTypo>{address}</UserAddressTypo>
-      <UserBalanceTypo>{`${numeral(balance).format("0,0.000")} ${"FCT"}`}</UserBalanceTypo>
+      <AddressTitleTypo>FCT Balance</AddressTitleTypo>
+      <UsdTypo>1 FCT ($ {currentUSDPrice})</UsdTypo>
+      <PriceTypo>$ {numeral(currentUSDPrice * convertNumber(balance)).format("0,0.00")}</PriceTypo>
+      <UserBalanceTypo>{`${numeral(balance).format("0,0.000")} FCT`}</UserBalanceTypo>
     </BlankCard>
   );
 };
