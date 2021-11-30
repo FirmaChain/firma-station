@@ -57,6 +57,7 @@ export const QRContent = styled.div`
 export const QRCodeWrap = styled.div`
   width: 150px;
   height: 150px;
+  margin-top: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,7 +68,8 @@ export const QRCodeWrap = styled.div`
 `;
 
 export const AddressTypo = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
+  margin-bottom: 14px;
   font-size: 14px;
 `;
 
