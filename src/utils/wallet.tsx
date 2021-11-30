@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { FirmaSDK } from "@firmachain/firma-js";
+import { useSnackbar } from "notistack";
 
 import { Wallet } from "./types";
 import { FIRMACHAIN_CONFIG } from "../config";
@@ -12,6 +13,7 @@ import { storeKey, storeKeyFirma, getStoredWallet, getStoredWalletFirma, clearKe
 import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
 
 function useFirma() {
+  const { enqueueSnackbar } = useSnackbar();
   const { isInit, timeKey } = useSelector((state: rootState) => state.wallet);
 
   const getFirmaSDK = () => {
@@ -424,8 +426,21 @@ function useFirma() {
   };
 
   const checkVlidateResult = (result: any) => {
-    if (result.code === undefined) throw new Error("INVALID TX");
-    if (result.code !== 0) throw new Error("FAILED TX");
+    if (result.code === undefined) {
+      console.log(result);
+      enqueueSnackbar(result, {
+        variant: "error",
+        autoHideDuration: 5000,
+      });
+      throw new Error("INVALID TX");
+    } else if (result.code !== 0) {
+      console.log(result);
+      enqueueSnackbar(result, {
+        variant: "error",
+        autoHideDuration: 5000,
+      });
+      throw new Error("FAILED TX");
+    }
   };
 
   return {
