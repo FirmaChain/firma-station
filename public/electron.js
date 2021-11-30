@@ -18,7 +18,6 @@ function initialize() {
       width: width,
       height: height,
       title: app.getName(),
-      titleBarStyle: "hiddenInset",
       webPreferences: {
         nodeIntegration: false,
         enableRemoteModule: false,

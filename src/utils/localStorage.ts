@@ -37,9 +37,14 @@ export const getStoredWalletFirma = (timeKey: string): Wallet => {
   let decrypted = null;
 
   try {
-    if (!stored) throw new Error("Key does not exist");
-    decrypted = decryptWallet(stored.wallet, timeKey + FIRMA_KEY);
+    if (stored) {
+      decrypted = decryptWallet(stored.wallet, timeKey + FIRMA_KEY);
+    }
   } catch (e) {}
+
+  if (decrypted === null) {
+    window.location.reload();
+  }
 
   return decrypted;
 };

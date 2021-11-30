@@ -103,10 +103,12 @@
     "mac": {
       "target": [
         "default"
-      ]
+      ],
+      "icon": "./public/images/firmachain.ico"
     },
     "dmg": {
-      "title": "firma-station"
+      "title": "firma-station",
+      "icon": "./public/images/firmachain.ico"
     },
     "win": {
       "target": [
@@ -117,11 +119,13 @@
             "ia32"
           ]
         }
-      ]
+      ],
+      "icon": "./public/images/firmachain.ico"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./public/images/firmachain.ico",
       "createDesktopShortcut": true
     }
   }
