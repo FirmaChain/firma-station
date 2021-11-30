@@ -72,7 +72,7 @@ function Header() {
     resetWallet();
   };
   const onNetwork = () => {
-    modalActions.handleModalNetwork(true);
+    // modalActions.handleModalNetwork(true);
   };
 
   const onQRCode = () => {
