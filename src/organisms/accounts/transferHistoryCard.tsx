@@ -85,7 +85,7 @@ const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState }: 
               </HeaderWrapper>
               <List
                 width={width}
-                height={height - 50}
+                height={height - 90}
                 itemCount={transferHistoryByAddressState.historyList.length}
                 itemSize={50}
                 itemData={transferHistoryByAddressState.historyList}
