@@ -23,7 +23,7 @@ interface IProps {
 
 const DepositCard = ({ proposalState }: IProps) => {
   const getAddTimeFormat = (startTime: string, second: number) => {
-    return moment(startTime).add(numeral(second).value(), "seconds").format("YYYY-MM-DD HH:mm:ss");
+    return moment(startTime).add(numeral(second).value(), "seconds").format("YYYY-MM-DD HH:mm:ss (UTC+0)");
   };
 
   const getCurrentDeposit = (deposits: any) => {

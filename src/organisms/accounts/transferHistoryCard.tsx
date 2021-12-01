@@ -38,7 +38,7 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   };
 
   const getTimestamp = (timestamp: string) => {
-    return moment(timestamp).format("YYYY-MM-DD HH:mm:ss");
+    return moment(timestamp).format("YYYY-MM-DD HH:mm:ss (UTC+0)");
   };
 
   return (
