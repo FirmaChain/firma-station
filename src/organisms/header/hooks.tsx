@@ -12,8 +12,8 @@ export const useAvataURL = () => {
     onCompleted: async (data) => {
       if (data.validator.length > 0)
         if (
-          data.validator[0].validator_descriptions[0].avatar_url === undefined ||
-          data.validator[0].validator_descriptions[0].avatar_url === null
+          data.validator[0].validator_descriptions[0].avatar_url !== undefined &&
+          data.validator[0].validator_descriptions[0].avatar_url !== null
         )
           setAvataURL(data.validator[0].validator_descriptions[0].avatar_url);
     },
