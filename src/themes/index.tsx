@@ -74,6 +74,7 @@ const urls = {
   github: process.env.PUBLIC_URL + "/images/ic_github.svg",
   twitter: process.env.PUBLIC_URL + "/images/ic_twitter.svg",
   medium: process.env.PUBLIC_URL + "/images/ic_medium.svg",
+  profile: process.env.PUBLIC_URL + "/images/profile.png",
 };
 
 const theme = {

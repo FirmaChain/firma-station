@@ -6,7 +6,7 @@ import { copyToClipboard } from "../../utils/common";
 import { FIRMACHAIN_CONFIG } from "../../config";
 import { modalActions } from "../../redux/action";
 import { rootState } from "../../redux/reducers";
-import useFirma from "../../utils/wallet";
+import { useAvataURL } from "./hooks";
 
 import {
   QRCodeModal,
@@ -38,18 +38,21 @@ import {
   HeaderRightWrapper,
   HeaderLeftWrapper,
   NetworkButton,
-  LoginoutButton,
   NetworkText,
   NetworkStatus,
   AddressTypo,
   CopyIconImg,
   SettingIconImg,
+  LoginWrap,
+  HeaderTypo,
+  LoginIconImg,
+  ProfileImg,
+  BarDiv,
 } from "./styles";
 
 function Header() {
   const { enqueueSnackbar } = useSnackbar();
   const { isInit, address } = useSelector((state: rootState) => state.wallet);
-  const { resetWallet } = useFirma();
   const {
     qrcode,
     network,
@@ -75,15 +78,16 @@ function Header() {
     resultTx,
   } = useSelector((state: rootState) => state.modal);
 
+  const { avatarURL } = useAvataURL();
+
   const onLogin = () => {
     modalActions.handleModalLogin(true);
   };
-  const onLogout = () => {
-    resetWallet();
-  };
+
   const onNetwork = () => {
     // modalActions.handleModalNetwork(true);
   };
+
   const clipboard = () => {
     copyToClipboard(address);
 
@@ -92,37 +96,35 @@ function Header() {
       autoHideDuration: 1000,
     });
   };
+
   const onSettings = () => {
     modalActions.handleModalSettings(true);
   };
+
   return (
     <HeaderContainer>
-      <HeaderLeftWrapper></HeaderLeftWrapper>
-      {isInit && (
-        <HeaderLeftWrapper>
-          <AddressTypo>{address}</AddressTypo>
-          <CopyIconImg onClick={clipboard} />
-          <SettingIconImg onClick={onSettings} />
-        </HeaderLeftWrapper>
-      )}
-      <HeaderRightWrapper>
+      <HeaderLeftWrapper>
         <NetworkButton onClick={onNetwork}>
           <NetworkStatus />
           <NetworkText>{FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
         </NetworkButton>
-        {/* {FAUCET_URI && (
-          <FaucetButton
-            onClick={() => {
-              window.open(FAUCET_URI);
-            }}
-          >
-            FAUCET
-          </FaucetButton>
-        )} */}
-        {isInit ? (
-          <LoginoutButton onClick={onLogout}>LOGOUT</LoginoutButton>
-        ) : (
-          <LoginoutButton onClick={onLogin}>LOGIN</LoginoutButton>
+      </HeaderLeftWrapper>
+
+      <HeaderRightWrapper>
+        {isInit && (
+          <HeaderLeftWrapper>
+            <ProfileImg src={avatarURL} />
+            <AddressTypo onClick={clipboard}>{address}</AddressTypo>
+            <BarDiv />
+            <CopyIconImg onClick={clipboard} />
+            <SettingIconImg onClick={onSettings} />
+          </HeaderLeftWrapper>
+        )}
+        {isInit === false && (
+          <LoginWrap onClick={onLogin}>
+            <LoginIconImg />
+            <HeaderTypo>Login</HeaderTypo>
+          </LoginWrap>
         )}
       </HeaderRightWrapper>
 

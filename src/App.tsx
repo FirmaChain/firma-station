@@ -26,6 +26,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
+        {isNeedLogin() && <LoginCard />}
         <MainContainer>
           <Sidebar />
           <RightContainer>
@@ -34,7 +35,6 @@ const App = () => {
             <Footer />
           </RightContainer>
         </MainContainer>
-        {isNeedLogin() && <LoginCard />}
       </ThemeProvider>
     </BrowserRouter>
   );

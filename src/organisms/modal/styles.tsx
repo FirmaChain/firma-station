@@ -5,10 +5,11 @@ import RecoverMnemonicIcon from "@mui/icons-material/Restore";
 import ImportPrivateKeyIcon from "@mui/icons-material/ImportExport";
 import ConnectLedgerIcon from "@mui/icons-material/Usb";
 import QrCodeIcon from "@mui/icons-material/QrCode";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export const qrCodeModalWidth = "500px";
 export const loginModalWidth = "900px";
-export const exportWalletModalWidth = "700px";
+export const exportWalletModalWidth = "900px";
 export const newWalletModalWidth = "650px";
 export const confirmWalletModalWidth = "650px";
 export const recoverMnemonicModalWidth = "600px";
@@ -467,4 +468,4 @@ export const ExportPasswordWrapper = styled.div`
   margin-bottom: 30px;
 `;
 
-export { NewWalletIcon, RecoverMnemonicIcon, ImportPrivateKeyIcon, ConnectLedgerIcon, QrCodeIcon };
+export { NewWalletIcon, RecoverMnemonicIcon, ImportPrivateKeyIcon, ConnectLedgerIcon, QrCodeIcon, LogoutIcon };

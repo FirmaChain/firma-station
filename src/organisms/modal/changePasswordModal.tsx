@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+// import { useSnackbar } from "notistack";
 
 import Password from "./password";
-import useFirma from "../../utils/wallet";
-import { copyToClipboard } from "../../utils/common";
+// import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -22,11 +21,11 @@ import {
 
 const ChangePasswordModal = () => {
   const changePasswordModalState = useSelector((state: rootState) => state.modal.changePassword);
-  const { isCorrectPassword } = useFirma();
-  const { enqueueSnackbar } = useSnackbar();
+  // const { isCorrectPassword } = useFirma();
+  // const { enqueueSnackbar } = useSnackbar();
 
   const [password, setPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  // const [newPassword, setNewPassword] = useState("");
   const inputRef = useRef(null);
 
   const closeModal = () => {
@@ -39,7 +38,7 @@ const ChangePasswordModal = () => {
   };
 
   const onChangeNewPassword = (newPassword: string) => {
-    setNewPassword(newPassword);
+    // setNewPassword(newPassword);
   };
 
   return (

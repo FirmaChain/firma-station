@@ -245,3 +245,27 @@ export const useTransferHistoryByAddressQuery = ({ onCompleted, address }: IQuer
     }
   );
 };
+
+export const useAvataURLFromAddress = ({ onCompleted, address }: IQueryParam) => {
+  return useQuery(
+    gql`
+      query {
+        validator(
+          where: { validator_info: { account: { address: { _eq: "${address}" } } } }
+        ) {
+          validator_descriptions {
+            avatar_url
+          }
+        }
+      }
+    `,
+    {
+      onCompleted,
+      pollInterval: 3000,
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        limit: 99999,
+      },
+    }
+  );
+};

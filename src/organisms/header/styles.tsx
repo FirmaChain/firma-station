@@ -2,6 +2,8 @@ import styled from "styled-components";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import QrCodeIcon from "@mui/icons-material/QrCode";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export const HeaderContainer = styled.div`
   width: calc(100% - 80px);
@@ -20,7 +22,6 @@ export const HeaderRightWrapper = styled.div`
 export const NetworkButton = styled.div`
   height: 26px;
   line-height: 26px;
-  margin: 28px 14px 26px 0;
   cursor: pointer;
 `;
 
@@ -81,21 +82,41 @@ export const LoginoutButton = styled.div`
 export const HeaderLeftWrapper = styled.div`
   float: left;
   display: flex;
+  margin: 29px 15px 29px 0;
   color: ${({ theme }) => theme.colors.defaultDarkGray};
 `;
 
+export const BarDiv = styled.div`
+  width: 1px;
+  height: 15px;
+  margin-top: 4px;
+  margin-right: 5px;
+  margin-left: 14px;
+  background-color: #aaa;
+`;
+export const ProfileImg = styled.div<{ src?: string }>`
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  margin-right: 8px;
+  margin-top: 1px;
+  background-image: url("${(props) => (props.src ? props.src : props.theme.urls.profile)}");
+  background-size: contain;
+  background-color: #bababa;
+  background-repeat: no-repeat;
+  background-position: center center;
+`;
 export const AddressTypo = styled.div`
   cursor: pointer;
   height: 20px;
   line-height: 20px;
   font-size: 12px;
   font-weight: 600;
-  margin: 29px 0;
   padding-top: 2px;
 `;
 
 export const CopyIconImg = styled(FileCopyIcon)`
-  margin: 29px 8px 29px 10px;
+  margin: 0 8px 0 10px;
   padding-top: 2px;
   width: 18px !important;
   height: 18px !important;
@@ -133,7 +154,7 @@ export const QrIconImg = styled(QrCodeIcon)`
 export const SettingIconImg = styled(SettingsIcon)`
   width: 21px !important;
   height: 21px !important;
-  margin: 30px 10px 29px 0;
+  margin-top: 1px;
   float: left;
   cursor: pointer;
   background-size: contain;
@@ -150,4 +171,36 @@ export const QrText = styled.div`
   font-size: ${({ theme }) => theme.sizes.headerContent};
 `;
 
-export { SettingsIcon };
+export const LoginWrap = styled.div`
+  height: 20px;
+  margin: 29px 0;
+  display: flex;
+  color: #bbb;
+  cursor: pointer;
+`;
+
+export const LoginIconImg = styled(LoginIcon)`
+  width: 20px !important;
+  height: 20px !important;
+  margin-right: 5px;
+  float: left;
+  cursor: pointer;
+  background-size: contain;
+`;
+
+export const LogoutImg = styled(LogoutIcon)`
+  width: 18px !important;
+  height: 18px !important;
+  margin-right: 5px;
+  margin-top: 2px;
+  float: left;
+  cursor: pointer;
+  background-size: contain;
+`;
+
+export const HeaderTypo = styled.div`
+  height: 20px;
+  line-height: 20px;
+  font-size: 17px;
+`;
+export { SettingsIcon, LoginIcon };

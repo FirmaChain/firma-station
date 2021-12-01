@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
+import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -15,17 +16,19 @@ import {
   MenuIconImg,
   ImportPrivateKeyIcon,
   QrCodeIcon,
+  LogoutIcon,
 } from "./styles";
-
-const menuList = [
-  { name: "Export\nQR Code", icon: QrCodeIcon, modalAction: modalActions.handleModalQRCode },
-  { name: "Export\nprivate key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportPrivatekey },
-  { name: "Export\nmnemonic", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportMnemonic },
-  // { name: "Change\npassword", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalChangePassword },
-];
 
 const ExportWalletModal = () => {
   const exportWalletModalState = useSelector((state: rootState) => state.modal.settings);
+  const { resetWallet } = useFirma();
+
+  const menuList = [
+    { name: "Export\nQR Code", icon: QrCodeIcon, modalAction: modalActions.handleModalQRCode },
+    { name: "Export\nprivate key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportPrivatekey },
+    { name: "Export\nmnemonic", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportMnemonic },
+    { name: "Disconnect\nyour wallet", icon: LogoutIcon, modalAction: resetWallet },
+  ];
 
   const closeExportWalletModal = () => {
     modalActions.handleModalSettings(false);

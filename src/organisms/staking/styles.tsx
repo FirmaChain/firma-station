@@ -80,7 +80,8 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-position: center;
   background-repeat: no-repeat;
   float: left;
-  ${(props) => props.src && `background-image:url('${props.src}')`}
+  ${(props) =>
+    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const MonikerTypo = styled.div`
   margin-left: 10px;
