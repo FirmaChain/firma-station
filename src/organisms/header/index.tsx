@@ -78,7 +78,7 @@ function Header() {
     resultTx,
   } = useSelector((state: rootState) => state.modal);
 
-  const { avatarURL } = useAvataURL();
+  const { avatarURL } = useAvataURL(address);
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);

@@ -254,7 +254,8 @@ export const useAvataURLFromAddress = ({ onCompleted, address }: IQueryParam) =>
           where: { validator_info: { account: { address: { _eq: "${address}" } } } }
         ) {
           validator_descriptions {
-            avatar_url
+            avatar_url,
+            moniker
           }
         }
       }

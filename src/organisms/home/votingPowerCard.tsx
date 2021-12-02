@@ -3,7 +3,7 @@ import numeral from "numeral";
 
 import { IVotingPowerState } from "./hooks";
 
-import Gauge from "../../components/gauge";
+import { Gauge } from "../../components/gauge";
 import { BlankCard } from "../../components/card";
 import theme from "../../themes";
 import {
