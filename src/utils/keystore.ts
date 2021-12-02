@@ -4,9 +4,10 @@ const keySize = 256;
 const iterations = 100;
 
 export const getRandomKey = () => {
-  return Math.floor(new Date().valueOf() * Math.random())
-    .toString()
-    .padStart(40, Math.random().toString(36).substr(2, 11));
+  return new Date().getTime().toString();
+  // return Math.floor(new Date().valueOf() * Math.random())
+  //   .toString()
+  //   .padStart(40, Math.random().toString(36).substr(2, 11));
 };
 
 export const encrypt = (originalMessage: string, pass: string): string => {

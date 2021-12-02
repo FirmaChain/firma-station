@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
+import { rootState } from "./redux/reducers";
 import { getRandomKey } from "./utils/keystore";
 import { walletActions } from "./redux/action";
 import useFirma from "./utils/wallet";
@@ -17,11 +18,12 @@ import theme from "./themes";
 import { RightContainer, MainContainer } from "./styles/common";
 
 const App = () => {
-  const { isNeedLogin } = useFirma();
+  const { isNeedLogin, isTimeout } = useFirma();
+  const { timeKey } = useSelector((state: rootState) => state.wallet);
 
-  useEffect(() => {
+  if (isTimeout(timeKey)) {
     walletActions.handleWalletTimeKey(getRandomKey());
-  }, []);
+  }
 
   return (
     <BrowserRouter>

@@ -26,6 +26,26 @@ function useFirma() {
     return newWallet.getMnemonic();
   };
 
+  const isTimeout = (timeKey: string) => {
+    return timeKey === "" || new Date().getTime() - Number(timeKey) > 600000;
+  };
+
+  const getStoredWalletFirmaInternal = (timeKey: string) => {
+    let privateKey = "";
+
+    try {
+      if (isTimeout(timeKey)) {
+        window.location.reload();
+      }
+
+      privateKey = getStoredWalletFirma(timeKey).privateKey;
+    } catch (e) {
+      window.location.reload();
+    }
+
+    return privateKey;
+  };
+
   const storeWallet = (password: string, mnemonic: string, privateKey: string, address: string, timeKey: string) => {
     const wallet: Wallet = {
       mnemonic,
@@ -104,7 +124,7 @@ function useFirma() {
 
   const getDecryptPrivateKey = (): string => {
     if (!isInit) return "";
-    return getStoredWalletFirma(timeKey).privateKey;
+    return getStoredWalletFirmaInternal(timeKey);
   };
 
   const getDecryptMnemonic = (): string => {
@@ -115,7 +135,7 @@ function useFirma() {
   const setUserData = async () => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const balance = await getFirmaSDK().Bank.getBalance(address);
@@ -157,7 +177,7 @@ function useFirma() {
   const getStaking = async () => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const balance = await getFirmaSDK().Bank.getBalance(address);
@@ -209,7 +229,7 @@ function useFirma() {
   const getStakingFromValidator = async (validatorAddress: string) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const balance = await getFirmaSDK().Bank.getBalance(address);
@@ -237,7 +257,7 @@ function useFirma() {
   const getDelegationList = async () => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
@@ -256,7 +276,7 @@ function useFirma() {
   const getDelegation = async (targetValidator: string) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
@@ -276,7 +296,7 @@ function useFirma() {
   const sendFCT = async (address: string, amount: string, memo = "") => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Bank.send(wallet, address, convertNumber(amount), { memo });
 
@@ -286,7 +306,7 @@ function useFirma() {
   const sendToken = async (address: string, amount: string, tokenID: string, decimal: number, memo = "") => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Bank.sendToken(wallet, address, tokenID, convertNumber(amount), decimal, {
       memo,
@@ -298,7 +318,7 @@ function useFirma() {
   const delegate = async (validatorAddress: string, amount: number) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Staking.delegate(wallet, validatorAddress, amount);
 
@@ -308,7 +328,7 @@ function useFirma() {
   const redelegate = async (validatorAddressSrc: string, validatorAddressDst: string, amount: number) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Staking.redelegate(wallet, validatorAddressSrc, validatorAddressDst, amount, {
       fee: 3000,
@@ -321,7 +341,7 @@ function useFirma() {
   const undelegate = async (validatorAddress: string, amount: number) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Staking.undelegate(wallet, validatorAddress, amount);
 
@@ -331,7 +351,7 @@ function useFirma() {
   const withdraw = async (validatorAddress: string) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Distribution.withdrawAllRewards(wallet, validatorAddress);
 
@@ -341,7 +361,7 @@ function useFirma() {
   const vote = async (proposalId: number, votingType: number) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Gov.vote(wallet, proposalId, votingType);
 
@@ -351,7 +371,7 @@ function useFirma() {
   const deposit = async (proposalId: number, amount: number) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Gov.deposit(wallet, proposalId, amount);
 
@@ -366,7 +386,7 @@ function useFirma() {
   ) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Gov.submitParameterChangeProposal(
       wallet,
@@ -388,7 +408,7 @@ function useFirma() {
   ) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Gov.submitCommunityPoolSpendProposal(
       wallet,
@@ -405,7 +425,7 @@ function useFirma() {
   const submitTextProposal = async (title: string, description: string, initialDeposit: number) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Gov.submitTextProposal(wallet, title, description, initialDeposit);
 
@@ -421,7 +441,7 @@ function useFirma() {
   ) => {
     if (!isInit) return;
 
-    const privateKey = getStoredWalletFirma(timeKey).privateKey;
+    const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Gov.submitSoftwareUpgradeProposalByHeight(
       wallet,
@@ -481,6 +501,7 @@ function useFirma() {
     submitSoftwareUpgrade,
     deposit,
     vote,
+    isTimeout,
   };
 }
 

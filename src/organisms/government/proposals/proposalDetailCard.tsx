@@ -58,7 +58,6 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
 
   return (
     <CardWrapper>
-      {console.log(proposalState)}
       <ProposalMainTitle>Proposal</ProposalMainTitle>
       <TitleWrapper>
         <ProposalID>#{proposalState.proposalId}</ProposalID>

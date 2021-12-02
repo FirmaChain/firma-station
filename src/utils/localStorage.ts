@@ -42,10 +42,6 @@ export const getStoredWalletFirma = (timeKey: string): Wallet => {
     }
   } catch (e) {}
 
-  if (decrypted === null) {
-    // window.location.reload();
-  }
-
   return decrypted;
 };
 

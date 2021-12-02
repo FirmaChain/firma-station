@@ -115,7 +115,6 @@ const SendModal = () => {
   };
 
   const sendTx = (resolveTx: () => void, rejectTx: () => void) => {
-    console.log(tokenData);
     if (tokenData.symbol === "FCT") {
       sendFCT(targetAddress, amount, memo)
         .then(() => {
