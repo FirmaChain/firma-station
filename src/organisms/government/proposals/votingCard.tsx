@@ -42,21 +42,25 @@ interface IProps {
 const votingThemeData = [
   {
     type: "YES",
+    key: "yes",
     option: "VOTE_OPTION_YES",
     color: "#2BA891",
   },
   {
     type: "NO",
+    key: "no",
     option: "VOTE_OPTION_NO",
     color: "#F17047",
   },
   {
     type: "NoWithVeto",
+    key: "noWithVeto",
     option: "VOTE_OPTION_NO_WITH_VETO",
     color: "#E79720",
   },
   {
     type: "Abstain",
+    key: "abstain",
     option: "VOTE_OPTION_ABSTAIN",
     color: "#9438DC",
   },
@@ -162,9 +166,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     for (let value in votingThemeData) {
       if (votingThemeData[value].color === "Abstain") continue;
       result.push({
-        percent: numeral(proposalState.tally[votingThemeData[value].type.toLowerCase()] / currentVoting).format(
-          "0.00%"
-        ),
+        percent: numeral(proposalState.tally[votingThemeData[value].key] / currentVoting).format("0.00%"),
         bgColor: votingThemeData[value].color,
       });
     }
