@@ -148,7 +148,7 @@ export const VotingWrapper = styled.div`
 `;
 
 export const VotingData = styled.div`
-  width: calc(25% - 40px - 2px - 25px);
+  width: calc(25% - 40px - 2px - 28px);
   padding: 25px 25px;
   border: 1px solid #6a709a;
   border-radius: 4px;
