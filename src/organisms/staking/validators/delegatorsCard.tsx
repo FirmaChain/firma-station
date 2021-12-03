@@ -2,9 +2,11 @@ import React from "react";
 import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
+import { Link } from "react-router-dom";
 
 import { IValidatorsState } from "../hooks";
 import { convertToFctNumber } from "../../../utils/common";
+import { EXPLORER_URI } from "../../../config";
 
 import { DelegatorsCardWrapper, DelegatorList, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn } from "./styles";
 
@@ -16,10 +18,12 @@ const Row = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
 
   return (
-    <ItemWrapper style={style}>
-      <ItemColumn>{currentDelegator.address}</ItemColumn>
-      <ItemColumn>{`${numeral(convertToFctNumber(currentDelegator.amount)).format("0,0.000")} FCT`}</ItemColumn>
-    </ItemWrapper>
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={"_blank"}>
+      <ItemWrapper style={style}>
+        <ItemColumn>{currentDelegator.address}</ItemColumn>
+        <ItemColumn>{`${numeral(convertToFctNumber(currentDelegator.amount)).format("0,0.000")} FCT`}</ItemColumn>
+      </ItemWrapper>
+    </Link>
   );
 };
 
