@@ -27,7 +27,7 @@ function useFirma() {
   };
 
   const isTimeout = (timeKey: string) => {
-    if (isNaN(new Date(timeKey).getTime())) {
+    if (isNaN(new Date(Number(timeKey)).getTime())) {
       return true;
     }
 
