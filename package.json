@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "./",
-  "main": "./public/electron.js",
   "dependencies": {
     "@apollo/client": "^3.4.16",
     "@apollo/react-hooks": "^4.0.0",
@@ -55,15 +54,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "concurrently \"npm run react:start\" \"npm run electron:start\"",
+    "start": "npm run react:start",
     "react:start": "react-app-env --env-file=.env start",
-    "react:build": "react-scripts build",
-    "electron:start": "wait-on http://localhost:3000 && electron .",
-    "build": "electron-builder build",
-    "build:osx": "electron-builder --mac",
-    "build:win32": "electron-builder --win --ia32",
-    "build:win64": "electron-builder --win --x64",
-    "build:win": "npm run build:win32 && npm run build:win64"
+    "react:build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -86,47 +79,6 @@
   "devDependencies": {
     "concurrently": "^6.2.1",
     "cross-env": "^7.0.3",
-    "electron": "^14.0.1",
-    "electron-builder": "^22.11.7",
     "wait-on": "^6.0.0"
-  },
-  "build": {
-    "productName": "firma-station",
-    "appId": "com.firmachain.station",
-    "asar": false,
-    "protocols": {
-      "name": "firma-station",
-      "schemes": [
-        "firma-station"
-      ]
-    },
-    "mac": {
-      "target": [
-        "default"
-      ],
-      "icon": "./public/images/firmachain.ico"
-    },
-    "dmg": {
-      "title": "firma-station",
-      "icon": "./public/images/firmachain.ico"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "icon": "./public/images/firmachain.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "installerIcon": "./public/images/firmachain.ico",
-      "createDesktopShortcut": true
-    }
   }
 }
