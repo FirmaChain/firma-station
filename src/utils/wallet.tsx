@@ -335,7 +335,7 @@ function useFirma() {
     const privateKey = getStoredWalletFirmaInternal(timeKey);
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const result = await getFirmaSDK().Staking.redelegate(wallet, validatorAddressSrc, validatorAddressDst, amount, {
-      fee: 3000,
+      fee: 300000,
       gas: 300000,
     });
 
@@ -462,14 +462,14 @@ function useFirma() {
   const checkVlidateResult = (result: any) => {
     if (result.code === undefined) {
       console.log(result);
-      enqueueSnackbar(result, {
+      enqueueSnackbar(JSON.stringify(result), {
         variant: "error",
         autoHideDuration: 5000,
       });
       throw new Error("INVALID TX");
     } else if (result.code !== 0) {
       console.log(result);
-      enqueueSnackbar(result, {
+      enqueueSnackbar(JSON.stringify(result), {
         variant: "error",
         autoHideDuration: 5000,
       });
