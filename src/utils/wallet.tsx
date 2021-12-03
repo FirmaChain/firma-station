@@ -27,6 +27,10 @@ function useFirma() {
   };
 
   const isTimeout = (timeKey: string) => {
+    if (isNaN(new Date(timeKey).getTime())) {
+      return true;
+    }
+
     return timeKey === "" || new Date().getTime() - Number(timeKey) > 600000;
   };
 
