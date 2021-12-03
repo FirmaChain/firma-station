@@ -125,6 +125,8 @@ export const ItemWrapper = styled.div`
 export const ItemColumn = styled(Column)`
   height: 50px;
   line-height: 50px;
+  white-space: pre-line;
+
   font-size: ${({ theme }) => theme.sizes.accountCardSize4};
   & > a {
     text-decoration: none !important;
@@ -141,6 +143,10 @@ export const ItemColumn = styled(Column)`
     font-size: ${({ theme }) => theme.sizes.accountCardSize5};
   }
   &:nth-child(3) {
+    font-size: ${({ theme }) => theme.sizes.accountCardSize5};
+  }
+  &:nth-child(7) {
+    line-height: 25px;
     font-size: ${({ theme }) => theme.sizes.accountCardSize5};
   }
 `;
