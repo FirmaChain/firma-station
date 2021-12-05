@@ -185,15 +185,23 @@ function useFirma() {
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
     const balance = await getFirmaSDK().Bank.getBalance(address);
-    const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
-    const undelegationList = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
+    const delegateListOrigin = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
+    const undelegateListOrigin = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
     const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
 
-    const delegationBalanceList = delegationList.map((value) => {
+    const delegateList = delegateListOrigin.map((value) => {
+      return {
+        validatorAddress: value.delegation.validator_address,
+        delegatorAddress: value.delegation.delegator_address,
+        amount: convertNumber(value.balance.amount),
+      };
+    });
+
+    const delegationBalanceList = delegateListOrigin.map((value) => {
       return value.balance.amount;
     });
 
-    const undelegationBalanceList = undelegationList.map((value) => {
+    const undelegationBalanceList = undelegateListOrigin.map((value) => {
       return value.entries
         .map((value) => {
           return value.balance;
@@ -225,6 +233,8 @@ function useFirma() {
       delegated,
       undelegate,
       stakingReward,
+      delegateList,
+      undelegateList: [],
     };
 
     return result;

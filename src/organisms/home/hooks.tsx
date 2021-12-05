@@ -97,8 +97,6 @@ export const useBlockData = () => {
 
   useVotingPowerQuery({
     onCompleted: (data) => {
-      console.log(data);
-
       setVotingPowerState({
         height: formatBlockHeight2(data),
         votingPower: formatVotingPower(data),

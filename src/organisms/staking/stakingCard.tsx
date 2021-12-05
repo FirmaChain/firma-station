@@ -32,7 +32,7 @@ const StakingCard = ({ totalStakingState }: IProps) => {
   }, [totalStakingState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height="168px">
+    <BlankCard bgColor={theme.colors.backgroundSideBar} height="120px">
       <StakingWrap>
         {stakingData.map((data, index) => (
           <StakingTextWrap key={index}>

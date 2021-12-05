@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StakingWrap = styled.div`
-  width: calc(100% - 150px);
+  width: calc(100%);
   height: 100%;
   float: left;
   display: flex;
@@ -12,13 +12,18 @@ export const StakingTextWrap = styled.div`
   margin: auto;
   flex: 1;
   text-align: center;
+  border-right: 1px solid #444;
+  &:last-child {
+    border: 0;
+  }
 `;
 
 export const StakingTitleTypo = styled.div`
   color: #aaa;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   font-size: ${({ theme }) => theme.sizes.stakingCardSize1};
 `;
+
 export const StakingContentTypo = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingCardSize2};
 `;

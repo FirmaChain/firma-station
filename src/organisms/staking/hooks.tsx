@@ -10,11 +10,19 @@ export interface IValidatorsState {
   validators: Array<any>;
 }
 
+export interface IStakeInfo {
+  validatorAddress: string;
+  delegatorAddress: string;
+  amount: number;
+}
+
 export interface ITotalStakingState {
   available: number;
   delegated: number;
   undelegate: number;
   stakingReward: number;
+  delegateList: Array<IStakeInfo>;
+  undelegateList: Array<IStakeInfo>;
 }
 
 export interface ITargetStakingState {
@@ -61,6 +69,8 @@ export const useStakingData = () => {
     delegated: 0,
     undelegate: 0,
     stakingReward: 0,
+    delegateList: [],
+    undelegateList: [],
   });
 
   useInterval(() => {
