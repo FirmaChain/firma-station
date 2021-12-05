@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
-import useFirma from "../../utils/wallet";
 import { convertToFctNumber } from "../../utils/common";
 import { useBlockDataQuery, useVotingPowerQuery, useTokenomicsQuery } from "../../apollo/gqls";
 
@@ -24,7 +23,6 @@ export interface ITokenomicsState {
 }
 
 export const useBlockData = () => {
-  const { setUserData } = useFirma();
   const [blockState, setBlockState] = useState<IBlockState>({
     height: 0,
     transactions: 0,
@@ -87,10 +85,6 @@ export const useBlockData = () => {
     return convertToFctNumber(data.stakingPool[0].unbonded);
   };
 
-  useInterval(() => {
-    setUserData();
-  }, 2000);
-
   useBlockDataQuery({
     onCompleted: (data) => {
       setBlockState({
@@ -103,6 +97,8 @@ export const useBlockData = () => {
 
   useVotingPowerQuery({
     onCompleted: (data) => {
+      console.log(data);
+
       setVotingPowerState({
         height: formatBlockHeight2(data),
         votingPower: formatVotingPower(data),
@@ -128,22 +124,3 @@ export const useBlockData = () => {
     tokenomicsState,
   };
 };
-
-function useInterval(callback: () => void, delay: number) {
-  const savedCallback = useRef<() => void>();
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  useEffect(() => {
-    function tick() {
-      if (savedCallback.current) savedCallback.current();
-    }
-    if (delay !== null) {
-      tick();
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}

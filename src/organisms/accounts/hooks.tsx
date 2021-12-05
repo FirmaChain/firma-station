@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
 import { rootState } from "../../redux/reducers";
@@ -39,7 +39,7 @@ export const useTransferHistoryByAddress = () => {
   });
   const [tokenDataState, setTokenDatas] = useState<ITokensState>({});
   const { address } = useSelector((state: rootState) => state.wallet);
-  const { getTokenData, setUserData } = useFirma();
+  const { getTokenData } = useFirma();
 
   const updateTokenData = async (data: any) => {
     for (let message of data.messagesByAddress) {
@@ -66,10 +66,6 @@ export const useTransferHistoryByAddress = () => {
       }
     }
   };
-
-  useInterval(() => {
-    setUserData();
-  }, 2000);
 
   const formatHistoryList = (data: any) => {
     return data.messagesByAddress.map((message: any) => {
@@ -104,22 +100,3 @@ export const useTransferHistoryByAddress = () => {
     tokenDataState,
   };
 };
-
-function useInterval(callback: () => void, delay: number) {
-  const savedCallback = useRef<() => void>();
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  useEffect(() => {
-    function tick() {
-      if (savedCallback.current) savedCallback.current();
-    }
-    if (delay !== null) {
-      tick();
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}

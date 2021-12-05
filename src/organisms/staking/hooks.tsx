@@ -49,7 +49,7 @@ export const useStakingDataFromTarget = () => {
 };
 
 export const useStakingData = () => {
-  const { getStaking, setUserData } = useFirma();
+  const { getStaking } = useFirma();
 
   const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
     totalVotingPower: 0,
@@ -67,7 +67,6 @@ export const useStakingData = () => {
     getStaking().then((result: ITotalStakingState | undefined) => {
       if (result) setTotalStakingState(result);
     });
-    setUserData();
   }, 2000);
 
   useValidatorsQuery({

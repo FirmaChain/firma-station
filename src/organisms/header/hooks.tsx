@@ -1,9 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+import useFirma from "../../utils/wallet";
 import { useAvataURLFromAddress } from "../../apollo/gqls";
 
 export const useAvataURL = (address: string) => {
   const [avatarURL, setAvataURL] = useState("");
   const [moniker, setMoniker] = useState(address);
+
+  const { setUserData } = useFirma();
+
+  useInterval(() => {
+    setUserData();
+  }, 2000);
 
   useAvataURLFromAddress({
     onCompleted: async (data) => {
@@ -29,3 +37,22 @@ export const useAvataURL = (address: string) => {
     moniker,
   };
 };
+
+function useInterval(callback: () => void, delay: number) {
+  const savedCallback = useRef<() => void>();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      if (savedCallback.current) savedCallback.current();
+    }
+    if (delay !== null) {
+      tick();
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
