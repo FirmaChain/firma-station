@@ -10,7 +10,9 @@ export const useAvataURL = (address: string) => {
   const { setUserData } = useFirma();
 
   useInterval(() => {
-    setUserData();
+    setUserData()
+      .then(() => {})
+      .catch(() => {});
   }, 2000);
 
   useAvataURLFromAddress({

@@ -1,5 +1,7 @@
 import { FirmaUtil } from "@firmachain/firma-js";
 
+export const isElectron = navigator.userAgent.includes("Electron");
+
 export const isValid = (data: any) => {
   if (data === null) return false;
   if (data === undefined) return false;

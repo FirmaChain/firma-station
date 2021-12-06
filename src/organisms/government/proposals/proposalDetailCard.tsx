@@ -105,7 +105,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
         {/* Change Parameters */}
         {isChangeParameter(proposalState.proposalType) && (
           <ProposalDetailItem>
-            <Label>Change Prameters</Label>
+            <Label>Change Parameters</Label>
             <ProposalContent>
               <pre>{JSON.stringify(proposalState.extraData.changes, null, 2)}</pre>
             </ProposalContent>

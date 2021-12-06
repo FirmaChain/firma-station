@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
 import { rootState } from "./redux/reducers";
-import { getRandomKey } from "./utils/keystore";
+import { getRandomKey } from "./utils/keyBridge";
 import { walletActions } from "./redux/action";
 import useFirma from "./utils/wallet";
 import Routes from "./routes";
