@@ -45,9 +45,11 @@ export const useStakingDataFromTarget = () => {
 
   useInterval(() => {
     if (targetValidator !== "") {
-      getStakingFromValidator(targetValidator).then((result: ITargetStakingState | undefined) => {
-        if (result) setTargetStakingState(result);
-      });
+      getStakingFromValidator(targetValidator)
+        .then((result: ITargetStakingState | undefined) => {
+          if (result) setTargetStakingState(result);
+        })
+        .catch((e) => {});
     }
   }, 2000);
 
@@ -74,9 +76,11 @@ export const useStakingData = () => {
   });
 
   useInterval(() => {
-    getStaking().then((result: ITotalStakingState | undefined) => {
-      if (result) setTotalStakingState(result);
-    });
+    getStaking()
+      .then((result: ITotalStakingState | undefined) => {
+        if (result) setTotalStakingState(result);
+      })
+      .catch((e) => {});
   }, 2000);
 
   useValidatorsQuery({
