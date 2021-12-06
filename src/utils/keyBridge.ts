@@ -1,8 +1,11 @@
 import { isElectron } from "./common";
 import Electron from "./electron";
-import { clearKeys, storeKey, storeKeyFirma, getStoredWallet, getStoredWalletFirma } from "./localStorage";
+import { clearKeys, storeKey, getStoredWallet, invalidateWallet } from "./localStorage";
 
 import { Wallet } from "./types";
+
+const USER_STORE = "USER_STORE";
+const FIRMA_STORE = "FIRMA_STORE";
 
 export const getRandomKey = () => {
   return new Date().getTime().toString();
@@ -13,13 +16,15 @@ export const clearKey = () => {
 };
 
 export const storeWallet = (key: string, wallet: Wallet, isFirma = false) => {
-  if (isFirma) storeKeyFirma(key, wallet);
-  else storeKey(key, wallet);
+  storeKey(isFirma ? FIRMA_STORE : USER_STORE, key, wallet);
+};
+
+export const isInvalidWallet = () => {
+  return invalidateWallet(FIRMA_STORE);
 };
 
 export const restoreWallet = (key: string, isFirma = false) => {
-  if (isFirma) return getStoredWalletFirma(key);
-  else return getStoredWallet(key);
+  return getStoredWallet(isFirma ? FIRMA_STORE : USER_STORE, key);
 };
 
 export const ipcTest = () => {

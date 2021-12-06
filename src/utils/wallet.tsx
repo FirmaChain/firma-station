@@ -7,7 +7,7 @@ import { FIRMACHAIN_CONFIG } from "../config";
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString } from "./common";
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
-import { getRandomKey, clearKey, storeWallet, restoreWallet } from "./keyBridge";
+import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from "./keyBridge";
 
 import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
 
@@ -94,20 +94,27 @@ function useFirma() {
   };
 
   const loginWallet = async (password: string) => {
-    const wallet = restoreWallet(password);
-    const timeKey = getRandomKey();
+    try {
+      const wallet = restoreWallet(password);
+      const timeKey = getRandomKey();
 
-    walletActions.handleWalletTimeKey(timeKey);
+      walletActions.handleWalletTimeKey(timeKey);
 
-    if (wallet.mnemonic !== "") {
-      await storeWalletFromMnemonic(password, wallet.mnemonic, timeKey);
-    } else {
-      await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
-    }
+      if (wallet.mnemonic !== "") {
+        await storeWalletFromMnemonic(password, wallet.mnemonic, timeKey);
+      } else {
+        await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
+      }
+    } catch (e) {}
   };
 
   const isNeedLogin = () => {
-    const wallet = restoreWallet(timeKey, true);
+    if (isInvalidWallet()) return false;
+
+    let wallet = null;
+    try {
+      wallet = restoreWallet(timeKey, true);
+    } catch (e) {}
 
     initWallet(wallet !== null);
 
