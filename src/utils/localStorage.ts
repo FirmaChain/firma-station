@@ -32,26 +32,6 @@ export const storeKey = (store: string, password: string, wallet: Wallet) => {
   storeKeys(store, encryptData);
 };
 
-// export const getStoredWalletFirma = (timeKey: string): Wallet => {
-//   const stored = loadKeys(FIRMA_STORE);
-
-//   let decrypted = null;
-
-//   try {
-//     if (stored) {
-//       decrypted = decryptWallet(stored.wallet, timeKey + FIRMA_KEY);
-//     }
-//   } catch (e) {}
-
-//   return decrypted;
-// };
-
-// export const storeKeyFirma = (timeKey: string, wallet: Wallet) => {
-//   const key = encryptWallet(timeKey + FIRMA_KEY, wallet);
-
-//   storeKeys(FIRMA_STORE, key);
-// };
-
 const decryptWallet = (wallet: string, password: string) => {
   try {
     const decrypted = decrypt(wallet, password);

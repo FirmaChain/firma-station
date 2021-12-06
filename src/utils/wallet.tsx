@@ -38,13 +38,13 @@ function useFirma() {
 
     try {
       if (isTimeout(timeKey)) {
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }
 
       wallet = restoreWallet(timeKey, true);
-    } catch (e) {
-      window.location.reload();
-    }
+    } catch (e) {}
 
     return wallet;
   };
@@ -105,7 +105,9 @@ function useFirma() {
       } else {
         await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const isNeedLogin = () => {
