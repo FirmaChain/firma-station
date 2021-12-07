@@ -94,19 +94,15 @@ function useFirma() {
   };
 
   const loginWallet = async (password: string) => {
-    try {
-      const wallet = restoreWallet(password);
-      const timeKey = getRandomKey();
+    const wallet = restoreWallet(password);
+    const timeKey = getRandomKey();
 
-      walletActions.handleWalletTimeKey(timeKey);
+    walletActions.handleWalletTimeKey(timeKey);
 
-      if (wallet.mnemonic !== "") {
-        await storeWalletFromMnemonic(password, wallet.mnemonic, timeKey);
-      } else {
-        await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
-      }
-    } catch (e) {
-      console.log(e);
+    if (wallet.mnemonic !== "") {
+      await storeWalletFromMnemonic(password, wallet.mnemonic, timeKey);
+    } else {
+      await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
     }
   };
 
