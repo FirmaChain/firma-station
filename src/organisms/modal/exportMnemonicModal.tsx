@@ -67,6 +67,11 @@ const ExportMnemonicModal = () => {
     setPassword(e.target.value);
   };
 
+  const onKeyDownPassword = (e: any) => {
+    if (e.key === "Enter") {
+      if (password.length >= 8) exportWallet();
+    }
+  };
   return (
     <Modal
       visible={exportMnemonicModalState}
@@ -86,6 +91,7 @@ const ExportMnemonicModal = () => {
               type="password"
               value={password}
               onChange={onChangePassword}
+              onKeyDown={onKeyDownPassword}
               autoFocus={true}
             />
           </ExportPasswordWrapper>

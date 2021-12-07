@@ -41,6 +41,8 @@ const ChangePasswordModal = () => {
     // setNewPassword(newPassword);
   };
 
+  const onKeyDownPassword = () => {};
+
   return (
     <Modal
       visible={changePasswordModalState}
@@ -64,7 +66,7 @@ const ChangePasswordModal = () => {
             />
           </ExportPasswordWrapper>
 
-          <Password onChange={onChangeNewPassword} />
+          <Password onChange={onChangeNewPassword} onKeyDown={onKeyDownPassword} />
 
           <ChangeButton active={true}>Change</ChangeButton>
         </ModalContent>

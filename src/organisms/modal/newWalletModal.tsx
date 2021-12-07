@@ -80,6 +80,10 @@ const NewWalletModal = () => {
     setPassword(password);
   };
 
+  const onKeyDownPassword = () => {
+    openConfirmModal();
+  };
+
   return (
     <Modal
       visible={newWalletModalState}
@@ -99,7 +103,7 @@ const NewWalletModal = () => {
             </MnemonicContainter>
           </ModalInput>
 
-          <Password onChange={onChangePassword} />
+          <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <NextButton onClick={() => openConfirmModal()} active={isValidString(password)}>
             NEXT

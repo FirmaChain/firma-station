@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { ModalLabel, ModalInput, InputBoxDefault, InputMessageText } from "./styles";
 
-const Password = ({ onChange }: any) => {
+const Password = ({ onChange, onKeyDown }: any) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -24,7 +24,7 @@ const Password = ({ onChange }: any) => {
     setInvalidConfirmPassword(!validConfirmPassword && confirmPassword.length > 0);
 
     if (validPassword && validConfirmPassword) {
-      onChange(password);
+      onChange && onChange(password);
     }
   }, [password, confirmPassword]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -36,6 +36,12 @@ const Password = ({ onChange }: any) => {
   const onChangeConfirmPassword = (e: any) => {
     if (e === null) return;
     setConfirmPassword(e.target.value);
+  };
+
+  const onKeyDownPassword = (e: any) => {
+    if (e.key === "Enter") {
+      onKeyDown && onKeyDown();
+    }
   };
 
   return (
@@ -52,6 +58,7 @@ const Password = ({ onChange }: any) => {
           type="password"
           value={confirmPassword}
           onChange={onChangeConfirmPassword}
+          onKeyDown={onKeyDownPassword}
           isInvalid={isInvalidConfirmPassword}
         />
         <InputMessageText>{isInvalidConfirmPassword && `The password confirmation does not match.`}</InputMessageText>

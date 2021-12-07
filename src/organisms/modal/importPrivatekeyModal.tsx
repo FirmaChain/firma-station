@@ -95,6 +95,10 @@ const ImportPrivatekeyModal = () => {
     setPassword(password);
   };
 
+  const onKeyDownPassword = () => {
+    if (isActiveImportButton && isValidString(password)) importWallet();
+  };
+
   return (
     <Modal
       visible={importPrivatekeyModalState}
@@ -111,7 +115,7 @@ const ImportPrivatekeyModal = () => {
             <PrivatekeyTextArea onChange={checkWords} ref={inputRef} />
           </ModalInput>
 
-          <Password onChange={onChangePassword} />
+          <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <ImportButton
             active={isActiveImportButton && isValidString(password)}

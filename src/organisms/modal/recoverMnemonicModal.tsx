@@ -95,6 +95,10 @@ const RecoverMnemonicModal = () => {
     setPassword(password);
   };
 
+  const onKeyDownPassword = () => {
+    if (isActiveRecoverButton) recoverWallet();
+  };
+
   return (
     <Modal
       visible={recoverMnemonicModalState}
@@ -111,7 +115,7 @@ const RecoverMnemonicModal = () => {
             <MnemonicTextArea onChange={checkWords} ref={inputRef} />
           </ModalInput>
 
-          <Password onChange={onChangePassword} />
+          <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <RecoverButton
             active={isActiveRecoverButton}
