@@ -19,18 +19,18 @@ const Row = ({ data, index, style }: any) => {
   };
 
   return (
-    <ItemWrapper style={style}>
-      <ItemColumn>{`# ${data[index].proposalId}`}</ItemColumn>
-      <ItemColumn>{getStatusTypo(data[index].status)}</ItemColumn>
-      <ItemColumn>{data[index].proposalType}</ItemColumn>
+    <Link to={{ pathname: `/government/proposals/${data[index].proposalId}` }} style={{ textDecoration: "none" }}>
+      <ItemWrapper style={style}>
+        <ItemColumn>{`# ${data[index].proposalId}`}</ItemColumn>
+        <ItemColumn>{getStatusTypo(data[index].status)}</ItemColumn>
+        <ItemColumn>{data[index].proposalType}</ItemColumn>
 
-      <ItemColumn>
-        <TitleTypo>
-          <Link to={{ pathname: `/government/proposals/${data[index].proposalId}` }}>{data[index].title}</Link>
-        </TitleTypo>
-        <DescriptionTypo>{data[index].description}</DescriptionTypo>
-      </ItemColumn>
-    </ItemWrapper>
+        <ItemColumn>
+          <TitleTypo>{data[index].title}</TitleTypo>
+          <DescriptionTypo>{data[index].description}</DescriptionTypo>
+        </ItemColumn>
+      </ItemWrapper>
+    </Link>
   );
 };
 
