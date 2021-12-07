@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
 
 export const CardWrapper = styled.div`
   padding: 16px 24px;
@@ -105,6 +106,7 @@ export const ValidatorCardWrapper = styled.div`
 
 export const ProfileWrapper = styled.div`
   display: flex;
+  position: relative;
   align-items: stretch;
   padding: 14px 0;
   gap: 0 10px;
@@ -131,7 +133,8 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  ${(props) => props.src && `background-image:url('${props.src}')`}
+  ${(props) =>
+    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const DescriptionWrap = styled.div`
   width: 100%;
@@ -170,4 +173,42 @@ export const StatusSubContent = styled.div``;
 export const LinkTypo = styled.a`
   line-height: 30px;
   text-decoration: none;
+`;
+
+export const LeftWrapper = styled.div`
+  width: 50%;
+  display: flex;
+  gap: 20px;
+`;
+
+export const AddressInfo = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-left: 20px;
+  padding-right: 10px;
+`;
+
+export const AddressWrapper = styled.div`
+  position: relative;
+`;
+
+export const AddressInfoLabel = styled.div`
+  font-size: 14px;
+  color: white;
+  margin-bottom: 10px;
+`;
+export const AddressInfoValue = styled.div`
+  font-size: 13px;
+`;
+
+export const CopyIconImg = styled(FileCopyIcon)`
+  width: 18px !important;
+  height: 18px !important;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.realWhite};
+  position: absolute;
+  top: -3px;
+  left: 114px;
 `;

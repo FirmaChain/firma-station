@@ -1,5 +1,6 @@
 import React from "react";
 import numeral from "numeral";
+import { useSnackbar } from "notistack";
 
 import { IValidatorsState } from "../hooks";
 
@@ -17,14 +18,21 @@ import {
   StatusContent,
   StatusSubContent,
   LinkTypo,
+  AddressInfo,
+  AddressWrapper,
+  AddressInfoLabel,
+  AddressInfoValue,
+  CopyIconImg,
+  LeftWrapper,
 } from "./styles";
-import { convertToFctNumber } from "../../../utils/common";
+import { convertToFctNumber, copyToClipboard } from "../../../utils/common";
 
 interface IProps {
   validatorsState: IValidatorsState;
 }
 
 const ValidatorCard = ({ validatorsState }: IProps) => {
+  const { enqueueSnackbar } = useSnackbar();
   const getValidatorAddress = () => {
     return window.location.pathname.replace("/staking/validators/", "");
   };
@@ -33,25 +41,50 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
     (value) => value.validatorAddress === getValidatorAddress()
   );
 
+  const clipboard = (value: string) => {
+    copyToClipboard(value);
+
+    enqueueSnackbar("Copied", {
+      variant: "success",
+      autoHideDuration: 1000,
+    });
+  };
+
   return (
     <ValidatorCardWrapper>
+      {console.log(targetValidatorData)}
       {targetValidatorData && (
         <>
           <ProfileWrapper>
-            <ProfileImageWrap>
-              <ProfileImage src={targetValidatorData.validatorAvatar} />
-            </ProfileImageWrap>
-            <DescriptionWrap>
-              <NameTypo>{targetValidatorData.validatorMoniker}</NameTypo>
-              <DescriptionTypo>
-                <div>{targetValidatorData.validatorDetail}</div>
-                {targetValidatorData.validatorWebsite && (
-                  <LinkTypo href={targetValidatorData.validatorWebsite} target="_blank">
-                    {targetValidatorData.validatorWebsite}
-                  </LinkTypo>
-                )}
-              </DescriptionTypo>
-            </DescriptionWrap>
+            <LeftWrapper>
+              <ProfileImageWrap>
+                <ProfileImage src={targetValidatorData.validatorAvatar} />
+              </ProfileImageWrap>
+              <DescriptionWrap>
+                <NameTypo>{targetValidatorData.validatorMoniker}</NameTypo>
+                <DescriptionTypo>
+                  <div>{targetValidatorData.validatorDetail}</div>
+                  {targetValidatorData.validatorWebsite && (
+                    <LinkTypo href={targetValidatorData.validatorWebsite} target="_blank">
+                      {targetValidatorData.validatorWebsite}
+                    </LinkTypo>
+                  )}
+                </DescriptionTypo>
+              </DescriptionWrap>
+            </LeftWrapper>
+
+            <AddressInfo>
+              <AddressWrapper>
+                <AddressInfoLabel>Operator Address</AddressInfoLabel>
+                <AddressInfoValue>{targetValidatorData.validatorAddress}</AddressInfoValue>
+                <CopyIconImg onClick={() => clipboard(targetValidatorData.validatorAddress)} />
+              </AddressWrapper>
+              <AddressWrapper>
+                <AddressInfoLabel>Account Address</AddressInfoLabel>
+                <AddressInfoValue>{targetValidatorData.selfDelegateAddress}</AddressInfoValue>
+                <CopyIconImg onClick={() => clipboard(targetValidatorData.selfDelegateAddress)} />
+              </AddressWrapper>
+            </AddressInfo>
           </ProfileWrapper>
           <StatusWrapper>
             <StatusItem>
