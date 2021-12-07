@@ -97,6 +97,8 @@ export const useBlockData = () => {
 
   useVotingPowerQuery({
     onCompleted: (data) => {
+      if (data.block[0].validatorVotingPowersAggregate.aggregate.sum.votingPower <= 0) return;
+
       setVotingPowerState({
         height: formatBlockHeight2(data),
         votingPower: formatVotingPower(data),

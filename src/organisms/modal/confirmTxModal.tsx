@@ -71,6 +71,12 @@ const ConfirmTxModal = () => {
     setActive(e.target.value.length >= 8);
   };
 
+  const onKeyDownPassword = (e: any) => {
+    if (e.key === "Enter") {
+      if (isActive) queueTx();
+    }
+  };
+
   return (
     <Modal
       visible={confirmTxModalState}
@@ -99,6 +105,7 @@ const ConfirmTxModal = () => {
               type="password"
               value={password}
               onChange={onChangePassword}
+              onKeyDown={onKeyDownPassword}
               autoFocus={true}
             />
           </PasswordWrapper>
