@@ -111,7 +111,7 @@ export const Column = styled.div`
     flex: 1 1 400px;
   }
   &:nth-child(7) {
-    flex: 1 1 800px;
+    flex: 1 1 500px;
   }
 `;
 

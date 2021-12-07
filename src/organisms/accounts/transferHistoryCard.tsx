@@ -46,6 +46,11 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
     );
   };
 
+  const getMemo = (memo: string) => {
+    if (memo.length > 10) return memo.substr(0, 10) + "...";
+    else return memo;
+  };
+
   return (
     <ItemWrapper style={style}>
       <ItemColumn>
@@ -65,7 +70,7 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
       </ItemColumn>
       <ItemColumn>{getAmount(currentHistory.denom, currentHistory.amount)}</ItemColumn>
       <ItemColumn>{getResult(currentHistory.success)}</ItemColumn>
-      <ItemColumn>{currentHistory.memo}</ItemColumn>
+      <ItemColumn>{getMemo(currentHistory.memo)}</ItemColumn>
       <ItemColumn>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
     </ItemWrapper>
   );
