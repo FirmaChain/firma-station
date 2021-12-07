@@ -1,5 +1,3 @@
-import { isElectron } from "./common";
-import Electron from "./electron";
 import { clearKeys, storeKey, getStoredWallet, invalidateWallet } from "./localStorage";
 
 import { Wallet } from "./types";
@@ -25,11 +23,4 @@ export const isInvalidWallet = () => {
 
 export const restoreWallet = (key: string, isFirma = false) => {
   return getStoredWallet(isFirma ? FIRMA_STORE : USER_STORE, key);
-};
-
-export const ipcTest = () => {
-  if (isElectron) {
-    Electron("Test", { a: 1 });
-  } else {
-  }
 };
