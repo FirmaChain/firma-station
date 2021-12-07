@@ -92,3 +92,43 @@ export const MonikerTypo = styled.div`
   margin-left: 10px;
   float: left;
 `;
+
+export const DelegationColumn = styled.div`
+  width: 100%;
+  & {
+    flex: 1 1 100%;
+  }
+`;
+
+export const DelegationItemWrapper = styled(RowWrapper)`
+  height: 35px;
+  line-height: 35px;
+  border-bottom: 1px solid #444;
+`;
+
+export const DelegationItemColumn = styled(DelegationColumn)``;
+
+export const DelegationHeaderWrapper = styled(RowWrapper)`
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #444;
+`;
+
+export const DelegationHeaderColumn = styled(DelegationColumn)`
+  color: #ddd;
+  text-align: center;
+`;
+
+export const FlexWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
+
+export const DelegationListWrapper = styled.div`
+  width: 50%;
+`;
+
+export const ChartWrapper = styled.div`
+  width: 50%;
+`;

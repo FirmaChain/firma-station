@@ -237,12 +237,14 @@ function useFirma() {
         : 0
     );
     const stakingReward = convertToFctNumber(totalReward.total);
+    const stakingRewardList = totalReward.rewards;
 
     const result: ITotalStakingState = {
       available,
       delegated,
       undelegate,
       stakingReward,
+      stakingRewardList,
       delegateList,
       undelegateList: [],
     };

@@ -8,6 +8,7 @@ export const CardWrapper = styled.div`
   top: 0px;
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   display: flex;
+  z-index: 2;
   justify-content: flex-start;
   gap: 0 30px;
 `;

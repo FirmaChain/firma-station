@@ -21,6 +21,7 @@ export interface ITotalStakingState {
   delegated: number;
   undelegate: number;
   stakingReward: number;
+  stakingRewardList: Array<any>;
   delegateList: Array<IStakeInfo>;
   undelegateList: Array<IStakeInfo>;
 }
@@ -71,6 +72,7 @@ export const useStakingData = () => {
     delegated: 0,
     undelegate: 0,
     stakingReward: 0,
+    stakingRewardList: [],
     delegateList: [],
     undelegateList: [],
   });
