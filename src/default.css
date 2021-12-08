@@ -101,6 +101,7 @@ section {
 }
 body {
   width: 100vw;
+  min-width: 1600px;
   height: 100vh;
   line-height: 1;
 }
