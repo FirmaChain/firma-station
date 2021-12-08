@@ -3,7 +3,9 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 import numeral from "numeral";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
+import { EXPLORER_URI } from "../../../config";
 import { IProposalState, tally } from "../hooks";
 import { convertToFctNumber } from "../../../utils/common";
 import { modalActions } from "../../../redux/action";
@@ -79,16 +81,18 @@ const Row = ({ data, index, style }: any) => {
   };
 
   return (
-    <ItemWrapper style={style}>
-      <ItemColumn>
-        <ProfileImage src={avatarURL} />
-      </ItemColumn>
-      <ItemColumn>{`${moniker}`}</ItemColumn>
-      <ItemColumn>
-        <span style={{ color: `${getDotColor(currentVoter.option)}` }}>● </span>
-        {getVotingText(currentVoter.option)}
-      </ItemColumn>
-    </ItemWrapper>
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentVoter.voterAddress}` }} target={"_blank"}>
+      <ItemWrapper style={style}>
+        <ItemColumn>
+          <ProfileImage src={avatarURL} />
+        </ItemColumn>
+        <ItemColumn>{`${moniker}`}</ItemColumn>
+        <ItemColumn>
+          <span style={{ color: `${getDotColor(currentVoter.option)}` }}>● </span>
+          {getVotingText(currentVoter.option)}
+        </ItemColumn>
+      </ItemWrapper>
+    </Link>
   );
 };
 

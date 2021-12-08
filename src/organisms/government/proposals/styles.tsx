@@ -101,6 +101,7 @@ export const Label = styled.div`
 
 export const ProposalContent = styled.div`
   width: 100%;
+  line-height: 23px;
   color: ${({ theme }) => theme.colors.defaultGray};
 `;
 
