@@ -1,6 +1,7 @@
 import React from "react";
 import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
 import { ResponsivePie } from "@nivo/pie";
 
@@ -49,8 +50,10 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
   return (
     <DelegationItemWrapper style={style}>
       <DelegationItemColumn>
-        <ProfileImage2 src={validatorInfo.avatarURL} />
-        <MonikerTypo>{validatorInfo.moniker}</MonikerTypo>
+        <Link to={{ pathname: `/staking/validators/${data[index].validatorAddress}` }}>
+          <ProfileImage2 src={validatorInfo.avatarURL} />
+          <MonikerTypo>{validatorInfo.moniker}</MonikerTypo>
+        </Link>
       </DelegationItemColumn>
       <DelegationItemColumn>{numeral(getDelegateAmount(data[index].amount)).format("0,0.000")}</DelegationItemColumn>
       <DelegationItemColumn>
