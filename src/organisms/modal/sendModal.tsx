@@ -54,7 +54,7 @@ const customStyles = {
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
-  const { sendFCT, sendToken } = useFirma();
+  const { sendFCT, sendToken, isValidAddress } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const [available, setAvailable] = useState(0);
@@ -111,7 +111,14 @@ const SendModal = () => {
   };
 
   const checkParams = () => {
-    setActiveButton(targetAddress !== "" && amount !== "" && convertNumber(amount) <= convertNumber(available));
+    console.log(isValidAddress(targetAddress));
+    setActiveButton(
+      targetAddress !== "" &&
+        isValidAddress(targetAddress) &&
+        amount !== "" &&
+        convertNumber(amount) <= convertNumber(available) &&
+        convertNumber(amount) > 0
+    );
   };
 
   const sendTx = (resolveTx: () => void, rejectTx: () => void) => {
