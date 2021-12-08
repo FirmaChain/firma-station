@@ -87,7 +87,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
           </ChartCenterTypoWrapper>
           <ResponsivePie
             data={data}
-            margin={{ top: 30, right: 20, bottom: 20, left: 20 }}
+            margin={{ top: 30, right: 20, bottom: 30, left: 20 }}
             innerRadius={0.75}
             padAngle={0.7}
             cornerRadius={3}
