@@ -154,8 +154,7 @@ function useFirma() {
     const privateKey = getDecryptPrivateKey();
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
-    // const balance = await getFirmaSDK().Bank.getBalance(address);
-    const balance = "0";
+    const balance = await getFirmaSDK().Bank.getBalance(address);
     // const nftList = await getFirmaSDK().Nft.getNftItemAllFromAddress(address);
     const tokenList = await getFirmaSDK().Bank.getTokenBalanceList(address);
     const tokenDataList = [];
@@ -195,13 +194,13 @@ function useFirma() {
     const privateKey = getDecryptPrivateKey();
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
-    // const balance = await getFirmaSDK().Bank.getBalance(address);
-    const balance = "0";
+    const balance = await getFirmaSDK().Bank.getBalance(address);
     const delegateListOrigin = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const undelegateListOrigin = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
     const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
+    const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.balance.amount - a.balance.amount);
 
-    const delegateList = delegateListOrigin.map((value) => {
+    const delegateList = delegateListSort.map((value) => {
       return {
         validatorAddress: value.delegation.validator_address,
         delegatorAddress: value.delegation.delegator_address,
@@ -211,7 +210,7 @@ function useFirma() {
       };
     });
 
-    const delegationBalanceList = delegateListOrigin.map((value) => {
+    const delegationBalanceList = delegateListSort.map((value) => {
       return value.balance.amount;
     });
 
@@ -260,8 +259,7 @@ function useFirma() {
     const privateKey = getDecryptPrivateKey();
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
-    // const balance = await getFirmaSDK().Bank.getBalance(address);
-    const balance = "0";
+    const balance = await getFirmaSDK().Bank.getBalance(address);
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
 
