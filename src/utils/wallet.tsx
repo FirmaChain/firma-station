@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { FirmaSDK } from "@firmachain/firma-js";
+import { FirmaSDK, FirmaUtil } from "@firmachain/firma-js";
 import { useSnackbar } from "notistack";
 
 import { Wallet } from "./types";
@@ -472,6 +472,10 @@ function useFirma() {
     }
   };
 
+  const isValidAddress = (address: string) => {
+    return FirmaUtil.isValidAddress(address);
+  };
+
   return {
     getNewMnemonic,
     storeWalletFromMnemonic,
@@ -501,6 +505,7 @@ function useFirma() {
     deposit,
     vote,
     isTimeout,
+    isValidAddress,
   };
 }
 
