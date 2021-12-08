@@ -193,9 +193,9 @@ export const ChartWrapper = styled.div`
 
 export const ChartCenterTypoWrapper = styled.div`
   position: absolute;
-  top: 132px;
+  top: 131px;
   left: 50%;
-  margin-left: -62px;
+  margin-left: -64px;
   display: flex;
   flex-direction: column;
   text-align: center;
