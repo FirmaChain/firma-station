@@ -30,6 +30,7 @@
     "@types/react-window": "^1.8.5",
     "@types/styled-components": "^5.1.15",
     "apollo-boost": "^0.4.9",
+    "axios": "^0.24.0",
     "crypto-js": "^4.1.1",
     "graphql": "^15.7.1",
     "moment": "^2.29.1",
