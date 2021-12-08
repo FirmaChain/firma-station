@@ -7,17 +7,17 @@ export const ContentContainer = styled.div`
   flex-direction: column;
   gap: 10px 0;
   padding: 0 40px;
-  height: calc(100% - 130px);
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
 `;
 
 export const CardWrap = styled.div`
   position: relative;
-  z-index: 50;
+  z-index: 2;
   height: 100%;
   display: flex;
   gap: 0 30px;
+  flex: 1;
 `;
 
 export const LeftCardWrap = styled.div`

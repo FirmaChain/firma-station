@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const ListWrapper = styled.div`
   width: 100%;
   height: 100%;
+  flex: 1;
 `;
 
 export const ButtonWrapper = styled.div`

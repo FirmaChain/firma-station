@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const ContentContainer = styled.div`
   z-index: 2;
   width: calc(100% - 80px);
-  height: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 0 40px;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
@@ -11,8 +12,8 @@ export const ContentContainer = styled.div`
 
 export const CardWrap = styled.div`
   position: relative;
-  z-index: 50;
-  height: 100%;
+  z-index: 2;
+  flex: 1;
   display: flex;
   gap: 0 30px;
 `;

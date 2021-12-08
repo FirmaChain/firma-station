@@ -7,7 +7,6 @@ export const ContentContainer = styled.div`
   flex-direction: column;
   gap: 10px 0;
   padding: 0 40px;
-  height: calc(100% - 130px);
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
 `;

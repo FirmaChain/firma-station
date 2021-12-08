@@ -52,7 +52,6 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
 
   return (
     <ValidatorCardWrapper>
-      {console.log(targetValidatorData)}
       {targetValidatorData && (
         <>
           <ProfileWrapper>

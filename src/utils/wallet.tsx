@@ -154,7 +154,8 @@ function useFirma() {
     const privateKey = getDecryptPrivateKey();
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
-    const balance = await getFirmaSDK().Bank.getBalance(address);
+    // const balance = await getFirmaSDK().Bank.getBalance(address);
+    const balance = "0";
     // const nftList = await getFirmaSDK().Nft.getNftItemAllFromAddress(address);
     const tokenList = await getFirmaSDK().Bank.getTokenBalanceList(address);
     const tokenDataList = [];
@@ -194,7 +195,8 @@ function useFirma() {
     const privateKey = getDecryptPrivateKey();
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
-    const balance = await getFirmaSDK().Bank.getBalance(address);
+    // const balance = await getFirmaSDK().Bank.getBalance(address);
+    const balance = "0";
     const delegateListOrigin = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const undelegateListOrigin = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
     const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
@@ -204,6 +206,8 @@ function useFirma() {
         validatorAddress: value.delegation.validator_address,
         delegatorAddress: value.delegation.delegator_address,
         amount: convertNumber(value.balance.amount),
+        moniker: value.delegation.validator_address,
+        avatarURL: "",
       };
     });
 
@@ -256,7 +260,8 @@ function useFirma() {
     const privateKey = getDecryptPrivateKey();
     const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
     const address = await wallet.getAddress();
-    const balance = await getFirmaSDK().Bank.getBalance(address);
+    // const balance = await getFirmaSDK().Bank.getBalance(address);
+    const balance = "0";
     const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
     const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
 

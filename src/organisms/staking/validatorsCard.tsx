@@ -1,23 +1,21 @@
 import React from "react";
 import numeral from "numeral";
-import AutoSizer from "react-virtualized-auto-sizer";
 import { Link } from "react-router-dom";
-import { FixedSizeList as List } from "react-window";
 
 import { IValidatorsState } from "./hooks";
 
+import theme from "../../themes";
+import { BlankCard } from "../../components/card";
 import { ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, ListWrapper, ProfileImage, MonikerTypo } from "./styles";
 
 interface IProps {
   validatorsState: IValidatorsState;
 }
 
-const Row = ({ data, index, style }: any) => {
-  const currentValidator = data[index];
-
+const CustomRow = ({ currentValidator, index }: any) => {
   return (
     <Link to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}>
-      <ItemWrapper style={style}>
+      <ItemWrapper>
         <ItemColumn>{index + 1}</ItemColumn>
         <ItemColumn>
           <ProfileImage src={currentValidator.validatorAvatar} />
@@ -34,31 +32,21 @@ const Row = ({ data, index, style }: any) => {
 
 const Validators = ({ validatorsState }: IProps) => {
   return (
-    <ListWrapper>
-      <AutoSizer>
-        {({ height, width }) => (
-          <>
-            <HeaderWrapper style={{ width }}>
-              <HeaderColumn>No</HeaderColumn>
-              <HeaderColumn>Moniker</HeaderColumn>
-              <HeaderColumn>Voting Power</HeaderColumn>
-              <HeaderColumn>Self Delegation</HeaderColumn>
-              <HeaderColumn>Commission</HeaderColumn>
-              <HeaderColumn>UpTime</HeaderColumn>
-            </HeaderWrapper>
-            <List
-              width={width}
-              height={height - 70}
-              itemCount={validatorsState.validators.length}
-              itemSize={50}
-              itemData={validatorsState.validators}
-            >
-              {Row}
-            </List>
-          </>
-        )}
-      </AutoSizer>
-    </ListWrapper>
+    <BlankCard bgColor={theme.colors.backgroundSideBar} height={"100%"}>
+      <ListWrapper>
+        <HeaderWrapper>
+          <HeaderColumn>No</HeaderColumn>
+          <HeaderColumn>Moniker</HeaderColumn>
+          <HeaderColumn>Voting Power</HeaderColumn>
+          <HeaderColumn>Self Delegation</HeaderColumn>
+          <HeaderColumn>Commission</HeaderColumn>
+          <HeaderColumn>UpTime</HeaderColumn>
+        </HeaderWrapper>
+        {validatorsState.validators.map((value, index) => (
+          <CustomRow key={index} currentValidator={value} index={index} />
+        ))}
+      </ListWrapper>
+    </BlankCard>
   );
 };
 

@@ -48,7 +48,7 @@ export const Column = styled.div`
   &:nth-child(5),
   &:nth-child(6) {
     text-align: center;
-    flex: 1 1 300px;
+    flex: 1 1 400px;
   }
 `;
 
@@ -58,7 +58,9 @@ export const ItemWrapper = styled(RowWrapper)`
   border-bottom: 1px solid #444;
 `;
 
-export const ItemColumn = styled(Column)``;
+export const ItemColumn = styled(Column)`
+  font-size: 14px;
+`;
 
 export const HeaderWrapper = styled(RowWrapper)`
   height: 70px;
@@ -68,11 +70,13 @@ export const HeaderWrapper = styled(RowWrapper)`
 
 export const HeaderColumn = styled(Column)`
   color: #ddd;
+  font-size: 16px;
 `;
 
 export const ListWrapper = styled.div`
-  width: 100%;
+  width: calc(100% - 40px);
   height: 100%;
+  padding: 0 20px;
 `;
 
 export const ProfileImage = styled.div<{ src?: string }>`
@@ -88,6 +92,19 @@ export const ProfileImage = styled.div<{ src?: string }>`
   ${(props) =>
     props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
+export const ProfileImage2 = styled.div<{ src?: string }>`
+  width: 25px;
+  height: 25px;
+  border-radius: 15px;
+  margin-top: 8px;
+  background-color: gray;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  float: left;
+  ${(props) =>
+    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+`;
 export const MonikerTypo = styled.div`
   margin-left: 10px;
   float: left;
@@ -96,39 +113,102 @@ export const MonikerTypo = styled.div`
 export const DelegationColumn = styled.div`
   width: 100%;
   & {
-    flex: 1 1 100%;
+    text-align: center;
+  }
+  &:nth-child(1) {
+    flex: 2;
+  }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: right;
+  }
+  &:nth-child(3) {
+    flex: 1;
+    text-align: right;
   }
 `;
 
 export const DelegationItemWrapper = styled(RowWrapper)`
-  height: 35px;
-  line-height: 35px;
-  border-bottom: 1px solid #444;
+  height: 45px;
+  line-height: 45px;
 `;
 
-export const DelegationItemColumn = styled(DelegationColumn)``;
+export const DelegationItemColumn = styled(DelegationColumn)`
+  text-align: center;
+  font-size: 14px;
+  &:nth-child(1) {
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(2) {
+    text-align: right;
+  }
+  &:nth-child(3) {
+    text-align: right;
+    margin-right: 20px;
+  }
+`;
 
 export const DelegationHeaderWrapper = styled(RowWrapper)`
-  height: 30px;
-  line-height: 30px;
+  height: 40px;
+  line-height: 40px;
   border-bottom: 1px solid #444;
 `;
 
 export const DelegationHeaderColumn = styled(DelegationColumn)`
   color: #ddd;
+  font-size: 16px;
   text-align: center;
+  &:nth-child(1) {
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(3) {
+    margin-right: 20px;
+  }
 `;
 
 export const FlexWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 20px);
+  margin-top: 10px;
+  margin-bottom: 10px;
   display: flex;
 `;
 
 export const DelegationListWrapper = styled.div`
-  width: 50%;
+  width: calc(50% - 35px);
+  padding: 0 0 10px 15px;
 `;
 
 export const ChartWrapper = styled.div`
   width: 50%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ChartCenterTypoWrapper = styled.div`
+  position: absolute;
+  top: 132px;
+  left: 50%;
+  margin-left: -62px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`;
+
+export const ChartCenterTypo = styled.div`
+  font-size: 22px;
+  margin-bottom: 8px;
+  font-size: ${({ theme }) => theme.sizes.stakingCardSize1};
+  &:nth-child(1) {
+    color: #aaa;
+  }
+  &:nth-child(2) {
+    font-size: ${({ theme }) => theme.sizes.stakingCardSize2};
+  }
 `;

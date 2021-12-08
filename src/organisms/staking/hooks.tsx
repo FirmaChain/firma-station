@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import numeral from "numeral";
+import gql from "graphql-tag";
+import { client } from "../../apollo";
 
 import useFirma from "../../utils/wallet";
 import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
@@ -13,6 +15,8 @@ export interface IValidatorsState {
 export interface IStakeInfo {
   validatorAddress: string;
   delegatorAddress: string;
+  moniker: string;
+  avatarURL: string;
   amount: number;
 }
 
@@ -80,7 +84,47 @@ export const useStakingData = () => {
   useInterval(() => {
     getStaking()
       .then((result: ITotalStakingState | undefined) => {
-        if (result) setTotalStakingState(result);
+        if (result) {
+          let queryIn = "";
+          for (let i = 0; i < result.delegateList.length; i++) {
+            queryIn += `"${result.delegateList[i].validatorAddress}",`;
+          }
+
+          client
+            .query({
+              query: gql`
+                query {
+                  validator(
+                    where: {
+                      validator_info: {
+                        operator_address: { _in: [${queryIn}] }
+                      }
+                    }
+                  ) {
+                    validator_descriptions {
+                      avatar_url
+                      moniker
+                    }
+                    validator_info {
+                      operator_address
+                    }
+                  }
+                }
+              `,
+            })
+            .then(({ data }) => {
+              result.delegateList = result.delegateList.map((delegate) => {
+                for (let i = 0; i < data.validator.length; i++) {
+                  if (data.validator[i].validator_info.operator_address === delegate.validatorAddress) {
+                    delegate.moniker = data.validator[i].validator_descriptions[0].moniker;
+                    delegate.avatarURL = data.validator[i].validator_descriptions[0].avatar_url;
+                  }
+                }
+                return delegate;
+              });
+              setTotalStakingState(result);
+            });
+        }
       })
       .catch((e) => {});
   }, 2000);
