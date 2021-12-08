@@ -72,8 +72,13 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
   const result = totalStakingState.delegateList.map((delegate) => {
     const moniker = getMonikerFormat(delegate.moniker);
     const percentValue = (convertToFctNumber(delegate.amount) / totalStakingState.delegated) * 100;
-    return { id: getMonikerFormat(moniker), value: Math.round(percentValue * 100) / 100 };
+    return {
+      id: getMonikerFormat(moniker),
+      value: Math.round(percentValue * 100) / 100,
+      amount: numeral(convertToFctNumber(delegate.amount)).format("0,0.000"),
+    };
   });
+
   return result;
 };
 
@@ -107,6 +112,12 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
             arcLinkLabelsColor={{ from: "color" }}
             arcLabelsSkipAngle={10}
             arcLabelsTextColor={{ from: "color", modifiers: [["darker", 2]] }}
+            tooltip={function (e) {
+              const t = e.datum;
+              return (
+                <div style={{ backgroundColor: "#eee", padding: "10px", borderRadius: "4px" }}>{t.data.amount} FCT</div>
+              );
+            }}
             legends={[]}
           />
         </ChartWrapper>
