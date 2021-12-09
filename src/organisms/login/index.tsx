@@ -2,7 +2,17 @@ import React, { useState } from "react";
 import { useSnackbar } from "notistack";
 import { useApolloClient } from "@apollo/client";
 
-import { LoginContainer, LoginWrapper, LogoImg, LoginInputWrapper, InputBoxDefault, LoginButton } from "./styles";
+import {
+  LoginContainer,
+  LoginWrapper,
+  LogoImg,
+  LoginInputWrapper,
+  InputBoxDefault,
+  LoginButton,
+  LogoutWrap,
+  LogoutIconImg,
+  LogoutTypo,
+} from "./styles";
 import useFirma from "../../utils/wallet";
 
 const LoginCard = () => {
@@ -10,7 +20,7 @@ const LoginCard = () => {
   const { reFetchObservableQueries } = useApolloClient();
   const [password, setPassword] = useState("");
 
-  const { loginWallet } = useFirma();
+  const { loginWallet, resetWallet } = useFirma();
 
   const onKeyDownPassword = (e: any) => {
     if (e.key === "Enter") {
@@ -40,6 +50,11 @@ const LoginCard = () => {
 
   return (
     <LoginContainer>
+      <LogoutWrap onClick={resetWallet}>
+        <LogoutIconImg />
+        <LogoutTypo>Logout</LogoutTypo>
+      </LogoutWrap>
+
       <LoginWrapper>
         <LogoImg />
         <LoginInputWrapper>

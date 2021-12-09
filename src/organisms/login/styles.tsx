@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export const LoginContainer = styled.div`
   position: absolute;
@@ -64,4 +65,29 @@ export const LoginButton = styled.div<{ active: boolean }>`
   border-radius: 4px;
   cursor: pointer;
   ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+`;
+
+export const LogoutIconImg = styled(LogoutIcon)`
+  width: 18px !important;
+  height: 18px !important;
+  margin-right: 5px;
+  margin-top: 1px;
+  float: left;
+  cursor: pointer;
+  background-size: contain;
+`;
+
+export const LogoutWrap = styled.div`
+  display: flex;
+  color: #bbb;
+  cursor: pointer;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+`;
+
+export const LogoutTypo = styled.div`
+  height: 20px;
+  line-height: 20px;
+  font-size: 17px;
 `;
