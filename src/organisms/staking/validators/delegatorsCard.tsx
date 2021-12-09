@@ -4,11 +4,20 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 import { Link } from "react-router-dom";
 
+import { useAvataURL } from "../../header/hooks";
 import { IValidatorsState } from "../hooks";
 import { convertToFctNumber } from "../../../utils/common";
 import { EXPLORER_URI } from "../../../config";
 
-import { DelegatorsCardWrapper, DelegatorList, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn } from "./styles";
+import {
+  DelegatorsCardWrapper,
+  DelegatorList,
+  ItemWrapper,
+  ItemColumn,
+  HeaderWrapper,
+  HeaderColumn,
+  ProfileImage2,
+} from "./styles";
 
 interface IProps {
   validatorsState: IValidatorsState;
@@ -16,11 +25,15 @@ interface IProps {
 
 const Row = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
+  const { avatarURL, moniker } = useAvataURL(currentDelegator.address);
 
   return (
     <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={"_blank"}>
       <ItemWrapper style={style}>
-        <ItemColumn>{currentDelegator.address}</ItemColumn>
+        <ItemColumn>
+          <ProfileImage2 src={avatarURL} />
+        </ItemColumn>
+        <ItemColumn>{`${moniker}`}</ItemColumn>
         <ItemColumn>{`${numeral(convertToFctNumber(currentDelegator.amount)).format("0,0.000")} FCT`}</ItemColumn>
       </ItemWrapper>
     </Link>
@@ -44,7 +57,8 @@ const DelegatorsCard = ({ validatorsState }: IProps) => {
             {({ height, width }) => (
               <>
                 <HeaderWrapper style={{ width }}>
-                  <HeaderColumn>Address</HeaderColumn>
+                  <HeaderColumn></HeaderColumn>
+                  <HeaderColumn>Delegator</HeaderColumn>
                   <HeaderColumn>Amount</HeaderColumn>
                 </HeaderWrapper>
                 <List

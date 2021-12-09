@@ -74,7 +74,10 @@ export const Column = styled.div`
   & {
     flex: 1 1 100%;
   }
-  &:nth-child(2) {
+  &:nth-child(1) {
+    flex: 90px;
+  }
+  &:nth-child(3) {
     text-align: right;
     padding-right: 30px;
   }
@@ -212,4 +215,18 @@ export const CopyIconImg = styled(FileCopyIcon)`
   position: absolute;
   top: -3px;
   left: 114px;
+`;
+
+export const ProfileImage2 = styled.div<{ src?: string }>`
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: gray;
+  margin: 10px auto;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  float: left;
+  ${(props) =>
+    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
