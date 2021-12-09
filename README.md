@@ -29,8 +29,7 @@ This app can also be used for TestNet and using Faucet, you can test various sce
 
 ```javascript
 npm install
-npm run react:start
-npm run electron:start
+npm run start
 ```
 
 </br>
