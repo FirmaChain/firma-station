@@ -1,6 +1,6 @@
 # Firma Station - Desktop & Web App wallet service
 
-![image](https://user-images.githubusercontent.com/5277080/134673615-d1750329-1a1d-4370-8195-582948834aff.png)
+![screen](https://user-images.githubusercontent.com/89889026/145321320-d5ae624b-0426-4203-b1c7-daae92a2b8ee.png)
 
 <p/>
 Firma Station is a desktop application for FirmaChain service like wallet, staking, voting.
