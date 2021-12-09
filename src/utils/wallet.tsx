@@ -291,7 +291,7 @@ function useFirma() {
       return {
         value: value.delegation.validator_address,
         label: value.delegation.validator_address,
-        amount: value.delegation.shares,
+        amount: value.balance.amount,
       };
     });
 
@@ -309,7 +309,7 @@ function useFirma() {
       .map((value) => {
         return {
           value: value.delegation.validator_address,
-          amount: value.delegation.shares,
+          amount: value.balance.amount,
         };
       });
 
