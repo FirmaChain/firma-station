@@ -1,37 +1,19 @@
 import { useSelector } from "react-redux";
-import { FirmaSDK, FirmaUtil } from "@firmachain/firma-js";
 import { useSnackbar } from "notistack";
+import { FirmaUtil } from "@firmachain/firma-js";
 
 import { Wallet } from "./types";
-import { FIRMACHAIN_CONFIG } from "../config";
-import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString } from "./common";
+import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from "./common";
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
 import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from "./keyBridge";
+import { FirmaSDKInternal } from "./firmaSDK";
 
 import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
 
 function useFirma() {
   const { enqueueSnackbar } = useSnackbar();
-  const { isInit, timeKey } = useSelector((state: rootState) => state.wallet);
-
-  const getFirmaSDK = () => {
-    return new FirmaSDK(FIRMACHAIN_CONFIG);
-  };
-
-  const getNewMnemonic = async (): Promise<string> => {
-    const newWallet = await getFirmaSDK().Wallet.newWallet();
-
-    return newWallet.getMnemonic();
-  };
-
-  const isTimeout = (timeKey: string) => {
-    if (isNaN(new Date(Number(timeKey)).getTime())) {
-      return true;
-    }
-
-    return timeKey === "" || new Date().getTime() - Number(timeKey) > 600000;
-  };
+  const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
 
   const restoreWalletInternal = (timeKey: string) => {
     let wallet = null;
@@ -47,6 +29,43 @@ function useFirma() {
     } catch (e) {}
 
     return wallet;
+  };
+
+  const getDecryptPrivateKey = (): string => {
+    if (!isInit) throw new Error("INVALID WALLET");
+
+    const wallet = restoreWalletInternal(timeKey);
+
+    if (wallet?.privateKey !== undefined) return wallet.privateKey;
+    else throw new Error("INVALID WALLET");
+  };
+
+  const getDecryptMnemonic = (): string => {
+    if (!isInit) throw new Error("INVALID WALLET");
+
+    const wallet = restoreWalletInternal(timeKey);
+
+    if (wallet?.mnemonic !== undefined) return wallet.mnemonic;
+    else throw new Error("INVALID WALLET");
+  };
+
+  const FirmaSDK = FirmaSDKInternal({ isLedger, getDecryptPrivateKey });
+
+  const getNewMnemonic = async (): Promise<string> => {
+    const firmaSDK = FirmaSDK.getSDK();
+    const newWallet = await firmaSDK.Wallet.newWallet();
+
+    return newWallet.getMnemonic();
+  };
+
+  const isTimeout = (timeKey: string) => {
+    if (isLedger) return false;
+
+    if (isNaN(new Date(Number(timeKey)).getTime())) {
+      return true;
+    }
+
+    return timeKey === "" || new Date().getTime() - Number(timeKey) > 600000;
   };
 
   const storeWalletInternal = (
@@ -70,7 +89,8 @@ function useFirma() {
   };
 
   const storeWalletFromMnemonic = async (password: string, mnemonic: string, newTimeKey: string = "") => {
-    const walletService = await getFirmaSDK().Wallet.fromMnemonic(mnemonic);
+    const firmaSDK = FirmaSDK.getSDK();
+    const walletService = await firmaSDK.Wallet.fromMnemonic(mnemonic);
     const privateKey = walletService.getPrivateKey();
     const address = await walletService.getAddress();
 
@@ -78,10 +98,30 @@ function useFirma() {
   };
 
   const storeWalletFromPrivateKey = async (password: string, privateKey: string, newTimeKey: string = "") => {
-    const walletService = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
+    const firmaSDK = FirmaSDK.getSDK();
+    const walletService = await firmaSDK.Wallet.fromPrivateKey(privateKey);
     const address = await walletService.getAddress();
 
     storeWalletInternal(password, "", privateKey, address, newTimeKey !== "" ? newTimeKey : timeKey);
+  };
+
+  const connectLedger = async () => {
+    try {
+      const address = await FirmaSDK.connectLedger();
+
+      if (isValidString(address)) {
+        walletActions.handleWalletAddress(address);
+        walletActions.handleWalletLedger(true);
+        initWallet(true);
+      } else {
+        enqueueSnackbar("Failed connect ledger", {
+          variant: "error",
+          autoHideDuration: 5000,
+        });
+      }
+    } catch (e) {
+      console.log("ERROR : " + e);
+    }
   };
 
   const isCorrectPassword = (password: string) => {
@@ -127,39 +167,29 @@ function useFirma() {
     initWallet(false);
 
     walletActions.handleWalletAddress("");
+    walletActions.handleWalletLedger(false);
     walletActions.handleWalletTimeKey(getRandomKey());
 
     clearKey();
   };
 
-  const getDecryptPrivateKey = (): string => {
+  const getAddressInternal = (): string => {
     if (!isInit) throw new Error("INVALID WALLET");
+    if (!isValidString(address)) throw new Error("INVALID WALLET");
 
-    const wallet = restoreWalletInternal(timeKey);
-
-    if (wallet?.privateKey !== undefined) return wallet.privateKey;
-    else throw new Error("INVALID WALLET");
-  };
-
-  const getDecryptMnemonic = (): string => {
-    if (!isInit) throw new Error("INVALID WALLET");
-
-    const wallet = restoreWalletInternal(timeKey);
-
-    if (wallet?.mnemonic !== undefined) return wallet.mnemonic;
-    else throw new Error("INVALID WALLET");
+    return address;
   };
 
   const setUserData = async () => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const address = await wallet.getAddress();
-    const balance = await getFirmaSDK().Bank.getBalance(address);
-    // const nftList = await getFirmaSDK().Nft.getNftItemAllFromAddress(address);
-    const tokenList = await getFirmaSDK().Bank.getTokenBalanceList(address);
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const balance = await firmaSDK.Bank.getBalance(address);
+    // const nftList = await firmaSDK.Nft.getNftItemAllFromAddress(address);
+    const tokenList = await firmaSDK.Bank.getTokenBalanceList(address);
     const tokenDataList = [];
     for (let token of tokenList) {
-      const tokenData = await getFirmaSDK().Token.getTokenData(token.denom);
+      const tokenData = await firmaSDK.Token.getTokenData(token.denom);
       tokenDataList.push({
         denom: token.denom,
         balance: convertToTokenString(token.amount, tokenData.decimal),
@@ -174,7 +204,8 @@ function useFirma() {
 
   const getTokenData = async (denom: string) => {
     if (denom !== "ufct") {
-      const tokenData = await getFirmaSDK().Token.getTokenData(denom);
+      const firmaSDK = FirmaSDK.getSDK();
+      const tokenData = await firmaSDK.Token.getTokenData(denom);
 
       return {
         denom: denom,
@@ -191,13 +222,13 @@ function useFirma() {
   };
 
   const getStaking = async () => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const address = await wallet.getAddress();
-    const balance = await getFirmaSDK().Bank.getBalance(address);
-    const delegateListOrigin = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
-    const undelegateListOrigin = await getFirmaSDK().Staking.getTotalUndelegateInfo(address);
-    const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const balance = await firmaSDK.Bank.getBalance(address);
+    const delegateListOrigin = await firmaSDK.Staking.getTotalDelegationInfo(address);
+    const undelegateListOrigin = await firmaSDK.Staking.getTotalUndelegateInfo(address);
+    const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
     const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.balance.amount - a.balance.amount);
 
     const delegateList = delegateListSort.map((value) => {
@@ -256,12 +287,12 @@ function useFirma() {
   };
 
   const getStakingFromValidator = async (validatorAddress: string) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const address = await wallet.getAddress();
-    const balance = await getFirmaSDK().Bank.getBalance(address);
-    const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
-    const totalReward = await getFirmaSDK().Distribution.getTotalRewardInfo(address);
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const balance = await firmaSDK.Bank.getBalance(address);
+    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(address);
+    const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
 
     const targetDelegation = delegationList.find((value) => value.delegation.validator_address === validatorAddress);
     const targetReward = totalReward.rewards.find((value) => value.validator_address === validatorAddress);
@@ -282,10 +313,10 @@ function useFirma() {
   };
 
   const getDelegationList = async () => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const address = await wallet.getAddress();
-    const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(address);
 
     const parseList = delegationList.map((value) => {
       return {
@@ -299,10 +330,10 @@ function useFirma() {
   };
 
   const getDelegation = async (targetValidator: string) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const address = await wallet.getAddress();
-    const delegationList = await getFirmaSDK().Staking.getTotalDelegationInfo(address);
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(address);
 
     const [delegation] = delegationList
       .filter((value) => value.delegation.validator_address === targetValidator)
@@ -317,70 +348,49 @@ function useFirma() {
   };
 
   const sendFCT = async (address: string, amount: string, memo = "") => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Bank.send(wallet, address, convertNumber(amount), { memo });
+    const result = await FirmaSDK.send(address, convertNumber(amount), memo);
 
     checkVlidateResult(result);
   };
 
   const sendToken = async (address: string, amount: string, tokenID: string, decimal: number, memo = "") => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Bank.sendToken(wallet, address, tokenID, convertNumber(amount), decimal, {
-      memo,
-    });
+    const result = await FirmaSDK.sendToken(address, tokenID, convertNumber(amount), decimal, memo);
 
     checkVlidateResult(result);
   };
 
   const delegate = async (validatorAddress: string, amount: number) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Staking.delegate(wallet, validatorAddress, amount);
+    const result = await FirmaSDK.delegate(validatorAddress, amount);
 
     checkVlidateResult(result);
   };
 
   const redelegate = async (validatorAddressSrc: string, validatorAddressDst: string, amount: number) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Staking.redelegate(wallet, validatorAddressSrc, validatorAddressDst, amount, {
-      fee: 300000,
-      gas: 300000,
-    });
+    const result = await FirmaSDK.redelegate(validatorAddressSrc, validatorAddressDst, amount);
 
     checkVlidateResult(result);
   };
 
   const undelegate = async (validatorAddress: string, amount: number) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Staking.undelegate(wallet, validatorAddress, amount);
+    const result = await FirmaSDK.undelegate(validatorAddress, amount);
 
     checkVlidateResult(result);
   };
 
   const withdraw = async (validatorAddress: string) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Distribution.withdrawAllRewards(wallet, validatorAddress);
+    const result = await FirmaSDK.withdrawAllRewards(validatorAddress);
 
     checkVlidateResult(result);
   };
 
   const vote = async (proposalId: number, votingType: number) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Gov.vote(wallet, proposalId, votingType);
+    const result = await FirmaSDK.vote(proposalId, votingType);
 
     checkVlidateResult(result);
   };
 
   const deposit = async (proposalId: number, amount: number) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Gov.deposit(wallet, proposalId, amount);
+    const result = await FirmaSDK.deposit(proposalId, amount);
 
     checkVlidateResult(result);
   };
@@ -391,15 +401,7 @@ function useFirma() {
     initialDeposit: number,
     paramList: Array<any>
   ) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Gov.submitParameterChangeProposal(
-      wallet,
-      title,
-      description,
-      initialDeposit,
-      paramList
-    );
+    const result = await FirmaSDK.submitParameterChangeProposal(title, description, initialDeposit, paramList);
 
     checkVlidateResult(result);
   };
@@ -411,10 +413,7 @@ function useFirma() {
     amount: number,
     recipient: string
   ) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Gov.submitCommunityPoolSpendProposal(
-      wallet,
+    const result = await FirmaSDK.submitCommunityPoolSpendProposal(
       title,
       description,
       initialDeposit,
@@ -426,9 +425,7 @@ function useFirma() {
   };
 
   const submitTextProposal = async (title: string, description: string, initialDeposit: number) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Gov.submitTextProposal(wallet, title, description, initialDeposit);
+    const result = await FirmaSDK.submitTextProposal(title, description, initialDeposit);
 
     checkVlidateResult(result);
   };
@@ -440,10 +437,7 @@ function useFirma() {
     upgradeName: string,
     height: number
   ) => {
-    const privateKey = getDecryptPrivateKey();
-    const wallet = await getFirmaSDK().Wallet.fromPrivateKey(privateKey);
-    const result = await getFirmaSDK().Gov.submitSoftwareUpgradeProposalByHeight(
-      wallet,
+    const result = await FirmaSDK.submitSoftwareUpgradeProposalByHeight(
       title,
       description,
       initialDeposit,
@@ -482,6 +476,7 @@ function useFirma() {
     storeWalletFromPrivateKey,
     resetWallet,
     loginWallet,
+    connectLedger,
     getDecryptPrivateKey,
     getDecryptMnemonic,
     isNeedLogin,

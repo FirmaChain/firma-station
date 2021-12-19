@@ -27,6 +27,8 @@ const DENOM = "FCT";
 const ConfirmTxModal = () => {
   const confirmTxModalState = useSelector((state: rootState) => state.modal.confirmTx);
   const modalData = useSelector((state: rootState) => state.modal.data);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
+
   const { enqueueSnackbar } = useSnackbar();
   const { isCorrectPassword } = useFirma();
 
@@ -54,7 +56,7 @@ const ConfirmTxModal = () => {
   };
 
   const queueTx = () => {
-    if (isCorrectPassword(password)) {
+    if (isCorrectPassword(password) || isLedger) {
       closeConfirmTxModal();
       modalActions.handleModalQueueTx(true);
     } else {
@@ -98,25 +100,27 @@ const ConfirmTxModal = () => {
             <ConfirmLabel>Fee</ConfirmLabel>
             <ConfirmInput>{`${numeral(fee).format("0,0.000000")} ${DENOM}`}</ConfirmInput>
           </ConfirmWrapper>
-          <PasswordWrapper>
-            <InputBoxDefault
-              ref={inputRef}
-              placeholder="PASSWORD"
-              type="password"
-              value={password}
-              onChange={onChangePassword}
-              onKeyDown={onKeyDownPassword}
-              autoFocus={true}
-            />
-          </PasswordWrapper>
+          {isLedger === false && (
+            <PasswordWrapper>
+              <InputBoxDefault
+                ref={inputRef}
+                placeholder="PASSWORD"
+                type="password"
+                value={password}
+                onChange={onChangePassword}
+                onKeyDown={onKeyDownPassword}
+                autoFocus={true}
+              />
+            </PasswordWrapper>
+          )}
           <NextButton
             style={{ marginTop: "50px" }}
             onClick={() => {
-              if (isActive) queueTx();
+              if (isActive || isLedger) queueTx();
             }}
-            active={isActive}
+            active={isActive || isLedger}
           >
-            {actionName}
+            {isLedger ? `Sign ledger` : actionName}
           </NextButton>
         </ModalContent>
       </ModalContainer>

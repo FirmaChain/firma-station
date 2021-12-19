@@ -21,6 +21,7 @@ import {
 
 const ExportWalletModal = () => {
   const exportWalletModalState = useSelector((state: rootState) => state.modal.settings);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { resetWallet } = useFirma();
 
   const menuList = [
@@ -51,6 +52,8 @@ const ExportWalletModal = () => {
         <ModalTitle>Settings Wallet</ModalTitle>
         <MenuListWrap>
           {menuList.map((menu, index) => {
+            if (isLedger && (index === 1 || index === 2)) return;
+
             return (
               <MenuItemWrap
                 key={index}
