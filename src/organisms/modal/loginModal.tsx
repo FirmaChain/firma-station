@@ -22,7 +22,7 @@ const menuList = [
   { name: "New\nWallet", icon: NewWalletIcon, modalAction: modalActions.handleModalNewWallet },
   { name: "Recover from Mnemonic", icon: RecoverMnemonicIcon, modalAction: modalActions.handleModalRecoverMnemonic },
   { name: "Import\nPrivate Key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalImportPrivatekey },
-  { name: "Connection to Ledger", icon: ConnectLedgerIcon, modalAction: modalActions.handleModalConnectLedger },
+  { name: "Connect to Ledger", icon: ConnectLedgerIcon, modalAction: modalActions.handleModalConnectLedger },
 ];
 
 const LoginModal = () => {

@@ -53,7 +53,7 @@ const ConnectLedgerModal = () => {
       width={connectLedgerModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Connecting to Ledger</ModalTitle>
+        <ModalTitle>Connect to Ledger</ModalTitle>
         <ModalContent>
           <ModalLabel></ModalLabel>
           <ModalInput></ModalInput>
