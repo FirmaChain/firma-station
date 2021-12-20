@@ -23,6 +23,12 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
       window.electron.sendSync("ledger-showAddressOnDevice", {});
     });
 
+    bridgeLedgerWallet.registerGetAddressAndPublicKeyCallback(
+      async (): Promise<{ address: string; publicKey: Uint8Array }> => {
+        return window.electron.sendSync("ledger-getAddressAndPublicKey", {});
+      }
+    );
+
     bridgeLedgerWallet.registerGetAddressCallback(async (): Promise<string> => {
       return window.electron.sendSync("ledger-getAddress", {});
     });
