@@ -111,7 +111,6 @@ const SendModal = () => {
   };
 
   const checkParams = () => {
-    console.log(isValidAddress(targetAddress));
     setActiveButton(
       targetAddress !== "" &&
         isValidAddress(targetAddress) &&

@@ -1,16 +1,47 @@
 import { FirmaSDK } from "@firmachain/firma-js";
-import { FirmaWebLedgerWallet } from "@firmachain/firma-js-ledger";
+import { FirmaWebLedgerWallet, FirmaBridgeLedgerWallet } from "@firmachain/firma-js-ledger";
 import TransportHID from "@ledgerhq/hw-transport-webhid";
 
 import { FIRMACHAIN_CONFIG } from "../config";
+import { isElectron } from "./common";
+
+declare global {
+  interface Window {
+    require: NodeRequire;
+    electron: any;
+  }
+}
 
 const webLedgerWallet = new FirmaWebLedgerWallet(TransportHID);
+const bridgeLedgerWallet = new FirmaBridgeLedgerWallet();
 
 const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   const firmaSDK = new FirmaSDK(FIRMACHAIN_CONFIG);
 
+  if (isElectron) {
+    bridgeLedgerWallet.registerShowAddressOnDevice(async (): Promise<void> => {
+      window.electron.sendSync("ledger-showAddressOnDevice", {});
+    });
+
+    bridgeLedgerWallet.registerGetAddressCallback(async (): Promise<string> => {
+      return window.electron.sendSync("ledger-getAddress", {});
+    });
+
+    bridgeLedgerWallet.registerGetPublicKeyCallback(async (): Promise<Uint8Array> => {
+      return window.electron.sendSync("ledger-getPublicKey", {});
+    });
+
+    bridgeLedgerWallet.registerGetSignCallback(async (message: string): Promise<Uint8Array> => {
+      return window.electron.sendSync("ledger-sign", { message: message });
+    });
+  }
+
   const connectLedger = async () => {
-    return await webLedgerWallet.getAddress();
+    if (isElectron) {
+      return await bridgeLedgerWallet.getAddress();
+    } else {
+      return await webLedgerWallet.getAddress();
+    }
   };
 
   const getSDK = () => {
@@ -18,10 +49,12 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getWallet = async () => {
-    console.log("IS LEDGER : " + isLedger);
-
     if (isLedger) {
-      return await firmaSDK.Wallet.initFromLedger(webLedgerWallet);
+      if (isElectron) {
+        return await firmaSDK.Wallet.initFromLedger(bridgeLedgerWallet);
+      } else {
+        return await firmaSDK.Wallet.initFromLedger(webLedgerWallet);
+      }
     } else {
       const privateKey = getDecryptPrivateKey();
 

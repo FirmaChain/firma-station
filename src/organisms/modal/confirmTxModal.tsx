@@ -120,7 +120,7 @@ const ConfirmTxModal = () => {
             }}
             active={isActive || isLedger}
           >
-            {isLedger ? `Sign ledger` : actionName}
+            {isLedger === false ? actionName : `Sign ledger`}
           </NextButton>
         </ModalContent>
       </ModalContainer>

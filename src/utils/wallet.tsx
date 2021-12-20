@@ -82,6 +82,7 @@ function useFirma() {
     };
 
     walletActions.handleWalletAddress(address);
+    walletActions.handleWalletLedger(false);
 
     storeWallet(password, wallet);
     storeWallet(timeKey, wallet, true);
@@ -188,6 +189,7 @@ function useFirma() {
     // const nftList = await firmaSDK.Nft.getNftItemAllFromAddress(address);
     const tokenList = await firmaSDK.Bank.getTokenBalanceList(address);
     const tokenDataList = [];
+
     for (let token of tokenList) {
       const tokenData = await firmaSDK.Token.getTokenData(token.denom);
       tokenDataList.push({

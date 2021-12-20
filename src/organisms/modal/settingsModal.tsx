@@ -52,7 +52,7 @@ const ExportWalletModal = () => {
         <ModalTitle>Settings Wallet</ModalTitle>
         <MenuListWrap>
           {menuList.map((menu, index) => {
-            if (isLedger && (index === 1 || index === 2)) return;
+            if (isLedger && (index === 1 || index === 2)) return null;
 
             return (
               <MenuItemWrap
