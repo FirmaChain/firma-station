@@ -7,6 +7,7 @@ import { FIRMACHAIN_CONFIG } from "../../config";
 import { modalActions } from "../../redux/action";
 import { rootState } from "../../redux/reducers";
 import { useAvataURL } from "./hooks";
+import useFirma from "../../utils/wallet";
 
 import {
   QRCodeModal,
@@ -48,11 +49,12 @@ import {
   LoginIconImg,
   ProfileImg,
   BarDiv,
+  LedgerIconImg,
 } from "./styles";
 
 function Header() {
   const { enqueueSnackbar } = useSnackbar();
-  const { isInit, address } = useSelector((state: rootState) => state.wallet);
+  const { isInit, isLedger, address } = useSelector((state: rootState) => state.wallet);
   const {
     qrcode,
     network,
@@ -79,6 +81,7 @@ function Header() {
   } = useSelector((state: rootState) => state.modal);
 
   const { avatarURL } = useAvataURL(address);
+  const { showAddressOnDevice } = useFirma();
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);
@@ -101,6 +104,17 @@ function Header() {
     modalActions.handleModalSettings(true);
   };
 
+  const onClickLedger = () => {
+    showAddressOnDevice()
+      .then(() => {})
+      .catch(() => {
+        enqueueSnackbar("Failed connect ledger", {
+          variant: "success",
+          autoHideDuration: 1000,
+        });
+      });
+  };
+
   return (
     <HeaderContainer>
       <HeaderLeftWrapper>
@@ -116,6 +130,7 @@ function Header() {
             <ProfileImg src={avatarURL} />
             <AddressTypo onClick={clipboard}>{address}</AddressTypo>
             <BarDiv />
+            {isLedger && <LedgerIconImg onClick={onClickLedger} />}
             <CopyIconImg onClick={clipboard} />
             <SettingIconImg onClick={onSettings} />
           </HeaderLeftWrapper>

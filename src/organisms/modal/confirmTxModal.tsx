@@ -35,7 +35,7 @@ const ConfirmTxModal = () => {
   const [password, setPassword] = useState("");
   const [actionName, setActionName] = useState("");
   const [amount, setAmount] = useState("");
-  const [fee, setFee] = useState("0.002");
+  const [fee, setFee] = useState("0.2");
   const [isActive, setActive] = useState(false);
 
   const inputRef = useRef(null);
@@ -43,7 +43,7 @@ const ConfirmTxModal = () => {
   useEffect(() => {
     setActionName(modalData.action);
     setAmount(modalData.data.amount);
-    setFee("0.002");
+    setFee("0.2");
   }, [modalData]);
 
   const closeConfirmTxModal = () => {

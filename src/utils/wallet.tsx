@@ -181,6 +181,12 @@ function useFirma() {
     return address;
   };
 
+  const showAddressOnDevice = async () => {
+    if (isLedger === false) return;
+
+    await FirmaSDK.showAddressOnDevice();
+  };
+
   const setUserData = async () => {
     const firmaSDK = FirmaSDK.getSDK();
     const address = getAddressInternal();
@@ -479,6 +485,7 @@ function useFirma() {
     resetWallet,
     loginWallet,
     connectLedger,
+    showAddressOnDevice,
     getDecryptPrivateKey,
     getDecryptMnemonic,
     isNeedLogin,

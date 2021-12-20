@@ -125,6 +125,19 @@ export const CopyIconImg = styled(FileCopyIcon)`
   color: ${({ theme }) => theme.colors.realWhite};
 `;
 
+export const LedgerIconImg = styled.div`
+  margin: 3px 2px 2px 10px;
+  padding-top: 2px;
+  width: 15px !important;
+  height: 15px !important;
+  float: left;
+  cursor: pointer;
+  background: url("${({ theme }) => theme.urls.ledger}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
 export const QrWrap = styled.div`
   cursor: pointer;
   height: 20px;

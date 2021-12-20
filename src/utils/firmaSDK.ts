@@ -42,6 +42,14 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     });
   }
 
+  const showAddressOnDevice = async () => {
+    if (isElectron) {
+      return await bridgeLedgerWallet.showAddressOnDevice();
+    } else {
+      return await webLedgerWallet.showAddressOnDevice();
+    }
+  };
+
   const connectLedger = async () => {
     if (isElectron) {
       return await bridgeLedgerWallet.getAddress();
@@ -193,6 +201,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
 
   return {
     getSDK,
+    showAddressOnDevice,
     connectLedger,
     getWallet,
     send,
