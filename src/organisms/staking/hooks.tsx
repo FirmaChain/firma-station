@@ -6,6 +6,7 @@ import { client } from "../../apollo";
 import useFirma from "../../utils/wallet";
 import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
 import { useValidatorsQuery } from "../../apollo/gqls";
+import { MINT_COIN_PER_BLOCK } from "../../config";
 
 export interface IValidatorsState {
   totalVotingPower: number;
@@ -131,9 +132,14 @@ export const useStakingData = () => {
 
   useValidatorsQuery({
     onCompleted: (data) => {
+      const averageBlockTimePerDay = data.average_block_time_per_day[0].average_time;
+      // BLOCK_PER_MINT_COIN
       const slashingParams = data.slashingParams[0].params;
       const totalVotingPower = convertToFctNumber(data.stakingPool[0].bondedTokens);
       const { signed_blocks_window } = slashingParams;
+
+      const mintCoinPerDay = (86400 / averageBlockTimePerDay) * MINT_COIN_PER_BLOCK;
+      const mintCoinPerYear = mintCoinPerDay * 365;
 
       const validatorsList = data.validator.map((validator: any) => {
         const validatorAddress = validator.validatorInfo.operatorAddress;
@@ -173,6 +179,15 @@ export const useStakingData = () => {
         const status = validator.validatorStatuses[0].status;
         const jailed = validator.validatorStatuses[0].jailed;
 
+        const rewardPerYear =
+          mintCoinPerYear *
+          (votingPower / totalVotingPower) *
+          0.98 *
+          (1 - validator.validatorCommissions[0].commission);
+        const APR = rewardPerYear / votingPower;
+        const APRPerDay = APR / 365;
+        const APY = convertNumber(((1 + APRPerDay) ** 365 - 1).toFixed(2));
+
         return {
           validatorAddress,
           validatorMoniker,
@@ -189,6 +204,8 @@ export const useStakingData = () => {
           condition,
           status,
           jailed,
+          APR,
+          APY,
         };
       });
 

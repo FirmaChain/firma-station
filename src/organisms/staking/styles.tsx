@@ -50,6 +50,10 @@ export const Column = styled.div`
     text-align: center;
     flex: 1 1 400px;
   }
+  &:nth-child(7) {
+    text-align: center;
+    flex: 1 1 200px;
+  }
 `;
 
 export const ItemWrapper = styled(RowWrapper)`
@@ -60,6 +64,23 @@ export const ItemWrapper = styled(RowWrapper)`
 
 export const ItemColumn = styled(Column)`
   font-size: 14px;
+  &:nth-child(3) {
+  }
+`;
+
+export const APYTypo = styled.div`
+  color: white;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: right;
+`;
+
+export const APRTypo = styled.div`
+  color: #f4b017;
+  text-align: right;
+  font-size: 18px;
+  line-height: 20px;
 `;
 
 export const HeaderWrapper = styled(RowWrapper)`
