@@ -50,6 +50,14 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
     });
   };
 
+  const formatCash = (n: any) => {
+    if (n < 1e3) return n.toFixed(2);
+    if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(2) + "K";
+    if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(2) + "M";
+    if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(2) + "B";
+    if (n >= 1e12) return +(n / 1e12).toFixed(2) + "T";
+  };
+
   return (
     <ValidatorCardWrapper>
       {targetValidatorData && (
@@ -107,6 +115,15 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
                 Uptime <span style={{ fontSize: "12px" }}>(Last 100 blocks)</span>
               </StatusTitle>
               <StatusContent>{`${numeral(targetValidatorData.condition).format("0.00")} %`}</StatusContent>
+            </StatusItem>
+            <StatusItem>
+              <StatusTitle>
+                APR <span style={{ fontSize: "12px" }}>/APY</span>
+              </StatusTitle>
+              <StatusContent style={{ color: "#f4b017" }}>{`${formatCash(
+                targetValidatorData.APR * 100
+              )} %`}</StatusContent>
+              <StatusSubContent>{`${formatCash(targetValidatorData.APY * 100)} %`}</StatusSubContent>
             </StatusItem>
           </StatusWrapper>
         </>
