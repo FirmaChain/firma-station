@@ -12,10 +12,24 @@ interface IProps {
   proposalsState: IProposalsState;
 }
 
+interface IKeyValue {
+  [key: string]: string;
+}
+
+const STATUS_COLOR: IKeyValue = {
+  PROPOSAL_STATUS_DEPOSIT_PERIOD: "#2460FA",
+  PROPOSAL_STATUS_VOTING_PERIOD: "#E79720",
+  PROPOSAL_STATUS_PASSED: "#F17047",
+  PROPOSAL_STATUS_REJECTED: "#DA4B4B",
+  PROPOSAL_STATUS_FAILED: "#9438DC",
+  PROPOSAL_STATUS_INVALID: "#2BA891",
+};
+
 const Row = ({ data, index, style }: any) => {
   const getStatusTypo = (status: string) => {
     const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : "UNKNOWN";
-    return <StatusTypo>{typo}</StatusTypo>;
+    const color = STATUS_COLOR[status];
+    return <StatusTypo statusColor={color}>{typo}</StatusTypo>;
   };
 
   return (

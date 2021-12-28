@@ -76,13 +76,13 @@ export const DescriptionTypo = styled.div`
   margin-top: 14px;
 `;
 
-export const StatusTypo = styled.div`
+export const StatusTypo = styled.div<{ statusColor: string }>`
   display: inline-block;
   height: 40px;
   line-height: 40px;
   padding: 0px 10px;
   border-radius: 4px;
   margin-top: 10px;
-  color: #f17047;
-  background: rgba(241, 112, 71, 0.2);
+  color: ${(props) => props.statusColor && props.statusColor};
+  background: ${(props) => props.statusColor && props.statusColor}50;
 `;
