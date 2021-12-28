@@ -171,3 +171,55 @@ export const HeaderWrapper = styled(RowWrapper)`
 export const HeaderColumn = styled(Column)`
   color: ${({ theme }) => theme.colors.defaultGray3};
 `;
+
+export const ListWrapper2 = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+export const RowWrapper2 = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+`;
+
+export const Column2 = styled.div`
+  width: 100%;
+  & {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+`;
+
+export const HeaderWrapper2 = styled(RowWrapper2)`
+  height: 50px;
+  line-height: 50px;
+  border-bottom: 1px solid #444;
+`;
+
+export const HeaderColumn2 = styled(Column2)`
+  color: ${({ theme }) => theme.colors.defaultGray3};
+`;
+
+export const ItemWrapper2 = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  border-bottom: 1px solid #444;
+`;
+
+export const ItemColumn2 = styled(Column2)`
+  height: 50px;
+  line-height: 50px;
+  white-space: pre-line;
+
+  font-size: ${({ theme }) => theme.sizes.accountCardSize4};
+  & > a {
+    text-decoration: none !important;
+    font-weight: 300 !important;
+  }
+  & > a:hover {
+    background: none;
+    font-weight: 500 !important;
+  }
+`;

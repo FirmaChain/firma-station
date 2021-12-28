@@ -192,7 +192,7 @@ function useFirma() {
     const address = getAddressInternal();
 
     const balance = await firmaSDK.Bank.getBalance(address);
-    // const nftList = await firmaSDK.Nft.getNftItemAllFromAddress(address);
+    const nftList = await firmaSDK.Nft.getNftItemAllFromAddress(address);
     const tokenList = await firmaSDK.Bank.getTokenBalanceList(address);
     const tokenDataList = [];
 
@@ -206,6 +206,7 @@ function useFirma() {
       });
     }
 
+    userActions.handleUserNFTList(nftList.dataList);
     userActions.handleUserBalance(convertToFctString(balance));
     userActions.handleUserTokenList(tokenDataList);
   };
