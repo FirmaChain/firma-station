@@ -216,10 +216,10 @@ export const ChartCenterTypoWrapper = styled.div`
   position: absolute;
   top: 131px;
   left: 50%;
-  margin-left: -64px;
   display: flex;
   flex-direction: column;
   text-align: center;
+  transform: translate(-50%, 0);
 `;
 
 export const ChartCenterTypo = styled.div`
