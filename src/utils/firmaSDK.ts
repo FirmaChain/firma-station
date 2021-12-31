@@ -136,6 +136,17 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     return result;
   };
 
+  const getGasEstimationWithdrawAllRewardsFromAllValidator = async () => {
+    const wallet = await getWallet();
+    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress());
+    const gasEstimation = await firmaSDK.Distribution.getGasEstimationWithdrawAllRewardsFromAllValidator(
+      wallet,
+      delegationList
+    );
+
+    return gasEstimation;
+  };
+
   const vote = async (proposalId: number, votingType: number) => {
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.vote(wallet, proposalId, votingType);
@@ -227,6 +238,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     undelegate,
     withdrawAllRewards,
     withdrawAllRewardsFromAllValidator,
+    getGasEstimationWithdrawAllRewardsFromAllValidator,
     vote,
     deposit,
     submitParameterChangeProposal,

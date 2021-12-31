@@ -216,7 +216,7 @@ export const ChartWrapper = styled.div`
 
 export const ChartCenterTypoWrapper = styled.div`
   position: absolute;
-  top: 131px;
+  top: 118px;
   left: 50%;
   display: flex;
   flex-direction: column;

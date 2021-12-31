@@ -87,7 +87,7 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 };
 
 const DelegationCard = ({ totalStakingState }: IProps) => {
-  const { withdrawAllValidator } = useFirma();
+  const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
   const data = GetDelegatePieData(totalStakingState);
 
   const withdrawAllValidatorTx = (resolveTx: () => void, rejectTx: () => void) => {
@@ -101,13 +101,15 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
   };
 
   const withdrawAllValidatorAction = () => {
-    modalActions.handleModalData({
-      action: "Withdraw",
-      data: { amount: totalStakingState.stakingReward },
-      txAction: withdrawAllValidatorTx,
-    });
+    getGasEstimationWithdrawAllValidator().then((result) => {
+      modalActions.handleModalData({
+        action: "Withdraw",
+        data: { amount: totalStakingState.stakingReward, fees: result },
+        txAction: withdrawAllValidatorTx,
+      });
 
-    modalActions.handleModalConfirmTx(true);
+      modalActions.handleModalConfirmTx(true);
+    });
   };
 
   const onClickWithdrawAll = () => {

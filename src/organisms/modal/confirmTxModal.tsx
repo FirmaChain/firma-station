@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { isValidString } from "../../utils/common";
+import { convertToFctString, isValidString } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -43,7 +43,12 @@ const ConfirmTxModal = () => {
   useEffect(() => {
     setActionName(modalData.action);
     setAmount(modalData.data.amount);
-    setFee("0.2");
+
+    if (modalData.data.fees) {
+      setFee(convertToFctString(modalData.data.fees.toString()));
+    } else {
+      setFee("0.2");
+    }
   }, [modalData]);
 
   const closeConfirmTxModal = () => {
