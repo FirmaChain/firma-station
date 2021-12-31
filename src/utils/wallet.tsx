@@ -392,6 +392,12 @@ function useFirma() {
     checkVlidateResult(result);
   };
 
+  const withdrawAllValidator = async () => {
+    const result = await FirmaSDK.withdrawAllRewardsFromAllValidator();
+
+    checkVlidateResult(result);
+  };
+
   const vote = async (proposalId: number, votingType: number) => {
     const result = await FirmaSDK.vote(proposalId, votingType);
 
@@ -503,6 +509,7 @@ function useFirma() {
     redelegate,
     undelegate,
     withdraw,
+    withdrawAllValidator,
     submitParameterChangeProposal,
     submitCommunityPoolSpendProposal,
     submitTextProposal,

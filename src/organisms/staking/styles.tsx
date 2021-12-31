@@ -194,7 +194,7 @@ export const DelegationHeaderColumn = styled(DelegationColumn)`
 export const FlexWrapper = styled.div`
   width: 100%;
   height: calc(100% - 20px);
-  margin-top: 10px;
+  margin-top: 65px;
   margin-bottom: 10px;
   display: flex;
 `;
@@ -206,6 +206,7 @@ export const DelegationListWrapper = styled.div`
 
 export const ChartWrapper = styled.div`
   width: 50%;
+  height: 300px;
   display: flex;
   position: relative;
   align-items: center;
@@ -232,4 +233,31 @@ export const ChartCenterTypo = styled.div`
   &:nth-child(2) {
     font-size: ${({ theme }) => theme.sizes.stakingCardSize2};
   }
+`;
+
+export const RewardTypo = styled.div`
+  height: 35px;
+  line-height: 35px;
+  font-size: 12px;
+`;
+
+export const ButtonWrapper = styled.div`
+  position: absolute;
+  top: 25px;
+  right: 40px;
+  display: flex;
+  gap: 20px;
+`;
+
+export const Button = styled.div<{ isActive?: boolean }>`
+  height: 35px;
+  padding-left: 10px;
+  padding-right: 10px;
+  line-height: 35px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.mainblue};
+  border-radius: 4px;
+  ${(props) => (props.isActive ? `` : `background-color: #444;color:#777`)}
 `;

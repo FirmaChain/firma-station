@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
 import { ResponsivePie } from "@nivo/pie";
 
+import useFirma from "../../utils/wallet";
+import { modalActions } from "../../redux/action";
 import { ITotalStakingState } from "./hooks";
 
 import theme from "../../themes";
@@ -21,6 +23,8 @@ import {
   MonikerTypo,
   ChartCenterTypoWrapper,
   ChartCenterTypo,
+  ButtonWrapper,
+  Button,
 } from "./styles";
 import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
 
@@ -83,10 +87,37 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 };
 
 const DelegationCard = ({ totalStakingState }: IProps) => {
+  const { withdrawAllValidator } = useFirma();
   const data = GetDelegatePieData(totalStakingState);
 
+  const withdrawAllValidatorTx = (resolveTx: () => void, rejectTx: () => void) => {
+    withdrawAllValidator()
+      .then(() => {
+        resolveTx();
+      })
+      .catch(() => {
+        rejectTx();
+      });
+  };
+
+  const withdrawAllValidatorAction = () => {
+    modalActions.handleModalData({
+      action: "Withdraw",
+      data: { amount: totalStakingState.stakingReward },
+      txAction: withdrawAllValidatorTx,
+    });
+
+    modalActions.handleModalConfirmTx(true);
+  };
+
+  const onClickWithdrawAll = () => {
+    if (totalStakingState.stakingReward > 0) {
+      withdrawAllValidatorAction();
+    }
+  };
+
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height="350px">
+    <BlankCard bgColor={theme.colors.backgroundSideBar} height="390px">
       <FlexWrapper>
         <ChartWrapper>
           <ChartCenterTypoWrapper>
@@ -132,7 +163,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
                 </DelegationHeaderWrapper>
                 <List
                   width={width}
-                  height={height - 10 - 20}
+                  height={height - 10 - 20 - 70}
                   itemCount={totalStakingState.delegateList.length}
                   itemSize={45}
                   itemData={totalStakingState.delegateList}
@@ -144,6 +175,11 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
           </AutoSizer>
         </DelegationListWrapper>
       </FlexWrapper>
+      <ButtonWrapper>
+        <Button isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
+          Withdraw All
+        </Button>
+      </ButtonWrapper>
     </BlankCard>
   );
 };
