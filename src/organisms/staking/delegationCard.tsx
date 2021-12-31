@@ -117,7 +117,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
   };
 
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height="390px">
+    <BlankCard bgColor={theme.colors.backgroundSideBar} height="370px">
       <FlexWrapper>
         <ChartWrapper>
           <ChartCenterTypoWrapper>
@@ -163,7 +163,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
                 </DelegationHeaderWrapper>
                 <List
                   width={width}
-                  height={height - 10 - 20 - 70}
+                  height={height - 40}
                   itemCount={totalStakingState.delegateList.length}
                   itemSize={45}
                   itemData={totalStakingState.delegateList}

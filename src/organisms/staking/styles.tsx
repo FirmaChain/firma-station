@@ -194,19 +194,20 @@ export const DelegationHeaderColumn = styled(DelegationColumn)`
 export const FlexWrapper = styled.div`
   width: 100%;
   height: calc(100% - 20px);
-  margin-top: 65px;
+  margin-top: 60px;
   margin-bottom: 10px;
   display: flex;
 `;
 
 export const DelegationListWrapper = styled.div`
   width: calc(50% - 35px);
-  padding: 0 0 10px 15px;
+  height: calc(100% - 50px);
+  padding: 0 0 0 15px;
 `;
 
 export const ChartWrapper = styled.div`
   width: 50%;
-  height: 300px;
+  height: 280px;
   display: flex;
   position: relative;
   align-items: center;
