@@ -42,6 +42,7 @@
     "react": "^17.0.2",
     "react-app-env": "^1.2.3",
     "react-dom": "^17.0.2",
+    "react-idle-timer": "^4.6.4",
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",

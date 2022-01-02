@@ -19,12 +19,6 @@ function useFirma() {
     let wallet = null;
 
     try {
-      if (isTimeout(timeKey)) {
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }
-
       wallet = restoreWallet(timeKey, true);
     } catch (e) {}
 
@@ -56,16 +50,6 @@ function useFirma() {
     const newWallet = await firmaSDK.Wallet.newWallet();
 
     return newWallet.getMnemonic();
-  };
-
-  const isTimeout = (timeKey: string) => {
-    if (isLedger) return false;
-
-    if (isNaN(new Date(Number(timeKey)).getTime())) {
-      return true;
-    }
-
-    return timeKey === "" || new Date().getTime() - Number(timeKey) > 600000;
   };
 
   const storeWalletInternal = (
@@ -125,6 +109,17 @@ function useFirma() {
     }
   };
 
+  const isValidWallet = () => {
+    if (isInvalidWallet()) return true;
+
+    let wallet = null;
+    try {
+      wallet = restoreWallet(timeKey, true);
+    } catch (e) {}
+
+    return wallet !== null;
+  };
+
   const isCorrectPassword = (password: string) => {
     try {
       restoreWallet(password);
@@ -145,19 +140,6 @@ function useFirma() {
     } else {
       await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
     }
-  };
-
-  const isNeedLogin = () => {
-    if (isInvalidWallet()) return false;
-
-    let wallet = null;
-    try {
-      wallet = restoreWallet(timeKey, true);
-    } catch (e) {}
-
-    initWallet(wallet !== null);
-
-    return wallet === null;
   };
 
   const initWallet = (isInit: boolean) => {
@@ -197,13 +179,17 @@ function useFirma() {
     const tokenDataList = [];
 
     for (let token of tokenList) {
-      const tokenData = await firmaSDK.Token.getTokenData(token.denom);
-      tokenDataList.push({
-        denom: token.denom,
-        balance: convertToTokenString(token.amount, tokenData.decimal),
-        symbol: tokenData.symbol,
-        decimal: tokenData.decimal,
-      });
+      try {
+        const tokenData = await firmaSDK.Token.getTokenData(token.denom);
+        tokenDataList.push({
+          denom: token.denom,
+          balance: convertToTokenString(token.amount, tokenData.decimal),
+          symbol: tokenData.symbol,
+          decimal: tokenData.decimal,
+        });
+      } catch (e) {
+        continue;
+      }
     }
 
     userActions.handleUserNFTList([]);
@@ -497,11 +483,11 @@ function useFirma() {
     storeWalletFromPrivateKey,
     resetWallet,
     loginWallet,
+    initWallet,
     connectLedger,
     showAddressOnDevice,
     getDecryptPrivateKey,
     getDecryptMnemonic,
-    isNeedLogin,
     isCorrectPassword,
     setUserData,
     getTokenData,
@@ -523,7 +509,7 @@ function useFirma() {
     submitSoftwareUpgrade,
     deposit,
     vote,
-    isTimeout,
+    isValidWallet,
     isValidAddress,
   };
 }

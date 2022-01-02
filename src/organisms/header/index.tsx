@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
@@ -6,7 +6,7 @@ import { copyToClipboard } from "../../utils/common";
 import { FIRMACHAIN_CONFIG } from "../../config";
 import { modalActions } from "../../redux/action";
 import { rootState } from "../../redux/reducers";
-import { useAvataURL } from "./hooks";
+import { useAvataURL, useUserData } from "./hooks";
 import useFirma from "../../utils/wallet";
 
 import {
@@ -82,6 +82,8 @@ function Header() {
 
   const { avatarURL } = useAvataURL(address);
   const { showAddressOnDevice } = useFirma();
+
+  useUserData();
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);

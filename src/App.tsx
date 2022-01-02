@@ -1,12 +1,12 @@
-import { useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
-import { rootState } from "./redux/reducers";
-import { getRandomKey } from "./utils/keyBridge";
-import { walletActions } from "./redux/action";
-import useFirma from "./utils/wallet";
 import Routes from "./routes";
+
+import useFirma from "./utils/wallet";
+import { SessionTimer } from "./utils/sessionTimer";
+import { walletActions } from "./redux/action";
+import { getRandomKey } from "./utils/keyBridge";
 
 import Sidebar from "./organisms/sidebar";
 import Header from "./organisms/header";
@@ -18,17 +18,17 @@ import theme from "./themes";
 import { RightContainer, MainContainer } from "./styles/common";
 
 const App = () => {
-  const { isNeedLogin, isTimeout } = useFirma();
-  const { timeKey } = useSelector((state: rootState) => state.wallet);
+  const { isValidWallet, initWallet } = useFirma();
 
-  if (isTimeout(timeKey)) {
+  SessionTimer(() => {
     walletActions.handleWalletTimeKey(getRandomKey());
-  }
+    initWallet(false);
+  });
 
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        {isNeedLogin() && <LoginCard />}
+        {isValidWallet() === false && <LoginCard />}
         <MainContainer>
           <Sidebar />
           <RightContainer>

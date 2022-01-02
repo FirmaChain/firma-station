@@ -1,19 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 
-import useFirma from "../../utils/wallet";
 import { useAvataURLFromAddress } from "../../apollo/gqls";
+import useFirma from "../../utils/wallet";
 
-export const useAvataURL = (address: string) => {
-  const [avatarURL, setAvataURL] = useState("");
-  const [moniker, setMoniker] = useState(address);
-
+export const useUserData = () => {
   const { setUserData } = useFirma();
 
   useInterval(() => {
     setUserData()
       .then(() => {})
       .catch(() => {});
-  }, 2000);
+  }, 5000);
+};
+
+export const useAvataURL = (address: string) => {
+  const [avatarURL, setAvataURL] = useState("");
+  const [moniker, setMoniker] = useState(address);
 
   useAvataURLFromAddress({
     onCompleted: async (data) => {

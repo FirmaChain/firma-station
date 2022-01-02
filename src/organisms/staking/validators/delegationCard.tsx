@@ -29,29 +29,31 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
     modalActions.handleModalDelegate(true);
   };
 
-  const redelegateAction = async () => {
-    let delegationList = await getDelegationList();
+  const redelegateAction = () => {
+    getDelegationList()
+      .then((delegationList) => {
+        if (delegationList && delegationList.length === 0) {
+          enqueueSnackbar("There is no target that has been delegated", {
+            variant: "error",
+            autoHideDuration: 1000,
+          });
+          return;
+        }
 
-    if (delegationList && delegationList.length === 0) {
-      enqueueSnackbar("There is no target that has been delegated", {
-        variant: "error",
-        autoHideDuration: 1000,
-      });
-      return;
-    }
+        if (delegationList !== undefined) {
+          for (let i = 0; i < delegationList.length; i++) {
+            delegationList[i].label = getMoniker(delegationList[i].value);
+          }
+        }
 
-    if (delegationList !== undefined) {
-      for (let i = 0; i < delegationList.length; i++) {
-        delegationList[i].label = getMoniker(delegationList[i].value);
-      }
-    }
+        modalActions.handleModalData({
+          action: "Redelegate",
+          data: { targetValidator, delegationList },
+        });
 
-    modalActions.handleModalData({
-      action: "Redelegate",
-      data: { targetValidator, delegationList },
-    });
-
-    modalActions.handleModalRedelegate(true);
+        modalActions.handleModalRedelegate(true);
+      })
+      .catch((e) => {});
   };
 
   const getMoniker = (validatorAddress: string) => {
@@ -65,23 +67,25 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
     return moniker;
   };
 
-  const undelegateAction = async () => {
-    const delegation = await getDelegation(targetValidator);
+  const undelegateAction = () => {
+    getDelegation(targetValidator)
+      .then((delegation) => {
+        if (delegation === undefined) {
+          enqueueSnackbar("There is no target that has been delegated", {
+            variant: "error",
+            autoHideDuration: 1000,
+          });
+          return;
+        }
 
-    if (delegation === undefined) {
-      enqueueSnackbar("There is no target that has been delegated", {
-        variant: "error",
-        autoHideDuration: 1000,
-      });
-      return;
-    }
+        modalActions.handleModalData({
+          action: "Undelegate",
+          data: { targetValidator, delegation },
+        });
 
-    modalActions.handleModalData({
-      action: "Undelegate",
-      data: { targetValidator, delegation },
-    });
-
-    modalActions.handleModalUndelegate(true);
+        modalActions.handleModalUndelegate(true);
+      })
+      .catch((e) => {});
   };
 
   const withdrawAction = () => {

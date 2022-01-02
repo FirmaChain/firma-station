@@ -6,7 +6,6 @@ import { rootState } from "../redux/reducers";
 import { useApolloClient } from "@apollo/client";
 
 import { Home, Staking, Accounts, History, Validators, Government, Proposals, Community } from "../pages";
-import useFirma from "../utils/wallet";
 
 const routePublic = (path: string, component: React.FC) => ({
   path,
@@ -41,7 +40,6 @@ interface IProps {
 const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const { reFetchObservableQueries } = useApolloClient();
-  const { isNeedLogin } = useFirma();
   const { address } = useSelector((state: rootState) => state.wallet);
 
   const renderFunc = (props: any) => {
@@ -55,8 +53,6 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
         return <Redirect to={{ pathname: "/" }} />;
       }
     }
-
-    if (isNeedLogin()) return <Redirect to={{ pathname: "/" }} />;
 
     reFetchObservableQueries();
 

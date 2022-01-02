@@ -46,23 +46,27 @@ export const useTransferHistoryByAddress = () => {
       const denom = message.transaction.messages[0].amount[0].denom;
 
       if (Object.keys(tokenDataState).includes(denom) === false) {
-        const tokenData = await getTokenData(denom);
+        try {
+          const tokenData = await getTokenData(denom);
 
-        setTokenDatas((prev) => {
-          let newData = {
-            ...prev,
-          };
+          setTokenDatas((prev) => {
+            let newData = {
+              ...prev,
+            };
 
-          newData[denom] = {
-            denom: tokenData.denom,
-            symbol: tokenData.symbol,
-            decimal: convertNumber(tokenData.decimal),
-          };
+            newData[denom] = {
+              denom: tokenData.denom,
+              symbol: tokenData.symbol,
+              decimal: convertNumber(tokenData.decimal),
+            };
 
-          return {
-            ...newData,
-          };
-        });
+            return {
+              ...newData,
+            };
+          });
+        } catch (e) {
+          continue;
+        }
       }
     }
   };
