@@ -111,6 +111,7 @@ function useFirma() {
 
   const isValidWallet = () => {
     if (isInvalidWallet()) return true;
+    if (isLedger) return true;
 
     let wallet = null;
     try {
