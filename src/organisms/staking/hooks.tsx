@@ -141,73 +141,77 @@ export const useStakingData = () => {
       const mintCoinPerDay = (86400 / averageBlockTimePerDay) * MINT_COIN_PER_BLOCK;
       const mintCoinPerYear = mintCoinPerDay * 365;
 
-      const validatorsList = data.validator.map((validator: any) => {
-        const validatorAddress = validator.validatorInfo.operatorAddress;
+      const validatorsList = data.validator
+        .filter((validator: any) => {
+          return validator.validatorStatuses[0].jailed === false;
+        })
+        .map((validator: any) => {
+          const validatorAddress = validator.validatorInfo.operatorAddress;
 
-        let validatorMoniker = "";
-        let validatorAvatar = "";
-        let validatorDetail = "";
-        let validatorWebsite = "";
+          let validatorMoniker = "";
+          let validatorAvatar = "";
+          let validatorDetail = "";
+          let validatorWebsite = "";
 
-        if (isValid(validator.validator_descriptions[0])) {
-          validatorMoniker = validator.validator_descriptions[0].moniker;
-          validatorAvatar = validator.validator_descriptions[0].avatar_url;
-          validatorDetail = validator.validator_descriptions[0].details;
-          validatorWebsite = validator.validator_descriptions[0].website;
-        }
+          if (isValid(validator.validator_descriptions[0])) {
+            validatorMoniker = validator.validator_descriptions[0].moniker;
+            validatorAvatar = validator.validator_descriptions[0].avatar_url;
+            validatorDetail = validator.validator_descriptions[0].details;
+            validatorWebsite = validator.validator_descriptions[0].website;
+          }
 
-        const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
-        const votingPower = validator.validatorVotingPowers[0].votingPower;
-        const votingPowerPercent = numeral(convertNumber((votingPower / totalVotingPower) * 100)).format("0.00");
-        const totalDelegations = validator.delegations.reduce((prev: number, current: any) => {
-          return prev + convertNumber(current.amount.amount);
-        }, 0);
-        const [selfDelegation] = validator.delegations.filter((y: any) => {
-          return y.delegatorAddress === validator.validatorInfo.selfDelegateAddress;
+          const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
+          const votingPower = validator.validatorVotingPowers[0].votingPower;
+          const votingPowerPercent = numeral(convertNumber((votingPower / totalVotingPower) * 100)).format("0.00");
+          const totalDelegations = validator.delegations.reduce((prev: number, current: any) => {
+            return prev + convertNumber(current.amount.amount);
+          }, 0);
+          const [selfDelegation] = validator.delegations.filter((y: any) => {
+            return y.delegatorAddress === validator.validatorInfo.selfDelegateAddress;
+          });
+
+          let self = 0;
+          if (selfDelegation) self = convertNumber(selfDelegation.amount.amount);
+
+          const selfPercent = numeral(convertNumber((self / (totalDelegations || 1)) * 100)).format("0.00");
+          const delegations = validator.delegations.map((value: any) => {
+            return { address: value.delegatorAddress, amount: convertNumber(value.amount.amount) };
+          });
+          const missedBlockCounter = validator.validatorSigningInfos[0].missedBlocksCounter;
+          const commission = numeral(convertNumber(validator.validatorCommissions[0].commission * 100)).value();
+          const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
+          const status = validator.validatorStatuses[0].status;
+          const jailed = validator.validatorStatuses[0].jailed;
+
+          const rewardPerYear =
+            mintCoinPerYear *
+            (votingPower / totalVotingPower) *
+            0.98 *
+            (1 - validator.validatorCommissions[0].commission);
+          const APR = rewardPerYear / votingPower;
+          const APRPerDay = APR / 365;
+          const APY = convertNumber(((1 + APRPerDay) ** 365 - 1).toFixed(2));
+
+          return {
+            validatorAddress,
+            validatorMoniker,
+            validatorAvatar,
+            validatorDetail,
+            validatorWebsite,
+            selfDelegateAddress,
+            votingPower,
+            votingPowerPercent,
+            commission,
+            self,
+            selfPercent,
+            delegations,
+            condition,
+            status,
+            jailed,
+            APR,
+            APY,
+          };
         });
-
-        let self = 0;
-        if (selfDelegation) self = convertNumber(selfDelegation.amount.amount);
-
-        const selfPercent = numeral(convertNumber((self / (totalDelegations || 1)) * 100)).format("0.00");
-        const delegations = validator.delegations.map((value: any) => {
-          return { address: value.delegatorAddress, amount: convertNumber(value.amount.amount) };
-        });
-        const missedBlockCounter = validator.validatorSigningInfos[0].missedBlocksCounter;
-        const commission = numeral(convertNumber(validator.validatorCommissions[0].commission * 100)).value();
-        const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
-        const status = validator.validatorStatuses[0].status;
-        const jailed = validator.validatorStatuses[0].jailed;
-
-        const rewardPerYear =
-          mintCoinPerYear *
-          (votingPower / totalVotingPower) *
-          0.98 *
-          (1 - validator.validatorCommissions[0].commission);
-        const APR = rewardPerYear / votingPower;
-        const APRPerDay = APR / 365;
-        const APY = convertNumber(((1 + APRPerDay) ** 365 - 1).toFixed(2));
-
-        return {
-          validatorAddress,
-          validatorMoniker,
-          validatorAvatar,
-          validatorDetail,
-          validatorWebsite,
-          selfDelegateAddress,
-          votingPower,
-          votingPowerPercent,
-          commission,
-          self,
-          selfPercent,
-          delegations,
-          condition,
-          status,
-          jailed,
-          APR,
-          APY,
-        };
-      });
 
       const validators = validatorsList.sort((a: any, b: any) => b.votingPower - a.votingPower);
 
