@@ -225,8 +225,21 @@ export const NextButton = styled.div<{ active: boolean }>`
   ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
 `;
 
+export const DownloadButton = styled.div<{ active: boolean }>`
+  width: 120px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  margin: 10px auto 30px auto;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.mainblue};
+  border-radius: 4px;
+  cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+`;
+
 export const ExportButton = styled.div<{ active: boolean }>`
-  width: 110px;
+  width: 100px;
   height: 40px;
   line-height: 40px;
   text-align: center;

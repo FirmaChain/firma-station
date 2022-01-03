@@ -114,15 +114,15 @@ class FirmaPaperWallet {
     page.drawText(firstMnemonic.join(" "), {
       x: position.x,
       y: position.y,
-      size: 10,
+      size: 7,
       font: font,
       color: rgb(1, 1, 1),
     });
 
     page.drawText(secondMnemonic.join(" "), {
       x: position.x,
-      y: position.y - 14,
-      size: 10,
+      y: position.y - 11,
+      size: 7,
       font: font,
       color: rgb(1, 1, 1),
     });
@@ -132,7 +132,7 @@ class FirmaPaperWallet {
     page.drawText(content, {
       x: position.x,
       y: position.y,
-      size: 12,
+      size: 8,
       font: font,
       color: rgb(1, 1, 1),
     });

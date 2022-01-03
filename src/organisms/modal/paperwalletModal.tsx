@@ -15,7 +15,7 @@ import {
   ModalLabel,
   InputBoxDefault,
   ExportPasswordWrapper,
-  ExportButton,
+  DownloadButton,
 } from "./styles";
 
 const PaperwalletModal = () => {
@@ -85,14 +85,14 @@ const PaperwalletModal = () => {
             />
           </ExportPasswordWrapper>
 
-          <ExportButton
+          <DownloadButton
             active={password.length >= 8}
             onClick={() => {
               if (password.length >= 8) downloadWallet();
             }}
           >
             DOWNLOAD
-          </ExportButton>
+          </DownloadButton>
         </ModalContent>
       </ModalContainer>
     </Modal>
