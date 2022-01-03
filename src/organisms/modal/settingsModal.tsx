@@ -17,6 +17,7 @@ import {
   ImportPrivateKeyIcon,
   QrCodeIcon,
   LogoutIcon,
+  PictureAsPdfIcon,
 } from "./styles";
 
 const ExportWalletModal = () => {
@@ -25,6 +26,7 @@ const ExportWalletModal = () => {
   const { resetWallet } = useFirma();
 
   const menuList = [
+    { name: "Download\nPaper wallet", icon: PictureAsPdfIcon, modalAction: modalActions.handleModalPaperwallet },
     { name: "Export\nQR Code", icon: QrCodeIcon, modalAction: modalActions.handleModalQRCode },
     { name: "Export\nprivate key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportPrivatekey },
     { name: "Export\nmnemonic", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportMnemonic },
@@ -52,7 +54,7 @@ const ExportWalletModal = () => {
         <ModalTitle>Settings Wallet</ModalTitle>
         <MenuListWrap>
           {menuList.map((menu, index) => {
-            if (isLedger && (index === 1 || index === 2)) return null;
+            if (isLedger && (index === 0 || index === 2 || index === 3)) return null;
 
             return (
               <MenuItemWrap

@@ -2,6 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 import {
   HANDLE_MODAL_RESET,
   HANDLE_MODAL_DATA,
+  HANDLE_MODAL_PAPERWALLET,
   HANDLE_MODAL_QRCODE,
   HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
@@ -28,6 +29,7 @@ import {
 
 export interface IModalState {
   data: any;
+  paperwallet: boolean;
   qrcode: boolean;
   network: boolean;
   login: boolean;
@@ -54,6 +56,7 @@ export interface IModalState {
 
 const initialState: IModalState = {
   data: {},
+  paperwallet: false,
   qrcode: false,
   network: false,
   login: false,
@@ -86,6 +89,9 @@ export default createReducer(initialState, {
   },
   [HANDLE_MODAL_DATA]: (state: IModalState, { data }) => {
     state.data = data;
+  },
+  [HANDLE_MODAL_PAPERWALLET]: (state: IModalState, { isVisible }) => {
+    state.paperwallet = isVisible;
   },
   [HANDLE_MODAL_QRCODE]: (state: IModalState, { isVisible }) => {
     state.qrcode = isVisible;

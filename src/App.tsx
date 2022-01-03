@@ -26,6 +26,7 @@ const App = () => {
     if (isLedger === false) {
       walletActions.handleWalletTimeKey(getRandomKey());
       initWallet(false);
+      window.location.reload();
     }
   });
 

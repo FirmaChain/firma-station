@@ -1,3 +1,4 @@
+import PaperwalletModal from "./paperwalletModal";
 import QRCodeModal from "./qrcodeModal";
 import NetworksModal from "./networksModal";
 import LoginModal from "./loginModal";
@@ -22,6 +23,7 @@ import QueueTxModal from "./queueTxModal";
 import ResultTxModal from "./resultTxModal";
 
 export {
+  PaperwalletModal,
   QRCodeModal,
   NetworksModal,
   LoginModal,

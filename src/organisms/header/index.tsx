@@ -10,6 +10,7 @@ import { useAvataURL, useUserData } from "./hooks";
 import useFirma from "../../utils/wallet";
 
 import {
+  PaperwalletModal,
   QRCodeModal,
   NetworksModal,
   LoginModal,
@@ -56,6 +57,7 @@ function Header() {
   const { enqueueSnackbar } = useSnackbar();
   const { isInit, isLedger, address } = useSelector((state: rootState) => state.wallet);
   const {
+    paperwallet,
     qrcode,
     network,
     login,
@@ -145,6 +147,7 @@ function Header() {
         )}
       </HeaderRightWrapper>
 
+      {paperwallet && <PaperwalletModal />}
       {qrcode && <QRCodeModal />}
       {network && <NetworksModal />}
       {login && <LoginModal />}

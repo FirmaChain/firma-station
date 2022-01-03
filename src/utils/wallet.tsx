@@ -7,6 +7,7 @@ import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenSt
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
 import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from "./keyBridge";
+import { FirmaPaperWallet } from "../paperwallet";
 import { FirmaSDKInternal } from "./firmaSDK";
 
 import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
@@ -40,7 +41,7 @@ function useFirma() {
     const wallet = restoreWalletInternal(timeKey);
 
     if (wallet?.mnemonic !== undefined) return wallet.mnemonic;
-    else throw new Error("INVALID WALLET");
+    else return "";
   };
 
   const FirmaSDK = FirmaSDKInternal({ isLedger, getDecryptPrivateKey });
@@ -168,6 +169,26 @@ function useFirma() {
     if (isLedger === false) return;
 
     await FirmaSDK.showAddressOnDevice();
+  };
+
+  const downloadPaperWallet = async () => {
+    const privateKey = getDecryptPrivateKey();
+    const mnemonic = getDecryptMnemonic();
+
+    const paperWallet = new FirmaPaperWallet({
+      address,
+      privateKey,
+      mnemonic,
+    });
+
+    let base64URI = null;
+    if (mnemonic === "") {
+      base64URI = await paperWallet.privatekeyToDataURI();
+    } else {
+      base64URI = await paperWallet.mnemonicToDataURI();
+    }
+
+    return base64URI;
   };
 
   const setUserData = async () => {
@@ -512,6 +533,7 @@ function useFirma() {
     vote,
     isValidWallet,
     isValidAddress,
+    downloadPaperWallet,
   };
 }
 

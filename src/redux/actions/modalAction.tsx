@@ -1,6 +1,7 @@
 import {
   HANDLE_MODAL_RESET,
   HANDLE_MODAL_DATA,
+  HANDLE_MODAL_PAPERWALLET,
   HANDLE_MODAL_QRCODE,
   HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
@@ -28,6 +29,7 @@ import {
 export const handleModalReset = () => ({ type: HANDLE_MODAL_RESET });
 export const handleModalData = (data: any) => ({ type: HANDLE_MODAL_DATA, data });
 
+export const handleModalPaperwallet = (isVisible: boolean) => ({ type: HANDLE_MODAL_PAPERWALLET, isVisible });
 export const handleModalQRCode = (isVisible: boolean) => ({ type: HANDLE_MODAL_QRCODE, isVisible });
 export const handleModalNetwork = (isVisible: boolean) => ({ type: HANDLE_MODAL_NETWORK, isVisible });
 export const handleModalLogin = (isVisible: boolean) => ({ type: HANDLE_MODAL_LOGIN, isVisible });
