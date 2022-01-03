@@ -25,6 +25,7 @@ import {
   HANDLE_MODAL_CONFIRMTX,
   HANDLE_MODAL_QUEUETX,
   HANDLE_MODAL_RESULTTX,
+  HANDLE_MODAL_GASESTIMATION,
 } from "../types";
 
 export interface IModalState {
@@ -52,6 +53,7 @@ export interface IModalState {
   confirmTx: boolean;
   queueTx: boolean;
   resultTx: boolean;
+  gasEstimation: boolean;
 }
 
 const initialState: IModalState = {
@@ -79,6 +81,7 @@ const initialState: IModalState = {
   confirmTx: false,
   queueTx: false,
   resultTx: false,
+  gasEstimation: false,
 };
 
 export default createReducer(initialState, {
@@ -158,5 +161,8 @@ export default createReducer(initialState, {
   },
   [HANDLE_MODAL_RESULTTX]: (state: IModalState, { isVisible }) => {
     state.resultTx = isVisible;
+  },
+  [HANDLE_MODAL_GASESTIMATION]: (state: IModalState, { isVisible }) => {
+    state.gasEstimation = isVisible;
   },
 });

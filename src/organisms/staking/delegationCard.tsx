@@ -4,7 +4,10 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
 import { ResponsivePie } from "@nivo/pie";
+import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
+import { rootState } from "../../redux/reducers";
 import useFirma from "../../utils/wallet";
 import { modalActions } from "../../redux/action";
 import { ITotalStakingState } from "./hooks";
@@ -87,6 +90,8 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 };
 
 const DelegationCard = ({ totalStakingState }: IProps) => {
+  const { enqueueSnackbar } = useSnackbar();
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
   const data = GetDelegatePieData(totalStakingState);
 
@@ -101,15 +106,28 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
   };
 
   const withdrawAllValidatorAction = () => {
-    getGasEstimationWithdrawAllValidator().then((result) => {
-      modalActions.handleModalData({
-        action: "Withdraw",
-        data: { amount: totalStakingState.stakingReward, fees: result },
-        txAction: withdrawAllValidatorTx,
-      });
+    if (isLedger) modalActions.handleModalGasEstimation(true);
 
-      modalActions.handleModalConfirmTx(true);
-    });
+    getGasEstimationWithdrawAllValidator()
+      .then((result) => {
+        if (isLedger) modalActions.handleModalGasEstimation(false);
+        modalActions.handleModalData({
+          action: "Withdraw",
+          data: { amount: totalStakingState.stakingReward, fees: result },
+          txAction: withdrawAllValidatorTx,
+        });
+
+        modalActions.handleModalConfirmTx(true);
+      })
+      .catch((e) => {
+        if (isLedger) {
+          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+            variant: "error",
+            autoHideDuration: 3000,
+          });
+          modalActions.handleModalGasEstimation(false);
+        }
+      });
   };
 
   const onClickWithdrawAll = () => {

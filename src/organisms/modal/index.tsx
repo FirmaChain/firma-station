@@ -21,6 +21,7 @@ import SendModal from "./sendModal";
 import ConfirmTxModal from "./confirmTxModal";
 import QueueTxModal from "./queueTxModal";
 import ResultTxModal from "./resultTxModal";
+import GasEstimationModal from "./gasEstimationModal";
 
 export {
   PaperwalletModal,
@@ -46,4 +47,5 @@ export {
   ConfirmTxModal,
   QueueTxModal,
   ResultTxModal,
+  GasEstimationModal,
 };

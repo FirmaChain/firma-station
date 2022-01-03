@@ -24,6 +24,7 @@ import {
   HANDLE_MODAL_CONFIRMTX,
   HANDLE_MODAL_QUEUETX,
   HANDLE_MODAL_RESULTTX,
+  HANDLE_MODAL_GASESTIMATION,
 } from "../types";
 
 export const handleModalReset = () => ({ type: HANDLE_MODAL_RESET });
@@ -54,3 +55,4 @@ export const handleModalSend = (isVisible: boolean) => ({ type: HANDLE_MODAL_SEN
 export const handleModalConfirmTx = (isVisible: boolean) => ({ type: HANDLE_MODAL_CONFIRMTX, isVisible });
 export const handleModalQueueTx = (isVisible: boolean) => ({ type: HANDLE_MODAL_QUEUETX, isVisible });
 export const handleModalResultTx = (isVisible: boolean) => ({ type: HANDLE_MODAL_RESULTTX, isVisible });
+export const handleModalGasEstimation = (isVisible: boolean) => ({ type: HANDLE_MODAL_GASESTIMATION, isVisible });

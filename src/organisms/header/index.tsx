@@ -33,6 +33,7 @@ import {
   ConfirmTxModal,
   QueueTxModal,
   ResultTxModal,
+  GasEstimationModal,
 } from "../modal";
 
 import {
@@ -80,6 +81,7 @@ function Header() {
     confirmTx,
     queueTx,
     resultTx,
+    gasEstimation,
   } = useSelector((state: rootState) => state.modal);
 
   const { avatarURL } = useAvataURL(address);
@@ -170,6 +172,7 @@ function Header() {
       {confirmTx && <ConfirmTxModal />}
       {queueTx && <QueueTxModal />}
       {resultTx && <ResultTxModal />}
+      {gasEstimation && <GasEstimationModal />}
     </HeaderContainer>
   );
 }

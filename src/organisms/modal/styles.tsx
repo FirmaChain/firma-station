@@ -25,6 +25,7 @@ export const depositModalWidth = "500px";
 export const networksModalWidth = "500px";
 export const newProposalModalWidth = "500px";
 export const queueTxModalWidth = "500px";
+export const gasEstimationModalWidth = "500px";
 export const redelegateModalWidth = "500px";
 export const resultTxModalWidth = "500px";
 export const sendModalWidth = "500px";
@@ -51,6 +52,12 @@ export const ModalContent = styled.div`
   height: 100%;
   padding: 0 30px;
   font-size: ${({ theme }) => theme.sizes.modalLabel};
+`;
+
+export const ModalTypo = styled.div`
+  text-align: center;
+  line-height: 40px;
+  color: #eee;
 `;
 
 export const QRContent = styled.div`
