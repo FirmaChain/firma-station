@@ -52,6 +52,7 @@ import {
   ProfileImg,
   BarDiv,
   LedgerIconImg,
+  QrIconImg,
 } from "./styles";
 
 function Header() {
@@ -121,6 +122,10 @@ function Header() {
       });
   };
 
+  const onClickQR = () => {
+    modalActions.handleModalQRCode(true);
+  };
+
   return (
     <HeaderContainer>
       <HeaderLeftWrapper>
@@ -137,6 +142,7 @@ function Header() {
             <AddressTypo onClick={clipboard}>{address}</AddressTypo>
             <BarDiv />
             {isLedger && <LedgerIconImg onClick={onClickLedger} />}
+            <QrIconImg onClick={onClickQR} />
             <CopyIconImg onClick={clipboard} />
             <SettingIconImg onClick={onSettings} />
           </HeaderLeftWrapper>

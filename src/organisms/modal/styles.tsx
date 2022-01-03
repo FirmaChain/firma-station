@@ -11,7 +11,7 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 export const paperwalletModalWidth = "600px";
 export const qrCodeModalWidth = "500px";
 export const loginModalWidth = "900px";
-export const exportWalletModalWidth = "1100px";
+export const exportWalletModalWidth = "900px";
 export const newWalletModalWidth = "650px";
 export const confirmWalletModalWidth = "650px";
 export const recoverMnemonicModalWidth = "600px";
@@ -312,11 +312,11 @@ export const MenuListWrap = styled.div`
   white-space: pre-wrap;
 `;
 
-export const MenuItemWrap = styled.div`
+export const MenuItemWrap = styled.div<{ disabled?: boolean }>`
   height: 70px;
   padding: 30px 10px;
   flex: 1;
-  border: 1px solid #324ab8aa;
+  ${(props) => (props.disabled ? `border: 1px solid #444;& > div {color:#888}` : `border: 1px solid #324ab8aa;`)}
   border-radius: 4px;
   cursor: pointer;
 
@@ -488,6 +488,20 @@ export const ExportPasswordWrapper = styled.div`
   display: flex;
   width: 100%;
   margin-bottom: 30px;
+`;
+
+export const SamplePaperWallet = styled.div`
+  width: 411px;
+  height: 160px;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  background: url("${({ theme }) => theme.urls.paperwallet}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid #666;
+  border-radius: 4px;
 `;
 
 export {

@@ -125,6 +125,16 @@ export const CopyIconImg = styled(FileCopyIcon)`
   color: ${({ theme }) => theme.colors.realWhite};
 `;
 
+export const QrIconImg = styled(QrCodeIcon)`
+  margin: 0 0px 0 10px;
+  padding-top: 1px;
+  width: 20px !important;
+  height: 20px !important;
+  float: left;
+  cursor: pointer;
+  color: ${({ theme }) => theme.colors.realWhite};
+`;
+
 export const LedgerIconImg = styled.div`
   margin: 3px 2px 2px 10px;
   padding-top: 2px;
@@ -151,16 +161,6 @@ export const SettingWrap = styled.div`
   height: 24px;
   line-height: 24px;
   margin: 29px 10px;
-  color: white;
-`;
-
-export const QrIconImg = styled(QrCodeIcon)`
-  width: 21px !important;
-  height: 21px !important;
-  margin: 30px 8px 29px 8px;
-  float: left;
-  cursor: pointer;
-  background-size: contain;
   color: white;
 `;
 

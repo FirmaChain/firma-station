@@ -13,9 +13,11 @@ import {
   ModalTitle,
   ModalContent,
   ModalLabel,
+  ModalTypo,
   InputBoxDefault,
   ExportPasswordWrapper,
   DownloadButton,
+  SamplePaperWallet,
 } from "./styles";
 
 const PaperwalletModal = () => {
@@ -72,6 +74,7 @@ const PaperwalletModal = () => {
       <ModalContainer>
         <ModalTitle>Downalod Paper Wallet</ModalTitle>
         <ModalContent>
+          <SamplePaperWallet />
           <ModalLabel>Password</ModalLabel>
           <ExportPasswordWrapper>
             <InputBoxDefault

@@ -76,6 +76,7 @@ const urls = {
   medium: process.env.PUBLIC_URL + "/images/ic_medium.svg",
   profile: process.env.PUBLIC_URL + "/images/profile.png",
   ledger: process.env.PUBLIC_URL + "/images/ledger.png",
+  paperwallet: process.env.PUBLIC_URL + "/images/paperwallet.png",
 };
 
 const theme = {

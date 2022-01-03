@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
@@ -15,19 +16,18 @@ import {
   MenuTitleTypo,
   MenuIconImg,
   ImportPrivateKeyIcon,
-  QrCodeIcon,
   LogoutIcon,
   PictureAsPdfIcon,
 } from "./styles";
 
 const ExportWalletModal = () => {
   const exportWalletModalState = useSelector((state: rootState) => state.modal.settings);
+  const { enqueueSnackbar } = useSnackbar();
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { resetWallet } = useFirma();
 
   const menuList = [
     { name: "Download\nPaper wallet", icon: PictureAsPdfIcon, modalAction: modalActions.handleModalPaperwallet },
-    { name: "Export\nQR Code", icon: QrCodeIcon, modalAction: modalActions.handleModalQRCode },
     { name: "Export\nprivate key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportPrivatekey },
     { name: "Export\nmnemonic", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportMnemonic },
     { name: "Disconnect\nyour wallet", icon: LogoutIcon, modalAction: resetWallet },
@@ -54,13 +54,19 @@ const ExportWalletModal = () => {
         <ModalTitle>Settings Wallet</ModalTitle>
         <MenuListWrap>
           {menuList.map((menu, index) => {
-            if (isLedger && (index === 0 || index === 2 || index === 3)) return null;
-
             return (
               <MenuItemWrap
                 key={index}
+                disabled={isLedger && index !== 3}
                 onClick={() => {
-                  openSubModal(menu.modalAction);
+                  if (isLedger && index !== 3) {
+                    enqueueSnackbar("It's not available on Ledger", {
+                      variant: "error",
+                      autoHideDuration: 2000,
+                    });
+                  } else {
+                    openSubModal(menu.modalAction);
+                  }
                 }}
               >
                 <MenuIconImg>
