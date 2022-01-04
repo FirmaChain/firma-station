@@ -70,7 +70,6 @@ export const TitleTypo = styled.div`
 export const NextButton = styled.div`
   width: 300px;
   height: 40px;
-  font-family: "Chakra" !important;
   line-height: 40px;
   text-align: center;
   color: white;

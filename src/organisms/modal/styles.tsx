@@ -47,7 +47,7 @@ export const ModalTitle = styled.div`
   font-size: ${({ theme }) => theme.sizes.modalTitle};
   color: white;
   text-align: center;
-  font-family: "Chakra" !important;
+  font-family: "Chakra-Medium" !important;
 `;
 
 export const ModalSubTitle = styled.div`
@@ -241,7 +241,6 @@ export const CopyIcon = styled(FileCopyIcon)`
 export const NextButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-family: "Chakra" !important;
   font-size: 18px;
   line-height: 48px;
   text-align: center;
@@ -256,7 +255,6 @@ export const NextButton = styled.div<{ active: boolean }>`
 export const DownloadButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-family: "Chakra" !important;
   font-size: 18px;
   line-height: 48px;
   text-align: center;
@@ -271,7 +269,6 @@ export const DownloadButton = styled.div<{ active: boolean }>`
 export const ExportButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-family: "Chakra" !important;
   font-size: 18px;
   line-height: 48px;
   text-align: center;
@@ -286,7 +283,6 @@ export const ExportButton = styled.div<{ active: boolean }>`
 export const ChangeButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-family: "Chakra" !important;
   font-size: 18px;
   line-height: 48px;
   text-align: center;
@@ -301,7 +297,6 @@ export const ChangeButton = styled.div<{ active: boolean }>`
 export const CreateButton = styled.div<{ isActive: boolean }>`
   width: 220px;
   height: 48px;
-  font-family: "Chakra" !important;
   font-size: 18px;
   line-height: 48px;
   text-align: center;
@@ -316,7 +311,6 @@ export const CreateButton = styled.div<{ isActive: boolean }>`
 export const RecoverButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-family: "Chakra" !important;
   font-size: 18px;
   line-height: 48px;
   text-align: center;
@@ -331,7 +325,6 @@ export const RecoverButton = styled.div<{ active: boolean }>`
 export const ImportButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-family: "Chakra" !important;
   font-size: 18px;
   line-height: 48px;
   text-align: center;

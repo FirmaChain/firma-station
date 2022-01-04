@@ -58,7 +58,7 @@ const ConnectLedgerModal = () => {
           <ModalLabel></ModalLabel>
           <ModalInput></ModalInput>
           <NextButton active={true} onClick={() => onClickConnectLedger()}>
-            connect
+            Connect
           </NextButton>
         </ModalContent>
       </ModalContainer>

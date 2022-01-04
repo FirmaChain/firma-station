@@ -210,7 +210,7 @@ const SendModal = () => {
             }}
             active={isActiveButton}
           >
-            next
+            Next
           </NextButton>
         </ModalContent>
       </ModalContainer>

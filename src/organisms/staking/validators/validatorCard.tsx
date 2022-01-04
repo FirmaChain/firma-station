@@ -118,7 +118,7 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
             </StatusItem>
             <StatusItem>
               <StatusTitle>
-                APR <span style={{ fontSize: "12px" }}>/APY</span>
+                APR <span style={{ fontSize: "12px" }}>/ APY</span>
               </StatusTitle>
               <StatusContent style={{ color: "#f4b017" }}>{`${formatCash(
                 targetValidatorData.APR * 100

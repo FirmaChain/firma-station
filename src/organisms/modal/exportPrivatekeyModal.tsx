@@ -94,7 +94,7 @@ const ExportPrivatekeyModal = () => {
               if (password.length >= 8) exportWallet();
             }}
           >
-            export
+            Export
           </ExportButton>
           {privatekey !== "" && (
             <>

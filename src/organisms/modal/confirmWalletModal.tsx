@@ -175,7 +175,7 @@ const ConfirmWalletModal = () => {
             }}
             isActive={isActiveCreateButton}
           >
-            create
+            Create
           </CreateButton>
         </ModalContent>
       </ModalContainer>

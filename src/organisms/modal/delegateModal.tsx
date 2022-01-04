@@ -88,7 +88,7 @@ const DelegateModal = () => {
             }}
             active={isActiveButton}
           >
-            next
+            Next
           </NextButton>
         </ModalContent>
       </ModalContainer>

@@ -357,7 +357,7 @@ const NewProposalModal = () => {
             }}
             active={proposalType !== ""}
           >
-            next
+            Next
           </NextButton>
         </ModalContent>
       </ModalContainer>

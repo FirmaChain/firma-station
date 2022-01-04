@@ -101,7 +101,7 @@ const ExportMnemonicModal = () => {
               if (password.length >= 8) exportWallet();
             }}
           >
-            export
+            Export
           </ExportButton>
           {mnemonic !== "" && (
             <>

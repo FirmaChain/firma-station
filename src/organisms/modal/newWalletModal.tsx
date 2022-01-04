@@ -106,7 +106,7 @@ const NewWalletModal = () => {
           <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <NextButton onClick={() => openConfirmModal()} active={isValidString(password)}>
-            next
+            Next
           </NextButton>
         </ModalContent>
       </ModalContainer>

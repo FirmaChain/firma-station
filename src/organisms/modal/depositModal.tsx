@@ -88,7 +88,7 @@ const DepositModal = () => {
             }}
             active={isActiveButton}
           >
-            next
+            Next
           </NextButton>
         </ModalContent>
       </ModalContainer>

@@ -123,7 +123,7 @@ const ImportPrivatekeyModal = () => {
               if (isActiveImportButton && isValidString(password)) importWallet();
             }}
           >
-            import
+            Import
           </ImportButton>
         </ModalContent>
       </ModalContainer>

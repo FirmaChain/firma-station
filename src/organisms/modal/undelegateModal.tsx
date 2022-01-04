@@ -92,7 +92,7 @@ const UndelegateModal = () => {
             }}
             active={isActiveButton}
           >
-            next
+            Next
           </NextButton>
         </ModalContent>
       </ModalContainer>

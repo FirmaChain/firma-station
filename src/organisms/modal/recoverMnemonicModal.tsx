@@ -123,7 +123,7 @@ const RecoverMnemonicModal = () => {
               if (isActiveRecoverButton) recoverWallet();
             }}
           >
-            recover
+            Recover
           </RecoverButton>
         </ModalContent>
       </ModalContainer>

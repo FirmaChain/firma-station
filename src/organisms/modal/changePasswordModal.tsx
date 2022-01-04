@@ -68,7 +68,7 @@ const ChangePasswordModal = () => {
 
           <Password onChange={onChangeNewPassword} onKeyDown={onKeyDownPassword} />
 
-          <ChangeButton active={true}>change</ChangeButton>
+          <ChangeButton active={true}>Change</ChangeButton>
         </ModalContent>
       </ModalContainer>
     </Modal>

@@ -41,7 +41,6 @@ export const Button = styled.div<{ isActive?: boolean }>`
   width: 100px;
   height: 35px;
   line-height: 35px;
-  font-family: "Chakra" !important;
   color: white;
   text-align: center;
   cursor: pointer;

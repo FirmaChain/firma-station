@@ -15,7 +15,6 @@ export const Button = styled.div`
   width: 140px;
   height: 40px;
   line-height: 40px;
-  font-family: "Chakra" !important;
   text-align: center;
   color: white;
   background-color: ${({ theme }) => theme.colors.mainblue};

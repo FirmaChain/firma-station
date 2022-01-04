@@ -156,7 +156,7 @@ const RedelegateModal = () => {
             }}
             active={isActiveButton}
           >
-            next
+            Next
           </NextButton>
         </ModalContent>
       </ModalContainer>

@@ -82,7 +82,7 @@ const VotingModal = () => {
             }}
             active={votingType !== 0}
           >
-            vote
+            Vote
           </NextButton>
         </ModalContent>
       </ModalContainer>

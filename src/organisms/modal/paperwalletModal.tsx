@@ -101,7 +101,7 @@ const PaperwalletModal = () => {
               if (password.length >= 8) downloadWallet();
             }}
           >
-            download
+            Download
           </DownloadButton>
         </ModalContent>
       </ModalContainer>
