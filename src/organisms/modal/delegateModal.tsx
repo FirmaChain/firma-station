@@ -73,7 +73,7 @@ const DelegateModal = () => {
   return (
     <Modal visible={delegateModalState} closable={true} onClose={closeModal} width={delegateModalWidth}>
       <ModalContainer>
-        <ModalTitle>Delegate</ModalTitle>
+        <ModalTitle>DELEGATE</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>{balance} FCT</ModalInput>
@@ -88,7 +88,7 @@ const DelegateModal = () => {
             }}
             active={isActiveButton}
           >
-            NEXT
+            next
           </NextButton>
         </ModalContent>
       </ModalContainer>

@@ -30,8 +30,8 @@ const SelectWrapper = styled.div`
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: "#1B1C22",
-    border: "1px solid #324ab8aa",
+    backgroundColor: "#21212f",
+    border: "1px solid #696974",
   }),
   option: (provided: any) => ({
     ...provided,
@@ -157,7 +157,7 @@ const SendModal = () => {
   return (
     <Modal visible={sendModalState} closable={true} onClose={closeModal} width={sendModalWidth}>
       <ModalContainer>
-        <ModalTitle>Send</ModalTitle>
+        <ModalTitle>SEND</ModalTitle>
         <ModalContent>
           <ModalLabel>Symbol</ModalLabel>
           <SelectWrapper>
@@ -210,7 +210,7 @@ const SendModal = () => {
             }}
             active={isActiveButton}
           >
-            NEXT
+            next
           </NextButton>
         </ModalContent>
       </ModalContainer>

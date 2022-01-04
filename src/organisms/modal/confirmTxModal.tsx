@@ -93,7 +93,7 @@ const ConfirmTxModal = () => {
       width={confirmTxModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Confirm</ModalTitle>
+        <ModalTitle>CONFIRM</ModalTitle>
         <ModalContent>
           {isValidString(amount) && (
             <ConfirmWrapper>
@@ -125,7 +125,7 @@ const ConfirmTxModal = () => {
             }}
             active={isActive || isLedger}
           >
-            {isLedger === false ? actionName : `Sign Ledger`}
+            {isLedger === false ? actionName : `sign ledger`}
           </NextButton>
         </ModalContent>
       </ModalContainer>

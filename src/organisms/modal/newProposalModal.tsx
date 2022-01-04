@@ -39,8 +39,8 @@ const options = [
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: "#1B1C22",
-    border: "1px solid #324ab8aa",
+    backgroundColor: "#21212f",
+    border: "1px solid #696974",
   }),
   option: (provided: any) => ({
     ...provided,
@@ -248,7 +248,7 @@ const NewProposalModal = () => {
   return (
     <Modal visible={newProposalState} closable={true} onClose={closeModal} width={newProposalModalWidth}>
       <ModalContainer>
-        <ModalTitle>New Proposal</ModalTitle>
+        <ModalTitle>NEW PROPOSAL</ModalTitle>
         <ModalContent>
           <ModalLabel>Type</ModalLabel>
           <ModalInput>
@@ -357,7 +357,7 @@ const NewProposalModal = () => {
             }}
             active={proposalType !== ""}
           >
-            NEXT
+            next
           </NextButton>
         </ModalContent>
       </ModalContainer>

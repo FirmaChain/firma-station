@@ -44,8 +44,8 @@ export const InputBoxDefault = styled.input`
   margin: 0 auto 10px auto;
   padding: 0 10px;
   color: white;
-  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
-  border: 1px solid #324ab8aa;
+  background-color: #21212f;
+  border: 1px solid #696974;
   border-radius: 4px;
   ::-webkit-outer-spin-button,
   ::-webkit-inner-spin-button {

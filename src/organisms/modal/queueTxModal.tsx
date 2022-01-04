@@ -44,7 +44,7 @@ const QueueTxModal = () => {
   return (
     <Modal visible={queueTxModalState} closable={true} onClose={closeQueueTxModal} width={queueTxModalWidth}>
       <ModalContainer>
-        <ModalTitle>Broadcasting Transaction</ModalTitle>
+        <ModalTitle>BROADCASTING TRANSACTION</ModalTitle>
         <ModalContent>
           <LoadingWrapper>
             <ScaleLoader loading={true} color={"#3550DE80"} height={"50px"} width={"7px"} />

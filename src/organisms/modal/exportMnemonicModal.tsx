@@ -81,7 +81,7 @@ const ExportMnemonicModal = () => {
       width={exportMnemonicModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Export Mnemonic</ModalTitle>
+        <ModalTitle>EXPORT MNEMONIC</ModalTitle>
         <ModalContent>
           <ModalLabel>Password</ModalLabel>
           <ExportPasswordWrapper>
@@ -101,7 +101,7 @@ const ExportMnemonicModal = () => {
               if (password.length >= 8) exportWallet();
             }}
           >
-            EXPORT
+            export
           </ExportButton>
           {mnemonic !== "" && (
             <>

@@ -73,7 +73,7 @@ const DepositModal = () => {
   return (
     <Modal visible={depositModalState} closable={true} onClose={closeModal} width={depositModalWidth}>
       <ModalContainer>
-        <ModalTitle>Deposit</ModalTitle>
+        <ModalTitle>DEPOSIT</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>{balance} FCT</ModalInput>
@@ -88,7 +88,7 @@ const DepositModal = () => {
             }}
             active={isActiveButton}
           >
-            NEXT
+            next
           </NextButton>
         </ModalContent>
       </ModalContainer>

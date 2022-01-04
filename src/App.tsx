@@ -33,15 +33,18 @@ const App = () => {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        {isValidWallet() === false && <LoginCard />}
-        <MainContainer>
-          <Sidebar />
-          <RightContainer>
-            <Header />
-            <Routes />
-            <Footer />
-          </RightContainer>
-        </MainContainer>
+        {isValidWallet() === false ? (
+          <LoginCard />
+        ) : (
+          <MainContainer>
+            <Sidebar />
+            <RightContainer>
+              <Header />
+              <Routes />
+              <Footer />
+            </RightContainer>
+          </MainContainer>
+        )}
       </ThemeProvider>
     </BrowserRouter>
   );

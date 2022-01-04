@@ -51,7 +51,7 @@ const ExportWalletModal = () => {
       width={exportWalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Settings Wallet</ModalTitle>
+        <ModalTitle>SETTINGS WALLET</ModalTitle>
         <MenuListWrap>
           {menuList.map((menu, index) => {
             return (

@@ -39,7 +39,7 @@ const LoginModal = () => {
 
   return (
     <Modal visible={loginModalState} closable={true} onClose={closeLoginModal} width={loginModalWidth}>
-      <ModalTitle>Login Wallet</ModalTitle>
+      <ModalTitle>LOGIN WALLET</ModalTitle>
       <MenuListWrap>
         {menuList.map((menu, index) => {
           return (

@@ -17,7 +17,7 @@ const ResultTxModal = () => {
   return (
     <Modal visible={resultTxModalState} closable={true} onClose={closeResultTxModal} width={resultTxModalWidth}>
       <ModalContainer>
-        <ModalTitle>Result</ModalTitle>
+        <ModalTitle>RESULT</ModalTitle>
         <ModalContent>Success</ModalContent>
       </ModalContainer>
     </Modal>

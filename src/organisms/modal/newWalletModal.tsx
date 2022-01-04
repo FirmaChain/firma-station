@@ -93,7 +93,7 @@ const NewWalletModal = () => {
       width={newWalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>New Wallet</ModalTitle>
+        <ModalTitle>NEW WALLET</ModalTitle>
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>
@@ -106,7 +106,7 @@ const NewWalletModal = () => {
           <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <NextButton onClick={() => openConfirmModal()} active={isValidString(password)}>
-            NEXT
+            next
           </NextButton>
         </ModalContent>
       </ModalContainer>

@@ -18,7 +18,7 @@ const NetworksModal = () => {
   return (
     <Modal visible={networkModalState} closable={true} onClose={closeNetworksModal} width={networksModalWidth}>
       <ModalContainer>
-        <ModalTitle>Networks</ModalTitle>
+        <ModalTitle>NETWORKS</ModalTitle>
         <ModalContent>
           <NetworkList>
             {NETWORK_INFO_LIST.length > 0 &&

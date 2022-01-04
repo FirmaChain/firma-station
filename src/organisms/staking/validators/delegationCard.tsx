@@ -115,10 +115,10 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
         <Content>{`${numeral(targetStakingState.delegated).format("0,0.000")} ${DENOM}`}</Content>
         <Buttons>
           <Button onClick={delegateAction} isActive={true}>
-            Delegate
+            delegate
           </Button>
           <Button onClick={redelegateAction} isActive={true}>
-            Redelegate
+            redelegate
           </Button>
           <Button
             onClick={() => {
@@ -126,7 +126,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
             }}
             isActive={targetStakingState.delegated > 0}
           >
-            Undelegate
+            undelegate
           </Button>
         </Buttons>
       </InnerWrapper>
@@ -140,7 +140,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
             }}
             isActive={targetStakingState.stakingReward > 0}
           >
-            Withdraw
+            withdraw
           </Button>
         </Buttons>
       </InnerWrapper>

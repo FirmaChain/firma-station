@@ -174,3 +174,8 @@ body {
 body > #root > div {
   min-height: 100vh;
 }
+
+@font-face {
+  src: url("./styles/fonts/ChakraPetch-Medium.ttf") format("truetype");
+  font-family: "Chakra";
+}

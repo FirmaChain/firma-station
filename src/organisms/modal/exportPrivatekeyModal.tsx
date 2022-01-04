@@ -74,7 +74,7 @@ const ExportPrivatekeyModal = () => {
       width={exportPrivatekeyModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Export Private Key</ModalTitle>
+        <ModalTitle>EXPORT PRIVATE KEY</ModalTitle>
         <ModalContent>
           <ModalLabel>Password</ModalLabel>
           <ExportPasswordWrapper>
@@ -94,7 +94,7 @@ const ExportPrivatekeyModal = () => {
               if (password.length >= 8) exportWallet();
             }}
           >
-            EXPORT
+            export
           </ExportButton>
           {privatekey !== "" && (
             <>

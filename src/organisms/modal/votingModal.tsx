@@ -60,7 +60,7 @@ const VotingModal = () => {
   return (
     <Modal visible={votingModalState} closable={true} onClose={closeModal} width={votingModalWidth}>
       <ModalContainer>
-        <ModalTitle>Voting</ModalTitle>
+        <ModalTitle>VOTING</ModalTitle>
         <ModalContent>
           <VotingWrapper>
             <VotingItem active={votingType === 1} onClick={() => setVotingType(1)}>
@@ -82,7 +82,7 @@ const VotingModal = () => {
             }}
             active={votingType !== 0}
           >
-            Vote
+            vote
           </NextButton>
         </ModalContent>
       </ModalContainer>

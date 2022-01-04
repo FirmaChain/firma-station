@@ -108,7 +108,7 @@ const RecoverMnemonicModal = () => {
       width={recoverMnemonicModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Recover from Mnemonic</ModalTitle>
+        <ModalTitle>RECOVER FROM MNEMONIC</ModalTitle>
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>
@@ -123,7 +123,7 @@ const RecoverMnemonicModal = () => {
               if (isActiveRecoverButton) recoverWallet();
             }}
           >
-            RECOVER
+            recover
           </RecoverButton>
         </ModalContent>
       </ModalContainer>

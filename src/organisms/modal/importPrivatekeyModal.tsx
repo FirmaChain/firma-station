@@ -108,7 +108,7 @@ const ImportPrivatekeyModal = () => {
       width={importPrivatekeyModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Import Private Key</ModalTitle>
+        <ModalTitle>IMPORT PRIVATE KEY</ModalTitle>
         <ModalContent>
           <ModalLabel>Private Key</ModalLabel>
           <ModalInput>
@@ -123,7 +123,7 @@ const ImportPrivatekeyModal = () => {
               if (isActiveImportButton && isValidString(password)) importWallet();
             }}
           >
-            IMPORT
+            import
           </ImportButton>
         </ModalContent>
       </ModalContainer>

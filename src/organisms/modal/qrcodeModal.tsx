@@ -25,7 +25,7 @@ const QRCodeModal = () => {
       width={qrCodeModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Your Firma Wallet Address</ModalTitle>
+        <ModalTitle>YOUR WALLET ADDRESS</ModalTitle>
         <QRContent>
           <QRCodeWrap>
             <QRCode value={address}></QRCode>

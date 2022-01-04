@@ -30,7 +30,7 @@ export const ModalInner = styled.div<{ width: string }>`
   box-sizing: border-box;
   position: relative;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
-  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  background-color: #21212f;
   border-radius: 4px;
   width: ${(props) => (props.width ? props.width : "300px")};
   max-width: ${(props) => (props.width ? props.width : "300px")};
@@ -45,28 +45,28 @@ export const ModalInner = styled.div<{ width: string }>`
 export const PrevButton = styled.div`
   &:after {
     position: absolute;
-    top: 4px;
-    left: 4px;
+    top: 6px;
+    left: 8px;
     padding: 15px;
     display: inline-block;
     content: "〈 ";
     cursor: pointer;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 900;
-    color: ${({ theme }) => theme.colors.defaultWhite};
+    color: #888;
   }
 `;
 
 export const CloseButton = styled.div`
-  &:after {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    padding: 15px;
-    display: inline-block;
-    content: "X";
-    font-size: 22px;
-    cursor: pointer;
-    color: ${({ theme }) => theme.colors.defaultWhite};
-  }
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 0px;
+  right: 0px;
+  display: inline-block;
+  cursor: pointer;
+  margin: 20px;
+  color: ${({ theme }) => theme.colors.defaultWhite};
+  background-image: url("${({ theme }) => theme.urls.close}");
+  background-size: contain;
 `;

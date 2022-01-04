@@ -73,7 +73,7 @@ const UndelegateModal = () => {
   return (
     <Modal visible={undelegateModalState} closable={true} onClose={closeModal} width={undelegateModalWidth}>
       <ModalContainer>
-        <ModalTitle>Undelegate</ModalTitle>
+        <ModalTitle>UNDELEGATE</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>
@@ -92,7 +92,7 @@ const UndelegateModal = () => {
             }}
             active={isActiveButton}
           >
-            NEXT
+            next
           </NextButton>
         </ModalContent>
       </ModalContainer>

@@ -52,7 +52,7 @@ const ChangePasswordModal = () => {
       width={exportPrivatekeyModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Change Password</ModalTitle>
+        <ModalTitle>CHANGE PASSWORD</ModalTitle>
         <ModalContent>
           <ModalLabel>Current Password</ModalLabel>
           <ExportPasswordWrapper style={{ marginBottom: "50px" }}>
@@ -68,7 +68,7 @@ const ChangePasswordModal = () => {
 
           <Password onChange={onChangeNewPassword} onKeyDown={onKeyDownPassword} />
 
-          <ChangeButton active={true}>Change</ChangeButton>
+          <ChangeButton active={true}>change</ChangeButton>
         </ModalContent>
       </ModalContainer>
     </Modal>

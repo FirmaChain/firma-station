@@ -15,7 +15,7 @@ const SendCard = () => {
           modalActions.handleModalSend(true);
         }}
       >
-        SEND to Address
+        send to address
       </NextButton>
     </BlankCard>
   );

@@ -23,7 +23,7 @@ const GasEstimationModal = () => {
       width={gasEstimationModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Estimating the gas</ModalTitle>
+        <ModalTitle>ESTIMATING THE GAS</ModalTitle>
         <ModalContent>
           <LoadingWrapper>
             <ScaleLoader loading={true} color={"#3550DE80"} height={"50px"} width={"7px"} />

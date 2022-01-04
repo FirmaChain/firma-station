@@ -53,12 +53,12 @@ const ConnectLedgerModal = () => {
       width={connectLedgerModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Connect to Ledger</ModalTitle>
+        <ModalTitle>CONNECT TO LEDGER</ModalTitle>
         <ModalContent>
           <ModalLabel></ModalLabel>
           <ModalInput></ModalInput>
           <NextButton active={true} onClick={() => onClickConnectLedger()}>
-            Connect
+            connect
           </NextButton>
         </ModalContent>
       </ModalContainer>

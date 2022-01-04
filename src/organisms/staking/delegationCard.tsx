@@ -197,7 +197,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
       </FlexWrapper>
       <ButtonWrapper>
         <Button isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
-          Withdraw All
+          withdraw all
         </Button>
       </ButtonWrapper>
     </BlankCard>

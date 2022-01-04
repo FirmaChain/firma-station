@@ -150,7 +150,7 @@ const ConfirmWalletModal = () => {
       width={confirmWalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Confirm Wallet</ModalTitle>
+        <ModalTitle>CONFIRM WALLET</ModalTitle>
         <ModalContent>
           <InputContainer>
             {inputTarget.map((data, index) => (
@@ -175,7 +175,7 @@ const ConfirmWalletModal = () => {
             }}
             isActive={isActiveCreateButton}
           >
-            CREATE
+            create
           </CreateButton>
         </ModalContent>
       </ModalContainer>

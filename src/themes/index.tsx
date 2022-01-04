@@ -57,7 +57,7 @@ const sizes = {
   proposalCardSize1: "20px",
   proposalCardSize2: "16px",
   sideMenuDrawer: "230px",
-  modalTitle: "20px",
+  modalTitle: "28px",
   modalLabel: "16px",
   tokenomicsDetail: "16px",
   votingpowerSize1: "30px",
@@ -77,6 +77,8 @@ const urls = {
   profile: process.env.PUBLIC_URL + "/images/profile.png",
   ledger: process.env.PUBLIC_URL + "/images/ledger.png",
   paperwallet: process.env.PUBLIC_URL + "/images/paperwallet.png",
+  close: process.env.PUBLIC_URL + "/images/ic_close.png",
+  tooltip: process.env.PUBLIC_URL + "/images/ic_tooltip.png",
 };
 
 const theme = {

@@ -11,9 +11,12 @@ import {
   paperwalletModalWidth,
   ModalContainer,
   ModalTitle,
+  ModalSubTitle,
   ModalContent,
   ModalLabel,
+  ModalTypoWrapper,
   ModalTypo,
+  ModalTooltipIcon,
   InputBoxDefault,
   ExportPasswordWrapper,
   DownloadButton,
@@ -72,7 +75,8 @@ const PaperwalletModal = () => {
       width={paperwalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>Downalod Paper Wallet</ModalTitle>
+        <ModalTitle>DOWNLOAD PAPER WALLET</ModalTitle>
+        <ModalSubTitle>It provides a private key in a form that can be printed out.</ModalSubTitle>
         <ModalContent>
           <SamplePaperWallet />
           <ModalLabel>Password</ModalLabel>
@@ -87,14 +91,17 @@ const PaperwalletModal = () => {
               autoFocus={true}
             />
           </ExportPasswordWrapper>
-
+          <ModalTypoWrapper>
+            <ModalTooltipIcon />
+            <ModalTypo>Please download the file and store it separately in a safe place.</ModalTypo>
+          </ModalTypoWrapper>
           <DownloadButton
             active={password.length >= 8}
             onClick={() => {
               if (password.length >= 8) downloadWallet();
             }}
           >
-            DOWNLOAD
+            download
           </DownloadButton>
         </ModalContent>
       </ModalContainer>

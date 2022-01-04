@@ -8,7 +8,7 @@ import QrCodeIcon from "@mui/icons-material/QrCode";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
-export const paperwalletModalWidth = "600px";
+export const paperwalletModalWidth = "630px";
 export const qrCodeModalWidth = "500px";
 export const loginModalWidth = "900px";
 export const exportWalletModalWidth = "900px";
@@ -41,10 +41,20 @@ export const ModalContainer = styled.div`
 
 export const ModalTitle = styled.div`
   width: 100%;
-  height: 50px;
-  line-height: 50px;
+  margin-top: 10px;
+  height: 40px;
+  line-height: 40px;
   font-size: ${({ theme }) => theme.sizes.modalTitle};
+  color: white;
   text-align: center;
+  font-family: "Chakra" !important;
+`;
+
+export const ModalSubTitle = styled.div`
+  width: 100%;
+  color: #9090a2;
+  text-align: center;
+  font-size: 14px;
 `;
 
 export const ModalContent = styled.div`
@@ -54,10 +64,25 @@ export const ModalContent = styled.div`
   font-size: ${({ theme }) => theme.sizes.modalLabel};
 `;
 
+export const ModalTypoWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 export const ModalTypo = styled.div`
   text-align: center;
   line-height: 40px;
-  color: #eee;
+  color: #ffc542;
+`;
+
+export const ModalTooltipIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  margin-right: 7px;
+  background: url("${({ theme }) => theme.urls.tooltip}");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 export const QRContent = styled.div`
@@ -93,6 +118,7 @@ export const ModalLabel = styled.div`
   line-height: 30px;
   font-size: 16px;
   margin-bottom: 8px;
+  color: #9090a2;
 `;
 
 export const ModalInput = styled.div`
@@ -134,8 +160,8 @@ export const InputBoxDefault = styled.input<{ isInvalid?: boolean }>`
   margin: 0;
   padding: 0 10px;
   color: white;
-  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
-  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}` : "#324ab8aa")};
+  background-color: #21212f;
+  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}` : "#696974")};
   border-radius: 4px;
   ::-webkit-outer-spin-button,
   ::-webkit-inner-spin-button {
@@ -177,7 +203,7 @@ export const MnemonicTextArea = styled.textarea<{ ref: any }>`
   resize: none;
   font-size: 16px;
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  background-color: #21212f;
   color: white;
 `;
 
@@ -188,8 +214,8 @@ export const TextAreaDefault = styled.textarea`
   resize: none;
   font-size: 16px;
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
-  border: 1px solid #324ab8aa;
+  background-color: #21212f;
+  border: 1px solid #696974;
   color: white;
 `;
 
@@ -200,7 +226,7 @@ export const PrivatekeyTextArea = styled.textarea<{ ref: any }>`
   resize: none;
   font-size: 16px;
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  background-color: #21212f;
   color: white;
 `;
 
@@ -213,9 +239,11 @@ export const CopyIcon = styled(FileCopyIcon)`
 `;
 
 export const NextButton = styled.div<{ active: boolean }>`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
+  width: 220px;
+  height: 48px;
+  font-family: "Chakra" !important;
+  font-size: 18px;
+  line-height: 48px;
   text-align: center;
   margin: 10px auto 0 auto;
   color: white;
@@ -226,9 +254,11 @@ export const NextButton = styled.div<{ active: boolean }>`
 `;
 
 export const DownloadButton = styled.div<{ active: boolean }>`
-  width: 120px;
-  height: 40px;
-  line-height: 40px;
+  width: 220px;
+  height: 48px;
+  font-family: "Chakra" !important;
+  font-size: 18px;
+  line-height: 48px;
   text-align: center;
   margin: 10px auto 30px auto;
   color: white;
@@ -239,9 +269,11 @@ export const DownloadButton = styled.div<{ active: boolean }>`
 `;
 
 export const ExportButton = styled.div<{ active: boolean }>`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
+  width: 220px;
+  height: 48px;
+  font-family: "Chakra" !important;
+  font-size: 18px;
+  line-height: 48px;
   text-align: center;
   margin: 10px auto 30px auto;
   color: white;
@@ -252,9 +284,11 @@ export const ExportButton = styled.div<{ active: boolean }>`
 `;
 
 export const ChangeButton = styled.div<{ active: boolean }>`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
+  width: 220px;
+  height: 48px;
+  font-family: "Chakra" !important;
+  font-size: 18px;
+  line-height: 48px;
   text-align: center;
   margin: 10px auto 30px auto;
   color: white;
@@ -265,9 +299,11 @@ export const ChangeButton = styled.div<{ active: boolean }>`
 `;
 
 export const CreateButton = styled.div<{ isActive: boolean }>`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
+  width: 220px;
+  height: 48px;
+  font-family: "Chakra" !important;
+  font-size: 18px;
+  line-height: 48px;
   text-align: center;
   margin: 30px auto 0 auto;
   color: white;
@@ -278,9 +314,11 @@ export const CreateButton = styled.div<{ isActive: boolean }>`
 `;
 
 export const RecoverButton = styled.div<{ active: boolean }>`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
+  width: 220px;
+  height: 48px;
+  font-family: "Chakra" !important;
+  font-size: 18px;
+  line-height: 48px;
   text-align: center;
   margin: 30px auto 0 auto;
   color: white;
@@ -291,9 +329,11 @@ export const RecoverButton = styled.div<{ active: boolean }>`
 `;
 
 export const ImportButton = styled.div<{ active: boolean }>`
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
+  width: 220px;
+  height: 48px;
+  font-family: "Chakra" !important;
+  font-size: 18px;
+  line-height: 48px;
   text-align: center;
   margin: 30px auto 0 auto;
   color: white;
@@ -491,17 +531,17 @@ export const ExportPasswordWrapper = styled.div`
 `;
 
 export const SamplePaperWallet = styled.div`
-  width: 411px;
-  height: 160px;
+  width: 530px;
+  height: 250px;
   margin: auto;
   margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   background: url("${({ theme }) => theme.urls.paperwallet}");
+  background-color: #44444f;
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
-  border: 1px solid #666;
-  border-radius: 4px;
+  background-position: bottom;
+  border-radius: 8px;
 `;
 
 export {
