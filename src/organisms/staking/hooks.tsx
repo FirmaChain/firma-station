@@ -133,11 +133,11 @@ export const useStakingData = () => {
   useValidatorsQuery({
     onCompleted: (data) => {
       const averageBlockTimePerDay =
-        data.average_block_time_per_day.lengh > 0 ? data.average_block_time_per_day[0].average_time : 0;
+        data.average_block_time_per_day.length > 0 ? data.average_block_time_per_day[0].average_time : 0;
       const averageBlockTimePerHour =
-        data.average_block_time_per_hour.lengh > 0 ? data.average_block_time_per_hour[0].average_time : 0;
+        data.average_block_time_per_hour.length > 0 ? data.average_block_time_per_hour[0].average_time : 0;
       const averageBlockTimePerMinute =
-        data.average_block_time_per_minute.lengh > 0 ? data.average_block_time_per_minute[0].average_time : 0;
+        data.average_block_time_per_minute.length > 0 ? data.average_block_time_per_minute[0].average_time : 0;
 
       let averageBlockTime = 0;
       if (averageBlockTimePerDay !== 0) {
