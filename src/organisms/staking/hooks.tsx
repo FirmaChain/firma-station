@@ -132,9 +132,8 @@ export const useStakingData = () => {
 
   useValidatorsQuery({
     onCompleted: (data) => {
-      const averageBlockTimePerDay = data.average_block_time_per_day[0]
-        ? data.average_block_time_per_day[0].average_time
-        : 0;
+      const averageBlockTimePerDay =
+        data.average_block_time_per_hour.lengh > 0 ? data.average_block_time_per_hour[0].average_time : 0;
       // BLOCK_PER_MINT_COIN
       const slashingParams = data.slashingParams[0].params;
       const totalVotingPower = convertToFctNumber(data.stakingPool[0].bondedTokens);
