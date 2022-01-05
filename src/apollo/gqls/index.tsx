@@ -78,7 +78,7 @@ export const useValidatorsQuery = ({ onCompleted }: IQueryParam) => {
         stakingPool: staking_pool(limit: 1, order_by: { height: desc }) {
           bondedTokens: bonded_tokens
         }
-        average_block_time_per_day {
+        average_block_time_per_hour {
           average_time
         }
         validator {
