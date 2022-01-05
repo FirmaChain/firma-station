@@ -133,13 +133,27 @@ export const useStakingData = () => {
   useValidatorsQuery({
     onCompleted: (data) => {
       const averageBlockTimePerDay =
+        data.average_block_time_per_day.lengh > 0 ? data.average_block_time_per_day[0].average_time : 0;
+      const averageBlockTimePerHour =
         data.average_block_time_per_hour.lengh > 0 ? data.average_block_time_per_hour[0].average_time : 0;
+      const averageBlockTimePerMinute =
+        data.average_block_time_per_minute.lengh > 0 ? data.average_block_time_per_minute[0].average_time : 0;
+
+      let averageBlockTime = 0;
+      if (averageBlockTimePerDay !== 0) {
+        averageBlockTime = averageBlockTimePerDay;
+      } else if (averageBlockTimePerHour !== 0) {
+        averageBlockTime = averageBlockTimePerHour;
+      } else if (averageBlockTimePerMinute !== 0) {
+        averageBlockTime = averageBlockTimePerMinute;
+      }
+
       // BLOCK_PER_MINT_COIN
       const slashingParams = data.slashingParams[0].params;
       const totalVotingPower = convertToFctNumber(data.stakingPool[0].bondedTokens);
       const { signed_blocks_window } = slashingParams;
 
-      const mintCoinPerDay = (86400 / averageBlockTimePerDay) * MINT_COIN_PER_BLOCK;
+      const mintCoinPerDay = (86400 / averageBlockTime) * MINT_COIN_PER_BLOCK;
       const mintCoinPerYear = mintCoinPerDay * 365;
 
       const validatorsList = data.validator
