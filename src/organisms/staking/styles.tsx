@@ -70,14 +70,14 @@ export const ItemColumn = styled(Column)`
 
 export const APYTypo = styled.div`
   color: white;
-  margin-top: 4px;
   font-size: 12px;
-  line-height: 20px;
+  line-height: 14px;
   text-align: right;
 `;
 
 export const APRTypo = styled.div`
   color: #f4b017;
+  margin-top: 9px;
   text-align: right;
   font-size: 18px;
   line-height: 20px;

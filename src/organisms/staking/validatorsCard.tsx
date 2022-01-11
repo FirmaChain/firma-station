@@ -44,8 +44,9 @@ const CustomRow = ({ currentValidator, index }: any) => {
         <ItemColumn>{`${numeral(currentValidator.commission).format("0,0.00")} %`}</ItemColumn>
         <ItemColumn>{`${numeral(currentValidator.condition).format("0,0.00")} %`}</ItemColumn>
         <ItemColumn>
-          <APYTypo>{`${formatCash(currentValidator.APY * 100)} %`}</APYTypo>
           <APRTypo>{`${formatCash(currentValidator.APR * 100)} %`}</APRTypo>
+
+          <APYTypo>{`${formatCash(currentValidator.APY * 100)} %`}</APYTypo>
         </ItemColumn>
       </ItemWrapper>
     </Link>
@@ -63,7 +64,7 @@ const Validators = ({ validatorsState }: IProps) => {
           <HeaderColumn>Self Delegation</HeaderColumn>
           <HeaderColumn>Commission</HeaderColumn>
           <HeaderColumn>UpTime</HeaderColumn>
-          <HeaderColumn>APY/APR</HeaderColumn>
+          <HeaderColumn>APR / APY</HeaderColumn>
         </HeaderWrapper>
         {validatorsState.validators.map((value, index) => (
           <CustomRow key={index} currentValidator={value} index={index} />
