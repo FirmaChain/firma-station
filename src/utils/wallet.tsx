@@ -18,7 +18,6 @@ import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/ho
 function useFirma() {
   const { enqueueSnackbar } = useSnackbar();
   const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
-  const { vesting } = useSelector((state: rootState) => state.user);
 
   const restoreWalletInternal = (timeKey: string) => {
     let wallet = null;
