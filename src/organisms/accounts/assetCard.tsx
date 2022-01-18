@@ -22,7 +22,7 @@ const Row = ({ data, index, style }: any) => {
 };
 
 const AssetCard = () => {
-  const { balance, vesting, tokenList, nftList } = useSelector((state: rootState) => state.user);
+  const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
 
   const assetList = [
     ["FCT", balance],
