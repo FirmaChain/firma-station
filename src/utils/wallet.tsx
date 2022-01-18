@@ -69,6 +69,7 @@ function useFirma() {
       privateKey,
       address,
     };
+    getVestingAccount();
 
     walletActions.handleWalletAddress(address);
     walletActions.handleWalletLedger(false);
@@ -146,8 +147,6 @@ function useFirma() {
     } else {
       await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
     }
-
-    getVestingAccount();
   };
 
   const initWallet = (isInit: boolean) => {
