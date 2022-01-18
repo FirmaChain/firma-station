@@ -1,0 +1,83 @@
+import React from "react";
+import moment from "moment";
+import numeral from "numeral";
+import AutoSizer from "react-virtualized-auto-sizer";
+import { FixedSizeList as List } from "react-window";
+
+import { IVesting } from "../../redux/reducers/userReducer";
+
+import theme from "../../themes";
+import { BlankCard } from "../../components/card";
+import {
+  ListWrapper,
+  ItemWrapper3,
+  ItemColumn3,
+  HeaderWrapper3,
+  HeaderColumn3,
+  TitleTypo,
+  VestingTotal,
+} from "./styles";
+import { convertToFctString, convertToFctNumber } from "../../utils/common";
+
+interface IProps {
+  vestingState: IVesting;
+}
+
+const Row = ({ data, index, style }: any) => {
+  const currentVesting = data[index];
+
+  const getTimestamp = (timestamp: number) => {
+    return moment(timestamp * 1000).format("YYYY-MM-DD HH:mm:ss+00:00");
+  };
+
+  const getAmount = (amount: string) => {
+    return numeral(convertToFctString(amount)).format("0,0.000") + " FCT";
+  };
+
+  return (
+    <ItemWrapper3 style={style}>
+      <ItemColumn3>{index + 1}</ItemColumn3>
+      <ItemColumn3>{getAmount(currentVesting.amount)}</ItemColumn3>
+      <ItemColumn3>{getTimestamp(currentVesting.endTime)}</ItemColumn3>
+    </ItemWrapper3>
+  );
+};
+
+const VestingCard = ({ vestingState }: IProps) => {
+  const getVestingTotal = () => {
+    return `( ${numeral(
+      convertToFctString((vestingState.totalVesting - vestingState.expiredVesting).toString())
+    ).format("0,0.000")} / ${numeral(convertToFctNumber(vestingState.totalVesting)).format("0,0.000")} )`;
+  };
+
+  return (
+    <BlankCard bgColor={theme.colors.backgroundSideBar}>
+      <TitleTypo>Account Vesting</TitleTypo>
+      <VestingTotal>{getVestingTotal()}</VestingTotal>
+      <ListWrapper>
+        <AutoSizer>
+          {({ height, width }) => (
+            <>
+              <HeaderWrapper3 style={{ width }}>
+                <HeaderColumn3>No</HeaderColumn3>
+                <HeaderColumn3>Amount</HeaderColumn3>
+                <HeaderColumn3>Vesting End Date</HeaderColumn3>
+              </HeaderWrapper3>
+              <List
+                width={width}
+                height={height - 90}
+                itemCount={vestingState.vestingPeriod.length}
+                itemSize={40}
+                itemData={vestingState.vestingPeriod}
+              >
+                {(props) => Row({ ...props })}
+              </List>
+            </>
+          )}
+        </AutoSizer>
+      </ListWrapper>
+    </BlankCard>
+  );
+};
+
+export default React.memo(VestingCard);

@@ -10,7 +10,7 @@ import theme from "../../themes";
 import { BlankCard } from "../../components/card";
 import { AddressTitleTypo, ListWrapper2, HeaderWrapper2, HeaderColumn2, ItemWrapper2, ItemColumn2 } from "./styles";
 
-const Row = ({ data, index, style, tokenDataState }: any) => {
+const Row = ({ data, index, style }: any) => {
   const currentAsset = data[index];
 
   return (
@@ -22,7 +22,7 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
 };
 
 const AssetCard = () => {
-  const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
+  const { balance, vesting, tokenList, nftList } = useSelector((state: rootState) => state.user);
 
   const assetList = [
     ["FCT", balance],

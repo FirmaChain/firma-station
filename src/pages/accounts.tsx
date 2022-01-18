@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { rootState } from "../redux/reducers";
 import { useTransferHistoryByAddress } from "../organisms/accounts/hooks";
 
-import { AccountCard, AssetCard, SendCard, TransferHistoryCard } from "../organisms/accounts";
+import { AccountCard, AssetCard, SendCard, TransferHistoryCard, VestingCard } from "../organisms/accounts";
 import {
   ContentContainer,
   CardWrap,
@@ -16,7 +16,9 @@ import {
 
 const Accounts = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
+  const { vesting } = useSelector((state: rootState) => state.user);
   const { transferHistoryByAddressState, tokenDataState } = useTransferHistoryByAddress();
+
   return (
     <ContentContainer>
       <CardWrap>
@@ -31,6 +33,7 @@ const Accounts = () => {
             <SendCard />
           </RightCardTopWrap>
           <RightCardBottomWrap>
+            {vesting.vestingPeriod.length && <VestingCard vestingState={vesting} />}
             {transferHistoryByAddressState && (
               <TransferHistoryCard
                 transferHistoryByAddressState={transferHistoryByAddressState}

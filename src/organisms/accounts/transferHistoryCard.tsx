@@ -78,7 +78,7 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
 
 const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState }: IProps) => {
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height={"100%"}>
+    <BlankCard bgColor={theme.colors.backgroundSideBar}>
       <TitleTypo>Send History</TitleTypo>
       <ListWrapper>
         <AutoSizer>

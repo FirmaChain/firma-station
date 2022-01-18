@@ -52,7 +52,7 @@ export const Column = styled.div`
   }
   &:nth-child(7) {
     text-align: center;
-    flex: 1 1 200px;
+    flex: 1 1 230px;
   }
 `;
 

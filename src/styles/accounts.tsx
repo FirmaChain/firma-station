@@ -47,4 +47,10 @@ export const RightCardTopWrap = styled.div`
 
 export const RightCardBottomWrap = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  & > div {
+    flex: 1;
+  }
 `;

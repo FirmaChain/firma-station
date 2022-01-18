@@ -1,8 +1,11 @@
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { FirmaUtil } from "@firmachain/firma-js";
+import axios from "axios";
+import moment from "moment";
 
 import { Wallet } from "./types";
+import { LCD_REST_URI } from "../config";
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from "./common";
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
@@ -15,6 +18,7 @@ import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/ho
 function useFirma() {
   const { enqueueSnackbar } = useSnackbar();
   const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
+  const { vesting } = useSelector((state: rootState) => state.user);
 
   const restoreWalletInternal = (timeKey: string) => {
     let wallet = null;
@@ -142,6 +146,8 @@ function useFirma() {
     } else {
       await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
     }
+
+    getVestingAccount();
   };
 
   const initWallet = (isInit: boolean) => {
@@ -214,9 +220,66 @@ function useFirma() {
       }
     }
 
+    const vestingData: any = await getVestingAccount();
+
     userActions.handleUserNFTList([]);
-    userActions.handleUserBalance(convertToFctString(balance));
+    userActions.handleUserBalance(
+      convertToFctString((convertNumber(balance) - (vestingData.totalVesting - vestingData.expiredVesting)).toString())
+    );
     userActions.handleUserTokenList(tokenDataList);
+  };
+
+  const getVestingAccount = async () => {
+    console.log("GET VESTING");
+
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`${LCD_REST_URI}/cosmos/auth/v1beta1/accounts/${address}`)
+        .then((res) => {
+          if (res.data.account) {
+            if (res.data.account["@type"] === "/cosmos.vesting.v1beta1.PeriodicVestingAccount") {
+              let endTimeAcc = res.data.account.start_time * 1;
+              let expiredVesting = 0;
+
+              const vestingPeriod = res.data.account.vesting_periods
+                .map((value: any) => {
+                  endTimeAcc += value.length * 1;
+                  return {
+                    endTime: endTimeAcc,
+                    amount: value.amount[0].amount * 1,
+                  };
+                })
+                .filter((value: any) => {
+                  if (value.endTime * 1 > moment().unix()) {
+                    return true;
+                  } else {
+                    expiredVesting += value.amount * 1;
+                    return false;
+                  }
+                });
+
+              const totalVesting = res.data.account.base_vesting_account.original_vesting[0].amount * 1;
+
+              resolve({ totalVesting, expiredVesting });
+
+              userActions.handleUserVesting({
+                totalVesting,
+                expiredVesting,
+                vestingPeriod,
+              });
+            }
+          }
+        })
+        .catch((e) => {
+          userActions.handleUserVesting({
+            totalVesting: 0,
+            expiredVesting: 0,
+            vestingPeriod: [],
+          });
+
+          resolve({ totalVesting: 0, expiredVesting: 0 });
+        });
+    });
   };
 
   const getTokenData = async (denom: string) => {
@@ -272,7 +335,7 @@ function useFirma() {
         });
     });
 
-    const available = convertToFctNumber(convertNumber(balance));
+    const available = convertToFctNumber(convertNumber(balance) - (vesting.totalVesting - vesting.expiredVesting));
     const delegated = convertToFctNumber(
       delegationBalanceList.length > 0
         ? delegationBalanceList.reduce((prev: string, current: string) => {
@@ -512,6 +575,7 @@ function useFirma() {
     getDecryptMnemonic,
     isCorrectPassword,
     setUserData,
+    getVestingAccount,
     getTokenData,
     getStaking,
     getStakingFromValidator,

@@ -29,6 +29,7 @@ export const Content = styled.div`
   text-align: left;
   height: 35px;
   line-height: 35px;
+  color: white;
 `;
 
 export const Buttons = styled.div`

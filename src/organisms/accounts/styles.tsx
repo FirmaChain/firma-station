@@ -163,8 +163,8 @@ export const QrImage = styled.img`
 `;
 
 export const HeaderWrapper = styled(RowWrapper)`
-  height: 50px;
-  line-height: 50px;
+  height: 35px;
+  line-height: 35px;
   border-bottom: 1px solid #444;
 `;
 
@@ -222,4 +222,72 @@ export const ItemColumn2 = styled(Column2)`
     background: none;
     font-weight: 500 !important;
   }
+`;
+
+export const ListWrapper3 = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+export const RowWrapper3 = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+`;
+
+export const Column3 = styled.div`
+  width: 100%;
+  & {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+  &:nth-child(1) {
+    flex: 1 1 200px;
+  }
+  &:nth-child(2) {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+  &:nth-child(3) {
+    flex: 1 1 600px;
+  }
+`;
+
+export const HeaderWrapper3 = styled(RowWrapper3)`
+  height: 35px;
+  line-height: 35px;
+  border-bottom: 1px solid #444;
+`;
+
+export const HeaderColumn3 = styled(Column3)`
+  color: ${({ theme }) => theme.colors.defaultGray3};
+`;
+
+export const ItemWrapper3 = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: nowrap;
+  border-bottom: 1px solid #444;
+`;
+
+export const ItemColumn3 = styled(Column3)`
+  height: 40px;
+  line-height: 40px;
+  white-space: pre-line;
+
+  font-size: ${({ theme }) => theme.sizes.accountCardSize4};
+  & > a {
+    text-decoration: none !important;
+    font-weight: 300 !important;
+  }
+  & > a:hover {
+    background: none;
+    font-weight: 500 !important;
+  }
+`;
+
+export const VestingTotal = styled.div`
+  position: absolute;
+  top: 24px;
+  right: 20px;
 `;

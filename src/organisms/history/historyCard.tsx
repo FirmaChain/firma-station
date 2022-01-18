@@ -18,7 +18,7 @@ const Row = ({ data, index, style }: any) => {
 
   const getMessageType = (type: string) => {
     const messageTypeArray = type.replace("Msg", "").split(".");
-    return messageTypeArray.pop();
+    return <span style={{ color: "white" }}>{messageTypeArray.pop()}</span>;
   };
 
   const getHash = (hash: string) => {

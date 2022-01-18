@@ -56,7 +56,7 @@ const sizes = {
   votingCardSize3: "20px",
   proposalCardSize1: "20px",
   proposalCardSize2: "16px",
-  sideMenuDrawer: "230px",
+  sideMenuDrawer: "210px",
   modalTitle: "24px",
   modalLabel: "16px",
   tokenomicsDetail: "16px",
