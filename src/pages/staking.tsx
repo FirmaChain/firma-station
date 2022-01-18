@@ -16,7 +16,7 @@ const Staking = () => {
       {isInit && totalStakingState && (
         <>
           <StakingCard totalStakingState={totalStakingState} />
-          <DelegationCard totalStakingState={totalStakingState} />
+          {totalStakingState.delegateList.length > 0 && <DelegationCard totalStakingState={totalStakingState} />}
         </>
       )}
 
