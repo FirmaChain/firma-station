@@ -33,7 +33,7 @@ const Accounts = () => {
             <SendCard />
           </RightCardTopWrap>
           <RightCardBottomWrap>
-            {vesting && vesting.vestingPeriod && <VestingCard vestingState={vesting} />}
+            {vesting && vesting.vestingPeriod.length > 0 && <VestingCard vestingState={vesting} />}
             {transferHistoryByAddressState && (
               <TransferHistoryCard
                 transferHistoryByAddressState={transferHistoryByAddressState}
