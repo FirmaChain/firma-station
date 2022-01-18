@@ -334,7 +334,7 @@ function useFirma() {
         });
     });
 
-    const available = convertToFctNumber(convertNumber(balance) - (vesting.totalVesting - vesting.expiredVesting));
+    const available = convertToFctNumber(convertNumber(balance));
     const delegated = convertToFctNumber(
       delegationBalanceList.length > 0
         ? delegationBalanceList.reduce((prev: string, current: string) => {

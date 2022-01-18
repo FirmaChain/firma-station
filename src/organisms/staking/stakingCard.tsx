@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import numeral from "numeral";
 
 import { isValid } from "../../utils/common";
+import { rootState } from "../../redux/reducers";
 import { ITotalStakingState } from "./hooks";
 
 import theme from "../../themes";
@@ -13,6 +15,8 @@ interface IProps {
 }
 
 const StakingCard = ({ totalStakingState }: IProps) => {
+  const { vesting } = useSelector((state: rootState) => state.user);
+
   const [stakingData, setStakingData] = useState([
     { name: "Available", value: 0, color: theme.colors.mainblue },
     { name: "Delegated", value: 0, color: theme.colors.mainpurple },
@@ -36,7 +40,12 @@ const StakingCard = ({ totalStakingState }: IProps) => {
       <StakingWrap>
         {stakingData.map((data, index) => (
           <StakingTextWrap key={index}>
-            <StakingTitleTypo>{data.name}</StakingTitleTypo>
+            <StakingTitleTypo>
+              {data.name}{" "}
+              {index === 0 && vesting.vestingPeriod.length > 0 && (
+                <span style={{ fontSize: "12px" }}>( + vesting )</span>
+              )}
+            </StakingTitleTypo>
             <StakingContentTypo>{numeral(data.value).format("0,0.000")} FCT</StakingContentTypo>
           </StakingTextWrap>
         ))}
