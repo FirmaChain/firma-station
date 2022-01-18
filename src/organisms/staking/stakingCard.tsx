@@ -43,7 +43,7 @@ const StakingCard = ({ totalStakingState }: IProps) => {
             <StakingTitleTypo>
               {data.name}{" "}
               {index === 0 && vesting.vestingPeriod.length > 0 && (
-                <span style={{ fontSize: "12px" }}>( + vesting )</span>
+                <span style={{ fontSize: "12px", color: "#f4b017" }}>( + Vesting )</span>
               )}
             </StakingTitleTypo>
             <StakingContentTypo>{numeral(data.value).format("0,0.000")} FCT</StakingContentTypo>
