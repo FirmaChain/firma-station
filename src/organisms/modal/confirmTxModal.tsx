@@ -21,6 +21,7 @@ import {
   InputBoxDefault,
   PasswordWrapper,
 } from "./styles";
+import { FIRMACHAIN_CONFIG } from "../../config";
 
 const DENOM = "FCT";
 
@@ -47,7 +48,7 @@ const ConfirmTxModal = () => {
     if (modalData.data.fees) {
       setFee(convertToFctString(modalData.data.fees.toString()));
     } else {
-      setFee("0.2");
+      setFee(convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString()));
     }
   }, [modalData]);
 

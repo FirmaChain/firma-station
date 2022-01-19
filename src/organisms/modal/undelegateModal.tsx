@@ -41,10 +41,19 @@ const UndelegateModal = () => {
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
-    const amount = value.replace(/[^0-9.]/g, "");
+
+    let amount: string = value.replace(/[^0-9.]/g, "");
+
+    const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
+
+    if (!pattern.test(amount)) {
+      amount = convertNumber(amount).toFixed(6);
+    }
 
     setAmount(amount);
-    setActiveButton(amount > 0 && amount <= convertToFctNumber(modalData.data.delegation.amount));
+    setActiveButton(
+      convertNumber(amount) > 0 && convertNumber(amount) <= convertToFctNumber(modalData.data.delegation.amount)
+    );
   };
 
   const undelegateTx = (resolveTx: () => void, rejectTx: () => void) => {

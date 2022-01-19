@@ -22,6 +22,7 @@ import {
 } from "./styles";
 
 import styled from "styled-components";
+import { FIRMACHAIN_CONFIG } from "../../config";
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -82,10 +83,17 @@ const RedelegateModal = () => {
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
-    const amount = value.replace(/[^0-9.]/g, "");
+
+    let amount: string = value.replace(/[^0-9.]/g, "");
+
+    const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
+
+    if (!pattern.test(amount)) {
+      amount = convertNumber(amount).toFixed(6);
+    }
 
     setAmount(amount);
-    setActiveButton(amount > 0 && amount <= sourceAmount);
+    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= sourceAmount);
   };
 
   const redelegateTx = (resolveTx: () => void, rejectTx: () => void) => {
@@ -111,7 +119,7 @@ const RedelegateModal = () => {
   const nextStep = () => {
     modalActions.handleModalData({
       action: "Redelegate",
-      data: { amount },
+      data: { amount, fees: FIRMACHAIN_CONFIG.defaultFee * 1.5 },
       prevModalAction: modalActions.handleModalRedelegate,
       txAction: redelegateTx,
     });

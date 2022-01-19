@@ -18,9 +18,10 @@ import {
   NextButton,
   InputBoxDefault,
 } from "./styles";
-import { convertNumber } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
 
 import styled from "styled-components";
+import { FIRMACHAIN_CONFIG } from "../../config";
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -85,7 +86,18 @@ const SendModal = () => {
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
-    const amount = value.replace(/[^0-9.]/g, "");
+
+    let amount: string = value.replace(/[^0-9.]/g, "");
+
+    const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
+
+    if (!pattern.test(amount)) {
+      amount = convertNumber(amount).toFixed(6);
+    }
+
+    if (convertNumber(amount) > getMaxAmount()) {
+      amount = getMaxAmount().toString();
+    }
 
     setAmount(amount);
   };
@@ -118,6 +130,14 @@ const SendModal = () => {
         convertNumber(amount) <= convertNumber(available) &&
         convertNumber(amount) > 0
     );
+  };
+
+  const getMaxAmount = (): Number => {
+    if (tokenData.symbol === "FCT") {
+      return convertNumber((available - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6));
+    } else {
+      return available;
+    }
   };
 
   const sendTx = (resolveTx: () => void, rejectTx: () => void) => {
@@ -194,6 +214,9 @@ const SendModal = () => {
           <ModalInput>
             {available} {tokenData.symbol}
           </ModalInput>
+
+          <ModalLabel>Fees</ModalLabel>
+          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>
