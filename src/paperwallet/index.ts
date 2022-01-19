@@ -108,13 +108,16 @@ class FirmaPaperWallet {
 
   private writeMnemonic(page: PDFPage, font: PDFFont, mnemonic: string, position: IPosition) {
     const mnemonicWords = mnemonic.split(" ");
-    const firstMnemonic = mnemonicWords.slice(0, Math.round(mnemonicWords.length / 2));
-    const secondMnemonic = mnemonicWords.slice(Math.round(mnemonicWords.length / 2), mnemonicWords.length);
+    const term = Math.round(mnemonicWords.length / 3);
+
+    const firstMnemonic = mnemonicWords.slice(0, term);
+    const secondMnemonic = mnemonicWords.slice(term, mnemonicWords.length - term);
+    const thirdMnemonic = mnemonicWords.slice(term * 2, mnemonicWords.length);
 
     page.drawText(firstMnemonic.join(" "), {
       x: position.x,
       y: position.y,
-      size: 7,
+      size: 8,
       font: font,
       color: rgb(1, 1, 1),
     });
@@ -122,7 +125,15 @@ class FirmaPaperWallet {
     page.drawText(secondMnemonic.join(" "), {
       x: position.x,
       y: position.y - 11,
-      size: 7,
+      size: 8,
+      font: font,
+      color: rgb(1, 1, 1),
+    });
+
+    page.drawText(thirdMnemonic.join(" "), {
+      x: position.x,
+      y: position.y - 22,
+      size: 8,
       font: font,
       color: rgb(1, 1, 1),
     });
