@@ -228,8 +228,6 @@ function useFirma() {
   };
 
   const getVestingAccount = async () => {
-    console.log("GET VESTING");
-
     return new Promise((resolve, reject) => {
       axios
         .get(`${LCD_REST_URI}/cosmos/auth/v1beta1/accounts/${address}`)
@@ -239,22 +237,22 @@ function useFirma() {
               let endTimeAcc = res.data.account.start_time * 1;
               let expiredVesting = 0;
 
-              const vestingPeriod = res.data.account.vesting_periods
-                .map((value: any) => {
-                  endTimeAcc += value.length * 1;
-                  return {
-                    endTime: endTimeAcc,
-                    amount: value.amount[0].amount * 1,
-                  };
-                })
-                .filter((value: any) => {
-                  if (value.endTime * 1 > moment().unix()) {
-                    return true;
-                  } else {
-                    expiredVesting += value.amount * 1;
-                    return false;
-                  }
-                });
+              const vestingPeriod = res.data.account.vesting_periods.map((value: any) => {
+                endTimeAcc += value.length * 1;
+
+                let status = 0;
+
+                if (endTimeAcc <= moment().unix()) {
+                  expiredVesting += value.amount[0].amount * 1;
+                  status = 1;
+                }
+
+                return {
+                  endTime: endTimeAcc,
+                  amount: value.amount[0].amount * 1,
+                  status,
+                };
+              });
 
               const totalVesting = res.data.account.base_vesting_account.original_vesting[0].amount * 1;
 

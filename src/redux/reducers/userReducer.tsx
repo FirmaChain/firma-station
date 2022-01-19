@@ -17,6 +17,7 @@ export interface IVesting {
 export interface IVestingPeriod {
   endTime: number;
   amount: number;
+  status: number;
 }
 
 export interface IUserState {

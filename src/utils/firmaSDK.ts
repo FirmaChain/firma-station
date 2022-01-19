@@ -100,8 +100,8 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   const redelegate = async (validatorAddressSrc: string, validatorAddressDst: string, amount: number) => {
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.redelegate(wallet, validatorAddressSrc, validatorAddressDst, amount, {
-      fee: 300000,
-      gas: 300000,
+      fee: FIRMACHAIN_CONFIG.defaultFee * 1.5,
+      gas: FIRMACHAIN_CONFIG.defaultGas * 1.5,
     });
     return result;
   };

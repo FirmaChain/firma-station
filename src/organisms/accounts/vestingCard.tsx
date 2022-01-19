@@ -34,11 +34,21 @@ const Row = ({ data, index, style }: any) => {
     return numeral(convertToFctString(amount)).format("0,0.000") + " FCT";
   };
 
+  const getStatus = (status: any) => {
+    switch (status) {
+      case 0:
+        return <span style={{ color: "#707070" }}>{"LOCKED"}</span>;
+      case 1:
+        return <span style={{ color: "#f4b017" }}>{"UNLOCKED"}</span>;
+    }
+  };
+
   return (
     <ItemWrapper3 style={style}>
       <ItemColumn3>{index + 1}</ItemColumn3>
       <ItemColumn3>{getAmount(currentVesting.amount)}</ItemColumn3>
       <ItemColumn3>{getTimestamp(currentVesting.endTime)}</ItemColumn3>
+      <ItemColumn3>{getStatus(currentVesting.status)}</ItemColumn3>
     </ItemWrapper3>
   );
 };
@@ -62,6 +72,7 @@ const VestingCard = ({ vestingState }: IProps) => {
                 <HeaderColumn3>No</HeaderColumn3>
                 <HeaderColumn3>Amount</HeaderColumn3>
                 <HeaderColumn3>Vesting End Date</HeaderColumn3>
+                <HeaderColumn3>Status</HeaderColumn3>
               </HeaderWrapper3>
               <List
                 width={width}
