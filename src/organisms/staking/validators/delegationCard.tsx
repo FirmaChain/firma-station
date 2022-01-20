@@ -23,7 +23,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const delegateAction = () => {
     modalActions.handleModalData({
       action: "Delegate",
-      data: { targetValidator },
+      data: { targetValidator, available: targetStakingState.available },
     });
 
     modalActions.handleModalDelegate(true);

@@ -22,7 +22,6 @@ import {
 const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
-  const { balance } = useSelector((state: rootState) => state.user);
 
   const { delegate } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
@@ -51,7 +50,7 @@ const DelegateModal = () => {
     }
 
     setAmount(amount);
-    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(balance));
+    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(modalData.data.available));
   };
 
   const delegateTx = (resolveTx: () => void, rejectTx: () => void) => {
@@ -83,7 +82,7 @@ const DelegateModal = () => {
         <ModalTitle>DELEGATE</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{balance} FCT</ModalInput>
+          <ModalInput>{modalData.data.available} FCT</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>

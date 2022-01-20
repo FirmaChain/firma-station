@@ -6,7 +6,7 @@ import moment from "moment";
 
 import { Wallet } from "./types";
 import { LCD_REST_URI } from "../config";
-import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from "./common";
+import { convertNumber, convertToFctNumber, convertToTokenString, isValidString } from "./common";
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
 import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from "./keyBridge";
@@ -222,6 +222,7 @@ function useFirma() {
     const newbalance = convertToFctNumber(
       convertNumber(balance) - (vestingData.totalVesting - vestingData.expiredVesting)
     );
+
     userActions.handleUserNFTList([]);
     userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : "0");
     userActions.handleUserTokenList(tokenDataList);
