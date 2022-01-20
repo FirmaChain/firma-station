@@ -27,7 +27,9 @@ const Row = ({ data, index, style }: any) => {
   const currentVesting = data[index];
 
   const getTimestamp = (timestamp: number) => {
-    return moment(timestamp * 1000).format("YYYY-MM-DD HH:mm:ss+00:00");
+    return moment(timestamp * 1000)
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss+00:00");
   };
 
   const getAmount = (amount: string) => {

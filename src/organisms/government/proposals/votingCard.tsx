@@ -141,7 +141,7 @@ const VotingCard = ({ proposalState }: IProps) => {
   });
 
   const getTimeFormat = (time: string) => {
-    return moment(time).format("YYYY-MM-DD HH:mm:ss (UTC+0)");
+    return moment(time).utc().format("YYYY-MM-DD HH:mm:ss+00:00");
   };
 
   const getCurrentVotingPower = (tally: tally, totalVotingPower: number) => {
