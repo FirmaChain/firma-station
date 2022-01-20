@@ -232,38 +232,44 @@ function useFirma() {
       axios
         .get(`${LCD_REST_URI}/cosmos/auth/v1beta1/accounts/${address}`)
         .then((res) => {
-          if (res.data.account) {
-            if (res.data.account["@type"] === "/cosmos.vesting.v1beta1.PeriodicVestingAccount") {
-              let endTimeAcc = res.data.account.start_time * 1;
-              let expiredVesting = 0;
+          if (res.data.account && res.data.account["@type"] === "/cosmos.vesting.v1beta1.PeriodicVestingAccount") {
+            let endTimeAcc = res.data.account.start_time * 1;
+            let expiredVesting = 0;
 
-              const vestingPeriod = res.data.account.vesting_periods.map((value: any) => {
-                endTimeAcc += value.length * 1;
+            const vestingPeriod = res.data.account.vesting_periods.map((value: any) => {
+              endTimeAcc += value.length * 1;
 
-                let status = 0;
+              let status = 0;
 
-                if (endTimeAcc <= moment().unix()) {
-                  expiredVesting += value.amount[0].amount * 1;
-                  status = 1;
-                }
+              if (endTimeAcc <= moment().unix()) {
+                expiredVesting += value.amount[0].amount * 1;
+                status = 1;
+              }
 
-                return {
-                  endTime: endTimeAcc,
-                  amount: value.amount[0].amount * 1,
-                  status,
-                };
-              });
+              return {
+                endTime: endTimeAcc,
+                amount: value.amount[0].amount * 1,
+                status,
+              };
+            });
 
-              const totalVesting = res.data.account.base_vesting_account.original_vesting[0].amount * 1;
+            const totalVesting = res.data.account.base_vesting_account.original_vesting[0].amount * 1;
 
-              resolve({ totalVesting, expiredVesting });
+            resolve({ totalVesting, expiredVesting });
 
-              userActions.handleUserVesting({
-                totalVesting,
-                expiredVesting,
-                vestingPeriod,
-              });
-            }
+            userActions.handleUserVesting({
+              totalVesting,
+              expiredVesting,
+              vestingPeriod,
+            });
+          } else {
+            userActions.handleUserVesting({
+              totalVesting: 0,
+              expiredVesting: 0,
+              vestingPeriod: [],
+            });
+
+            resolve({ totalVesting: 0, expiredVesting: 0 });
           }
         })
         .catch((e) => {
