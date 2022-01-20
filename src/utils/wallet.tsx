@@ -219,11 +219,11 @@ function useFirma() {
     }
 
     const vestingData: any = await getVestingAccount();
-
-    userActions.handleUserNFTList([]);
-    userActions.handleUserBalance(
-      convertToFctString((convertNumber(balance) - (vestingData.totalVesting - vestingData.expiredVesting)).toString())
+    const newbalance = convertToFctNumber(
+      convertNumber(balance) - (vestingData.totalVesting - vestingData.expiredVesting)
     );
+    userActions.handleUserNFTList([]);
+    userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : "0");
     userActions.handleUserTokenList(tokenDataList);
   };
 
