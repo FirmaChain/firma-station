@@ -86,6 +86,11 @@ const RedelegateModal = () => {
 
     let amount: string = value.replace(/[^0-9.]/g, "");
 
+    if (amount === "") {
+      setAmount("");
+      return;
+    }
+
     const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
 
     if (!pattern.test(amount)) {

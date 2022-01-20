@@ -43,10 +43,18 @@ const DelegateModal = () => {
 
     let amount: string = value.replace(/[^0-9.]/g, "");
 
+    if (amount === "") {
+      setAmount("");
+      return;
+    }
+
     const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
 
     if (!pattern.test(amount)) {
       amount = convertNumber(amount).toFixed(6);
+    }
+    if (amount > modalData.data.available) {
+      amount = modalData.data.available;
     }
 
     setAmount(amount);
