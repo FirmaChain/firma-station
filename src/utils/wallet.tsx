@@ -218,10 +218,26 @@ function useFirma() {
       }
     }
 
+    const delegateListOrigin = await firmaSDK.Staking.getTotalDelegationInfo(address);
+
+    let totalDelegated = 0;
+    for (let i = 0; i < delegateListOrigin.length; i++) {
+      totalDelegated += convertNumber(delegateListOrigin[i].balance.amount);
+    }
+
     const vestingData: any = await getVestingAccount();
-    const newbalance = convertToFctNumber(
-      convertNumber(balance) - (vestingData.totalVesting - vestingData.expiredVesting)
-    );
+
+    const getBalance = convertNumber(balance) + totalDelegated;
+    const lockupVesting = vestingData.totalVesting - vestingData.expiredVesting;
+
+    let availableBalance = 0;
+    if (lockupVesting - totalDelegated > 0) {
+      availableBalance = getBalance - lockupVesting;
+    } else {
+      availableBalance = getBalance - lockupVesting + (lockupVesting - totalDelegated);
+    }
+
+    const newbalance = convertToFctNumber(availableBalance);
 
     userActions.handleUserNFTList([]);
     userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : "0");
