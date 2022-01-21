@@ -103,9 +103,9 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
       modalActions.handleModalConfirmTx(true);
     } else {
-      enqueueSnackbar("Not enough fees.", {
+      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
         variant: "error",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
     }
   };

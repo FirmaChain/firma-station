@@ -253,9 +253,9 @@ const NewProposalModal = () => {
     const isSoftwareUpgradeInvalid = proposalType === "SOFTWARE_UPGRADE" && (upgradeName === "" || height <= 0);
 
     if (initialDeposit === 0) {
-      enqueueSnackbar("Not enough FCT", {
+      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
         variant: "error",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
 
       return;
