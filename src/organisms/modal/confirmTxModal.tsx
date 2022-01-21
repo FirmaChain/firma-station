@@ -56,10 +56,10 @@ const ConfirmTxModal = () => {
     modalActions.handleModalConfirmTx(false);
   };
 
-  const prevModal = () => {
-    closeConfirmTxModal();
-    modalData.prevModalAction && modalData.prevModalAction(true);
-  };
+  // const prevModal = () => {
+  //   closeConfirmTxModal();
+  //   modalData.prevModalAction && modalData.prevModalAction(true);
+  // };
 
   const queueTx = () => {
     if (isCorrectPassword(password) || isLedger) {
@@ -86,13 +86,7 @@ const ConfirmTxModal = () => {
   };
 
   return (
-    <Modal
-      visible={confirmTxModalState}
-      closable={true}
-      onClose={closeConfirmTxModal}
-      prev={prevModal}
-      width={confirmTxModalWidth}
-    >
+    <Modal visible={confirmTxModalState} closable={true} onClose={closeConfirmTxModal} width={confirmTxModalWidth}>
       <ModalContainer>
         <ModalTitle>CONFIRM</ModalTitle>
         <ModalContent>
