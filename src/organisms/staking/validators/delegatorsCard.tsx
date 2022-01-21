@@ -77,29 +77,6 @@ const DelegatorsCard = ({ validatorsState }: IProps) => {
           </AutoSizer>
         </DelegatorList>
       )}
-      {/* 
-      {targetValidatorData && (
-        <DelegatorList>
-          <DelegatorWrapper>
-            <DelegatorAddressHeader>Address</DelegatorAddressHeader>
-            <DelegatorAmountHeader>Amount</DelegatorAmountHeader>
-          </DelegatorWrapper>
-          {targetValidatorData.delegations
-            .sort((a, b) =>
-              numeral(a.amount).value() > numeral(b.amount).value()
-                ? -1
-                : numeral(a.amount).value() < numeral(b.amount).value()
-                ? 1
-                : 0
-            )
-            .map((delegator, index) => (
-              <DelegatorWrapper key={index}>
-                <DelegatorAddress>{delegator.address}</DelegatorAddress>
-                <DelegatorAmount>{numeral(delegator.amount / 1000000).format("0,00.000")} FCT</DelegatorAmount>
-              </DelegatorWrapper>
-            ))}
-        </DelegatorList>
-      )} */}
     </DelegatorsCardWrapper>
   );
 };

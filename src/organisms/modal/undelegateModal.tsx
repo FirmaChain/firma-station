@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import numeral from "numeral";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
-import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString, isValid } from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { FIRMACHAIN_CONFIG } from "../../config";
 
 import {
   undelegateModalWidth,
@@ -23,7 +25,8 @@ import {
 const UndelegateModal = () => {
   const undelegateModalState = useSelector((state: rootState) => state.modal.undelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
-
+  const { balance } = useSelector((state: rootState) => state.user);
+  const { enqueueSnackbar } = useSnackbar();
   const { undelegate } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
@@ -55,10 +58,18 @@ const UndelegateModal = () => {
       amount = convertNumber(amount).toFixed(6);
     }
 
+    if (convertNumber(amount) > getMaxAmount()) {
+      amount = getMaxAmount().toString();
+    }
+
     setAmount(amount);
     setActiveButton(
       convertNumber(amount) > 0 && convertNumber(amount) <= convertToFctNumber(modalData.data.delegation.amount)
     );
+  };
+
+  const getMaxAmount = () => {
+    return convertToFctNumber(modalData.data.delegation.amount);
   };
 
   const undelegateTx = (resolveTx: () => void, rejectTx: () => void) => {
@@ -73,15 +84,22 @@ const UndelegateModal = () => {
   };
 
   const nextStep = () => {
-    modalActions.handleModalData({
-      action: "Undelegate",
-      data: { amount: amount },
-      prevModalAction: modalActions.handleModalUndelegate,
-      txAction: undelegateTx,
-    });
+    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+      modalActions.handleModalData({
+        action: "Undelegate",
+        data: { amount: amount },
+        prevModalAction: modalActions.handleModalUndelegate,
+        txAction: undelegateTx,
+      });
 
-    closeModal();
-    modalActions.handleModalConfirmTx(true);
+      closeModal();
+      modalActions.handleModalConfirmTx(true);
+    } else {
+      enqueueSnackbar("Not enough fees.", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
   };
 
   return (
@@ -96,6 +114,10 @@ const UndelegateModal = () => {
               : 0}{" "}
             FCT
           </ModalInput>
+
+          <ModalLabel>Fees</ModalLabel>
+          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
+
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />

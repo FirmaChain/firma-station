@@ -2,13 +2,15 @@ import React, { useState, useRef } from "react";
 import numeral from "numeral";
 import Select from "react-select";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
-import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString, isValid } from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { FIRMACHAIN_CONFIG } from "../../config";
 
 import {
   redelegateModalWidth,
@@ -22,7 +24,6 @@ import {
 } from "./styles";
 
 import styled from "styled-components";
-import { FIRMACHAIN_CONFIG } from "../../config";
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -57,6 +58,8 @@ const customStyles = {
 const RedelegateModal = () => {
   const redelegateModalState = useSelector((state: rootState) => state.modal.redelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
+  const { enqueueSnackbar } = useSnackbar();
+  const { balance } = useSelector((state: rootState) => state.user);
 
   const { redelegate } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
@@ -97,8 +100,16 @@ const RedelegateModal = () => {
       amount = convertNumber(amount).toFixed(6);
     }
 
+    if (convertNumber(amount) > getMaxAmount()) {
+      amount = getMaxAmount().toString();
+    }
+
     setAmount(amount);
     setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= sourceAmount);
+  };
+
+  const getMaxAmount = () => {
+    return sourceAmount;
   };
 
   const redelegateTx = (resolveTx: () => void, rejectTx: () => void) => {
@@ -122,15 +133,22 @@ const RedelegateModal = () => {
   };
 
   const nextStep = () => {
-    modalActions.handleModalData({
-      action: "Redelegate",
-      data: { amount, fees: FIRMACHAIN_CONFIG.defaultFee * 1.5 },
-      prevModalAction: modalActions.handleModalRedelegate,
-      txAction: redelegateTx,
-    });
+    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
+      modalActions.handleModalData({
+        action: "Redelegate",
+        data: { amount, fees: FIRMACHAIN_CONFIG.defaultFee * 1.5 },
+        prevModalAction: modalActions.handleModalRedelegate,
+        txAction: redelegateTx,
+      });
 
-    closeModal();
-    modalActions.handleModalConfirmTx(true);
+      closeModal();
+      modalActions.handleModalConfirmTx(true);
+    } else {
+      enqueueSnackbar("Not enough fees.", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
   };
 
   return (
@@ -156,9 +174,12 @@ const RedelegateModal = () => {
               <ModalLabel>Available</ModalLabel>
               <ModalInput>{numeral(sourceAmount).format("0,0.000")} FCT</ModalInput>
 
+              <ModalLabel>Fees</ModalLabel>
+              <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
+
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
-                <InputBoxDefault type="text" placeholder="0" onChange={onChangeAmount} />
+                <InputBoxDefault type="text" placeholder="0" onChange={onChangeAmount} value={amount} />
               </ModalInput>
             </>
           )}

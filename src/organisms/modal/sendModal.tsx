@@ -139,7 +139,8 @@ const SendModal = () => {
 
   const getMaxAmount = (): Number => {
     if (tokenData.symbol === "FCT") {
-      return convertNumber((available - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6));
+      const value = convertNumber((available - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6));
+      return value > 0 ? value : 0;
     } else {
       return available;
     }

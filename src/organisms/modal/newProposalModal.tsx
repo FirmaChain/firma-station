@@ -4,11 +4,12 @@ import { useSnackbar } from "notistack";
 import Select from "react-select";
 
 import useFirma from "../../utils/wallet";
-import { convertNumber } from "../../utils/common";
+import { convertNumber, convertToFctNumber } from "../../utils/common";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { FIRMACHAIN_CONFIG } from "../../config";
 
 import {
   newProposalModalWidth,
@@ -65,6 +66,7 @@ const NewProposalModal = () => {
   const newProposalState = useSelector((state: rootState) => state.modal.newProposal);
   const selectInputRef = useRef<any>();
   const { enqueueSnackbar } = useSnackbar();
+  const { balance } = useSelector((state: rootState) => state.user);
 
   const [proposalType, setProposalType] = useState("");
   const [title, setTitle] = useState("");
@@ -167,7 +169,32 @@ const NewProposalModal = () => {
 
   const onChangeInitialDeposit = (e: any) => {
     if (e === null) return;
-    setInitialDeposit(e.target.value);
+    const { value } = e.target;
+
+    let amount: string = value.replace(/[^0-9.]/g, "");
+
+    if (amount === "") {
+      setInitialDeposit(0);
+      return;
+    }
+
+    const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
+
+    if (!pattern.test(amount)) {
+      amount = convertNumber(amount).toFixed(6);
+    }
+
+    if (convertNumber(amount) > getMaxAmount()) {
+      amount = getMaxAmount().toString();
+    }
+
+    setInitialDeposit(convertNumber(amount));
+  };
+
+  const getMaxAmount = () => {
+    const value = convertNumber((convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6));
+
+    return value > 0 ? value : 0;
   };
 
   const onChangeRecipient = (e: any) => {
@@ -224,6 +251,15 @@ const NewProposalModal = () => {
       proposalType === "COMMUNITY_POOL_SPEND_PROPOSAL" && (recipient === "" || amount === 0);
     const isParameterChangeInvalid = proposalType === "PARAMETER_CHANGE_PROPOSAL" && validParamList.length === 0;
     const isSoftwareUpgradeInvalid = proposalType === "SOFTWARE_UPGRADE" && (upgradeName === "" || height <= 0);
+
+    if (initialDeposit === 0) {
+      enqueueSnackbar("Not enough FCT", {
+        variant: "error",
+        autoHideDuration: 1000,
+      });
+
+      return;
+    }
 
     if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid || isSoftwareUpgradeInvalid) {
       enqueueSnackbar("Invalid Parameters", {

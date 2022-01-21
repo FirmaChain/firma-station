@@ -4,10 +4,13 @@ import { FixedSizeList as List } from "react-window";
 import numeral from "numeral";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
-import { EXPLORER_URI } from "../../../config";
+import { rootState } from "../../../redux/reducers";
+import { EXPLORER_URI, FIRMACHAIN_CONFIG } from "../../../config";
 import { IProposalState, tally } from "../hooks";
-import { convertToFctNumber } from "../../../utils/common";
+import { convertNumber, convertToFctNumber } from "../../../utils/common";
 import { modalActions } from "../../../redux/action";
 import { useAvataURL } from "../../header/hooks";
 
@@ -98,6 +101,8 @@ const Row = ({ data, index, style }: any) => {
 
 const VotingCard = ({ proposalState }: IProps) => {
   const [currentVotingTab, setVotingTab] = useState(0);
+  const { balance } = useSelector((state: rootState) => state.user);
+  const { enqueueSnackbar } = useSnackbar();
 
   const getTallyPercent = (proposalState: IProposalState, targetKey: string) => {
     let currentVoting = 0;
@@ -182,6 +187,20 @@ const VotingCard = ({ proposalState }: IProps) => {
     setVotingTab(index);
   };
 
+  const onClickVote = () => {
+    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+      modalActions.handleModalData({
+        proposalId: proposalState.proposalId,
+      });
+      modalActions.handleModalVoting(true);
+    } else {
+      enqueueSnackbar("Not enough fees.", {
+        variant: "error",
+        autoHideDuration: 1000,
+      });
+    }
+  };
+
   return (
     <CardWrapper>
       <VotingMainTitle>Voting</VotingMainTitle>
@@ -238,15 +257,7 @@ const VotingCard = ({ proposalState }: IProps) => {
         ))}
       </VotingWrapper>
       {proposalState.status === "PROPOSAL_STATUS_VOTING_PERIOD" && (
-        <VotingButton
-          active={true}
-          onClick={() => {
-            modalActions.handleModalData({
-              proposalId: proposalState.proposalId,
-            });
-            modalActions.handleModalVoting(true);
-          }}
-        >
+        <VotingButton active={true} onClick={onClickVote}>
           Vote
         </VotingButton>
       )}

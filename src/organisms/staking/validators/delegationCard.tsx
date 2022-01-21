@@ -1,10 +1,14 @@
 import React from "react";
 import numeral from "numeral";
+import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../../utils/wallet";
+import { rootState } from "../../../redux/reducers";
 import { ITargetStakingState, IValidatorsState } from "../hooks";
+import { convertNumber, convertToFctNumber } from "../../../utils/common";
 import { modalActions } from "../../../redux/action";
+import { FIRMACHAIN_CONFIG } from "../../../config";
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from "./styles";
 
@@ -17,6 +21,7 @@ const DENOM = "FCT";
 
 const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const targetValidator = window.location.pathname.replace("/staking/validators/", "");
+  const { balance } = useSelector((state: rootState) => state.user);
   const { getDelegationList, getDelegation, withdraw } = useFirma();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -89,13 +94,20 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   };
 
   const withdrawAction = () => {
-    modalActions.handleModalData({
-      action: "Withdraw",
-      data: { amount: targetStakingState.stakingReward },
-      txAction: withdrawTx,
-    });
+    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
+      modalActions.handleModalData({
+        action: "Withdraw",
+        data: { amount: targetStakingState.stakingReward },
+        txAction: withdrawTx,
+      });
 
-    modalActions.handleModalConfirmTx(true);
+      modalActions.handleModalConfirmTx(true);
+    } else {
+      enqueueSnackbar("Not enough fees.", {
+        variant: "error",
+        autoHideDuration: 1000,
+      });
+    }
   };
 
   const withdrawTx = (resolveTx: () => void, rejectTx: () => void) => {

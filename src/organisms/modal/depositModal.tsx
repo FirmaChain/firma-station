@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
-import { convertNumber } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { FIRMACHAIN_CONFIG } from "../../config";
 
 import {
   depositModalWidth,
@@ -55,8 +56,17 @@ const DepositModal = () => {
       amount = convertNumber(amount).toFixed(6);
     }
 
+    if (convertNumber(amount) > getMaxAmount()) {
+      amount = getMaxAmount().toString();
+    }
+
     setAmount(amount);
-    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(balance));
+    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= getMaxAmount());
+  };
+
+  const getMaxAmount = () => {
+    const value = convertNumber((convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6));
+    return value > 0 ? value : 0;
   };
 
   const depositTx = (resolveTx: () => void, rejectTx: () => void) => {
@@ -89,6 +99,9 @@ const DepositModal = () => {
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>{balance} FCT</ModalInput>
+
+          <ModalLabel>Fees</ModalLabel>
+          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>

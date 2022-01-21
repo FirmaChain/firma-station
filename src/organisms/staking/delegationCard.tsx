@@ -7,10 +7,11 @@ import { ResponsivePie } from "@nivo/pie";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
-import { rootState } from "../../redux/reducers";
 import useFirma from "../../utils/wallet";
+import { rootState } from "../../redux/reducers";
 import { modalActions } from "../../redux/action";
 import { ITotalStakingState } from "./hooks";
+import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
 
 import theme from "../../themes";
 import { BlankCard } from "../../components/card";
@@ -29,7 +30,6 @@ import {
   ButtonWrapper,
   Button,
 } from "./styles";
-import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
 
 interface IProps {
   totalStakingState: ITotalStakingState;
@@ -92,6 +92,7 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 const DelegationCard = ({ totalStakingState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { balance } = useSelector((state: rootState) => state.user);
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
   const data = GetDelegatePieData(totalStakingState);
 
@@ -111,13 +112,21 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
     getGasEstimationWithdrawAllValidator()
       .then((result) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
-        modalActions.handleModalData({
-          action: "Withdraw",
-          data: { amount: totalStakingState.stakingReward, fees: result },
-          txAction: withdrawAllValidatorTx,
-        });
 
-        modalActions.handleModalConfirmTx(true);
+        if (convertNumber(balance) > convertToFctNumber(result)) {
+          modalActions.handleModalData({
+            action: "Withdraw",
+            data: { amount: totalStakingState.stakingReward, fees: result },
+            txAction: withdrawAllValidatorTx,
+          });
+
+          modalActions.handleModalConfirmTx(true);
+        } else {
+          enqueueSnackbar("Not enough fees.", {
+            variant: "error",
+            autoHideDuration: 1000,
+          });
+        }
       })
       .catch((e) => {
         if (isLedger) {
