@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterTypo>Copyright ⓒ 2021 FirmaChain</FooterTypo>
-      <FooterTypo>v0.0.1</FooterTypo>
+      <FooterTypo>v1.0.4</FooterTypo>
     </FooterContainer>
   );
 };
