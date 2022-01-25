@@ -157,7 +157,7 @@ export const useStakingData = () => {
       const inflation = convertNumber(data.inflation[0].value);
       const totalSupply = convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount);
 
-      const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / 5274814);
+      const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / 5111183);
       const mintCoinPerYear = mintCoinPerDay * 365;
 
       const validatorsList = data.validator
