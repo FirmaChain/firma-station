@@ -51,11 +51,23 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
   };
 
   const formatCash = (n: any) => {
-    if (n < 1e3) return n.toFixed(2);
-    if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(2) + "K";
-    if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(2) + "M";
-    if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(2) + "B";
-    if (n >= 1e12) return +(n / 1e12).toFixed(2) + "T";
+    let result = "";
+
+    if (n < 1e3) {
+      result = n.toFixed(2);
+    } else if (n >= 1e3 && n < 1e6) {
+      result = +(n / 1e3).toFixed(2) + "K";
+    } else if (n >= 1e6 && n < 1e9) {
+      result = +(n / 1e6).toFixed(2) + "M";
+    } else if (n >= 1e9 && n < 1e12) {
+      result = +(n / 1e9).toFixed(2) + "B";
+    } else if (n >= 1e12) {
+      result = +(n / 1e12).toFixed(2) + "T";
+    }
+
+    if (result.length > 10) result = "infinity";
+
+    return result;
   };
 
   return (
