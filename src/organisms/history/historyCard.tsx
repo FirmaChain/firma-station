@@ -30,7 +30,7 @@ const Row = ({ data, index, style }: any) => {
   };
 
   const getTimestamp = (timestamp: string) => {
-    return moment(timestamp).utc().format("YYYY-MM-DD HH:mm:ss+00:00");
+    return moment(timestamp).format("YYYY-MM-DD HH:mm:ss+00:00");
   };
 
   return (

@@ -53,7 +53,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
   };
 
   const getTimeFormat = (time: string) => {
-    return moment(time).utc().format("YYYY-MM-DD HH:mm:ss+00:00");
+    return moment(time).format("YYYY-MM-DD HH:mm:ss+00:00");
   };
 
   return (
