@@ -131,6 +131,8 @@ export const useStakingData = () => {
 
   useValidatorsQuery({
     onCompleted: (data) => {
+      if (data.inflation.length === 0) return;
+
       const averageBlockTimePerDay =
         data.average_block_time_per_day.length > 0 ? data.average_block_time_per_day[0].average_time : 0;
       const averageBlockTimePerHour =

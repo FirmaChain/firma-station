@@ -43,11 +43,11 @@ export const useBlockData = () => {
   });
 
   const formatBlockHeight = (data: any) => {
-    return data.height[0].height;
+    return data.height.length > 0 ? data.height[0].height : 0;
   };
 
   const formatBlockHeight2 = (data: any) => {
-    return data.block[0].height;
+    return data.block.length > 0 ? data.block[0].height : 0;
   };
 
   const formatTransactions = (data: any) => {
@@ -55,7 +55,7 @@ export const useBlockData = () => {
   };
 
   const formatInflation = (data: any) => {
-    return (data.inflation[0].value * 100).toFixed(2) + " %";
+    return data.inflation.length > 0 ? (data.inflation[0].value * 100).toFixed(2) + " %" : "0 %";
   };
 
   const formatVotingPower = (data: any) => {
@@ -63,26 +63,30 @@ export const useBlockData = () => {
   };
 
   const formatTotalVotingPower = (data: any) => {
-    return convertToFctNumber(data.stakingPool[0].bonded);
+    return data.stakingPool.length > 0 ? convertToFctNumber(data.stakingPool[0].bonded) : 0;
   };
 
   const formatSupply = (data: any) => {
-    return convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount);
+    return data.supply.length > 0
+      ? convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount)
+      : 0;
   };
   const formatDelegated = (data: any) => {
-    return convertToFctNumber(data.stakingPool[0].bonded);
+    return data.stakingPool.length > 0 ? convertToFctNumber(data.stakingPool[0].bonded) : 0;
   };
 
   const formatUndelegated = (data: any) => {
-    return convertToFctNumber(
-      data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount -
-        data.stakingPool[0].bonded -
-        data.stakingPool[0].unbonded
-    );
+    return data.supply.length > 0
+      ? convertToFctNumber(
+          data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount -
+            data.stakingPool[0].bonded -
+            data.stakingPool[0].unbonded
+        )
+      : 0;
   };
 
   const formatUndelegate = (data: any) => {
-    return convertToFctNumber(data.stakingPool[0].unbonded);
+    return data.stakingPool.length > 0 ? convertToFctNumber(data.stakingPool[0].unbonded) : 0;
   };
 
   useBlockDataQuery({
@@ -97,6 +101,7 @@ export const useBlockData = () => {
 
   useVotingPowerQuery({
     onCompleted: (data) => {
+      if (data.block.length === 0) return;
       if (data.block[0].validatorVotingPowersAggregate.aggregate.sum.votingPower <= 0) return;
 
       setVotingPowerState({
