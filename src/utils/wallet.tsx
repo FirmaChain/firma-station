@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { FirmaUtil } from "@firmachain/firma-js";
@@ -18,6 +19,7 @@ import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/ho
 function useFirma() {
   const { enqueueSnackbar } = useSnackbar();
   const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
+  const [isVesting, setVesting] = useState(true);
 
   const restoreWalletInternal = (timeKey: string) => {
     let wallet = null;
@@ -226,7 +228,6 @@ function useFirma() {
     }
 
     const vestingData: any = await getVestingAccount();
-
     const getBalance = convertNumber(balance) + totalDelegated;
     const lockupVesting = vestingData.totalVesting - vestingData.expiredVesting;
 
@@ -245,11 +246,21 @@ function useFirma() {
   };
 
   const getVestingAccount = async () => {
+    if (isVesting === false || address === "") return;
+
     return new Promise((resolve, reject) => {
       axios
-        .get(`${LCD_REST_URI}/cosmos/auth/v1beta1/accounts/${address}`)
+        .get(`${LCD_REST_URI}/cosmos/auth/v1beta1/accounts/${address}`, {
+          validateStatus: (status) => {
+            return (status >= 200 && status < 300) || status === 404;
+          },
+        })
         .then((res) => {
-          if (res.data.account && res.data.account["@type"] === "/cosmos.vesting.v1beta1.PeriodicVestingAccount") {
+          if (
+            res.status !== 404 &&
+            res.data.account &&
+            res.data.account["@type"] === "/cosmos.vesting.v1beta1.PeriodicVestingAccount"
+          ) {
             let endTimeAcc = res.data.account.start_time * 1;
             let expiredVesting = 0;
 
@@ -280,6 +291,7 @@ function useFirma() {
               vestingPeriod,
             });
           } else {
+            setVesting(false);
             userActions.handleUserVesting({
               totalVesting: 0,
               expiredVesting: 0,
@@ -290,6 +302,7 @@ function useFirma() {
           }
         })
         .catch((e) => {
+          setVesting(false);
           userActions.handleUserVesting({
             totalVesting: 0,
             expiredVesting: 0,
