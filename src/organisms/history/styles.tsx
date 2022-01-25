@@ -28,7 +28,7 @@ export const Column = styled.div`
     flex: 1 1 300px;
   }
   &:nth-child(5) {
-    flex: 1 1 400px;
+    flex: 1 1 600px;
   }
 `;
 
