@@ -6,7 +6,6 @@ import { client } from "../../apollo";
 import useFirma from "../../utils/wallet";
 import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
 import { useValidatorsQuery } from "../../apollo/gqls";
-import { MINT_COIN_PER_BLOCK } from "../../config";
 
 export interface IValidatorsState {
   totalVotingPower: number;
@@ -153,7 +152,10 @@ export const useStakingData = () => {
       const totalVotingPower = convertToFctNumber(data.stakingPool[0].bondedTokens);
       const { signed_blocks_window } = slashingParams;
 
-      const mintCoinPerDay = (86400 / averageBlockTime) * MINT_COIN_PER_BLOCK;
+      const inflation = convertNumber(data.inflation[0].value);
+      const totalSupply = convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount);
+
+      const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / 5274814);
       const mintCoinPerYear = mintCoinPerDay * 365;
 
       const validatorsList = data.validator
