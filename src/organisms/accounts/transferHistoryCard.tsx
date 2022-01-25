@@ -40,8 +40,8 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   const getTimestamp = (timestamp: string) => {
     return (
       <>
-        <div>{moment(timestamp).utc().format("YYYY-MM-DD")}</div>
-        <div>{moment(timestamp).utc().format("HH:mm:ss+00:00")}</div>
+        <div>{moment(timestamp).format("YYYY-MM-DD")}</div>
+        <div>{moment(timestamp).format("HH:mm:ss+00:00")}</div>
       </>
     );
   };
