@@ -64,9 +64,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "npm run react:start",
-    "react:start": "react-app-env --env-file=.env start",
-    "react:build": "react-scripts build"
+    "start": "react-app-env --env-file=.env start",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build"
   },
   "eslintConfig": {
     "extends": [
