@@ -6,9 +6,8 @@ import { useSnackbar } from "notistack";
 import useFirma from "../../../utils/wallet";
 import { rootState } from "../../../redux/reducers";
 import { ITargetStakingState, IValidatorsState } from "../hooks";
-import { convertNumber, convertToFctNumber } from "../../../utils/common";
+import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../../utils/common";
 import { modalActions } from "../../../redux/action";
-import { FIRMACHAIN_CONFIG } from "../../../config";
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from "./styles";
 
@@ -22,7 +21,8 @@ const DENOM = "FCT";
 const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const targetValidator = window.location.pathname.replace("/staking/validators/", "");
   const { balance } = useSelector((state: rootState) => state.user);
-  const { getDelegationList, getDelegation, withdraw } = useFirma();
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw } = useFirma();
   const { enqueueSnackbar } = useSnackbar();
 
   const delegateAction = () => {
@@ -94,24 +94,40 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   };
 
   const withdrawAction = () => {
-    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
-      modalActions.handleModalData({
-        action: "Withdraw",
-        data: { amount: targetStakingState.stakingReward },
-        txAction: withdrawTx,
-      });
+    if (isLedger) modalActions.handleModalGasEstimation(true);
 
-      modalActions.handleModalConfirmTx(true);
-    } else {
-      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-        variant: "error",
-        autoHideDuration: 2000,
+    getGasEstimationWithdraw(targetValidator)
+      .then((gas) => {
+        if (isLedger) modalActions.handleModalGasEstimation(false);
+
+        if (convertNumber(balance) > convertToFctNumber(gas)) {
+          modalActions.handleModalData({
+            action: "Withdraw",
+            data: { amount: targetStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
+            txAction: withdrawTx,
+          });
+
+          modalActions.handleModalConfirmTx(true);
+        } else {
+          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        }
+      })
+      .catch(() => {
+        if (isLedger) {
+          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+            variant: "error",
+            autoHideDuration: 3000,
+          });
+          modalActions.handleModalGasEstimation(false);
+        }
       });
-    }
   };
 
-  const withdrawTx = (resolveTx: () => void, rejectTx: () => void) => {
-    withdraw(targetValidator)
+  const withdrawTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
+    withdraw(targetValidator, gas)
       .then(() => {
         resolveTx();
       })

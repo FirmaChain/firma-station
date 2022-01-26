@@ -12,4 +12,5 @@ export const GRAPHQL_CONFIG = {
 
 export const FIRMACHAIN_CONFIG = FirmaConfig.TestNetConfig;
 
-export const MINT_COIN_PER_BLOCK = 0;
+export const BLOCKS_PER_YEAR = 0;
+export const IS_DEFAULT_GAS = true;

@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import { client } from "../../apollo";
 
 import useFirma from "../../utils/wallet";
+import { BLOCKS_PER_YEAR } from "../../config";
 import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
 import { useValidatorsQuery } from "../../apollo/gqls";
 
@@ -157,7 +158,7 @@ export const useStakingData = () => {
       const inflation = convertNumber(data.inflation[0].value);
       const totalSupply = convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount);
 
-      const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / 5111183);
+      const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / BLOCKS_PER_YEAR);
       const mintCoinPerYear = mintCoinPerDay * 365;
 
       const validatorsList = data.validator

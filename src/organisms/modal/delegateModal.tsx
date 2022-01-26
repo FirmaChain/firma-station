@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
-import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -23,12 +24,19 @@ import {
 const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { delegate } = useFirma();
+  const { delegate, getGasEstimationDelegate } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
+  const [availableAmount, setAvailableAmount] = useState("");
+
+  useEffect(() => {
+    setAvailableAmount(modalData.data.available);
+  }, [delegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeModal = () => {
     resetModal();
@@ -71,8 +79,8 @@ const DelegateModal = () => {
     return value > 0 ? value : 0;
   };
 
-  const delegateTx = (resolveTx: () => void, rejectTx: () => void) => {
-    delegate(modalData.data.targetValidator, convertNumber(amount))
+  const delegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
+    delegate(modalData.data.targetValidator, convertNumber(amount), gas)
       .then(() => {
         reFetchObservableQueries();
         resolveTx();
@@ -83,15 +91,32 @@ const DelegateModal = () => {
   };
 
   const nextStep = () => {
-    modalActions.handleModalData({
-      action: "Delegate",
-      data: { amount },
-      prevModalAction: modalActions.handleModalDelegate,
-      txAction: delegateTx,
-    });
+    if (isLedger) modalActions.handleModalGasEstimation(true);
 
     closeModal();
-    modalActions.handleModalConfirmTx(true);
+
+    getGasEstimationDelegate(modalData.data.targetValidator, convertNumber(amount))
+      .then((gas) => {
+        if (isLedger) modalActions.handleModalGasEstimation(false);
+
+        modalActions.handleModalData({
+          action: "Delegate",
+          data: { amount, fees: getFeesFromGas(gas), gas },
+          prevModalAction: modalActions.handleModalDelegate,
+          txAction: delegateTx,
+        });
+
+        modalActions.handleModalConfirmTx(true);
+      })
+      .catch(() => {
+        if (isLedger) {
+          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+            variant: "error",
+            autoHideDuration: 3000,
+          });
+          modalActions.handleModalGasEstimation(false);
+        }
+      });
   };
 
   return (
@@ -100,7 +125,7 @@ const DelegateModal = () => {
         <ModalTitle>DELEGATE</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{modalData.data.available} FCT</ModalInput>
+          <ModalInput>{availableAmount} FCT</ModalInput>
 
           <ModalLabel>Fees</ModalLabel>
           <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>

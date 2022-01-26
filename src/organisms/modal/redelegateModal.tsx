@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import numeral from "numeral";
 import Select from "react-select";
 import { useSelector } from "react-redux";
@@ -7,7 +7,7 @@ import { useSnackbar } from "notistack";
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
-import { convertNumber, convertToFctNumber, convertToFctString, isValid } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 import { FIRMACHAIN_CONFIG } from "../../config";
@@ -60,16 +60,24 @@ const RedelegateModal = () => {
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
 
-  const { redelegate } = useFirma();
+  const { redelegate, getGasEstimationRedelegate } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
   const [sourceValidator, setSourceValidator] = useState("");
   const [sourceAmount, setSourceAmount] = useState(0);
+  const [delegationList, setDelegationList] = useState([]);
+  const [targetValidator, setTargetValidator] = useState("");
 
   const selectInputRef = useRef<any>();
+
+  useEffect(() => {
+    setDelegationList(modalData.data.delegationList);
+    setTargetValidator(modalData.data.targetValidator);
+  }, [redelegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeModal = () => {
     resetModal();
@@ -112,8 +120,8 @@ const RedelegateModal = () => {
     return sourceAmount;
   };
 
-  const redelegateTx = (resolveTx: () => void, rejectTx: () => void) => {
-    redelegate(sourceValidator, modalData.data.targetValidator, convertNumber(amount))
+  const redelegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
+    redelegate(sourceValidator, modalData.data.targetValidator, convertNumber(amount), gas)
       .then(() => {
         reFetchObservableQueries();
         resolveTx();
@@ -133,22 +141,39 @@ const RedelegateModal = () => {
   };
 
   const nextStep = () => {
-    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
-      modalActions.handleModalData({
-        action: "Redelegate",
-        data: { amount, fees: FIRMACHAIN_CONFIG.defaultFee * 1.5 },
-        prevModalAction: modalActions.handleModalRedelegate,
-        txAction: redelegateTx,
-      });
+    if (isLedger) modalActions.handleModalGasEstimation(true);
 
-      closeModal();
-      modalActions.handleModalConfirmTx(true);
-    } else {
-      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-        variant: "error",
-        autoHideDuration: 2000,
+    closeModal();
+
+    getGasEstimationRedelegate(sourceValidator, modalData.data.targetValidator, convertNumber(amount))
+      .then((gas) => {
+        if (isLedger) modalActions.handleModalGasEstimation(false);
+
+        if (convertNumber(balance) > convertToFctNumber(gas)) {
+          modalActions.handleModalData({
+            action: "Redelegate",
+            data: { amount, fees: getFeesFromGas(gas), gas },
+            prevModalAction: modalActions.handleModalRedelegate,
+            txAction: redelegateTx,
+          });
+
+          modalActions.handleModalConfirmTx(true);
+        } else {
+          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        }
+      })
+      .catch(() => {
+        if (isLedger) {
+          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+            variant: "error",
+            autoHideDuration: 3000,
+          });
+          modalActions.handleModalGasEstimation(false);
+        }
       });
-    }
   };
 
   return (
@@ -156,19 +181,15 @@ const RedelegateModal = () => {
       <ModalContainer>
         <ModalTitle>REDELEGATE</ModalTitle>
         <ModalContent>
-          {isValid(modalData.data) && (
-            <>
-              <ModalLabel>Source Validator</ModalLabel>
-              <SelectWrapper>
-                <Select
-                  options={modalData.data.delegationList.filter((v: any) => v.value !== modalData.data.targetValidator)}
-                  styles={customStyles}
-                  onChange={onChangeValidator}
-                  ref={selectInputRef}
-                />
-              </SelectWrapper>
-            </>
-          )}
+          <ModalLabel>Source Validator</ModalLabel>
+          <SelectWrapper>
+            <Select
+              options={delegationList.filter((v: any) => v.value !== targetValidator)}
+              styles={customStyles}
+              onChange={onChangeValidator}
+              ref={selectInputRef}
+            />
+          </SelectWrapper>
           {sourceValidator && (
             <>
               <ModalLabel>Available</ModalLabel>

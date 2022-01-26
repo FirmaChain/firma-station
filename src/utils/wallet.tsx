@@ -197,14 +197,11 @@ function useFirma() {
     return base64URI;
   };
 
-  const setUserData = async () => {
+  const getTokenDataList = async (address: string) => {
     const firmaSDK = FirmaSDK.getSDK();
-    const address = getAddressInternal();
-
-    const balance = await firmaSDK.Bank.getBalance(address);
-    // const nftList = await firmaSDK.Nft.getNftItemAllFromAddress(address);
     const tokenList = await firmaSDK.Bank.getTokenBalanceList(address);
-    const tokenDataList = [];
+
+    let tokenDataList = [];
 
     for (let token of tokenList) {
       try {
@@ -220,6 +217,11 @@ function useFirma() {
       }
     }
 
+    return tokenDataList;
+  };
+
+  const getTotalDelegated = async (address: string) => {
+    const firmaSDK = FirmaSDK.getSDK();
     const delegateListOrigin = await firmaSDK.Staking.getTotalDelegationInfo(address);
 
     let totalDelegated = 0;
@@ -227,15 +229,49 @@ function useFirma() {
       totalDelegated += convertNumber(delegateListOrigin[i].balance.amount);
     }
 
+    return totalDelegated;
+  };
+
+  const getTotalUndelegated = async (address: string) => {
+    const firmaSDK = FirmaSDK.getSDK();
+    const undelegateListOrigin = await firmaSDK.Staking.getTotalUndelegateInfo(address);
+    const undelegationBalanceList = undelegateListOrigin.map((value) => {
+      return value.entries
+        .map((value) => {
+          return value.balance;
+        })
+        .reduce((prev: string, current: string) => {
+          return (convertNumber(prev) + convertNumber(current)).toString();
+        });
+    });
+
+    let totalUndelegated = 0;
+    for (let i = 0; i < undelegationBalanceList.length; i++) {
+      totalUndelegated += convertNumber(undelegationBalanceList[i]);
+    }
+
+    return totalUndelegated;
+  };
+
+  const setUserData = async () => {
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const balance = await firmaSDK.Bank.getBalance(address);
+    const tokenDataList = await getTokenDataList(address);
+    const totalDelegated = await getTotalDelegated(address);
+    const totalUndelegated = await getTotalUndelegated(address);
+
     const vestingData: any = await getVestingAccount();
-    const getBalance = convertNumber(balance) + totalDelegated;
+    const stakingBalance = totalDelegated + totalUndelegated;
+    const totalBalance = convertNumber(balance) + stakingBalance;
     const lockupVesting = vestingData.totalVesting - vestingData.expiredVesting;
 
     let availableBalance = 0;
-    if (lockupVesting - totalDelegated > 0) {
-      availableBalance = getBalance - lockupVesting;
+    if (lockupVesting - stakingBalance > 0) {
+      availableBalance = totalBalance - lockupVesting;
     } else {
-      availableBalance = getBalance - lockupVesting + (lockupVesting - totalDelegated);
+      availableBalance = totalBalance - lockupVesting + (lockupVesting - stakingBalance);
     }
 
     const newbalance = convertToFctNumber(availableBalance);
@@ -459,75 +495,143 @@ function useFirma() {
     return delegation;
   };
 
-  const sendFCT = async (address: string, amount: string, memo = "") => {
-    const result = await FirmaSDK.send(address, convertNumber(amount), memo);
+  const sendFCT = async (address: string, amount: string, memo = "", estimatedGas: number) => {
+    const result = await FirmaSDK.send(address, convertNumber(amount), memo, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const sendToken = async (address: string, amount: string, tokenID: string, decimal: number, memo = "") => {
-    const result = await FirmaSDK.sendToken(address, tokenID, convertNumber(amount), decimal, memo);
+  const getGasEstimationSendFCT = async (address: string, amount: string, memo = "") => {
+    return await FirmaSDK.getGasEstimationSend(address, convertNumber(amount), memo);
+  };
+
+  const sendToken = async (
+    address: string,
+    amount: string,
+    tokenID: string,
+    decimal: number,
+    memo = "",
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.sendToken(address, tokenID, convertNumber(amount), decimal, memo, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const delegate = async (validatorAddress: string, amount: number) => {
-    const result = await FirmaSDK.delegate(validatorAddress, amount);
+  const getGasEstimationsendToken = async (
+    address: string,
+    amount: string,
+    tokenID: string,
+    decimal: number,
+    memo = ""
+  ) => {
+    return await FirmaSDK.getGasEstimationSendToken(address, tokenID, convertNumber(amount), decimal, memo);
+  };
+
+  const delegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
+    const result = await FirmaSDK.delegate(validatorAddress, amount, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const redelegate = async (validatorAddressSrc: string, validatorAddressDst: string, amount: number) => {
-    const result = await FirmaSDK.redelegate(validatorAddressSrc, validatorAddressDst, amount);
+  const getGasEstimationDelegate = async (validatorAddress: string, amount: number) => {
+    return await FirmaSDK.getGasEstimationDelegate(validatorAddress, amount);
+  };
+
+  const redelegate = async (
+    validatorAddressSrc: string,
+    validatorAddressDst: string,
+    amount: number,
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.redelegate(validatorAddressSrc, validatorAddressDst, amount, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const undelegate = async (validatorAddress: string, amount: number) => {
-    const result = await FirmaSDK.undelegate(validatorAddress, amount);
+  const getGasEstimationRedelegate = async (
+    validatorAddressSrc: string,
+    validatorAddressDst: string,
+    amount: number
+  ) => {
+    return await FirmaSDK.getGasEstimationRedelegate(validatorAddressSrc, validatorAddressDst, amount);
+  };
+
+  const undelegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
+    const result = await FirmaSDK.undelegate(validatorAddress, amount, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const withdraw = async (validatorAddress: string) => {
-    const result = await FirmaSDK.withdrawAllRewards(validatorAddress);
+  const getGasEstimationUndelegate = async (validatorAddress: string, amount: number) => {
+    return await FirmaSDK.getGasEstimationUndelegate(validatorAddress, amount);
+  };
+
+  const withdraw = async (validatorAddress: string, estimatedGas: number) => {
+    const result = await FirmaSDK.withdrawAllRewards(validatorAddress, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const withdrawAllValidator = async () => {
-    const result = await FirmaSDK.withdrawAllRewardsFromAllValidator();
+  const getGasEstimationWithdraw = async (validatorAddress: string) => {
+    return await FirmaSDK.getGasEstimationWithdrawAllRewards(validatorAddress);
+  };
+
+  const withdrawAllValidator = async (estimatedGas: number) => {
+    const result = await FirmaSDK.withdrawAllRewardsFromAllValidator(estimatedGas);
 
     checkVlidateResult(result);
   };
 
   const getGasEstimationWithdrawAllValidator = async () => {
-    const result = await FirmaSDK.getGasEstimationWithdrawAllRewardsFromAllValidator();
-
-    return result;
+    return await FirmaSDK.getGasEstimationWithdrawAllRewardsFromAllValidator();
   };
 
-  const vote = async (proposalId: number, votingType: number) => {
-    const result = await FirmaSDK.vote(proposalId, votingType);
+  const vote = async (proposalId: number, votingType: number, estimatedGas: number) => {
+    const result = await FirmaSDK.vote(proposalId, votingType, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const deposit = async (proposalId: number, amount: number) => {
-    const result = await FirmaSDK.deposit(proposalId, amount);
+  const getGasEstimationVote = async (proposalId: number, votingType: number) => {
+    return await FirmaSDK.getGasEstimationVote(proposalId, votingType);
+  };
+
+  const deposit = async (proposalId: number, amount: number, estimatedGas: number) => {
+    const result = await FirmaSDK.deposit(proposalId, amount, estimatedGas);
 
     checkVlidateResult(result);
+  };
+
+  const getGasEstimationDeposit = async (proposalId: number, amount: number) => {
+    return await FirmaSDK.getGasEstimationDeposit(proposalId, amount);
   };
 
   const submitParameterChangeProposal = async (
     title: string,
     description: string,
     initialDeposit: number,
-    paramList: Array<any>
+    paramList: Array<any>,
+    estimatedGas: number
   ) => {
-    const result = await FirmaSDK.submitParameterChangeProposal(title, description, initialDeposit, paramList);
+    const result = await FirmaSDK.submitParameterChangeProposal(
+      title,
+      description,
+      initialDeposit,
+      paramList,
+      estimatedGas
+    );
 
     checkVlidateResult(result);
+  };
+
+  const getGasEstimationSubmitParameterChangeProposal = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    paramList: Array<any>
+  ) => {
+    return await FirmaSDK.getGasEstimationSubmitParameterChangeProposal(title, description, initialDeposit, paramList);
   };
 
   const submitCommunityPoolSpendProposal = async (
@@ -535,23 +639,50 @@ function useFirma() {
     description: string,
     initialDeposit: number,
     amount: number,
-    recipient: string
+    recipient: string,
+    estimatedGas: number
   ) => {
     const result = await FirmaSDK.submitCommunityPoolSpendProposal(
       title,
       description,
       initialDeposit,
       amount,
-      recipient
+      recipient,
+      estimatedGas
     );
 
     checkVlidateResult(result);
   };
 
-  const submitTextProposal = async (title: string, description: string, initialDeposit: number) => {
-    const result = await FirmaSDK.submitTextProposal(title, description, initialDeposit);
+  const getGasEstimationSubmitCommunityPoolSpendProposal = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    amount: number,
+    recipient: string
+  ) => {
+    return await FirmaSDK.getGasEstimationSubmitCommunityPoolSpendProposal(
+      title,
+      description,
+      initialDeposit,
+      amount,
+      recipient
+    );
+  };
+
+  const submitTextProposal = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.submitTextProposal(title, description, initialDeposit, estimatedGas);
 
     checkVlidateResult(result);
+  };
+
+  const getGasEstimationSubmitTextProposal = async (title: string, description: string, initialDeposit: number) => {
+    return await FirmaSDK.getGasEstimationSubmitTextProposal(title, description, initialDeposit);
   };
 
   const submitSoftwareUpgrade = async (
@@ -559,17 +690,35 @@ function useFirma() {
     description: string,
     initialDeposit: number,
     upgradeName: string,
-    height: number
+    height: number,
+    estimatedGas: number
   ) => {
     const result = await FirmaSDK.submitSoftwareUpgradeProposalByHeight(
       title,
       description,
       initialDeposit,
       upgradeName,
-      height
+      height,
+      estimatedGas
     );
 
     checkVlidateResult(result);
+  };
+
+  const getGasEstimationSubmitSoftwareUpgrade = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    upgradeName: string,
+    height: number
+  ) => {
+    return await FirmaSDK.getGasEstimationSubmitSoftwareUpgradeProposalByHeight(
+      title,
+      description,
+      initialDeposit,
+      upgradeName,
+      height
+    );
   };
 
   const checkVlidateResult = (result: any) => {
@@ -620,13 +769,25 @@ function useFirma() {
     undelegate,
     withdraw,
     withdrawAllValidator,
-    getGasEstimationWithdrawAllValidator,
     submitParameterChangeProposal,
     submitCommunityPoolSpendProposal,
     submitTextProposal,
     submitSoftwareUpgrade,
     deposit,
     vote,
+    getGasEstimationSendFCT,
+    getGasEstimationsendToken,
+    getGasEstimationDelegate,
+    getGasEstimationRedelegate,
+    getGasEstimationUndelegate,
+    getGasEstimationWithdraw,
+    getGasEstimationWithdrawAllValidator,
+    getGasEstimationVote,
+    getGasEstimationDeposit,
+    getGasEstimationSubmitParameterChangeProposal,
+    getGasEstimationSubmitCommunityPoolSpendProposal,
+    getGasEstimationSubmitTextProposal,
+    getGasEstimationSubmitSoftwareUpgrade,
     isValidWallet,
     isValidAddress,
     downloadPaperWallet,

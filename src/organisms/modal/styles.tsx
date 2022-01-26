@@ -501,7 +501,7 @@ export const VotingWrapper = styled.div`
   margin-bottom: 30px;
 `;
 export const VotingItem = styled.div<{ active: boolean }>`
-  width: calc(50% - 12px);
+  width: calc(50% - 13px);
   height: 50px;
   line-height: 50px;
   cursor: pointer;

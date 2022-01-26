@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import numeral from "numeral";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
@@ -6,7 +6,7 @@ import { useSnackbar } from "notistack";
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
-import { convertNumber, convertToFctNumber, convertToFctString, isValid } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas, isValid } from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 import { FIRMACHAIN_CONFIG } from "../../config";
@@ -26,12 +26,21 @@ const UndelegateModal = () => {
   const undelegateModalState = useSelector((state: rootState) => state.modal.undelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
-  const { undelegate } = useFirma();
+  const { undelegate, getGasEstimationUndelegate } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
+
+  const [availableAmount, setAvailableAmount] = useState("");
+
+  useEffect(() => {
+    setAvailableAmount(
+      isValid(modalData.data) ? numeral(convertToFctNumber(modalData.data.delegation.amount)).format("0,0.000") : "0"
+    );
+  }, [undelegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeModal = () => {
     resetModal();
@@ -72,8 +81,8 @@ const UndelegateModal = () => {
     return convertToFctNumber(modalData.data.delegation.amount);
   };
 
-  const undelegateTx = (resolveTx: () => void, rejectTx: () => void) => {
-    undelegate(modalData.data.targetValidator, convertNumber(amount))
+  const undelegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
+    undelegate(modalData.data.targetValidator, convertNumber(amount), gas)
       .then(() => {
         reFetchObservableQueries();
         resolveTx();
@@ -84,22 +93,39 @@ const UndelegateModal = () => {
   };
 
   const nextStep = () => {
-    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
-      modalActions.handleModalData({
-        action: "Undelegate",
-        data: { amount: amount },
-        prevModalAction: modalActions.handleModalUndelegate,
-        txAction: undelegateTx,
-      });
+    if (isLedger) modalActions.handleModalGasEstimation(true);
 
-      closeModal();
-      modalActions.handleModalConfirmTx(true);
-    } else {
-      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-        variant: "error",
-        autoHideDuration: 2000,
+    closeModal();
+
+    getGasEstimationUndelegate(modalData.data.targetValidator, convertNumber(amount))
+      .then((gas) => {
+        if (isLedger) modalActions.handleModalGasEstimation(false);
+
+        if (convertNumber(balance) > convertToFctNumber(gas)) {
+          modalActions.handleModalData({
+            action: "Undelegate",
+            data: { amount: amount, fees: getFeesFromGas(gas), gas },
+            prevModalAction: modalActions.handleModalUndelegate,
+            txAction: undelegateTx,
+          });
+
+          modalActions.handleModalConfirmTx(true);
+        } else {
+          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        }
+      })
+      .catch(() => {
+        if (isLedger) {
+          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+            variant: "error",
+            autoHideDuration: 3000,
+          });
+          modalActions.handleModalGasEstimation(false);
+        }
       });
-    }
   };
 
   return (
@@ -108,12 +134,7 @@ const UndelegateModal = () => {
         <ModalTitle>UNDELEGATE</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>
-            {isValid(modalData.data)
-              ? numeral(convertToFctNumber(modalData.data.delegation.amount)).format("0,0.000")
-              : 0}{" "}
-            FCT
-          </ModalInput>
+          <ModalInput>{availableAmount} FCT</ModalInput>
 
           <ModalLabel>Fees</ModalLabel>
           <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>

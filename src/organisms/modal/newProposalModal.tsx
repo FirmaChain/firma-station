@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import Select from "react-select";
 
 import useFirma from "../../utils/wallet";
-import { convertNumber, convertToFctNumber } from "../../utils/common";
+import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../utils/common";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
@@ -67,6 +67,7 @@ const NewProposalModal = () => {
   const selectInputRef = useRef<any>();
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
 
   const [proposalType, setProposalType] = useState("");
   const [title, setTitle] = useState("");
@@ -78,8 +79,16 @@ const NewProposalModal = () => {
   const [height, setHeight] = useState(1);
   const [paramList, setParamList] = useState<Array<any>>([]);
 
-  const { submitParameterChangeProposal, submitCommunityPoolSpendProposal, submitTextProposal, submitSoftwareUpgrade } =
-    useFirma();
+  const {
+    submitParameterChangeProposal,
+    submitCommunityPoolSpendProposal,
+    submitTextProposal,
+    submitSoftwareUpgrade,
+    getGasEstimationSubmitParameterChangeProposal,
+    getGasEstimationSubmitCommunityPoolSpendProposal,
+    getGasEstimationSubmitSoftwareUpgrade,
+    getGasEstimationSubmitTextProposal,
+  } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const closeModal = () => {
@@ -102,10 +111,10 @@ const NewProposalModal = () => {
     setParamList([]);
   };
 
-  const newProposalTx = (resolveTx: () => void, rejectTx: () => void) => {
+  const newProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     switch (proposalType) {
       case "TEXT_PROPOSAL":
-        submitTextProposal(title, description, initialDeposit)
+        submitTextProposal(title, description, initialDeposit, gas)
           .then(() => {
             reFetchObservableQueries();
             resolveTx();
@@ -115,7 +124,7 @@ const NewProposalModal = () => {
           });
         break;
       case "COMMUNITY_POOL_SPEND_PROPOSAL":
-        submitCommunityPoolSpendProposal(title, description, initialDeposit, amount, recipient)
+        submitCommunityPoolSpendProposal(title, description, initialDeposit, amount, recipient, gas)
           .then(() => {
             reFetchObservableQueries();
             resolveTx();
@@ -128,7 +137,7 @@ const NewProposalModal = () => {
         const validParamList = paramList.filter(
           (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
         );
-        submitParameterChangeProposal(title, description, initialDeposit, validParamList)
+        submitParameterChangeProposal(title, description, initialDeposit, validParamList, gas)
           .then(() => {
             resolveTx();
           })
@@ -137,7 +146,7 @@ const NewProposalModal = () => {
           });
         break;
       case "SOFTWARE_UPGRADE":
-        submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height))
+        submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height), gas)
           .then(() => {
             reFetchObservableQueries();
             resolveTx();
@@ -241,7 +250,7 @@ const NewProposalModal = () => {
     setParamList((prevState) => [...prevState.filter((v, i) => i !== index)]);
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     const validParamList = paramList.filter(
       (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
     );
@@ -270,15 +279,70 @@ const NewProposalModal = () => {
       return;
     }
 
-    modalActions.handleModalData({
-      action: "Proposal",
-      data: {},
-      prevModalAction: modalActions.handleModalNewProposal,
-      txAction: newProposalTx,
-    });
-
     closeModal();
-    modalActions.handleModalConfirmTx(true);
+    if (isLedger) modalActions.handleModalGasEstimation(true);
+
+    let currentGas: number = 0;
+
+    try {
+      switch (proposalType) {
+        case "TEXT_PROPOSAL":
+          currentGas = await getGasEstimationSubmitTextProposal(title, description, initialDeposit);
+          break;
+        case "COMMUNITY_POOL_SPEND_PROPOSAL":
+          currentGas = await getGasEstimationSubmitCommunityPoolSpendProposal(
+            title,
+            description,
+            initialDeposit,
+            amount,
+            recipient
+          );
+          break;
+        case "PARAMETER_CHANGE_PROPOSAL":
+          const validParamList = paramList.filter(
+            (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
+          );
+          currentGas = await getGasEstimationSubmitParameterChangeProposal(
+            title,
+            description,
+            initialDeposit,
+            validParamList
+          );
+          break;
+        case "SOFTWARE_UPGRADE":
+          currentGas = await getGasEstimationSubmitSoftwareUpgrade(
+            title,
+            description,
+            initialDeposit,
+            upgradeName,
+            convertNumber(height)
+          );
+          break;
+        default:
+          break;
+      }
+    } catch (e) {
+      if (isLedger) {
+        enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+          variant: "error",
+          autoHideDuration: 3000,
+        });
+        modalActions.handleModalGasEstimation(false);
+      }
+    }
+
+    if (isLedger) modalActions.handleModalGasEstimation(false);
+
+    if (currentGas > 0) {
+      modalActions.handleModalData({
+        action: "Proposal",
+        data: { fees: getFeesFromGas(currentGas), gas: currentGas },
+        prevModalAction: modalActions.handleModalNewProposal,
+        txAction: newProposalTx,
+      });
+
+      modalActions.handleModalConfirmTx(true);
+    }
   };
 
   return (

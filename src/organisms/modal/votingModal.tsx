@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { getFeesFromGas } from "../../utils/common";
 
 import {
   votingModalWidth,
@@ -20,9 +22,11 @@ import {
 const VotingModal = () => {
   const votingModalState = useSelector((state: rootState) => state.modal.voting);
   const modalData = useSelector((state: rootState) => state.modal.data);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const [votingType, setVotingType] = useState(0);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const { vote } = useFirma();
+  const { vote, getGasEstimationVote } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
 
   const closeModal = () => {
@@ -34,8 +38,8 @@ const VotingModal = () => {
     setVotingType(0);
   };
 
-  const votingTx = (resolveTx: () => void, rejectTx: () => void) => {
-    vote(modalData.proposalId, votingType)
+  const votingTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
+    vote(modalData.proposalId, votingType, gas)
       .then(() => {
         reFetchObservableQueries();
         resolveTx();
@@ -46,15 +50,32 @@ const VotingModal = () => {
   };
 
   const nextStep = () => {
-    modalActions.handleModalData({
-      action: "Voting",
-      data: {},
-      prevModalAction: modalActions.handleModalVoting,
-      txAction: votingTx,
-    });
+    if (isLedger) modalActions.handleModalGasEstimation(true);
 
     closeModal();
-    modalActions.handleModalConfirmTx(true);
+
+    getGasEstimationVote(modalData.proposalId, votingType)
+      .then((gas) => {
+        if (isLedger) modalActions.handleModalGasEstimation(false);
+
+        modalActions.handleModalData({
+          action: "Voting",
+          data: { fees: getFeesFromGas(gas), gas },
+          prevModalAction: modalActions.handleModalVoting,
+          txAction: votingTx,
+        });
+
+        modalActions.handleModalConfirmTx(true);
+      })
+      .catch(() => {
+        if (isLedger) {
+          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+            variant: "error",
+            autoHideDuration: 3000,
+          });
+          modalActions.handleModalGasEstimation(false);
+        }
+      });
   };
 
   return (

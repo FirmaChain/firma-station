@@ -17,7 +17,9 @@ const QueueTxModal = () => {
 
   useEffect(() => {
     if (queueTxModalState) {
-      modalData.txAction(resolveTx, rejectTx);
+      const gas = modalData.data.gas ? modalData.data.gas : 0;
+
+      modalData.txAction(resolveTx, rejectTx, gas);
     }
   }, [queueTxModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 

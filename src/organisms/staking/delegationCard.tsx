@@ -11,7 +11,7 @@ import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
 import { modalActions } from "../../redux/action";
 import { ITotalStakingState } from "./hooks";
-import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 
 import theme from "../../themes";
 import { BlankCard } from "../../components/card";
@@ -96,8 +96,8 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
   const data = GetDelegatePieData(totalStakingState);
 
-  const withdrawAllValidatorTx = (resolveTx: () => void, rejectTx: () => void) => {
-    withdrawAllValidator()
+  const withdrawAllValidatorTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
+    withdrawAllValidator(gas)
       .then(() => {
         resolveTx();
       })
@@ -110,13 +110,13 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
     if (isLedger) modalActions.handleModalGasEstimation(true);
 
     getGasEstimationWithdrawAllValidator()
-      .then((result) => {
+      .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        if (convertNumber(balance) > convertToFctNumber(result)) {
+        if (convertNumber(balance) > convertToFctNumber(gas)) {
           modalActions.handleModalData({
             action: "Withdraw",
-            data: { amount: totalStakingState.stakingReward, fees: result },
+            data: { amount: totalStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
             txAction: withdrawAllValidatorTx,
           });
 
@@ -128,7 +128,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
           });
         }
       })
-      .catch((e) => {
+      .catch(() => {
         if (isLedger) {
           enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
             variant: "error",

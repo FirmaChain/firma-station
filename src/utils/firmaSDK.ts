@@ -2,8 +2,8 @@ import { FirmaSDK } from "@firmachain/firma-js";
 import { FirmaWebLedgerWallet, FirmaBridgeLedgerWallet } from "@firmachain/firma-js-ledger";
 import TransportHID from "@ledgerhq/hw-transport-webhid";
 
-import { FIRMACHAIN_CONFIG } from "../config";
-import { isElectron } from "./common";
+import { FIRMACHAIN_CONFIG, IS_DEFAULT_GAS } from "../config";
+import { getFeesFromGas, isElectron } from "./common";
 
 declare global {
   interface Window {
@@ -62,6 +62,10 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     return firmaSDK;
   };
 
+  const getFees = (estimatedGas: number) => {
+    return getFeesFromGas(estimatedGas);
+  };
+
   const getWallet = async () => {
     if (isLedger) {
       if (isElectron) {
@@ -76,67 +80,162 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     }
   };
 
-  const send = async (address: string, amount: number, memo = "") => {
+  const send = async (address: string, amount: number, memo = "", estimatedGas: number) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Bank.send(wallet, address, amount, { memo });
+    const result = await firmaSDK.Bank.send(wallet, address, amount, {
+      memo,
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
 
     return result;
   };
 
-  const sendToken = async (address: string, tokenID: string, amount: number, decimal: number, memo = "") => {
+  const getGasEstimationSend = async (address: string, amount: number, memo = "") => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
     const wallet = await getWallet();
-    const result = await firmaSDK.Bank.sendToken(wallet, address, tokenID, amount, decimal, { memo });
+    const gasEstimation = await firmaSDK.Bank.getGasEstimationSend(wallet, address, amount, { memo });
+
+    return gasEstimation;
+  };
+
+  const sendToken = async (
+    address: string,
+    tokenID: string,
+    amount: number,
+    decimal: number,
+    memo = "",
+    estimatedGas: number
+  ) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Bank.sendToken(wallet, address, tokenID, amount, decimal, {
+      memo,
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
 
     return result;
   };
 
-  const delegate = async (validatorAddress: string, amount: number) => {
+  const getGasEstimationSendToken = async (
+    address: string,
+    tokenID: string,
+    amount: number,
+    decimal: number,
+    memo = ""
+  ) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    // comming: firma-js
+    return FIRMACHAIN_CONFIG.defaultGas;
+  };
+
+  const delegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Staking.delegate(wallet, validatorAddress, amount);
+    const result = await firmaSDK.Staking.delegate(wallet, validatorAddress, amount, {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
 
     return result;
   };
 
-  const redelegate = async (validatorAddressSrc: string, validatorAddressDst: string, amount: number) => {
+  const getGasEstimationDelegate = async (validatorAddress: string, amount: number) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Staking.getGasEstimationDelegate(wallet, validatorAddress, amount);
+
+    return result;
+  };
+
+  const redelegate = async (
+    validatorAddressSrc: string,
+    validatorAddressDst: string,
+    amount: number,
+    estimatedGas: number
+  ) => {
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.redelegate(wallet, validatorAddressSrc, validatorAddressDst, amount, {
-      fee: FIRMACHAIN_CONFIG.defaultFee * 1.5,
-      gas: FIRMACHAIN_CONFIG.defaultGas * 1.5,
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
     });
     return result;
   };
 
-  const undelegate = async (validatorAddress: string, amount: number) => {
+  const getGasEstimationRedelegate = async (
+    validatorAddressSrc: string,
+    validatorAddressDst: string,
+    amount: number
+  ) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas * 1.5;
+
+    // const wallet = await getWallet();
+    // const result = await firmaSDK.Staking.getGasEstimationRedelegate(
+    //   wallet,
+    //   validatorAddressSrc,
+    //   validatorAddressDst,
+    //   amount
+    // );
+
+    // return result;
+    return FIRMACHAIN_CONFIG.defaultGas * 1.5;
+  };
+
+  const undelegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Staking.undelegate(wallet, validatorAddress, amount);
+    const result = await firmaSDK.Staking.undelegate(wallet, validatorAddress, amount, {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
 
     return result;
   };
 
-  const withdrawAllRewards = async (validatorAddress: string) => {
+  const getGasEstimationUndelegate = async (validatorAddress: string, amount: number) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
     const wallet = await getWallet();
-    const result = await firmaSDK.Distribution.withdrawAllRewards(wallet, validatorAddress);
+    const result = await firmaSDK.Staking.getGasEstimationUndelegate(wallet, validatorAddress, amount);
 
     return result;
   };
 
-  const withdrawAllRewardsFromAllValidator = async () => {
+  const withdrawAllRewards = async (validatorAddress: string, estimatedGas: number) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Distribution.withdrawAllRewards(wallet, validatorAddress, {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
+
+    return result;
+  };
+
+  const getGasEstimationWithdrawAllRewards = async (validatorAddress: string) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Distribution.getGasEstimationWithdrawAllRewards(wallet, validatorAddress);
+
+    return result;
+  };
+
+  const withdrawAllRewardsFromAllValidator = async (estimatedGas: number) => {
     const wallet = await getWallet();
     const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress());
-    const gasEstimation = await firmaSDK.Distribution.getGasEstimationWithdrawAllRewardsFromAllValidator(
-      wallet,
-      delegationList
-    );
 
     const result = await firmaSDK.Distribution.withdrawAllRewardsFromAllValidator(wallet, delegationList, {
-      gas: gasEstimation,
-      fee: gasEstimation,
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
     });
 
     return result;
   };
 
   const getGasEstimationWithdrawAllRewardsFromAllValidator = async () => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
     const wallet = await getWallet();
     const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress());
     const gasEstimation = await firmaSDK.Distribution.getGasEstimationWithdrawAllRewardsFromAllValidator(
@@ -147,16 +246,40 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     return gasEstimation;
   };
 
-  const vote = async (proposalId: number, votingType: number) => {
+  const vote = async (proposalId: number, votingType: number, estimatedGas: number) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.vote(wallet, proposalId, votingType);
+    const result = await firmaSDK.Gov.vote(wallet, proposalId, votingType, {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
 
     return result;
   };
 
-  const deposit = async (proposalId: number, amount: number) => {
+  const getGasEstimationVote = async (proposalId: number, votingType: number) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.deposit(wallet, proposalId, amount);
+    const result = await firmaSDK.Gov.getGasEstimationVote(wallet, proposalId, votingType);
+
+    return result;
+  };
+
+  const deposit = async (proposalId: number, amount: number, estimatedGas: number) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.deposit(wallet, proposalId, amount, {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
+
+    return result;
+  };
+
+  const getGasEstimationDeposit = async (proposalId: number, amount: number) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationDeposit(wallet, proposalId, amount);
 
     return result;
   };
@@ -165,10 +288,35 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     title: string,
     description: string,
     initialDeposit: number,
-    paramList: Array<any>
+    paramList: Array<any>,
+    estimatedGas: number
   ) => {
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.submitParameterChangeProposal(
+      wallet,
+      title,
+      description,
+      initialDeposit,
+      paramList,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationSubmitParameterChangeProposal = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    paramList: Array<any>
+  ) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitParameterChangeProposal(
       wallet,
       title,
       description,
@@ -184,10 +332,37 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     description: string,
     initialDeposit: number,
     amount: number,
-    recipient: string
+    recipient: string,
+    estimatedGas: number
   ) => {
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.submitCommunityPoolSpendProposal(
+      wallet,
+      title,
+      description,
+      initialDeposit,
+      amount,
+      recipient,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationSubmitCommunityPoolSpendProposal = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    amount: number,
+    recipient: string
+  ) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitCommunityPoolSpendProposal(
       wallet,
       title,
       description,
@@ -199,9 +374,26 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     return result;
   };
 
-  const submitTextProposal = async (title: string, description: string, initialDeposit: number) => {
+  const submitTextProposal = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    estimatedGas: number
+  ) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitTextProposal(wallet, title, description, initialDeposit);
+    const result = await firmaSDK.Gov.submitTextProposal(wallet, title, description, initialDeposit, {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas),
+    });
+
+    return result;
+  };
+
+  const getGasEstimationSubmitTextProposal = async (title: string, description: string, initialDeposit: number) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitTextProposal(wallet, title, description, initialDeposit);
 
     return result;
   };
@@ -211,10 +403,37 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     description: string,
     initialDeposit: number,
     upgradeName: string,
-    height: number
+    height: number,
+    estimatedGas: number
   ) => {
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.submitSoftwareUpgradeProposalByHeight(
+      wallet,
+      title,
+      description,
+      initialDeposit,
+      upgradeName,
+      height,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationSubmitSoftwareUpgradeProposalByHeight = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    upgradeName: string,
+    height: number
+  ) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitSoftwareUpgradeProposalByHeight(
       wallet,
       title,
       description,
@@ -238,13 +457,26 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     undelegate,
     withdrawAllRewards,
     withdrawAllRewardsFromAllValidator,
-    getGasEstimationWithdrawAllRewardsFromAllValidator,
     vote,
     deposit,
     submitParameterChangeProposal,
     submitCommunityPoolSpendProposal,
     submitTextProposal,
     submitSoftwareUpgradeProposalByHeight,
+
+    getGasEstimationSend,
+    getGasEstimationSendToken,
+    getGasEstimationDelegate,
+    getGasEstimationRedelegate,
+    getGasEstimationUndelegate,
+    getGasEstimationWithdrawAllRewards,
+    getGasEstimationWithdrawAllRewardsFromAllValidator,
+    getGasEstimationVote,
+    getGasEstimationDeposit,
+    getGasEstimationSubmitParameterChangeProposal,
+    getGasEstimationSubmitCommunityPoolSpendProposal,
+    getGasEstimationSubmitTextProposal,
+    getGasEstimationSubmitSoftwareUpgradeProposalByHeight,
   };
 };
 

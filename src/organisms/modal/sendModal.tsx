@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { useApolloClient } from "@apollo/client";
@@ -18,7 +19,7 @@ import {
   NextButton,
   InputBoxDefault,
 } from "./styles";
-import { convertNumber, convertToFctNumber, convertToFctString } from "../../utils/common";
+import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 
 import styled from "styled-components";
 import { FIRMACHAIN_CONFIG } from "../../config";
@@ -55,8 +56,10 @@ const customStyles = {
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
-  const { sendFCT, sendToken, isValidAddress } = useFirma();
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress } = useFirma();
   const { reFetchObservableQueries } = useApolloClient();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [available, setAvailable] = useState(0);
   const [tokenData, setTokenData] = useState({
@@ -146,9 +149,9 @@ const SendModal = () => {
     }
   };
 
-  const sendTx = (resolveTx: () => void, rejectTx: () => void) => {
+  const sendTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     if (tokenData.symbol === "FCT") {
-      sendFCT(targetAddress, amount, memo)
+      sendFCT(targetAddress, amount, memo, gas)
         .then(() => {
           reFetchObservableQueries();
           resolveTx();
@@ -157,7 +160,7 @@ const SendModal = () => {
           rejectTx();
         });
     } else {
-      sendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo)
+      sendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo, gas)
         .then(() => {
           reFetchObservableQueries();
           resolveTx();
@@ -169,15 +172,57 @@ const SendModal = () => {
   };
 
   const nextStep = () => {
-    modalActions.handleModalData({
-      action: "Send",
-      data: { amount },
-      prevModalAction: modalActions.handleModalSend,
-      txAction: sendTx,
-    });
+    if (isLedger) modalActions.handleModalGasEstimation(true);
 
     closeModal();
-    modalActions.handleModalConfirmTx(true);
+
+    if (tokenData.symbol === "FCT") {
+      getGasEstimationSendFCT(targetAddress, amount, memo)
+        .then((gas) => {
+          if (isLedger) modalActions.handleModalGasEstimation(false);
+
+          modalActions.handleModalData({
+            action: "Send",
+            data: { amount, fees: getFeesFromGas(gas), gas },
+            prevModalAction: modalActions.handleModalSend,
+            txAction: sendTx,
+          });
+
+          modalActions.handleModalConfirmTx(true);
+        })
+        .catch(() => {
+          if (isLedger) {
+            enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+              variant: "error",
+              autoHideDuration: 3000,
+            });
+            modalActions.handleModalGasEstimation(false);
+          }
+        });
+    } else {
+      getGasEstimationsendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo)
+        .then((gas) => {
+          if (isLedger) modalActions.handleModalGasEstimation(false);
+
+          modalActions.handleModalData({
+            action: "Send",
+            data: { amount, fees: getFeesFromGas(gas), gas },
+            prevModalAction: modalActions.handleModalSend,
+            txAction: sendTx,
+          });
+
+          modalActions.handleModalConfirmTx(true);
+        })
+        .catch(() => {
+          if (isLedger) {
+            enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
+              variant: "error",
+              autoHideDuration: 3000,
+            });
+            modalActions.handleModalGasEstimation(false);
+          }
+        });
+    }
   };
 
   return (

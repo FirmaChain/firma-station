@@ -2,6 +2,10 @@ import { FirmaUtil } from "@firmachain/firma-js";
 
 export const isElectron = navigator.userAgent.includes("Electron");
 
+export const getFeesFromGas = (estimatedGas: number) => {
+  return Math.round(estimatedGas * 0.1);
+};
+
 export const isValid = (data: any) => {
   if (data === null) return false;
   if (data === undefined) return false;
