@@ -195,7 +195,7 @@ const RedelegateModal = () => {
               <ModalLabel>Available</ModalLabel>
               <ModalInput>{numeral(sourceAmount).format("0,0.000")} FCT</ModalInput>
 
-              <ModalLabel>Fees</ModalLabel>
+              <ModalLabel>Fee estimation</ModalLabel>
               <ModalInput>{`${convertToFctString((FIRMACHAIN_CONFIG.defaultFee * 1.5).toString())} FCT`}</ModalInput>
 
               <ModalLabel>Amount</ModalLabel>

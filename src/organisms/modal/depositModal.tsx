@@ -120,7 +120,7 @@ const DepositModal = () => {
           <ModalLabel>Available</ModalLabel>
           <ModalInput>{balance} FCT</ModalInput>
 
-          <ModalLabel>Fees</ModalLabel>
+          <ModalLabel>Fee estimation</ModalLabel>
           <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
