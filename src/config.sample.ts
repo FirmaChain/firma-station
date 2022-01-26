@@ -14,3 +14,5 @@ export const FIRMACHAIN_CONFIG = FirmaConfig.TestNetConfig;
 
 export const BLOCKS_PER_YEAR = 0;
 export const IS_DEFAULT_GAS = true;
+
+export const DOWNLOAD_LINK_LIST = [];
