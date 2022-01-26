@@ -161,6 +161,10 @@ function useFirma() {
     walletActions.handleWalletLedger(false);
     walletActions.handleWalletTimeKey(getRandomKey());
 
+    userActions.handleUserNFTList([]);
+    userActions.handleUserBalance("0");
+    userActions.handleUserTokenList([]);
+
     clearKey();
   };
 
