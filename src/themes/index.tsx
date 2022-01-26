@@ -79,6 +79,9 @@ const urls = {
   paperwallet: process.env.PUBLIC_URL + "/images/paperwallet.png",
   close: process.env.PUBLIC_URL + "/images/ic_close.png",
   tooltip: process.env.PUBLIC_URL + "/images/ic_tooltip.png",
+  win: process.env.PUBLIC_URL + "/images/icon_win.png",
+  linux: process.env.PUBLIC_URL + "/images/icon_linux.png",
+  mac: process.env.PUBLIC_URL + "/images/icon_mac.png",
 };
 
 const theme = {

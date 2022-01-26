@@ -9,7 +9,8 @@ import StakingIcon from "@mui/icons-material/Inbox";
 import GovernmentIcon from "@mui/icons-material/AccountBalance";
 import ForumIcon from "@mui/icons-material/Forum";
 import BuyFirmaIcon from "@mui/icons-material/Payment";
-import ExplorerIcon from "@mui/icons-material/Archive";
+import ExplorerIcon from "@mui/icons-material/Public";
+import DownloadIcon from "@mui/icons-material/Archive";
 // import SettingsIcon from "@mui/icons-material/Settings";
 
 import {
@@ -42,6 +43,12 @@ const menus = [
     path: "/explorer",
     icon: ExplorerIcon,
     externalLink: EXPLORER_URI,
+  },
+  {
+    name: "Desktop App",
+    path: "/download",
+    icon: DownloadIcon,
+    externalLink: "",
   },
 ];
 
