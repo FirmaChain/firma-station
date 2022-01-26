@@ -261,34 +261,41 @@ function useFirma() {
     const firmaSDK = FirmaSDK.getSDK();
     const address = getAddressInternal();
 
-    const balance = await firmaSDK.Bank.getBalance(address);
-    const tokenDataList = await getTokenDataList(address);
-    const totalDelegated = await getTotalDelegated(address);
-    const totalUndelegated = await getTotalUndelegated(address);
+    try {
+      const balance = await firmaSDK.Bank.getBalance(address);
+      const tokenDataList = await getTokenDataList(address);
+      const totalDelegated = await getTotalDelegated(address);
+      const totalUndelegated = await getTotalUndelegated(address);
 
-    const vestingData: any = await getVestingAccount();
-    const stakingBalance = totalDelegated + totalUndelegated;
-    const totalBalance = convertNumber(balance) + stakingBalance;
-    const lockupVesting = vestingData.totalVesting - vestingData.expiredVesting;
+      const vestingData: any = await getVestingAccount();
+      const stakingBalance = totalDelegated + totalUndelegated;
+      const totalBalance = convertNumber(balance) + stakingBalance;
+      const lockupVesting = vestingData.totalVesting - vestingData.expiredVesting;
 
-    let availableBalance = 0;
-    if (lockupVesting - stakingBalance > 0) {
-      availableBalance = totalBalance - lockupVesting;
-    } else {
-      availableBalance = totalBalance - lockupVesting + (lockupVesting - stakingBalance);
+      let availableBalance = 0;
+      if (lockupVesting - stakingBalance > 0) {
+        availableBalance = totalBalance - lockupVesting;
+      } else {
+        availableBalance = totalBalance - lockupVesting + (lockupVesting - stakingBalance);
+      }
+
+      const newbalance = convertToFctNumber(availableBalance);
+
+      userActions.handleUserNFTList([]);
+      userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : "0");
+      userActions.handleUserTokenList(tokenDataList);
+    } catch (e) {
+      console.log(e);
     }
-
-    const newbalance = convertToFctNumber(availableBalance);
-
-    userActions.handleUserNFTList([]);
-    userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : "0");
-    userActions.handleUserTokenList(tokenDataList);
   };
 
   const getVestingAccount = async () => {
-    if (isVesting === false || address === "") return;
-
     return new Promise((resolve, reject) => {
+      if (isVesting === false || address === "") {
+        resolve({ totalVesting: 0, expiredVesting: 0 });
+        return;
+      }
+
       axios
         .get(`${LCD_REST_URI}/cosmos/auth/v1beta1/accounts/${address}`, {
           validateStatus: (status) => {
