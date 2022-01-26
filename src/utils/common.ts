@@ -1,9 +1,12 @@
 import { FirmaUtil } from "@firmachain/firma-js";
+import { FIRMACHAIN_CONFIG } from "../config";
 
 export const isElectron = navigator.userAgent.includes("Electron");
 
 export const getFeesFromGas = (estimatedGas: number) => {
-  return Math.round(estimatedGas * 0.1);
+  const fee = Math.round(estimatedGas * 0.1);
+
+  return Math.max(fee, FIRMACHAIN_CONFIG.defaultFee);
 };
 
 export const isValid = (data: any) => {
