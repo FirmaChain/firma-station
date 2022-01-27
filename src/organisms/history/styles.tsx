@@ -22,13 +22,16 @@ export const Column = styled.div`
     flex: 1 1 300px;
   }
   &:nth-child(2) {
-    flex: 1 1 500px;
+    flex: 1 1 800px;
   }
-  &:nth-child(4) {
-    flex: 1 1 300px;
+  &:nth-child(3) {
+    flex: 1 1 800px;
   }
   &:nth-child(5) {
-    flex: 1 1 600px;
+    flex: 1 1 300px;
+  }
+  &:nth-child(6) {
+    flex: 1 1 800px;
   }
 `;
 

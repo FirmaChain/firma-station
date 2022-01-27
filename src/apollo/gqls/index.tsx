@@ -206,6 +206,7 @@ export const useHistoryByAddressQuery = ({ onCompleted, address }: IQueryParam) 
             height
             hash
             success
+            memo
             messages
             block {
               height

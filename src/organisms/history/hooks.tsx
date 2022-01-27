@@ -24,10 +24,12 @@ export const useHistoryByAddress = () => {
 
   const formatHistoryList = (data: any) => {
     return data.messagesByAddress.map((message: any) => {
+      console.log(message);
       return {
         height: message.transaction.height,
         hash: message.transaction.hash,
         type: message.transaction.messages[0]["@type"],
+        memo: message.transaction.memo,
         timestamp: message.transaction.block.timestamp,
         success: message.transaction.success,
       };

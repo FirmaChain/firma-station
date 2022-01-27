@@ -32,6 +32,9 @@ const Row = ({ data, index, style }: any) => {
   const getTimestamp = (timestamp: string) => {
     return moment(timestamp).format("YYYY-MM-DD HH:mm:ss+00:00");
   };
+  const getMemo = (memo: string) => {
+    return memo.length > 0 ? memo : "-";
+  };
 
   return (
     <ItemWrapper style={style}>
@@ -42,6 +45,7 @@ const Row = ({ data, index, style }: any) => {
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>
+      <ItemColumn>{getMemo(currentHistory.memo)}</ItemColumn>
       <ItemColumn>{getResult(currentHistory.success)}</ItemColumn>
       <ItemColumn>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
     </ItemWrapper>
@@ -58,6 +62,7 @@ const HistoryCard = ({ historyByAddressState }: IProps) => {
               <HeaderColumn>Block</HeaderColumn>
               <HeaderColumn>Type</HeaderColumn>
               <HeaderColumn>Hash</HeaderColumn>
+              <HeaderColumn>Memo</HeaderColumn>
               <HeaderColumn>Result</HeaderColumn>
               <HeaderColumn>Time</HeaderColumn>
             </HeaderWrapper>
