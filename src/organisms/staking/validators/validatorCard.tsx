@@ -124,7 +124,7 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
             </StatusItem>
             <StatusItem>
               <StatusTitle>
-                Uptime <span style={{ fontSize: "12px" }}>(Last 100 blocks)</span>
+                Uptime <span style={{ fontSize: "12px" }}>(Last 10k blocks)</span>
               </StatusTitle>
               <StatusContent>{`${numeral(targetValidatorData.condition).format("0.00")} %`}</StatusContent>
             </StatusItem>
