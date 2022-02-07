@@ -21,5 +21,5 @@ export const ComingTextTypo = styled.div`
   left: 58%;
   transform: translate(-50%, -50%);
   text-align: center;
-  font-size: 50px;
+  font-size: ${({ theme }) => theme.sizes.comingTitle};
 `;

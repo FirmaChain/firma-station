@@ -19,6 +19,7 @@ export const Button = styled.div`
   color: white;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
   cursor: pointer;
 `;
 
@@ -32,6 +33,7 @@ export const ItemWrapper = styled.div`
 export const ItemColumn = styled.div`
   width: 100%;
   padding-top: 8px;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
   & {
     flex: 1 1 100%;
   }

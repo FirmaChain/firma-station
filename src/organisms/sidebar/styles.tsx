@@ -16,6 +16,9 @@ export const DrawerStyled = styled(Drawer)`
     width: ${({ theme }) => theme.sizes.sideMenuDrawer};
   }
   width: ${({ theme }) => theme.sizes.sideMenuDrawer};
+  @media only screen and (max-width: 1400px) {
+    display: none;
+  }
 `;
 
 export const ListStyled = styled(List)``;
@@ -41,6 +44,9 @@ export const ListItemStyled = styled(ListItem)<{
 
 export const ListItemIconStyled = styled(ListItemIcon)`
   color: ${({ theme }) => theme.colors.defaultGray} !important;
+  & > svg {
+    font-size: ${({ theme }) => theme.sizes.sideMenuIcon};
+  }
 `;
 
 export const ListItemTextStyled = styled(ListItemText)`

@@ -51,7 +51,7 @@ export const PrevButton = styled.div`
     display: inline-block;
     content: "〈 ";
     cursor: pointer;
-    font-size: 22px;
+    font-size: ${({ theme }) => theme.sizes.modalButton};
     font-weight: 900;
     color: #888;
   }

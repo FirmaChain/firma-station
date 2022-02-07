@@ -9,4 +9,8 @@ export const ContentContainer = styled.div`
   padding: 0 40px;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
+  @media only screen and (max-width: 1400px) {
+    width: calc(100% - 20px);
+    padding: 0 10px;
+  }
 `;

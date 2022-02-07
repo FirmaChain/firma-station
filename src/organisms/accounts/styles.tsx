@@ -73,6 +73,7 @@ export const NextButton = styled.div`
   line-height: 40px;
   text-align: center;
   color: white;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   cursor: pointer;
@@ -170,6 +171,7 @@ export const HeaderWrapper = styled(RowWrapper)`
 
 export const HeaderColumn = styled(Column)`
   color: ${({ theme }) => theme.colors.defaultGray3};
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
 `;
 
 export const ListWrapper2 = styled.div`

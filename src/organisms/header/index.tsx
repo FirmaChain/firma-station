@@ -54,6 +54,7 @@ import {
   LedgerIconImg,
   QrIconImg,
 } from "./styles";
+import { isMobile } from "react-device-detect";
 
 function Header() {
   const { enqueueSnackbar } = useSnackbar();
@@ -135,25 +136,27 @@ function Header() {
         </NetworkButton>
       </HeaderLeftWrapper>
 
-      <HeaderRightWrapper>
-        {isInit && (
-          <HeaderLeftWrapper>
-            <ProfileImg src={avatarURL} />
-            <AddressTypo onClick={clipboard}>{address}</AddressTypo>
-            <BarDiv />
-            {isLedger && <LedgerIconImg onClick={onClickLedger} />}
-            <QrIconImg onClick={onClickQR} />
-            <CopyIconImg onClick={clipboard} />
-            <SettingIconImg onClick={onSettings} />
-          </HeaderLeftWrapper>
-        )}
-        {isInit === false && (
-          <LoginWrap onClick={onLogin}>
-            <LoginIconImg />
-            <HeaderTypo>Login</HeaderTypo>
-          </LoginWrap>
-        )}
-      </HeaderRightWrapper>
+      {isMobile === false && (
+        <HeaderRightWrapper>
+          {isInit && (
+            <HeaderLeftWrapper>
+              <ProfileImg src={avatarURL} />
+              <AddressTypo onClick={clipboard}>{address}</AddressTypo>
+              <BarDiv />
+              {isLedger && <LedgerIconImg onClick={onClickLedger} />}
+              <QrIconImg onClick={onClickQR} />
+              <CopyIconImg onClick={clipboard} />
+              <SettingIconImg onClick={onSettings} />
+            </HeaderLeftWrapper>
+          )}
+          {isInit === false && (
+            <LoginWrap onClick={onLogin}>
+              <LoginIconImg />
+              <HeaderTypo>Login</HeaderTypo>
+            </LoginWrap>
+          )}
+        </HeaderRightWrapper>
+      )}
 
       {paperwallet && <PaperwalletModal />}
       {qrcode && <QRCodeModal />}

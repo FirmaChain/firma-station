@@ -4,6 +4,7 @@ export const CardWrapper = styled.div`
   display: flex;
   padding: 24px;
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
   flex-direction: column;
 `;
 
@@ -106,7 +107,7 @@ export const ProposalContent = styled.div`
 `;
 
 export const ProposalMainTitle = styled.div`
-  font-size: 20px;
+  font-size: ${({ theme }) => theme.sizes.proposalTitle};
   color: ${({ theme }) => theme.colors.defaultDarkGray};
 `;
 

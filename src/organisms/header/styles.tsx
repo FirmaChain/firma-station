@@ -10,6 +10,10 @@ export const HeaderContainer = styled.div`
   height: 80px;
   padding: 0 40px;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
+  @media only screen and (max-width: 1400px) {
+    width: calc(100% - 30px);
+    padding: 0 15px;
+  }
 `;
 
 export const HeaderRightWrapper = styled.div`
@@ -110,7 +114,7 @@ export const AddressTypo = styled.div`
   cursor: pointer;
   height: 20px;
   line-height: 20px;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.sizes.headerAddress};
   font-weight: 600;
   padding-top: 2px;
 `;
@@ -214,6 +218,6 @@ export const LogoutImg = styled(LogoutIcon)`
 export const HeaderTypo = styled.div`
   height: 20px;
   line-height: 20px;
-  font-size: 17px;
+  font-size: ${({ theme }) => theme.sizes.headerTypo};
 `;
 export { SettingsIcon, LoginIcon };

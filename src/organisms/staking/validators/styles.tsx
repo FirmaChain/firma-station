@@ -90,7 +90,9 @@ export const ItemWrapper = styled(RowWrapper)`
   border-bottom: 1px solid #444;
 `;
 
-export const ItemColumn = styled(Column)``;
+export const ItemColumn = styled(Column)`
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+`;
 
 export const HeaderWrapper = styled(RowWrapper)`
   height: 50px;
@@ -100,6 +102,7 @@ export const HeaderWrapper = styled(RowWrapper)`
 
 export const HeaderColumn = styled(Column)`
   color: #ddd;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
 `;
 
 export const ValidatorCardWrapper = styled.div`
@@ -147,13 +150,13 @@ export const DescriptionWrap = styled.div`
   flex-direction: column;
 `;
 export const NameTypo = styled.div`
-  font-size: 24px;
+  font-size: ${({ theme }) => theme.sizes.stakingXXXLarge};
   height: 50px;
   line-height: 50px;
   color: #eee;
 `;
 export const DescriptionTypo = styled.div`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
   line-height: 20px;
 `;
 
@@ -164,16 +167,18 @@ export const StatusItem = styled.div`
 export const StatusTitle = styled.div`
   height: 30px;
   line-height: 30px;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
   color: #888;
 `;
 export const StatusContent = styled.div`
   height: 35px;
   line-height: 35px;
-  font-size: 24px;
+  font-size: ${({ theme }) => theme.sizes.stakingXXXLarge};
   color: #eee;
 `;
-export const StatusSubContent = styled.div``;
+export const StatusSubContent = styled.div`
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+`;
 
 export const LinkTypo = styled.a`
   line-height: 30px;
@@ -200,12 +205,12 @@ export const AddressWrapper = styled.div`
 `;
 
 export const AddressInfoLabel = styled.div`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
   color: white;
   margin-bottom: 10px;
 `;
 export const AddressInfoValue = styled.div`
-  font-size: 13px;
+  font-size: ${({ theme }) => theme.sizes.stakingSemiMedium};
 `;
 
 export const CopyIconImg = styled(FileCopyIcon)`

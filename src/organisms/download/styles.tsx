@@ -10,14 +10,14 @@ export const TitleTypo = styled.div`
   width: 100%;
   text-align: center;
   line-height: 50px;
-  font-size: 40px;
+  font-size: ${({ theme }) => theme.sizes.communityTitle};
   color: #eee;
 `;
 export const SubTitleTypo = styled.div`
   width: 100%;
   text-align: center;
   line-height: 30px;
-  font-size: 20px;
+  font-size: ${({ theme }) => theme.sizes.communitySubTitle};
 `;
 
 export const DownloadWrapper = styled.div`

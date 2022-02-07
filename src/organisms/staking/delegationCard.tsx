@@ -13,8 +13,6 @@ import { modalActions } from "../../redux/action";
 import { ITotalStakingState } from "./hooks";
 import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 
-import theme from "../../themes";
-import { BlankCard } from "../../components/card";
 import {
   ChartWrapper,
   DelegationListWrapper,
@@ -146,70 +144,68 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
   };
 
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height="370px">
-      <FlexWrapper>
-        <ChartWrapper>
-          <ChartCenterTypoWrapper>
-            <ChartCenterTypo>Delegated</ChartCenterTypo>
-            <ChartCenterTypo>{numeral(totalStakingState.delegated).format("0,0.000")}</ChartCenterTypo>
-          </ChartCenterTypoWrapper>
-          <ResponsivePie
-            data={data}
-            margin={{ top: 30, right: 20, bottom: 30, left: 20 }}
-            innerRadius={0.75}
-            padAngle={0.7}
-            cornerRadius={3}
-            activeOuterRadiusOffset={8}
-            colors={{ scheme: "dark2" }}
-            borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
-            enableArcLabels={false}
-            arcLinkLabel={function (e) {
-              return e.id + "\n[" + e.value + "%]";
-            }}
-            arcLinkLabelsSkipAngle={10}
-            arcLinkLabelsTextColor="#fff"
-            arcLinkLabelsThickness={2}
-            arcLinkLabelsColor={{ from: "color" }}
-            arcLabelsSkipAngle={10}
-            arcLabelsTextColor={{ from: "color", modifiers: [["darker", 2]] }}
-            tooltip={function (e) {
-              const t = e.datum;
-              return (
-                <div style={{ backgroundColor: "#eee", padding: "10px", borderRadius: "4px" }}>{t.data.amount} FCT</div>
-              );
-            }}
-            legends={[]}
-          />
-        </ChartWrapper>
-        <DelegationListWrapper>
-          <AutoSizer>
-            {({ height, width }) => (
-              <>
-                <DelegationHeaderWrapper style={{ width: width - 5 }}>
-                  <DelegationHeaderColumn>Validator</DelegationHeaderColumn>
-                  <DelegationHeaderColumn>Delegated (FCT)</DelegationHeaderColumn>
-                  <DelegationHeaderColumn>Reward (FCT)</DelegationHeaderColumn>
-                </DelegationHeaderWrapper>
-                <List
-                  width={width}
-                  height={height - 40}
-                  itemCount={totalStakingState.delegateList.length}
-                  itemSize={45}
-                  itemData={totalStakingState.delegateList}
-                >
-                  {(props) => Row({ ...props, totalStakingState })}
-                </List>
-              </>
-            )}
-          </AutoSizer>
-        </DelegationListWrapper>
-      </FlexWrapper>
+    <FlexWrapper>
+      <ChartWrapper>
+        <ChartCenterTypoWrapper>
+          <ChartCenterTypo>Delegated</ChartCenterTypo>
+          <ChartCenterTypo>{numeral(totalStakingState.delegated).format("0,0.000")}</ChartCenterTypo>
+        </ChartCenterTypoWrapper>
+        <ResponsivePie
+          data={data}
+          margin={{ top: 30, right: 20, bottom: 30, left: 20 }}
+          innerRadius={0.75}
+          padAngle={0.7}
+          cornerRadius={3}
+          activeOuterRadiusOffset={8}
+          colors={{ scheme: "dark2" }}
+          borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
+          enableArcLabels={false}
+          arcLinkLabel={function (e) {
+            return e.id + "\n[" + e.value + "%]";
+          }}
+          arcLinkLabelsSkipAngle={10}
+          arcLinkLabelsTextColor="#fff"
+          arcLinkLabelsThickness={2}
+          arcLinkLabelsColor={{ from: "color" }}
+          arcLabelsSkipAngle={10}
+          arcLabelsTextColor={{ from: "color", modifiers: [["darker", 2]] }}
+          tooltip={function (e) {
+            const t = e.datum;
+            return (
+              <div style={{ backgroundColor: "#eee", padding: "10px", borderRadius: "4px" }}>{t.data.amount} FCT</div>
+            );
+          }}
+          legends={[]}
+        />
+      </ChartWrapper>
+      <DelegationListWrapper>
+        <AutoSizer>
+          {({ height, width }) => (
+            <>
+              <DelegationHeaderWrapper style={{ width: width - 5 }}>
+                <DelegationHeaderColumn>Validator</DelegationHeaderColumn>
+                <DelegationHeaderColumn>Delegated (FCT)</DelegationHeaderColumn>
+                <DelegationHeaderColumn>Reward (FCT)</DelegationHeaderColumn>
+              </DelegationHeaderWrapper>
+              <List
+                width={width}
+                height={height - 40}
+                itemCount={totalStakingState.delegateList.length}
+                itemSize={45}
+                itemData={totalStakingState.delegateList}
+              >
+                {(props) => Row({ ...props, totalStakingState })}
+              </List>
+            </>
+          )}
+        </AutoSizer>
+      </DelegationListWrapper>
       <ButtonWrapper>
         <Button isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
           Withdraw All
         </Button>
       </ButtonWrapper>
-    </BlankCard>
+    </FlexWrapper>
   );
 };
 

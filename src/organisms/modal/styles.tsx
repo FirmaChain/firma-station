@@ -54,7 +54,7 @@ export const ModalSubTitle = styled.div`
   width: 100%;
   color: #9090a2;
   text-align: center;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.modal14};
 `;
 
 export const ModalContent = styled.div`
@@ -109,21 +109,21 @@ export const QRCodeWrap = styled.div`
 export const AddressTypo = styled.div`
   margin-top: 30px;
   margin-bottom: 14px;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.modal14};
 `;
 
 export const ModalLabel = styled.div`
   width: 100%;
   height: 30px;
   line-height: 30px;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.modal16};
   margin-bottom: 8px;
   color: #9090a2;
 `;
 
 export const ModalInput = styled.div`
   position: relative;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.modal14};
   color: #ccc;
   margin-bottom: 30px;
   &:last-child {
@@ -140,7 +140,7 @@ export const ConfirmLabel = styled.div`
   width: 100%;
   height: 30px;
   line-height: 30px;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.modal16};
 `;
 
 export const ConfirmInput = styled.div`
@@ -149,7 +149,7 @@ export const ConfirmInput = styled.div`
   line-height: 30px;
   text-align: right;
   position: relative;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.modal14};
   color: #ccc;
 `;
 
@@ -201,7 +201,7 @@ export const MnemonicTextArea = styled.textarea<{ ref: any }>`
   height: 100px;
   padding: 10px;
   resize: none;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.modal16};
   border-radius: 4px;
   background-color: #21212f;
   color: white;
@@ -212,7 +212,7 @@ export const TextAreaDefault = styled.textarea`
   height: 100px;
   padding: 10px;
   resize: none;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.modal16};
   border-radius: 4px;
   background-color: #21212f;
   border: 1px solid #696974;
@@ -224,7 +224,7 @@ export const PrivatekeyTextArea = styled.textarea<{ ref: any }>`
   height: 100px;
   padding: 10px;
   resize: none;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.modal16};
   border-radius: 4px;
   background-color: #21212f;
   color: white;
@@ -241,7 +241,7 @@ export const CopyIcon = styled(FileCopyIcon)`
 export const NextButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
   line-height: 48px;
   text-align: center;
   margin: 10px auto 0 auto;
@@ -255,7 +255,7 @@ export const NextButton = styled.div<{ active: boolean }>`
 export const DownloadButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
   line-height: 48px;
   text-align: center;
   margin: 10px auto 30px auto;
@@ -269,7 +269,7 @@ export const DownloadButton = styled.div<{ active: boolean }>`
 export const ExportButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
   line-height: 48px;
   text-align: center;
   margin: 10px auto 30px auto;
@@ -283,7 +283,7 @@ export const ExportButton = styled.div<{ active: boolean }>`
 export const ChangeButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
   line-height: 48px;
   text-align: center;
   margin: 10px auto 30px auto;
@@ -297,7 +297,7 @@ export const ChangeButton = styled.div<{ active: boolean }>`
 export const CreateButton = styled.div<{ isActive: boolean }>`
   width: 220px;
   height: 48px;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
   line-height: 48px;
   text-align: center;
   margin: 30px auto 0 auto;
@@ -311,7 +311,7 @@ export const CreateButton = styled.div<{ isActive: boolean }>`
 export const RecoverButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
   line-height: 48px;
   text-align: center;
   margin: 30px auto 0 auto;
@@ -325,7 +325,7 @@ export const RecoverButton = styled.div<{ active: boolean }>`
 export const ImportButton = styled.div<{ active: boolean }>`
   width: 220px;
   height: 48px;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
   line-height: 48px;
   text-align: center;
   margin: 30px auto 0 auto;
@@ -363,11 +363,15 @@ export const MenuTitleTypo = styled.div`
   text-align: center;
   margin: 0 20px;
   color: #eee;
+  font-size: ${({ theme }) => theme.sizes.modalTypo};
 `;
 
 export const MenuIconImg = styled.div`
   text-align: center;
   margin-bottom: 8px;
+  & > svg {
+    font-size: ${({ theme }) => theme.sizes.modalIcon};
+  }
 `;
 
 export const InputContainer = styled.div`

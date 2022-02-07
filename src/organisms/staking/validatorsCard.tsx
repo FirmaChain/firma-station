@@ -3,11 +3,11 @@ import numeral from "numeral";
 import { Link } from "react-router-dom";
 
 import { IValidatorsState } from "./hooks";
+import { useMediaQuery } from "react-responsive";
 
-import theme from "../../themes";
-import { BlankCard } from "../../components/card";
 import {
   ItemWrapper,
+  ItemSmallWrapper,
   ItemColumn,
   HeaderWrapper,
   HeaderColumn,
@@ -16,6 +16,16 @@ import {
   MonikerTypo,
   APYTypo,
   APRTypo,
+  APYTypoSmall,
+  APRTypoSmall,
+  ProfileImageSmall,
+  Moniker,
+  ProfileWrapper,
+  ArrowIcon,
+  ValidatorInfoList,
+  ValidatorInfo,
+  InfoLabel,
+  InfoValue,
 } from "./styles";
 
 interface IProps {
@@ -65,24 +75,87 @@ const CustomRow = ({ currentValidator, index }: any) => {
   );
 };
 
-const Validators = ({ validatorsState }: IProps) => {
+const CustomSmallRow = ({ currentValidator, index }: any) => {
+  const formatCash = (n: any) => {
+    let result = "";
+
+    if (n < 1e3) {
+      result = n.toFixed(2);
+    } else if (n >= 1e3 && n < 1e6) {
+      result = +(n / 1e3).toFixed(2) + "K";
+    } else if (n >= 1e6 && n < 1e9) {
+      result = +(n / 1e6).toFixed(2) + "M";
+    } else if (n >= 1e9 && n < 1e12) {
+      result = +(n / 1e9).toFixed(2) + "B";
+    } else if (n >= 1e12) {
+      result = +(n / 1e12).toFixed(2) + "T";
+    }
+
+    if (result.length > 10) result = "infinity";
+
+    return result;
+  };
+
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height={"100%"}>
-      <ListWrapper>
-        <HeaderWrapper>
-          <HeaderColumn>No</HeaderColumn>
-          <HeaderColumn>Moniker</HeaderColumn>
-          <HeaderColumn>Voting Power</HeaderColumn>
-          <HeaderColumn>Self Delegation</HeaderColumn>
-          <HeaderColumn>Commission</HeaderColumn>
-          <HeaderColumn>UpTime</HeaderColumn>
-          <HeaderColumn>APR / APY</HeaderColumn>
-        </HeaderWrapper>
-        {validatorsState.validators.map((value, index) => (
-          <CustomRow key={index} currentValidator={value} index={index} />
-        ))}
-      </ListWrapper>
-    </BlankCard>
+    <Link to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}>
+      <ItemSmallWrapper>
+        <ProfileWrapper>
+          <ProfileImageSmall src={currentValidator.validatorAvatar}></ProfileImageSmall>
+          <Moniker>{currentValidator.validatorMoniker}</Moniker>
+          <ArrowIcon>〉</ArrowIcon>
+        </ProfileWrapper>
+        <ValidatorInfoList>
+          <ValidatorInfo>
+            <InfoLabel>Voting Power</InfoLabel>
+            <InfoValue>{`${numeral(currentValidator.votingPowerPercent).format("0,0.00")} %`}</InfoValue>
+          </ValidatorInfo>
+          <ValidatorInfo>
+            <InfoLabel>Self Delegation</InfoLabel>
+            <InfoValue>{`${numeral(currentValidator.selfPercent).format("0,0.00")} %`}</InfoValue>
+          </ValidatorInfo>
+          <ValidatorInfo>
+            <InfoLabel>Commission</InfoLabel>
+            <InfoValue>{`${numeral(currentValidator.commission).format("0,0.00")} %`}</InfoValue>
+          </ValidatorInfo>
+          <ValidatorInfo>
+            <InfoLabel>Uptime</InfoLabel>
+            <InfoValue>{`${numeral(currentValidator.condition).format("0,0.00")} %`}</InfoValue>
+          </ValidatorInfo>
+          <ValidatorInfo>
+            <InfoLabel>APR/APY</InfoLabel>
+            <InfoValue>
+              <APRTypoSmall>{`${formatCash(currentValidator.APR * 100)} % /`}&nbsp;</APRTypoSmall>
+              <APYTypoSmall>{`${formatCash(currentValidator.APY * 100)} %`}</APYTypoSmall>
+            </InfoValue>
+          </ValidatorInfo>
+        </ValidatorInfoList>
+      </ItemSmallWrapper>
+    </Link>
+  );
+};
+
+const Validators = ({ validatorsState }: IProps) => {
+  const isSmall = useMediaQuery({ query: "(max-width: 900px)" });
+
+  return (
+    <ListWrapper>
+      <HeaderWrapper>
+        <HeaderColumn>No</HeaderColumn>
+        <HeaderColumn>Moniker</HeaderColumn>
+        <HeaderColumn>Voting Power</HeaderColumn>
+        <HeaderColumn>Self Delegation</HeaderColumn>
+        <HeaderColumn>Commission</HeaderColumn>
+        <HeaderColumn>UpTime</HeaderColumn>
+        <HeaderColumn>APR / APY</HeaderColumn>
+      </HeaderWrapper>
+      {validatorsState.validators.map((value, index) => {
+        if (isSmall) {
+          return <CustomSmallRow key={index} currentValidator={value} index={index} />;
+        } else {
+          return <CustomRow key={index} currentValidator={value} index={index} />;
+        }
+      })}
+    </ListWrapper>
   );
 };
 

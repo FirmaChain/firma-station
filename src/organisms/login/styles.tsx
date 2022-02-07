@@ -89,5 +89,5 @@ export const LogoutWrap = styled.div`
 export const LogoutTypo = styled.div`
   height: 20px;
   line-height: 20px;
-  font-size: 17px;
+  font-size: ${({ theme }) => theme.sizes.logout};
 `;

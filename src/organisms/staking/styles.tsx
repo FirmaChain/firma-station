@@ -1,10 +1,18 @@
 import styled from "styled-components";
 
 export const StakingWrap = styled.div`
-  width: calc(100%);
-  height: 100%;
+  width: calc(100% - 40px);
+  height: 60px;
+  padding: 20px;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  border-radius: 4px;
   float: left;
   display: flex;
+  @media only screen and (max-width: 1400px) {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 20px 0;
+  }
 `;
 
 export const StakingTextWrap = styled.div`
@@ -15,6 +23,12 @@ export const StakingTextWrap = styled.div`
   border-right: 1px solid #444;
   &:last-child {
     border: 0;
+  }
+  @media only screen and (max-width: 1400px) {
+    border: 0;
+    width: 50%;
+    min-width: 200px;
+    flex: auto;
   }
 `;
 
@@ -63,14 +77,12 @@ export const ItemWrapper = styled(RowWrapper)`
 `;
 
 export const ItemColumn = styled(Column)`
-  font-size: 14px;
-  &:nth-child(3) {
-  }
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
 `;
 
 export const APYTypo = styled.div`
   color: white;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.sizes.stakingSmall};
   line-height: 14px;
   text-align: right;
 `;
@@ -79,7 +91,7 @@ export const APRTypo = styled.div`
   color: #f4b017;
   margin-top: 9px;
   text-align: right;
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.sizes.stakingXLarge};
   line-height: 20px;
 `;
 
@@ -87,17 +99,22 @@ export const HeaderWrapper = styled(RowWrapper)`
   height: 70px;
   line-height: 70px;
   border-bottom: 1px solid #444;
+  @media only screen and (max-width: 900px) {
+    display: none;
+  }
 `;
 
 export const HeaderColumn = styled(Column)`
   color: #ddd;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
 `;
 
 export const ListWrapper = styled.div`
   width: calc(100% - 40px);
   height: 100%;
-  padding: 0 20px;
+  padding: 20px;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  border-radius: 4px;
 `;
 
 export const ProfileImage = styled.div<{ src?: string }>`
@@ -156,7 +173,7 @@ export const DelegationItemWrapper = styled(RowWrapper)`
 
 export const DelegationItemColumn = styled(DelegationColumn)`
   text-align: center;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
   &:nth-child(1) {
     text-align: left;
     padding-left: 5px;
@@ -179,7 +196,7 @@ export const DelegationHeaderWrapper = styled(RowWrapper)`
 
 export const DelegationHeaderColumn = styled(DelegationColumn)`
   color: #ddd;
-  font-size: 16px;
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
   text-align: center;
   &:nth-child(1) {
     text-align: left;
@@ -194,15 +211,23 @@ export const DelegationHeaderColumn = styled(DelegationColumn)`
 export const FlexWrapper = styled.div`
   width: 100%;
   height: calc(100% - 20px);
-  margin-top: 60px;
-  margin-bottom: 10px;
+  position: relative;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  border-radius: 4px;
   display: flex;
+  @media only screen and (max-width: 1400px) {
+    flex-wrap: wrap;
+  }
 `;
 
 export const DelegationListWrapper = styled.div`
   width: calc(50% - 35px);
-  height: calc(100% - 50px);
-  padding: 0 0 0 15px;
+  height: 240px;
+  padding: 70px 10px 20px 15px;
+  @media only screen and (max-width: 1400px) {
+    width: 100%;
+    padding: 20px;
+  }
 `;
 
 export const ChartWrapper = styled.div`
@@ -212,6 +237,9 @@ export const ChartWrapper = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
+  @media only screen and (max-width: 1400px) {
+    width: 100%;
+  }
 `;
 
 export const ChartCenterTypoWrapper = styled.div`
@@ -225,7 +253,7 @@ export const ChartCenterTypoWrapper = styled.div`
 `;
 
 export const ChartCenterTypo = styled.div`
-  font-size: 22px;
+  font-size: ${({ theme }) => theme.sizes.stakingXXLarge};
   margin-bottom: 8px;
   font-size: ${({ theme }) => theme.sizes.stakingCardSize1};
   &:nth-child(1) {
@@ -239,7 +267,7 @@ export const ChartCenterTypo = styled.div`
 export const RewardTypo = styled.div`
   height: 35px;
   line-height: 35px;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.sizes.stakingSmall};
 `;
 
 export const ButtonWrapper = styled.div`
@@ -247,7 +275,6 @@ export const ButtonWrapper = styled.div`
   top: 25px;
   right: 40px;
   display: flex;
-  gap: 20px;
 `;
 
 export const Button = styled.div<{ isActive?: boolean }>`
@@ -257,8 +284,97 @@ export const Button = styled.div<{ isActive?: boolean }>`
   line-height: 35px;
   color: white;
   text-align: center;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   ${(props) => (props.isActive ? `` : `background-color: #444;color:#777`)}
+`;
+
+export const ItemSmallWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 20px);
+  margin-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-bottom: 1px solid #444;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+`;
+
+export const ProfileWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 0 10px;
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 10px;
+`;
+
+export const ProfileImageSmall = styled.div<{ src?: string }>`
+  width: 38px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: gray;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  float: left;
+  ${(props) =>
+    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+`;
+export const Moniker = styled.div`
+  flex: 1 1 100%;
+  color: white;
+`;
+
+export const ArrowIcon = styled.div`
+  font-size: 1.3rem;
+  font-weight: 900;
+  text-align: right;
+  padding-top: 1px;
+`;
+export const ValidatorInfoList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+export const ValidatorInfo = styled.div`
+  width: 100%;
+  display: flex;
+  &:last-child {
+    & > div:nth-child(2) {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+`;
+
+export const InfoLabel = styled.div`
+  flex: 1;
+  height: 2.5rem;
+  line-height: 2.5rem;
+`;
+
+export const InfoValue = styled.div`
+  flex: 1;
+  text-align: right;
+  line-height: 2.5rem;
+  color: #ccc;
+`;
+
+export const APYTypoSmall = styled.div`
+  color: white;
+  font-size: ${({ theme }) => theme.sizes.stakingSmall};
+  line-height: 1.4rem;
+  text-align: right;
+  padding-top: 0.3rem;
+`;
+
+export const APRTypoSmall = styled.div`
+  color: #f4b017;
+  text-align: right;
+  font-size: ${({ theme }) => theme.sizes.stakingXLarge};
+  line-height: 2rem;
 `;

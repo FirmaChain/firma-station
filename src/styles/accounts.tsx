@@ -9,15 +9,21 @@ export const ContentContainer = styled.div`
   padding: 0 40px;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
+  @media only screen and (max-width: 1400px) {
+    width: calc(100% - 20px);
+    padding: 0 10px;
+  }
 `;
 
 export const CardWrap = styled.div`
   position: relative;
   z-index: 2;
-  height: 100%;
+  flex: 1;
   display: flex;
   gap: 0 30px;
-  flex: 1;
+  @media only screen and (max-width: 1400px) {
+    flex-direction: column;
+  }
 `;
 
 export const LeftCardWrap = styled.div`
@@ -26,6 +32,14 @@ export const LeftCardWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px 0;
+  @media only screen and (max-width: 1400px) {
+    width: 100%;
+    flex-direction: column;
+    margin-bottom: 10px;
+    & > div:nth-child(2) {
+      display: none;
+    }
+  }
 `;
 
 export const RightCardWrap = styled.div`
@@ -34,6 +48,9 @@ export const RightCardWrap = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px 0;
+  @media only screen and (max-width: 1400px) {
+    gap: 10px 0;
+  }
 `;
 
 export const RightCardTopWrap = styled.div`
@@ -52,5 +69,8 @@ export const RightCardBottomWrap = styled.div`
   gap: 30px;
   & > div {
     flex: 1;
+  }
+  @media only screen and (max-width: 1400px) {
+    height: 600px;
   }
 `;

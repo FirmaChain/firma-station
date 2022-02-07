@@ -175,7 +175,7 @@ export const PiechartLabelTypo = styled.div`
   width: 100%;
   height: 20px;
   line-height: 20px;
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.sizes.pieChartLabel};
   color: #ccc;
 `;
 
