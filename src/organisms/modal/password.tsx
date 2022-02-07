@@ -25,6 +25,8 @@ const Password = ({ onChange, onKeyDown }: any) => {
 
     if (validPassword && validConfirmPassword) {
       onChange && onChange(password);
+    } else {
+      onChange && onChange("");
     }
   }, [password, confirmPassword]); // eslint-disable-line react-hooks/exhaustive-deps
 

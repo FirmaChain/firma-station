@@ -4,6 +4,7 @@ export const ListWrapper = styled.div`
   width: 100%;
   height: 100%;
   flex: 1;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
 `;
 
 export const RowWrapper = styled.div`
