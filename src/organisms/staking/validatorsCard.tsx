@@ -26,6 +26,7 @@ import {
   ValidatorInfo,
   InfoLabel,
   InfoValue,
+  SmallTitle,
 } from "./styles";
 
 interface IProps {
@@ -148,6 +149,7 @@ const Validators = ({ validatorsState }: IProps) => {
         <HeaderColumn>UpTime</HeaderColumn>
         <HeaderColumn>APR / APY</HeaderColumn>
       </HeaderWrapper>
+      {isSmall && <SmallTitle>Validators</SmallTitle>}
       {validatorsState.validators.map((value, index) => {
         if (isSmall) {
           return <CustomSmallRow key={index} currentValidator={value} index={index} />;

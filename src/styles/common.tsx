@@ -14,15 +14,4 @@ export const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  & > div {
-  }
-  & > div:nth-child(1) {
-    height: 80px;
-  }
-  & > div:nth-child(2) {
-    flex: 1;
-  }
-  & > div:nth-child(3) {
-    height: 50px;
-  }
 `;

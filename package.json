@@ -38,6 +38,7 @@
     "axios": "^0.24.0",
     "crypto-js": "^4.1.1",
     "graphql": "^15.7.1",
+    "hamburger-react": "^2.4.1",
     "moment": "^2.29.1",
     "notistack": "^2.0.2",
     "numeral": "^2.0.6",

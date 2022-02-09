@@ -15,15 +15,16 @@ import Footer from "./organisms/footer";
 import LoginCard from "./organisms/login";
 
 import "./default.css";
+
 import theme from "./themes";
 import { RightContainer, MainContainer } from "./styles/common";
 
 const App = () => {
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isInit } = useSelector((state: rootState) => state.wallet);
   const { isValidWallet, initWallet } = useFirma();
 
   SessionTimer(() => {
-    if (isLedger === false) {
+    if (isLedger === false && isInit === true) {
       walletActions.handleWalletTimeKey(getRandomKey());
       initWallet(false);
       window.location.reload();

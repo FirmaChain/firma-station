@@ -378,3 +378,8 @@ export const APRTypoSmall = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingXLarge};
   line-height: 2rem;
 `;
+
+export const SmallTitle = styled.div`
+  color: #ccc;
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
+`;

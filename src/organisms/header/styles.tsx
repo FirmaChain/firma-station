@@ -4,6 +4,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Link } from "react-router-dom";
 
 export const HeaderContainer = styled.div`
   width: calc(100% - 80px);
@@ -14,6 +15,26 @@ export const HeaderContainer = styled.div`
     width: calc(100% - 30px);
     padding: 0 15px;
   }
+`;
+
+export const HeaderMobileContainer = styled.div`
+  width: calc(100% - 20px);
+  height: 60px;
+  padding: 0 10px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: ${({ theme }) => theme.colors.backgroundBlack};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const HeaderWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const HeaderRightWrapper = styled.div`
@@ -221,3 +242,50 @@ export const HeaderTypo = styled.div`
   font-size: ${({ theme }) => theme.sizes.headerTypo};
 `;
 export { SettingsIcon, LoginIcon };
+
+export const HeaderLeft = styled.div`
+  display: flex;
+  gap: 0 8px;
+`;
+
+export const HeaderRight = styled.div`
+  color: white;
+`;
+
+export const HeaderTypoMobile = styled.div`
+  color: white;
+  height: 20px;
+  line-height: 20px;
+  font-size: 1.6rem;
+`;
+
+export const HeaderIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  background-image: url("${({ theme }) => theme.urls.logo}");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
+export const MobileMenuList = styled.div<{ isShow: boolean }>`
+  width: calc(100%);
+  position: absolute;
+  top: 60px;
+  left: 0;
+  flex-direction: column;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  background-color: #131317;
+  box-shadow: 0px 3px 10px black;
+  ${(props) => (props.isShow ? `display:flex;` : `display:none;`)}
+`;
+
+export const MobileMenuItem = styled(Link)`
+  width: calc(100% - 40px);
+  padding: 0 20px;
+  height: 50px;
+  line-height: 50px;
+  color: white;
+  border-top: 1px solid #222;
+`;

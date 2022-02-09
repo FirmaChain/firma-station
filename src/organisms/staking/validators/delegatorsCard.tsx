@@ -1,6 +1,7 @@
 import React from "react";
 import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { useMediaQuery } from "react-responsive";
 import { FixedSizeList as List } from "react-window";
 import { Link } from "react-router-dom";
 
@@ -16,7 +17,12 @@ import {
   ItemColumn,
   HeaderWrapper,
   HeaderColumn,
+  HeaderMobileWrapper,
+  HeaderMobileColumn,
+  ItemMobileWrapper,
+  ItemMobileColumn,
   ProfileImage2,
+  DelegatorInfoMobile,
 } from "./styles";
 
 interface IProps {
@@ -40,7 +46,28 @@ const Row = ({ data, index, style }: any) => {
   );
 };
 
+const RowMobile = ({ data, index, style }: any) => {
+  const currentDelegator = data[index];
+  const { avatarURL, moniker } = useAvataURL(currentDelegator.address);
+
+  return (
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={"_blank"}>
+      <ItemMobileWrapper style={style}>
+        <ItemMobileColumn>
+          <ProfileImage2 src={avatarURL} />
+          <DelegatorInfoMobile>
+            <div>{`${moniker}`}</div>
+            <div>{`${numeral(convertToFctNumber(currentDelegator.amount)).format("0,0.000")} FCT`}</div>
+          </DelegatorInfoMobile>
+        </ItemMobileColumn>
+      </ItemMobileWrapper>
+    </Link>
+  );
+};
+
 const DelegatorsCard = ({ validatorsState }: IProps) => {
+  const isMobile = useMediaQuery({ query: "(min-width:0px) and (max-width:599px)" });
+
   const getValidatorAddress = () => {
     return window.location.pathname.replace("/staking/validators/", "");
   };
@@ -56,22 +83,43 @@ const DelegatorsCard = ({ validatorsState }: IProps) => {
           <AutoSizer>
             {({ height, width }) => (
               <>
-                <HeaderWrapper style={{ width }}>
-                  <HeaderColumn></HeaderColumn>
-                  <HeaderColumn>Delegator</HeaderColumn>
-                  <HeaderColumn>Amount</HeaderColumn>
-                </HeaderWrapper>
-                <List
-                  width={width}
-                  height={height - 70}
-                  itemCount={targetValidatorData.delegations.length}
-                  itemSize={50}
-                  itemData={targetValidatorData.delegations.sort((a: any, b: any) =>
-                    a.amount > b.amount ? -1 : a.amount < b.amount ? 0 : 1
-                  )}
-                >
-                  {Row}
-                </List>
+                {isMobile ? (
+                  <>
+                    <HeaderMobileWrapper style={{ width }}>
+                      <HeaderMobileColumn>Delegator</HeaderMobileColumn>
+                    </HeaderMobileWrapper>
+                    <List
+                      width={width}
+                      height={height - 70}
+                      itemCount={targetValidatorData.delegations.length}
+                      itemSize={68}
+                      itemData={targetValidatorData.delegations.sort((a: any, b: any) =>
+                        a.amount > b.amount ? -1 : a.amount < b.amount ? 0 : 1
+                      )}
+                    >
+                      {RowMobile}
+                    </List>
+                  </>
+                ) : (
+                  <>
+                    <HeaderWrapper style={{ width }}>
+                      <HeaderColumn></HeaderColumn>
+                      <HeaderColumn>Delegator</HeaderColumn>
+                      <HeaderColumn>Amount</HeaderColumn>
+                    </HeaderWrapper>
+                    <List
+                      width={width}
+                      height={height - 70}
+                      itemCount={targetValidatorData.delegations.length}
+                      itemSize={50}
+                      itemData={targetValidatorData.delegations.sort((a: any, b: any) =>
+                        a.amount > b.amount ? -1 : a.amount < b.amount ? 0 : 1
+                      )}
+                    >
+                      {Row}
+                    </List>
+                  </>
+                )}
               </>
             )}
           </AutoSizer>

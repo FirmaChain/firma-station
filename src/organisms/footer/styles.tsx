@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const FooterContainer = styled.div`
+  height: 50px;
   width: calc(100% - 80px);
-  height: 80px;
   line-height: 50px;
   display: flex;
   justify-content: space-between;

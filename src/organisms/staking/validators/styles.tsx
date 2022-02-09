@@ -51,10 +51,15 @@ export const Button = styled.div<{ isActive?: boolean }>`
 `;
 
 export const DelegatorsCardWrapper = styled.div`
+  width: calc(100% - 48px);
   display: flex;
   padding: 24px;
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   flex-direction: column;
+  @media only screen and (max-width: 1400px) {
+    width: calc(100% - 20px);
+    padding: 10px;
+  }
 `;
 
 export const DelegatorList = styled.div`
@@ -62,6 +67,9 @@ export const DelegatorList = styled.div`
   height: 300px;
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 1400px) {
+    height: 345px;
+  }
 `;
 
 export const RowWrapper = styled.div`
@@ -105,11 +113,46 @@ export const HeaderColumn = styled(Column)`
   font-size: ${({ theme }) => theme.sizes.defaultSize};
 `;
 
+export const HeaderMobileWrapper = styled.div`
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  border-bottom: 1px solid #444;
+  display: flex;
+  flex-wrap: nowrap;
+`;
+
+export const HeaderMobileColumn = styled.div`
+  width: 100%;
+  color: #ddd;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+`;
+
+export const ItemMobileWrapper = styled.div`
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  border-bottom: 1px solid #444;
+  display: flex;
+  flex-wrap: nowrap;
+`;
+
+export const ItemMobileColumn = styled.div`
+  width: 100%;
+  display: flex;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+`;
+
 export const ValidatorCardWrapper = styled.div`
+  width: calc(100% - 48px);
   display: flex;
   padding: 24px;
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   flex-direction: column;
+  @media only screen and (max-width: 1400px) {
+    width: calc(100% - 20px);
+    padding: 10px;
+  }
 `;
 
 export const ProfileWrapper = styled.div`
@@ -118,6 +161,10 @@ export const ProfileWrapper = styled.div`
   align-items: stretch;
   padding: 14px 0;
   gap: 0 10px;
+  @media only screen and (max-width: 1400px) {
+    gap: 24px 0;
+    flex-wrap: wrap;
+  }
 `;
 
 export const StatusWrapper = styled.div`
@@ -126,6 +173,12 @@ export const StatusWrapper = styled.div`
   border-top: 1px solid #555;
   margin-top: 20px;
   padding: 24px 0 10px 0;
+  gap: 30px 0;
+  @media only screen and (max-width: 1400px) {
+    margin-top: 10px;
+    padding: 24px 0 20px 0;
+    flex-wrap: wrap;
+  }
 `;
 
 export const ProfileImageWrap = styled.div`
@@ -154,6 +207,9 @@ export const NameTypo = styled.div`
   height: 50px;
   line-height: 50px;
   color: #eee;
+  @media only screen and (max-width: 1400px) {
+    font-size: ${({ theme }) => theme.sizes.stakingXLarge};
+  }
 `;
 export const DescriptionTypo = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingMedium};
@@ -163,6 +219,9 @@ export const DescriptionTypo = styled.div`
 export const StatusItem = styled.div`
   width: 100%;
   text-align: center;
+  @media only screen and (max-width: 1400px) {
+    width: 50%;
+  }
 `;
 export const StatusTitle = styled.div`
   height: 30px;
@@ -189,6 +248,9 @@ export const LeftWrapper = styled.div`
   width: 50%;
   display: flex;
   gap: 20px;
+  @media only screen and (max-width: 1400px) {
+    width: calc(100%);
+  }
 `;
 
 export const AddressInfo = styled.div`
@@ -198,6 +260,10 @@ export const AddressInfo = styled.div`
   gap: 20px;
   padding-left: 20px;
   padding-right: 10px;
+  @media only screen and (max-width: 1400px) {
+    width: calc(100% - 20px);
+    padding: 0;
+  }
 `;
 
 export const AddressWrapper = styled.div`
@@ -225,6 +291,8 @@ export const CopyIconImg = styled(FileCopyIcon)`
 
 export const ProfileImage2 = styled.div<{ src?: string }>`
   width: 30px;
+  min-width: 30px;
+  max-width: 30px;
   height: 30px;
   border-radius: 15px;
   background-color: gray;
@@ -235,4 +303,28 @@ export const ProfileImage2 = styled.div<{ src?: string }>`
   float: left;
   ${(props) =>
     props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+`;
+
+export const DelegatorMobile = styled.div`
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+`;
+
+export const DelegatorInfoMobile = styled.div`
+  width: calc(100% - 40px);
+  margin-left: 10px;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  & > div {
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  & > div:nth-child(1) {
+    color: white;
+  }
+  & > div:nth-child(2) {
+  }
 `;

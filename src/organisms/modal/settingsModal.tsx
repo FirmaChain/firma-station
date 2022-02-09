@@ -27,9 +27,9 @@ const ExportWalletModal = () => {
   const { resetWallet } = useFirma();
 
   const menuList = [
-    { name: "Download\nPaper wallet", icon: PictureAsPdfIcon, modalAction: modalActions.handleModalPaperwallet },
-    { name: "Export\nprivate key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportPrivatekey },
+    { name: "Download\npaper wallet", icon: PictureAsPdfIcon, modalAction: modalActions.handleModalPaperwallet },
     { name: "Export\nmnemonic", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportMnemonic },
+    { name: "Export\nprivate key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportPrivatekey },
     { name: "Disconnect\nyour wallet", icon: LogoutIcon, modalAction: resetWallet },
   ];
 
@@ -51,7 +51,7 @@ const ExportWalletModal = () => {
       width={exportWalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>SETTINGS WALLET</ModalTitle>
+        <ModalTitle>WALLET SETTING</ModalTitle>
         <MenuListWrap>
           {menuList.map((menu, index) => {
             return (
