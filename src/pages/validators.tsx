@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-
+import { useMediaQuery } from "react-responsive";
 import { rootState } from "../redux/reducers";
 
 import { ValidatorCard, DelegationCard, DelegatorsCard } from "../organisms/staking/validators";
@@ -12,9 +12,11 @@ const Validators = () => {
   const { validatorsState } = useStakingData();
   const { targetStakingState } = useStakingDataFromTarget();
 
+  const isMobile = useMediaQuery({ query: "(min-width:0px) and (max-width:599px)" });
+
   return (
     <ContentContainer>
-      {targetStakingState && validatorsState && isInit && (
+      {targetStakingState && validatorsState && isInit && isMobile === false && (
         <DelegationCard targetStakingState={targetStakingState} validatorsState={validatorsState} />
       )}
       {validatorsState && (

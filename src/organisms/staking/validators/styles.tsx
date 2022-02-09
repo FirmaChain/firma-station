@@ -6,6 +6,7 @@ export const CardWrapper = styled.div`
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   display: flex;
   z-index: 2;
