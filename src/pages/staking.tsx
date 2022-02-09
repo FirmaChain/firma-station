@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 
 import { rootState } from "../redux/reducers";
 
@@ -11,12 +12,16 @@ const Staking = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
   const { totalStakingState, validatorsState } = useStakingData();
 
+  const isMobile = useMediaQuery({ query: "(min-width:0px) and (max-width:599px)" });
+
   return (
     <ContentContainer>
       {isInit && totalStakingState && (
         <>
           <StakingCard totalStakingState={totalStakingState} />
-          {totalStakingState.delegateList.length > 0 && <DelegationCard totalStakingState={totalStakingState} />}
+          {totalStakingState.delegateList.length > 0 && isMobile === false && (
+            <DelegationCard totalStakingState={totalStakingState} />
+          )}
         </>
       )}
 
