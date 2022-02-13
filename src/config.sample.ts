@@ -5,6 +5,7 @@ export const NETWORK_INFO_LIST = [];
 export const FAUCET_URI = "";
 export const EXPLORER_URI = "";
 export const LCD_REST_URI = "";
+export const HELP_URI = "";
 
 export const GRAPHQL_CONFIG = {
   URI: "http://:8080/v1/graphql",

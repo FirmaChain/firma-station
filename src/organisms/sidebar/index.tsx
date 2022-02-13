@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { EXPLORER_URI } from "../../config";
+import { EXPLORER_URI, HELP_URI } from "../../config";
 
 import HomeIcon from "@mui/icons-material/Home";
 import AccountsIcon from "@mui/icons-material/AccountBalanceWallet";
@@ -11,6 +11,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import BuyFirmaIcon from "@mui/icons-material/Payment";
 import ExplorerIcon from "@mui/icons-material/Public";
 import DownloadIcon from "@mui/icons-material/Archive";
+import HelpIcon from "@mui/icons-material/Help";
 // import SettingsIcon from "@mui/icons-material/Settings";
 
 import {
@@ -49,6 +50,12 @@ const menus = [
     path: "/download",
     icon: DownloadIcon,
     externalLink: "",
+  },
+  {
+    name: "Help",
+    path: "/help",
+    icon: HelpIcon,
+    externalLink: HELP_URI,
   },
 ];
 

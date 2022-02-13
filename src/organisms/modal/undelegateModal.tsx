@@ -20,6 +20,9 @@ import {
   ModalInput,
   NextButton,
   InputBoxDefault,
+  ModalTooltipWrapper,
+  ModalTooltipIcon,
+  ModalTooltipTypo,
 } from "./styles";
 
 const UndelegateModal = () => {
@@ -143,6 +146,15 @@ const UndelegateModal = () => {
           <ModalInput>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
           </ModalInput>
+
+          <ModalTooltipWrapper>
+            <ModalTooltipIcon />
+            <ModalTooltipTypo>
+              A 21 day period is required when undelegating your tokens. During the 21 day period, you will not receive
+              any rewards. And you can't send and delegate that amount during 21 days.
+            </ModalTooltipTypo>
+          </ModalTooltipWrapper>
+
           <NextButton
             onClick={() => {
               if (isActiveButton) nextStep();

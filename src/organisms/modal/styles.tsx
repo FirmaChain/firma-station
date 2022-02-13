@@ -75,9 +75,25 @@ export const ModalTypo = styled.div`
   color: #ffc542;
 `;
 
+export const ModalTooltipWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
+
+export const ModalTooltipTypo = styled.div`
+  text-align: left;
+  color: #ffc542;
+  line-height: 20px;
+  flex: 1 1 100%;
+  font-size: 1.3rem;
+`;
+
 export const ModalTooltipIcon = styled.div`
   width: 20px;
   height: 20px;
+  flex: 1 1 25px;
   margin-right: 7px;
   background: url("${({ theme }) => theme.urls.tooltip}");
   background-size: contain;
