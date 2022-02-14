@@ -2,11 +2,25 @@ import React from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 import { Link } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 import { PROPOSAL_STATUS } from "../../constants/government";
 import { IProposalsState } from "./hooks";
 
-import { ListWrapper, ItemWrapper, ItemColumn, TitleTypo, DescriptionTypo, StatusTypo } from "./styles";
+import {
+  ListWrapper,
+  ItemWrapper,
+  ItemColumn,
+  TitleTypo,
+  DescriptionTypo,
+  StatusTypo,
+  SmallList,
+  SmallItemCard,
+  SmallProposalId,
+  SmallProposalTitle,
+  SmallProposalType,
+  SmallProposalStatus,
+} from "./styles";
 
 interface IProps {
   proposalsState: IProposalsState;
@@ -49,21 +63,46 @@ const Row = ({ data, index, style }: any) => {
 };
 
 const ProposalCard = ({ proposalsState }: IProps) => {
+  const isSmall = useMediaQuery({ query: "(max-width: 900px)" });
+
   return (
     <ListWrapper>
-      <AutoSizer>
-        {({ height, width }) => (
-          <List
-            width={width}
-            height={height}
-            itemCount={proposalsState.proposals.length}
-            itemSize={130}
-            itemData={proposalsState.proposals}
-          >
-            {Row}
-          </List>
-        )}
-      </AutoSizer>
+      {isSmall ? (
+        <SmallList>
+          {proposalsState.proposals.map((proposal, i) => {
+            const getStatusTypo = (status: string) => {
+              const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : "UNKNOWN";
+              const color = STATUS_COLOR[status];
+              return <StatusTypo statusColor={color}>{typo}</StatusTypo>;
+            };
+
+            return (
+              <Link to={{ pathname: `/government/proposals/${proposal.proposalId}` }} key={i}>
+                <SmallItemCard>
+                  <SmallProposalId>{`# ${proposal.proposalId}`}</SmallProposalId>
+                  <SmallProposalTitle>{proposal.title}</SmallProposalTitle>
+                  <SmallProposalType>{proposal.proposalType}</SmallProposalType>
+                  <SmallProposalStatus>{getStatusTypo(proposal.status)}</SmallProposalStatus>
+                </SmallItemCard>
+              </Link>
+            );
+          })}
+        </SmallList>
+      ) : (
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              width={width}
+              height={height}
+              itemCount={proposalsState.proposals.length}
+              itemSize={130}
+              itemData={proposalsState.proposals}
+            >
+              {Row}
+            </List>
+          )}
+        </AutoSizer>
+      )}
     </ListWrapper>
   );
 };

@@ -24,7 +24,6 @@ export const useHistoryByAddress = () => {
 
   const formatHistoryList = (data: any) => {
     return data.messagesByAddress.map((message: any) => {
-      console.log(message);
       return {
         height: message.transaction.height,
         hash: message.transaction.hash,

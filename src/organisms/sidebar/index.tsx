@@ -64,7 +64,10 @@ function Sidebar() {
 
   return (
     <DrawerStyled variant="permanent" anchor="left">
-      <LogoImg />
+      <Link to={{ pathname: `/` }}>
+        <LogoImg />
+      </Link>
+
       <ListStyled disablePadding={true}>
         {menus.map((menu, index) => {
           if (menu.externalLink !== "") {

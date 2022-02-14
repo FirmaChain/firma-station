@@ -7,7 +7,6 @@ export const ContentContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
   gap: 10px 0;
   padding: 0 40px;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};

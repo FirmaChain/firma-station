@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Hamburger from "hamburger-react";
+import { Link } from "react-router-dom";
 
 import { EXPLORER_URI } from "../../config";
 
@@ -17,6 +18,7 @@ import {
 const menus = [
   { name: "Home", path: "/", externalLink: "" },
   { name: "Staking", path: "/staking", externalLink: "" },
+  { name: "Governance", path: "/government", externalLink: "" },
   { name: "Community", path: "/community", externalLink: "" },
   {
     name: "Buy Firma",
@@ -36,10 +38,12 @@ const HeaderMobile = () => {
   return (
     <HeaderMobileContainer>
       <HeaderWrapper>
-        <HeaderLeft>
-          <HeaderIcon />
-          <HeaderTypoMobile>Firma Station</HeaderTypoMobile>
-        </HeaderLeft>
+        <Link to={{ pathname: `/` }}>
+          <HeaderLeft>
+            <HeaderIcon />
+            <HeaderTypoMobile>Firma Station</HeaderTypoMobile>
+          </HeaderLeft>
+        </Link>
         <HeaderRight>
           <Hamburger size={26} toggled={isOpen} toggle={setOpen} />
         </HeaderRight>

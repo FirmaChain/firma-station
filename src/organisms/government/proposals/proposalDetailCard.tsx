@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import numeral from "numeral";
+import { useMediaQuery } from "react-responsive";
 
 import {
   PROPOSAL_STATUS,
@@ -30,6 +31,8 @@ interface IProps {
 }
 
 const ProposalDetailCard = ({ proposalState }: IProps) => {
+  const isSmall = useMediaQuery({ query: "(max-width: 900px)" });
+
   const getStatusTypo = (status: string) => {
     const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : "UNKNOWN";
     return typo;
@@ -106,7 +109,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
         {isChangeParameter(proposalState.proposalType) && (
           <ProposalDetailItem>
             <Label>Change Parameters</Label>
-            <ProposalContent>
+            <ProposalContent isSmall={true}>
               <pre>{JSON.stringify(proposalState.extraData.changes, null, 2)}</pre>
             </ProposalContent>
           </ProposalDetailItem>

@@ -6,7 +6,7 @@ export const ContentContainer = styled.div`
   width: calc(100% - 80px);
   display: flex;
   flex-direction: column;
-  gap: 10px 0;
+  gap: 15px 0;
   padding: 0 40px;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
@@ -21,7 +21,7 @@ export const CardWrap = styled.div`
   z-index: 2;
   flex: 1;
   display: flex;
-  gap: 0 30px;
+  gap: 0 15px;
   @media only screen and (max-width: 1400px) {
     flex-direction: column;
   }
@@ -32,7 +32,7 @@ export const LeftCardWrap = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 30px 0;
+  gap: 15px 0;
   @media only screen and (max-width: 1400px) {
     width: 100%;
     flex-direction: column;
@@ -48,7 +48,7 @@ export const RightCardWrap = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 30px 0;
+  gap: 15px 0;
   @media only screen and (max-width: 1400px) {
     gap: 10px 0;
   }
@@ -60,14 +60,14 @@ export const RightCardTopWrap = styled.div`
   max-height: 130px;
   height: 130px;
   display: flex;
-  gap: 0 30px;
+  gap: 0 15px;
 `;
 
 export const RightCardBottomWrap = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
   & > div {
     flex: 1;
   }

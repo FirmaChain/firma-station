@@ -1,9 +1,9 @@
 import React from "react";
 import numeral from "numeral";
 import { Link } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 import { IValidatorsState } from "./hooks";
-import { useMediaQuery } from "react-responsive";
 
 import {
   ItemWrapper,

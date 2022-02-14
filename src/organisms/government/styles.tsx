@@ -88,3 +88,46 @@ export const StatusTypo = styled.div<{ statusColor: string }>`
   color: ${(props) => props.statusColor && props.statusColor};
   background: ${(props) => props.statusColor && props.statusColor}50;
 `;
+
+export const SmallList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const SmallItemCard = styled.div`
+  position: relative;
+  padding: 14px;
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  line-height: 24px;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+`;
+
+export const SmallProposalId = styled.div`
+  height: 30px;
+  line-height: 30px;
+  padding-bottom: 10px;
+`;
+
+export const SmallProposalTitle = styled.div`
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
+  color: white;
+`;
+
+export const SmallProposalType = styled.div`
+  font-size: ${({ theme }) => theme.sizes.stakingSmall};
+  color: #777;
+`;
+
+export const SmallProposalStatus = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 1.2rem;
+  & > div {
+    height: 30px;
+    line-height: 30px;
+  }
+`;

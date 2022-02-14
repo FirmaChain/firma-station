@@ -6,6 +6,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import { useMediaQuery } from "react-responsive";
 
 import { rootState } from "../../../redux/reducers";
 import { EXPLORER_URI, FIRMACHAIN_CONFIG } from "../../../config";
@@ -103,6 +104,8 @@ const VotingCard = ({ proposalState }: IProps) => {
   const [currentVotingTab, setVotingTab] = useState(0);
   const { balance } = useSelector((state: rootState) => state.user);
   const { enqueueSnackbar } = useSnackbar();
+
+  const isSmall = useMediaQuery({ query: "(max-width: 900px)" });
 
   const getTallyPercent = (proposalState: IProposalState, targetKey: string) => {
     let currentVoting = 0;
@@ -208,7 +211,14 @@ const VotingCard = ({ proposalState }: IProps) => {
         <VotingDetailItem>
           <VotingLabel>Voting Time</VotingLabel>
           <VotingContent>
-            {getTimeFormat(proposalState.votingStartTime)} ~ {getTimeFormat(proposalState.votingEndTime)}
+            {isSmall ? (
+              <>
+                <div style={{ marginBottom: "5px" }}>{getTimeFormat(proposalState.votingStartTime)} ~</div>
+                <div>{getTimeFormat(proposalState.votingEndTime)}</div>
+              </>
+            ) : (
+              `${getTimeFormat(proposalState.votingStartTime)} ~ ${getTimeFormat(proposalState.votingEndTime)}`
+            )}
           </VotingContent>
         </VotingDetailItem>
         <VotingDetailItem>
@@ -242,6 +252,9 @@ const VotingCard = ({ proposalState }: IProps) => {
               {votingThemeData[index].type}
             </VotingType>
 
+            <VotingPercent>
+              {votingThemeData[index].type !== "Abstain" ? `${numeral(voting.percent * 100).format("0.00")}%` : "ㅤ"}
+            </VotingPercent>
             {/* <VotingGauge>
               <Gauge
                 percent={`${numeral(voting.percent * 100).format("0.00")}%`}
@@ -249,10 +262,6 @@ const VotingCard = ({ proposalState }: IProps) => {
               />
             </VotingGauge> */}
             <VotingValue>{numeral(voting.value).format("0,0")}</VotingValue>
-
-            <VotingPercent>
-              {votingThemeData[index].type !== "Abstain" ? `${numeral(voting.percent * 100).format("0.00")}%` : "ㅤ"}
-            </VotingPercent>
           </VotingData>
         ))}
       </VotingWrapper>
@@ -261,35 +270,37 @@ const VotingCard = ({ proposalState }: IProps) => {
           Vote
         </VotingButton>
       )}
-      <VotingListWrap>
-        <VotingTabWrap>
-          <VotingTabItem active={currentVotingTab === 0} onClick={() => changeVotingTab(0)}>
-            All ({getVotingCountByOption("ALL")})
-          </VotingTabItem>
-          <VotingTabItem active={currentVotingTab === 1} onClick={() => changeVotingTab(1)}>
-            Yes ({getVotingCountByOption(votingThemeData[0].option)})
-          </VotingTabItem>
-          <VotingTabItem active={currentVotingTab === 2} onClick={() => changeVotingTab(2)}>
-            No ({getVotingCountByOption(votingThemeData[1].option)})
-          </VotingTabItem>
-          <VotingTabItem active={currentVotingTab === 3} onClick={() => changeVotingTab(3)}>
-            NoWithVeto ({getVotingCountByOption(votingThemeData[2].option)})
-          </VotingTabItem>
-          <VotingTabItem active={currentVotingTab === 4} onClick={() => changeVotingTab(4)}>
-            Abstain ({getVotingCountByOption(votingThemeData[3].option)})
-          </VotingTabItem>
-        </VotingTabWrap>
+      {isSmall === false && (
+        <VotingListWrap>
+          <VotingTabWrap>
+            <VotingTabItem active={currentVotingTab === 0} onClick={() => changeVotingTab(0)}>
+              All ({getVotingCountByOption("ALL")})
+            </VotingTabItem>
+            <VotingTabItem active={currentVotingTab === 1} onClick={() => changeVotingTab(1)}>
+              Yes ({getVotingCountByOption(votingThemeData[0].option)})
+            </VotingTabItem>
+            <VotingTabItem active={currentVotingTab === 2} onClick={() => changeVotingTab(2)}>
+              No ({getVotingCountByOption(votingThemeData[1].option)})
+            </VotingTabItem>
+            <VotingTabItem active={currentVotingTab === 3} onClick={() => changeVotingTab(3)}>
+              NoWithVeto ({getVotingCountByOption(votingThemeData[2].option)})
+            </VotingTabItem>
+            <VotingTabItem active={currentVotingTab === 4} onClick={() => changeVotingTab(4)}>
+              Abstain ({getVotingCountByOption(votingThemeData[3].option)})
+            </VotingTabItem>
+          </VotingTabWrap>
 
-        <VotingList>
-          <AutoSizer>
-            {({ height, width }) => (
-              <List width={width} height={height} itemCount={voters.length} itemSize={50} itemData={voters}>
-                {Row}
-              </List>
-            )}
-          </AutoSizer>
-        </VotingList>
-      </VotingListWrap>
+          <VotingList>
+            <AutoSizer>
+              {({ height, width }) => (
+                <List width={width} height={height} itemCount={voters.length} itemSize={50} itemData={voters}>
+                  {Row}
+                </List>
+              )}
+            </AutoSizer>
+          </VotingList>
+        </VotingListWrap>
+      )}
     </CardWrapper>
   );
 };

@@ -6,6 +6,7 @@ export const CardWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   font-size: ${({ theme }) => theme.sizes.defaultSize};
   flex-direction: column;
+  position: relative;
 `;
 
 export const DepositDetailWrapper = styled.div`
@@ -19,6 +20,9 @@ export const DepositDetailItem = styled.div`
   width: 100%;
   display: flex;
   font-size: ${({ theme }) => theme.sizes.depositCardSize1};
+  @media only screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 export const DepositContent = styled.div<{ bigSize?: boolean }>`
@@ -56,6 +60,9 @@ export const TitleWrapper = styled.div`
   padding: 20px 0;
   margin-bottom: 20px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+  @media only screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 export const ProposalID = styled.div`
@@ -63,6 +70,11 @@ export const ProposalID = styled.div`
   height: 30px;
   line-height: 30px;
   text-align: center;
+  @media only screen and (max-width: 900px) {
+    width: 100%;
+    height: auto;
+    text-align: left;
+  }
 `;
 
 export const Title = styled.div`
@@ -71,6 +83,11 @@ export const Title = styled.div`
   line-height: 30px;
   font-size: ${({ theme }) => theme.sizes.proposalDetailCardSize1};
   color: white;
+  @media only screen and (max-width: 900px) {
+    width: 100%;
+    height: auto;
+    text-align: left;
+  }
 `;
 
 export const Status = styled.div`
@@ -78,6 +95,11 @@ export const Status = styled.div`
   height: 30px;
   line-height: 30px;
   text-align: center;
+  @media only screen and (max-width: 900px) {
+    position: absolute;
+    top: 18px;
+    right: 10px;
+  }
 `;
 
 export const ProposalDetailWrapper = styled.div`
@@ -93,17 +115,27 @@ export const ProposalDetailItem = styled.div`
   width: 100%;
   display: flex;
   font-size: ${({ theme }) => theme.sizes.proposalDetailCardSize2};
+  @media only screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 export const Label = styled.div`
   width: 200px;
-  color: ${({ theme }) => theme.colors.defaultGray3};
+  color: ${({ theme }) => theme.colors.defaultGray4};
+  @media only screen and (max-width: 900px) {
+    width: 100%;
+    padding-bottom: 10px;
+  }
 `;
 
-export const ProposalContent = styled.div`
+export const ProposalContent = styled.div<{ isSmall?: boolean }>`
   width: 100%;
   line-height: 23px;
   color: ${({ theme }) => theme.colors.defaultGray};
+  @media only screen and (max-width: 900px) {
+    ${(props) => props.isSmall && `font-size: ${props.theme.sizes.stakingSmall};`}
+  }
 `;
 
 export const ProposalMainTitle = styled.div`
@@ -123,11 +155,18 @@ export const VotingDetailItem = styled.div`
   width: 100%;
   display: flex;
   font-size: ${({ theme }) => theme.sizes.votingCardSize1};
+  @media only screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 export const VotingLabel = styled.div`
   width: 200px;
   color: ${({ theme }) => theme.colors.defaultGray4};
+  @media only screen and (max-width: 900px) {
+    width: 100%;
+    padding-bottom: 10px;
+  }
 `;
 
 export const VotingContent = styled.div<{ bigSize?: boolean }>`
@@ -147,6 +186,9 @@ export const VotingWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  @media only screen and (max-width: 900px) {
+    gap: 10px;
+  }
 `;
 
 export const VotingData = styled.div`
@@ -154,6 +196,10 @@ export const VotingData = styled.div`
   padding: 25px 25px;
   border: 1px solid #6a709a;
   border-radius: 4px;
+  @media only screen and (max-width: 900px) {
+    width: calc(50% - 20px - 10px);
+    padding: 10px;
+  }
 `;
 
 export const VotingType = styled.div`
@@ -162,6 +208,9 @@ export const VotingType = styled.div`
   line-height: 30px;
   font-size: ${({ theme }) => theme.sizes.votingCardSize2};
   ${(props) => props.color && `color:${props.color};`}
+  @media only screen and (max-width: 900px) {
+    text-align: center;
+  }
 `;
 
 export const VotingGauge = styled.div`
@@ -183,20 +232,31 @@ export const Arrow = styled.div`
   top: -17px;
   left: 41px;
 `;
+
 export const VotingPercent = styled.div`
   width: 50%;
   float: left;
-  text-align: right;
   line-height: 30px;
+  text-align: left;
   color: ${({ theme }) => theme.colors.defaultDarkGray};
+  @media only screen and (max-width: 900px) {
+    width: 100%;
+    color: white;
+    text-align: center;
+  }
 `;
 
 export const VotingValue = styled.div`
   width: 50%;
   float: left;
   line-height: 30px;
-  text-align: left;
+  text-align: right;
   color: ${({ theme }) => theme.colors.defaultDarkGray};
+  @media only screen and (max-width: 900px) {
+    width: 100%;
+    text-align: center;
+    font-size: ${({ theme }) => theme.sizes.stakingSmall};
+  }
 `;
 
 export const VotingButton = styled.div<{ active: boolean }>`
