@@ -104,7 +104,7 @@ const UndelegateModal = () => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        if (convertNumber(balance) > convertToFctNumber(gas)) {
+        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: "Undelegate",
             data: { amount: amount, fees: getFeesFromGas(gas), gas },

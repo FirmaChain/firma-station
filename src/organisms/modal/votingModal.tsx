@@ -7,7 +7,7 @@ import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
-import { getFeesFromGas } from "../../utils/common";
+import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../utils/common";
 
 import {
   votingModalWidth,
@@ -22,6 +22,7 @@ import {
 const VotingModal = () => {
   const votingModalState = useSelector((state: rootState) => state.modal.voting);
   const modalData = useSelector((state: rootState) => state.modal.data);
+  const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const [votingType, setVotingType] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
@@ -58,14 +59,21 @@ const VotingModal = () => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        modalActions.handleModalData({
-          action: "Voting",
-          data: { fees: getFeesFromGas(gas), gas },
-          prevModalAction: modalActions.handleModalVoting,
-          txAction: votingTx,
-        });
+        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
+          modalActions.handleModalData({
+            action: "Voting",
+            data: { fees: getFeesFromGas(gas), gas },
+            prevModalAction: modalActions.handleModalVoting,
+            txAction: votingTx,
+          });
 
-        modalActions.handleModalConfirmTx(true);
+          modalActions.handleModalConfirmTx(true);
+        } else {
+          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        }
       })
       .catch(() => {
         if (isLedger) {

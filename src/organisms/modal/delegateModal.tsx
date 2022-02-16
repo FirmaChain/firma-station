@@ -24,6 +24,7 @@ import {
 const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
+  const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -99,14 +100,21 @@ const DelegateModal = () => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        modalActions.handleModalData({
-          action: "Delegate",
-          data: { amount, fees: getFeesFromGas(gas), gas },
-          prevModalAction: modalActions.handleModalDelegate,
-          txAction: delegateTx,
-        });
+        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
+          modalActions.handleModalData({
+            action: "Delegate",
+            data: { amount, fees: getFeesFromGas(gas), gas },
+            prevModalAction: modalActions.handleModalDelegate,
+            txAction: delegateTx,
+          });
 
-        modalActions.handleModalConfirmTx(true);
+          modalActions.handleModalConfirmTx(true);
+        } else {
+          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        }
       })
       .catch(() => {
         if (isLedger) {

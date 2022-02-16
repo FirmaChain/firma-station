@@ -92,14 +92,21 @@ const DepositModal = () => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        modalActions.handleModalData({
-          action: "Deposit",
-          data: { amount, fees: getFeesFromGas(gas), gas },
-          prevModalAction: modalActions.handleModalDeposit,
-          txAction: depositTx,
-        });
+        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
+          modalActions.handleModalData({
+            action: "Deposit",
+            data: { amount, fees: getFeesFromGas(gas), gas },
+            prevModalAction: modalActions.handleModalDeposit,
+            txAction: depositTx,
+          });
 
-        modalActions.handleModalConfirmTx(true);
+          modalActions.handleModalConfirmTx(true);
+        } else {
+          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+            variant: "error",
+            autoHideDuration: 2000,
+          });
+        }
       })
       .catch(() => {
         if (isLedger) {

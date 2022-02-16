@@ -334,14 +334,21 @@ const NewProposalModal = () => {
     if (isLedger) modalActions.handleModalGasEstimation(false);
 
     if (currentGas > 0) {
-      modalActions.handleModalData({
-        action: "Proposal",
-        data: { fees: getFeesFromGas(currentGas), gas: currentGas },
-        prevModalAction: modalActions.handleModalNewProposal,
-        txAction: newProposalTx,
-      });
+      if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(currentGas))) {
+        modalActions.handleModalData({
+          action: "Proposal",
+          data: { fees: getFeesFromGas(currentGas), gas: currentGas },
+          prevModalAction: modalActions.handleModalNewProposal,
+          txAction: newProposalTx,
+        });
 
-      modalActions.handleModalConfirmTx(true);
+        modalActions.handleModalConfirmTx(true);
+      } else {
+        enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
+      }
     }
   };
 

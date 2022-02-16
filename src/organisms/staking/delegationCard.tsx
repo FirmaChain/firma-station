@@ -111,7 +111,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        if (convertNumber(balance) > convertToFctNumber(gas)) {
+        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: "Withdraw",
             data: { amount: totalStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
