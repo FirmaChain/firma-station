@@ -328,6 +328,11 @@ const NewProposalModal = () => {
           autoHideDuration: 3000,
         });
         modalActions.handleModalGasEstimation(false);
+      } else {
+        enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+          variant: "error",
+          autoHideDuration: 2000,
+        });
       }
     }
 
