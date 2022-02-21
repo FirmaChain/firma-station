@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import moment from "moment";
 import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { Link } from "react-router-dom";
@@ -20,6 +21,17 @@ import {
   DelegationHeaderColumn,
   DelegationItemWrapper,
   DelegationItemColumn,
+  RedelegationItemWrapper,
+  RedelegationItemColumn,
+  RedelegationHeaderWrapper,
+  RedelegationHeaderColumn,
+  UndelegationItemWrapper,
+  UndelegationItemColumn,
+  UndelegationHeaderWrapper,
+  UndelegationHeaderColumn,
+  DelegationTab,
+  DelegationTabItem,
+  TabListItem,
   FlexWrapper,
   ProfileImage2,
   MonikerTypo,
@@ -68,6 +80,58 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
   );
 };
 
+const RedelegationRow = ({ data, index, style }: any) => {
+  const validatorInfo = data[index];
+
+  const getMoniker = (moniker: string) => {
+    if (moniker.length > 15) {
+      return moniker.substr(0, 10) + "...";
+    } else {
+      return moniker;
+    }
+  };
+
+  return (
+    <RedelegationItemWrapper style={style}>
+      <RedelegationItemColumn>
+        <Link to={{ pathname: `/staking/validators/${validatorInfo.srcAddress}` }}>
+          <ProfileImage2 src={validatorInfo.srcAvatarURL} />
+          <MonikerTypo>{getMoniker(validatorInfo.srcMoniker)}</MonikerTypo>
+        </Link>
+      </RedelegationItemColumn>
+      <RedelegationItemColumn>
+        <Link to={{ pathname: `/staking/validators/${validatorInfo.dstAddress}` }}>
+          <ProfileImage2 src={validatorInfo.dstAvatarURL} />
+          <MonikerTypo>{getMoniker(validatorInfo.dstMoniker)}</MonikerTypo>
+        </Link>
+      </RedelegationItemColumn>
+      <RedelegationItemColumn>{numeral(validatorInfo.balance).format("0,0.000")}</RedelegationItemColumn>
+      <RedelegationItemColumn>
+        {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
+      </RedelegationItemColumn>
+    </RedelegationItemWrapper>
+  );
+};
+
+const UndelegationRow = ({ data, index, style }: any) => {
+  const validatorInfo = data[index];
+
+  return (
+    <UndelegationItemWrapper style={style}>
+      <UndelegationItemColumn>
+        <Link to={{ pathname: `/staking/validators/${validatorInfo.validatorAddress}` }}>
+          <ProfileImage2 src={validatorInfo.avatarURL} />
+          <MonikerTypo>{validatorInfo.moniker}</MonikerTypo>
+        </Link>
+      </UndelegationItemColumn>
+      <UndelegationItemColumn>{numeral(validatorInfo.balance).format("0,0.000")}</UndelegationItemColumn>
+      <UndelegationItemColumn>
+        {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
+      </UndelegationItemColumn>
+    </UndelegationItemWrapper>
+  );
+};
+
 const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
   const getMonikerFormat = (moniker: string) => {
     if (moniker.length > 20) return moniker.substr(0, 20) + "...";
@@ -93,6 +157,8 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
   const { balance } = useSelector((state: rootState) => state.user);
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
   const data = GetDelegatePieData(totalStakingState);
+
+  const [currentTab, setCurrentTab] = useState(0);
 
   const withdrawAllValidatorTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     withdrawAllValidator(gas)
@@ -142,6 +208,16 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
       });
   };
 
+  const onCLickChangeTab = (index: number) => {
+    if (index === 0) {
+      setCurrentTab(index);
+    } else if (index === 1 && totalStakingState.redelegationList.length > 0) {
+      setCurrentTab(index);
+    } else if (index === 2 && totalStakingState.undelegationList.length > 0) {
+      setCurrentTab(index);
+    }
+  };
+
   const onClickWithdrawAll = () => {
     if (totalStakingState.stakingReward > 0) {
       withdrawAllValidatorAction();
@@ -184,25 +260,79 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
         />
       </ChartWrapper>
       <DelegationListWrapper>
+        <DelegationTab>
+          <DelegationTabItem isActive={currentTab === 0} onClick={() => onCLickChangeTab(0)}>
+            Delegations ({totalStakingState.delegateList.length})
+          </DelegationTabItem>
+          <DelegationTabItem isActive={currentTab === 1} onClick={() => onCLickChangeTab(1)}>
+            Redelegations ({totalStakingState.redelegationList.length}/7)
+          </DelegationTabItem>
+          <DelegationTabItem isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
+            Undelegations ({totalStakingState.undelegationList.length})
+          </DelegationTabItem>
+        </DelegationTab>
         <AutoSizer>
-          {({ height, width }) => (
-            <>
-              <DelegationHeaderWrapper style={{ width: width - 5 }}>
-                <DelegationHeaderColumn>Validator</DelegationHeaderColumn>
-                <DelegationHeaderColumn>Delegated (FCT)</DelegationHeaderColumn>
-                <DelegationHeaderColumn>Reward (FCT)</DelegationHeaderColumn>
-              </DelegationHeaderWrapper>
-              <List
-                width={width}
-                height={height - 40}
-                itemCount={totalStakingState.delegateList.length}
-                itemSize={45}
-                itemData={totalStakingState.delegateList}
-              >
-                {(props) => Row({ ...props, totalStakingState })}
-              </List>
-            </>
-          )}
+          {({ height, width }) => {
+            if (currentTab === 0) {
+              return (
+                <TabListItem>
+                  <DelegationHeaderWrapper style={{ width: width - 5 }}>
+                    <DelegationHeaderColumn>Validator</DelegationHeaderColumn>
+                    <DelegationHeaderColumn>Delegated (FCT)</DelegationHeaderColumn>
+                    <DelegationHeaderColumn>Reward (FCT)</DelegationHeaderColumn>
+                  </DelegationHeaderWrapper>
+                  <List
+                    width={width}
+                    height={height - 80}
+                    itemCount={totalStakingState.delegateList.length}
+                    itemSize={45}
+                    itemData={totalStakingState.delegateList}
+                  >
+                    {(props) => Row({ ...props, totalStakingState })}
+                  </List>
+                </TabListItem>
+              );
+            } else if (currentTab === 1) {
+              return (
+                <TabListItem>
+                  <RedelegationHeaderWrapper style={{ width: width - 5 }}>
+                    <RedelegationHeaderColumn>From</RedelegationHeaderColumn>
+                    <RedelegationHeaderColumn>To</RedelegationHeaderColumn>
+                    <RedelegationHeaderColumn>Amount (FCT)</RedelegationHeaderColumn>
+                    <RedelegationHeaderColumn>Linked Until</RedelegationHeaderColumn>
+                  </RedelegationHeaderWrapper>
+                  <List
+                    width={width}
+                    height={height - 80}
+                    itemCount={totalStakingState.redelegationList.length}
+                    itemSize={45}
+                    itemData={totalStakingState.redelegationList}
+                  >
+                    {(props) => RedelegationRow({ ...props })}
+                  </List>
+                </TabListItem>
+              );
+            } else if (currentTab === 2) {
+              return (
+                <TabListItem>
+                  <UndelegationHeaderWrapper style={{ width: width - 5 }}>
+                    <UndelegationHeaderColumn>Validator</UndelegationHeaderColumn>
+                    <UndelegationHeaderColumn>Amount (FCT)</UndelegationHeaderColumn>
+                    <UndelegationHeaderColumn>Linked Until</UndelegationHeaderColumn>
+                  </UndelegationHeaderWrapper>
+                  <List
+                    width={width}
+                    height={height - 80}
+                    itemCount={totalStakingState.undelegationList.length}
+                    itemSize={45}
+                    itemData={totalStakingState.undelegationList}
+                  >
+                    {(props) => UndelegationRow({ ...props })}
+                  </List>
+                </TabListItem>
+              );
+            }
+          }}
         </AutoSizer>
       </DelegationListWrapper>
       <ButtonWrapper>

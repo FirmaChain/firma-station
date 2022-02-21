@@ -21,6 +21,25 @@ export interface IStakeInfo {
   amount: number;
 }
 
+export interface IUndelegationList {
+  validatorAddress: string;
+  moniker: string;
+  avatarURL: string;
+  balance: string;
+  completionTime: string;
+}
+
+export interface IRedelegationList {
+  srcAddress: string;
+  srcMoniker: string;
+  srcAvatarURL: string;
+  dstAddress: string;
+  dstMoniker: string;
+  dstAvatarURL: string;
+  balance: string;
+  completionTime: string;
+}
+
 export interface ITotalStakingState {
   available: number;
   delegated: number;
@@ -28,7 +47,8 @@ export interface ITotalStakingState {
   stakingReward: number;
   stakingRewardList: Array<any>;
   delegateList: Array<IStakeInfo>;
-  undelegateList: Array<IStakeInfo>;
+  redelegationList: Array<IRedelegationList>;
+  undelegationList: Array<IUndelegationList>;
 }
 
 export interface ITargetStakingState {
@@ -57,7 +77,7 @@ export const useStakingDataFromTarget = () => {
         })
         .catch((e) => {});
     }
-  }, 2000);
+  }, 5000);
 
   return {
     targetStakingState,
@@ -79,7 +99,8 @@ export const useStakingData = () => {
     stakingReward: 0,
     stakingRewardList: [],
     delegateList: [],
-    undelegateList: [],
+    redelegationList: [],
+    undelegationList: [],
   });
 
   useInterval(() => {
@@ -89,6 +110,13 @@ export const useStakingData = () => {
           let queryIn = "";
           for (let i = 0; i < result.delegateList.length; i++) {
             queryIn += `"${result.delegateList[i].validatorAddress}",`;
+          }
+          for (let i = 0; i < result.redelegationList.length; i++) {
+            queryIn += `"${result.redelegationList[i].srcAddress}",`;
+            queryIn += `"${result.redelegationList[i].dstAddress}",`;
+          }
+          for (let i = 0; i < result.undelegationList.length; i++) {
+            queryIn += `"${result.undelegationList[i].validatorAddress}",`;
           }
 
           client
@@ -123,12 +151,38 @@ export const useStakingData = () => {
                 }
                 return delegate;
               });
+
+              result.redelegationList = result.redelegationList.map((delegate) => {
+                for (let i = 0; i < data.validator.length; i++) {
+                  if (data.validator[i].validator_info.operator_address === delegate.srcAddress) {
+                    delegate.srcMoniker = data.validator[i].validator_descriptions[0].moniker;
+                    delegate.srcAvatarURL = data.validator[i].validator_descriptions[0].avatar_url;
+                  }
+
+                  if (data.validator[i].validator_info.operator_address === delegate.dstAddress) {
+                    delegate.dstMoniker = data.validator[i].validator_descriptions[0].moniker;
+                    delegate.dstAvatarURL = data.validator[i].validator_descriptions[0].avatar_url;
+                  }
+                }
+                return delegate;
+              });
+
+              result.undelegationList = result.undelegationList.map((delegate) => {
+                for (let i = 0; i < data.validator.length; i++) {
+                  if (data.validator[i].validator_info.operator_address === delegate.validatorAddress) {
+                    delegate.moniker = data.validator[i].validator_descriptions[0].moniker;
+                    delegate.avatarURL = data.validator[i].validator_descriptions[0].avatar_url;
+                  }
+                }
+                return delegate;
+              });
+
               setTotalStakingState(result);
             });
         }
       })
       .catch((e) => {});
-  }, 2000);
+  }, 5000);
 
   useValidatorsQuery({
     onCompleted: (data) => {

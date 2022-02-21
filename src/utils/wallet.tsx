@@ -7,7 +7,7 @@ import moment from "moment";
 
 import { Wallet } from "./types";
 import { LCD_REST_URI } from "../config";
-import { convertNumber, convertToFctNumber, convertToTokenString, isValidString } from "./common";
+import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from "./common";
 import { rootState } from "../redux/reducers";
 import { userActions, walletActions } from "../redux/action";
 import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from "./keyBridge";
@@ -284,6 +284,9 @@ function useFirma() {
       userActions.handleUserNFTList([]);
       userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : "0");
       userActions.handleUserTokenList(tokenDataList);
+
+      getRedelegationList();
+      getUndelegationList();
     } catch (e) {
       console.log(e);
     }
@@ -432,6 +435,9 @@ function useFirma() {
     const stakingReward = convertToFctNumber(totalReward.total);
     const stakingRewardList = totalReward.rewards;
 
+    const redelegationList = await getRedelegationList();
+    const undelegationList = await getUndelegationList();
+
     const result: ITotalStakingState = {
       available,
       delegated,
@@ -439,7 +445,8 @@ function useFirma() {
       stakingReward,
       stakingRewardList,
       delegateList,
-      undelegateList: [],
+      redelegationList,
+      undelegationList,
     };
 
     return result;
@@ -483,6 +490,72 @@ function useFirma() {
         label: value.delegation.validator_address,
         amount: value.balance.amount,
       };
+    });
+
+    return parseList;
+  };
+
+  const getRedelegationList = async () => {
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const redelegationList = await firmaSDK.Staking.getTotalRedelegationInfo(address);
+
+    let parseList = [];
+    for (let redelegation of redelegationList) {
+      const srcAddress = redelegation.redelegation.validator_src_address;
+      const dstAddress = redelegation.redelegation.validator_dst_address;
+
+      for (let entry of redelegation.entries) {
+        const completionTime = entry.redelegation_entry.completion_time;
+        const balance = convertToFctString(entry.redelegation_entry.shares_dst);
+
+        parseList.push({
+          srcAddress,
+          srcMoniker: "",
+          srcAvatarURL: "",
+          dstAddress,
+          dstMoniker: "",
+          dstAvatarURL: "",
+          balance,
+          completionTime,
+        });
+      }
+    }
+
+    parseList.sort((a: any, b: any) => {
+      return new Date(a.completionTime).getTime() - new Date(b.completionTime).getTime();
+    });
+
+    return parseList;
+  };
+
+  const getUndelegationList = async () => {
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const undelegationList = await firmaSDK.Staking.getTotalUndelegateInfo(address);
+
+    let parseList = [];
+    for (let undelegation of undelegationList) {
+      const validatorAddress = undelegation.validator_address;
+
+      for (let entry of undelegation.entries) {
+        const completionTime = entry.completion_time;
+        const balance = convertToFctString(entry.balance);
+
+        parseList.push({
+          validatorAddress,
+          moniker: "",
+          avatarURL: "",
+          balance,
+          completionTime,
+        });
+      }
+    }
+
+    parseList.sort((a: any, b: any) => {
+      return new Date(a.completionTime).getTime() - new Date(b.completionTime).getTime();
     });
 
     return parseList;

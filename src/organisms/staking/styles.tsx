@@ -148,64 +148,196 @@ export const MonikerTypo = styled.div`
   float: left;
 `;
 
-export const DelegationColumn = styled.div`
-  width: 100%;
-  & {
-    text-align: center;
-  }
-  &:nth-child(1) {
-    flex: 2;
-  }
-  &:nth-child(2) {
-    flex: 1;
-    text-align: right;
-  }
-  &:nth-child(3) {
-    flex: 1;
-    text-align: right;
-  }
-`;
-
 export const DelegationItemWrapper = styled(RowWrapper)`
   height: 45px;
   line-height: 45px;
 `;
 
-export const DelegationItemColumn = styled(DelegationColumn)`
+export const DelegationItemColumn = styled.div`
+  width: 100%;
   text-align: center;
   font-size: ${({ theme }) => theme.sizes.stakingMedium};
   &:nth-child(1) {
+    flex: 1;
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
   }
   &:nth-child(2) {
+    flex: 1;
     text-align: right;
   }
   &:nth-child(3) {
+    flex: 1;
     text-align: right;
     margin-right: 20px;
   }
 `;
 
 export const DelegationHeaderWrapper = styled(RowWrapper)`
+  width: 100%;
   height: 40px;
   line-height: 40px;
   border-bottom: 1px solid #444;
 `;
 
-export const DelegationHeaderColumn = styled(DelegationColumn)`
+export const DelegationHeaderColumn = styled.div`
   color: #ddd;
   font-size: ${({ theme }) => theme.sizes.stakingLarge};
   text-align: center;
   &:nth-child(1) {
+    flex: 1;
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
   }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: right;
+  }
   &:nth-child(3) {
+    flex: 1;
+    margin-right: 20px;
+    text-align: right;
+  }
+`;
+
+export const UndelegationItemWrapper = styled(RowWrapper)`
+  height: 45px;
+  line-height: 45px;
+`;
+
+export const UndelegationItemColumn = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
+  &:nth-child(1) {
+    flex: 1;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: right;
+  }
+  &:nth-child(3) {
+    flex: 1;
+    text-align: center;
     margin-right: 20px;
   }
+`;
+
+export const UndelegationHeaderWrapper = styled(RowWrapper)`
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #444;
+`;
+
+export const UndelegationHeaderColumn = styled.div`
+  color: #ddd;
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
+  text-align: center;
+  &:nth-child(1) {
+    flex: 1;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: right;
+  }
+  &:nth-child(3) {
+    flex: 1;
+    margin-right: 20px;
+  }
+`;
+
+export const RedelegationItemWrapper = styled(RowWrapper)`
+  height: 45px;
+  line-height: 45px;
+`;
+
+export const RedelegationItemColumn = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
+  &:nth-child(1) {
+    flex: 1;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: left;
+  }
+  &:nth-child(3) {
+    flex: 1 1 30px;
+    text-align: right;
+    margin-right: 20px;
+  }
+  &:nth-child(4) {
+    flex: 1 1 100px;
+    margin-right: 20px;
+  }
+`;
+
+export const RedelegationHeaderWrapper = styled(RowWrapper)`
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #444;
+`;
+
+export const RedelegationHeaderColumn = styled.div`
+  color: #ddd;
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
+  text-align: center;
+  &:nth-child(1) {
+    flex: 1;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: left;
+  }
+  &:nth-child(3) {
+    flex: 1 1 30px;
+    text-align: right;
+    margin-right: 20px;
+  }
+  &:nth-child(4) {
+    flex: 1 1 100px;
+    margin-right: 20px;
+  }
+`;
+
+export const TabListItem = styled.div``;
+
+export const DelegationTab = styled.div`
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  display: flex;
+  padding-bottom: 10px;
+`;
+
+export const DelegationTabItem = styled.div<{ isActive: boolean }>`
+  width: 13.8rem;
+  text-align: center;
+  padding: 10px;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  cursor: pointer;
+  color: #888;
+  ${(props) =>
+    props.isActive &&
+    `
+    color:white;
+    border-bottom:1px solid white;
+  `}
 `;
 
 export const FlexWrapper = styled.div`
@@ -215,6 +347,7 @@ export const FlexWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   border-radius: 4px;
   display: flex;
+  align-items: center;
   @media only screen and (max-width: 1400px) {
     flex-wrap: wrap;
   }
@@ -222,8 +355,8 @@ export const FlexWrapper = styled.div`
 
 export const DelegationListWrapper = styled.div`
   width: calc(50% - 35px);
-  height: 240px;
-  padding: 70px 10px 20px 15px;
+  height: 260px;
+  padding: 20px 10px 20px 15px;
   @media only screen and (max-width: 1400px) {
     width: 100%;
     padding: 20px;
@@ -272,8 +405,8 @@ export const RewardTypo = styled.div`
 
 export const ButtonWrapper = styled.div`
   position: absolute;
-  top: 25px;
-  right: 40px;
+  top: 20px;
+  right: 25px;
   display: flex;
 `;
 
