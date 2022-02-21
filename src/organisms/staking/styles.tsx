@@ -8,7 +8,7 @@ export const StakingWrap = styled.div`
   border-radius: 4px;
   float: left;
   display: flex;
-  @media only screen and (max-width: 1400px) {
+  @media only screen and (max-width: 1550px) {
     flex-wrap: wrap;
     height: auto;
     gap: 20px 0;
@@ -24,7 +24,7 @@ export const StakingTextWrap = styled.div`
   &:last-child {
     border: 0;
   }
-  @media only screen and (max-width: 1400px) {
+  @media only screen and (max-width: 1550px) {
     border: 0;
     width: 50%;
     min-width: 200px;
@@ -224,7 +224,9 @@ export const UndelegationItemColumn = styled.div`
   &:nth-child(3) {
     flex: 1;
     text-align: center;
-    margin-right: 20px;
+    margin-right: 5px;
+    min-width: 16rem;
+    font-size: ${({ theme }) => theme.sizes.stakingSmall};
   }
 `;
 
@@ -251,7 +253,8 @@ export const UndelegationHeaderColumn = styled.div`
   }
   &:nth-child(3) {
     flex: 1;
-    margin-right: 20px;
+    min-width: 16rem;
+    margin-right: 5px;
   }
 `;
 
@@ -266,22 +269,26 @@ export const RedelegationItemColumn = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingMedium};
   &:nth-child(1) {
     flex: 1;
+    min-width: 13rem;
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
   }
   &:nth-child(2) {
     flex: 1;
+    min-width: 13rem;
     text-align: left;
   }
   &:nth-child(3) {
-    flex: 1 1 30px;
+    flex: 1;
     text-align: right;
-    margin-right: 20px;
+    margin-right: 5px;
   }
   &:nth-child(4) {
-    flex: 1 1 100px;
-    margin-right: 20px;
+    flex: 1;
+    min-width: 16rem;
+    margin-right: 5px;
+    font-size: ${({ theme }) => theme.sizes.stakingSmall};
   }
 `;
 
@@ -298,22 +305,25 @@ export const RedelegationHeaderColumn = styled.div`
   text-align: center;
   &:nth-child(1) {
     flex: 1;
+    min-width: 13rem;
     text-align: left;
     padding-left: 5px;
     padding-right: 5px;
   }
   &:nth-child(2) {
     flex: 1;
+    min-width: 13rem;
     text-align: left;
   }
   &:nth-child(3) {
-    flex: 1 1 30px;
+    flex: 1;
     text-align: right;
-    margin-right: 20px;
+    margin-right: 5px;
   }
   &:nth-child(4) {
-    flex: 1 1 100px;
-    margin-right: 20px;
+    flex: 1;
+    min-width: 16rem;
+    margin-right: 5px;
   }
 `;
 
@@ -348,7 +358,7 @@ export const FlexWrapper = styled.div`
   border-radius: 4px;
   display: flex;
   align-items: center;
-  @media only screen and (max-width: 1400px) {
+  @media only screen and (max-width: 1550px) {
     flex-wrap: wrap;
   }
 `;
@@ -357,7 +367,7 @@ export const DelegationListWrapper = styled.div`
   width: calc(50% - 35px);
   height: 260px;
   padding: 20px 10px 20px 15px;
-  @media only screen and (max-width: 1400px) {
+  @media only screen and (max-width: 1550px) {
     width: 100%;
     padding: 20px;
   }
@@ -370,7 +380,7 @@ export const ChartWrapper = styled.div`
   position: relative;
   align-items: center;
   justify-content: center;
-  @media only screen and (max-width: 1400px) {
+  @media only screen and (max-width: 1550px) {
     width: 100%;
   }
 `;

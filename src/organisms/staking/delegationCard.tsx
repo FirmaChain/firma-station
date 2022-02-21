@@ -84,8 +84,8 @@ const RedelegationRow = ({ data, index, style }: any) => {
   const validatorInfo = data[index];
 
   const getMoniker = (moniker: string) => {
-    if (moniker.length > 15) {
-      return moniker.substr(0, 10) + "...";
+    if (moniker.length > 12) {
+      return moniker.substr(0, 8) + "...";
     } else {
       return moniker;
     }
@@ -105,7 +105,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
           <MonikerTypo>{getMoniker(validatorInfo.dstMoniker)}</MonikerTypo>
         </Link>
       </RedelegationItemColumn>
-      <RedelegationItemColumn>{numeral(validatorInfo.balance).format("0,0.000")}</RedelegationItemColumn>
+      <RedelegationItemColumn>{numeral(validatorInfo.balance * 10000).format("0,0.000")}</RedelegationItemColumn>
       <RedelegationItemColumn>
         {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
       </RedelegationItemColumn>
@@ -271,8 +271,8 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
                 <TabListItem>
                   <DelegationHeaderWrapper style={{ width: width - 5 }}>
                     <DelegationHeaderColumn>Validator</DelegationHeaderColumn>
-                    <DelegationHeaderColumn>Delegated (FCT)</DelegationHeaderColumn>
-                    <DelegationHeaderColumn>Reward (FCT)</DelegationHeaderColumn>
+                    <DelegationHeaderColumn>Delegated</DelegationHeaderColumn>
+                    <DelegationHeaderColumn>Reward</DelegationHeaderColumn>
                   </DelegationHeaderWrapper>
                   <List
                     width={width}
@@ -291,7 +291,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
                   <RedelegationHeaderWrapper style={{ width: width - 5 }}>
                     <RedelegationHeaderColumn>From</RedelegationHeaderColumn>
                     <RedelegationHeaderColumn>To</RedelegationHeaderColumn>
-                    <RedelegationHeaderColumn>Amount (FCT)</RedelegationHeaderColumn>
+                    <RedelegationHeaderColumn>Amount</RedelegationHeaderColumn>
                     <RedelegationHeaderColumn>Linked Until</RedelegationHeaderColumn>
                   </RedelegationHeaderWrapper>
                   <List
@@ -310,7 +310,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
                 <TabListItem>
                   <UndelegationHeaderWrapper style={{ width: width - 5 }}>
                     <UndelegationHeaderColumn>Validator</UndelegationHeaderColumn>
-                    <UndelegationHeaderColumn>Amount (FCT)</UndelegationHeaderColumn>
+                    <UndelegationHeaderColumn>Amount</UndelegationHeaderColumn>
                     <UndelegationHeaderColumn>Linked Until</UndelegationHeaderColumn>
                   </UndelegationHeaderWrapper>
                   <List
