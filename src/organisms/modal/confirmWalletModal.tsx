@@ -82,7 +82,7 @@ const ConfirmWalletModal = () => {
     storeWalletFromMnemonic(password, mnemonic).then(() => {
       enqueueSnackbar("Success Create Wallet", {
         variant: "success",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
       closeModal();
     });

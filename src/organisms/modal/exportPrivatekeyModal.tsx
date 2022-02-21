@@ -36,7 +36,7 @@ const ExportPrivatekeyModal = () => {
     } else {
       enqueueSnackbar("Invalid Password", {
         variant: "error",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
     }
   };

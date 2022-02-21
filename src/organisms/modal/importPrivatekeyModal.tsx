@@ -41,7 +41,7 @@ const ImportPrivatekeyModal = () => {
         .then(() => {
           enqueueSnackbar("Success Import Your Wallet", {
             variant: "success",
-            autoHideDuration: 1000,
+            autoHideDuration: 2000,
           });
           reFetchObservableQueries();
           closeModal();
@@ -50,13 +50,13 @@ const ImportPrivatekeyModal = () => {
           console.log(error);
           enqueueSnackbar("Invalidate Private Key", {
             variant: "error",
-            autoHideDuration: 1000,
+            autoHideDuration: 2000,
           });
         });
     } else {
       enqueueSnackbar("Invalid input fields", {
         variant: "error",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
     }
   };

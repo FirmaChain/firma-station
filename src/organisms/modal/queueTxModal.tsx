@@ -26,7 +26,7 @@ const QueueTxModal = () => {
   const resolveTx = () => {
     enqueueSnackbar("Success Transaction", {
       variant: "success",
-      autoHideDuration: 1000,
+      autoHideDuration: 2000,
     });
     closeQueueTxModal();
   };
@@ -34,7 +34,7 @@ const QueueTxModal = () => {
   const rejectTx = () => {
     enqueueSnackbar("Failed Transaction", {
       variant: "error",
-      autoHideDuration: 1000,
+      autoHideDuration: 2000,
     });
     closeQueueTxModal();
   };

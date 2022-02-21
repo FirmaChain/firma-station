@@ -51,7 +51,7 @@ const NewWalletModal = () => {
     } else {
       enqueueSnackbar("Incorrect Password", {
         variant: "error",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
     }
   };

@@ -118,7 +118,7 @@ function HeaderDesktop() {
       .catch(() => {
         enqueueSnackbar("Failed connect ledger", {
           variant: "success",
-          autoHideDuration: 1000,
+          autoHideDuration: 2000,
         });
       });
   };

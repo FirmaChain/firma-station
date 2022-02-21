@@ -48,7 +48,7 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
       if (address === "") {
         enqueueSnackbar("You Need Login First", {
           variant: "error",
-          autoHideDuration: 1000,
+          autoHideDuration: 2000,
         });
 
         return <Redirect to={{ pathname: "/" }} />;

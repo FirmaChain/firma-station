@@ -41,7 +41,7 @@ const RecoverMnemonicModal = () => {
         .then(() => {
           enqueueSnackbar("Success Recovered Your Wallet", {
             variant: "success",
-            autoHideDuration: 1000,
+            autoHideDuration: 2000,
           });
           reFetchObservableQueries();
           closeModal();
@@ -50,13 +50,13 @@ const RecoverMnemonicModal = () => {
           console.log(error);
           enqueueSnackbar("Invalidate Mnemonic Words", {
             variant: "error",
-            autoHideDuration: 1000,
+            autoHideDuration: 2000,
           });
         });
     } else {
       enqueueSnackbar("Invalid input fields", {
         variant: "error",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
     }
   };

@@ -846,6 +846,8 @@ function useFirma() {
     getStakingFromValidator,
     getDelegationList,
     getDelegation,
+    getRedelegationList,
+    getUndelegationList,
     sendFCT,
     sendToken,
     delegate,

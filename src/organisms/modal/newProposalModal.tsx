@@ -273,7 +273,7 @@ const NewProposalModal = () => {
     if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid || isSoftwareUpgradeInvalid) {
       enqueueSnackbar("Invalid Parameters", {
         variant: "error",
-        autoHideDuration: 1000,
+        autoHideDuration: 2000,
       });
 
       return;
