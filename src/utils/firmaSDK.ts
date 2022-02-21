@@ -127,8 +127,12 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   ) => {
     if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
 
-    // comming: firma-js
-    return FIRMACHAIN_CONFIG.defaultGas;
+    const wallet = await getWallet();
+    const gasEstimation = await firmaSDK.Bank.getGasEstimationSendToken(wallet, address, tokenID, amount, decimal, {
+      memo,
+    });
+
+    return gasEstimation;
   };
 
   const delegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
