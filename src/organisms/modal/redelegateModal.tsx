@@ -21,6 +21,9 @@ import {
   ModalInput,
   NextButton,
   InputBoxDefault,
+  ModalTooltipWrapper,
+  ModalTooltipIcon,
+  ModalTooltipTypo,
 } from "./styles";
 
 import styled from "styled-components";
@@ -165,19 +168,12 @@ const RedelegateModal = () => {
           });
         }
       })
-      .catch(() => {
-        if (isLedger) {
-          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
-            variant: "error",
-            autoHideDuration: 3000,
-          });
-          modalActions.handleModalGasEstimation(false);
-        } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
-            autoHideDuration: 2000,
-          });
-        }
+      .catch((e) => {
+        enqueueSnackbar(e, {
+          variant: "error",
+          autoHideDuration: 5000,
+        });
+        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 
@@ -209,6 +205,21 @@ const RedelegateModal = () => {
               </ModalInput>
             </>
           )}
+
+          <ModalTooltipWrapper>
+            <ModalTooltipIcon />
+            <ModalTooltipTypo>Redelegated supply will be linked for a period of 21 days.</ModalTooltipTypo>
+          </ModalTooltipWrapper>
+          <ModalTooltipWrapper>
+            <ModalTooltipIcon />
+            <ModalTooltipTypo>A maximum of 7 redelegations are allowed.</ModalTooltipTypo>
+          </ModalTooltipWrapper>
+          <ModalTooltipWrapper>
+            <ModalTooltipIcon />
+            <ModalTooltipTypo>
+              Until the 21 day link period passes, you cannot redelegate your redelgated supply to another validator.
+            </ModalTooltipTypo>
+          </ModalTooltipWrapper>
 
           <NextButton
             onClick={() => {

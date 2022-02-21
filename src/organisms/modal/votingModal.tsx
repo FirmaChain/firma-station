@@ -75,19 +75,12 @@ const VotingModal = () => {
           });
         }
       })
-      .catch(() => {
-        if (isLedger) {
-          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
-            variant: "error",
-            autoHideDuration: 3000,
-          });
-          modalActions.handleModalGasEstimation(false);
-        } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
-            autoHideDuration: 2000,
-          });
-        }
+      .catch((e) => {
+        enqueueSnackbar(e, {
+          variant: "error",
+          autoHideDuration: 5000,
+        });
+        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

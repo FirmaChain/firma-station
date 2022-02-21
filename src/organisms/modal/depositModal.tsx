@@ -108,14 +108,12 @@ const DepositModal = () => {
           });
         }
       })
-      .catch(() => {
-        if (isLedger) {
-          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
-            variant: "error",
-            autoHideDuration: 3000,
-          });
-          modalActions.handleModalGasEstimation(false);
-        }
+      .catch((e) => {
+        enqueueSnackbar(e, {
+          variant: "error",
+          autoHideDuration: 5000,
+        });
+        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

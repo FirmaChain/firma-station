@@ -19,9 +19,11 @@ const Staking = () => {
       {isInit && totalStakingState && (
         <>
           <StakingCard totalStakingState={totalStakingState} />
-          {totalStakingState.delegateList.length > 0 && isMobile === false && (
-            <DelegationCard totalStakingState={totalStakingState} />
-          )}
+          {totalStakingState.delegateList.length +
+            totalStakingState.redelegationList.length +
+            totalStakingState.undelegationList.length >
+            0 &&
+            isMobile === false && <DelegationCard totalStakingState={totalStakingState} />}
         </>
       )}
 

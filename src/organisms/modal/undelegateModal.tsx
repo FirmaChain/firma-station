@@ -120,19 +120,12 @@ const UndelegateModal = () => {
           });
         }
       })
-      .catch(() => {
-        if (isLedger) {
-          enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
-            variant: "error",
-            autoHideDuration: 3000,
-          });
-          modalActions.handleModalGasEstimation(false);
-        } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
-            autoHideDuration: 2000,
-          });
-        }
+      .catch((e) => {
+        enqueueSnackbar(e, {
+          variant: "error",
+          autoHideDuration: 5000,
+        });
+        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 
@@ -157,6 +150,13 @@ const UndelegateModal = () => {
             <ModalTooltipTypo>
               A 21 day period is required when undelegating your tokens. During the 21 day period, you will not receive
               any rewards. And you can't send and delegate that amount during 21 days.
+            </ModalTooltipTypo>
+          </ModalTooltipWrapper>
+
+          <ModalTooltipWrapper>
+            <ModalTooltipIcon />
+            <ModalTooltipTypo>
+              A maximum of 7 undelegations are allowed per validator during the 21 day link period.
             </ModalTooltipTypo>
           </ModalTooltipWrapper>
 
