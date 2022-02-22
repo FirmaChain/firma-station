@@ -105,7 +105,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
           <MonikerTypo>{getMoniker(validatorInfo.dstMoniker)}</MonikerTypo>
         </Link>
       </RedelegationItemColumn>
-      <RedelegationItemColumn>{numeral(validatorInfo.balance * 10000).format("0,0.000")}</RedelegationItemColumn>
+      <RedelegationItemColumn>{numeral(validatorInfo.balance).format("0,0.000")}</RedelegationItemColumn>
       <RedelegationItemColumn>
         {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
       </RedelegationItemColumn>
