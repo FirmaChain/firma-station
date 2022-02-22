@@ -258,7 +258,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
             Delegations ({totalStakingState.delegateList.length})
           </DelegationTabItem>
           <DelegationTabItem isActive={currentTab === 1} onClick={() => onCLickChangeTab(1)}>
-            Redelegations ({totalStakingState.redelegationList.length}/7)
+            Redelegations ({totalStakingState.redelegationList.length})
           </DelegationTabItem>
           <DelegationTabItem isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
             Undelegations ({totalStakingState.undelegationList.length})
