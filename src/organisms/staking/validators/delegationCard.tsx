@@ -45,13 +45,13 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const redelegateAction = () => {
     getRedelegationList()
       .then((redelegationList) => {
-        if (redelegationList.length >= 7) {
-          enqueueSnackbar("You cannot redelegate more than 7 times!", {
-            variant: "error",
-            autoHideDuration: 2000,
-          });
-          return;
-        }
+        // if (redelegationList.length >= 7) {
+        //   enqueueSnackbar("You cannot redelegate more than 7 times!", {
+        //     variant: "error",
+        //     autoHideDuration: 2000,
+        //   });
+        //   return;
+        // }
 
         getDelegationList()
           .then((delegationList) => {
