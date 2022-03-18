@@ -10,6 +10,8 @@ import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 import { FIRMACHAIN_CONFIG } from "../../config";
 
+import { ToggleButton } from "../../components/toggle";
+
 import {
   delegateModalWidth,
   ModalContainer,
@@ -19,6 +21,10 @@ import {
   ModalInput,
   NextButton,
   InputBoxDefault,
+  ModalToggleWrapper,
+  ModalTooltipWrapper,
+  ModalTooltipIcon,
+  ModalTooltipTypo,
 } from "./styles";
 
 const DelegateModal = () => {
@@ -34,10 +40,15 @@ const DelegateModal = () => {
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
   const [availableAmount, setAvailableAmount] = useState("");
+  const [isSafety, setSafety] = useState(true);
 
   useEffect(() => {
     setAvailableAmount(modalData.data.available);
   }, [delegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    onChangeAmount({ target: { value: amount } });
+  }, [isSafety]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeModal = () => {
     resetModal();
@@ -46,6 +57,10 @@ const DelegateModal = () => {
 
   const resetModal = () => {
     setAmount("");
+  };
+
+  const onClickToggle = () => {
+    setSafety(!isSafety);
   };
 
   const onChangeAmount = (e: any) => {
@@ -73,9 +88,8 @@ const DelegateModal = () => {
   };
 
   const getMaxAmount = () => {
-    const value = convertNumber(
-      (modalData.data.available - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6)
-    );
+    const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
+    const value = convertNumber((modalData.data.available - fee).toFixed(6));
 
     return value > 0 ? value : 0;
   };
@@ -137,9 +151,20 @@ const DelegateModal = () => {
           <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
-          <ModalInput>
+          <ModalInput style={{ marginBottom: "10px" }}>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
           </ModalInput>
+
+          <ModalToggleWrapper>
+            <ToggleButton toggleText="Safety" isActive={isSafety} onClickToggle={onClickToggle} />
+            <ModalTooltipWrapper>
+              <ModalTooltipIcon />
+              <ModalTooltipTypo>
+                The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
+              </ModalTooltipTypo>
+            </ModalTooltipWrapper>
+          </ModalToggleWrapper>
+
           <NextButton
             onClick={() => {
               if (isActiveButton) nextStep();
