@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -63,8 +62,8 @@ const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
-  const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress, setUserData } =
+    useFirma();
   const { enqueueSnackbar } = useSnackbar();
 
   const [available, setAvailable] = useState(0);
@@ -175,7 +174,7 @@ const SendModal = () => {
     if (tokenData.symbol === "FCT") {
       sendFCT(targetAddress, amount, memo, gas)
         .then(() => {
-          reFetchObservableQueries();
+          setUserData();
           resolveTx();
         })
         .catch(() => {
@@ -184,7 +183,7 @@ const SendModal = () => {
     } else {
       sendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo, gas)
         .then(() => {
-          reFetchObservableQueries();
+          setUserData();
           resolveTx();
         })
         .catch(() => {

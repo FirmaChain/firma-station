@@ -259,9 +259,10 @@ function useFirma() {
 
   const setUserData = async () => {
     const firmaSDK = FirmaSDK.getSDK();
-    const address = getAddressInternal();
 
     try {
+      const address = getAddressInternal();
+
       const balance = await firmaSDK.Bank.getBalance(address);
       const tokenDataList = await getTokenDataList(address);
       const totalDelegated = await getTotalDelegated(address);
@@ -287,9 +288,7 @@ function useFirma() {
 
       getRedelegationList();
       getUndelegationList();
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
   const getVestingAccount = async () => {

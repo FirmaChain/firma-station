@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -27,8 +26,7 @@ const VotingModal = () => {
   const [votingType, setVotingType] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { vote, getGasEstimationVote } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const { vote, getGasEstimationVote, setUserData } = useFirma();
 
   const closeModal = () => {
     resetModal();
@@ -42,7 +40,7 @@ const VotingModal = () => {
   const votingTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     vote(modalData.proposalId, votingType, gas)
       .then(() => {
-        reFetchObservableQueries();
+        setUserData();
         resolveTx();
       })
       .catch(() => {

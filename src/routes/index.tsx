@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { rootState } from "../redux/reducers";
-import { useApolloClient } from "@apollo/client";
 
 import { Home, Staking, Accounts, History, Validators, Government, Proposals, Community, Download } from "../pages";
 
@@ -40,7 +39,6 @@ interface IProps {
 
 const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { reFetchObservableQueries } = useApolloClient();
   const { address } = useSelector((state: rootState) => state.wallet);
 
   const renderFunc = (props: any) => {
@@ -54,8 +52,6 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
         return <Redirect to={{ pathname: "/" }} />;
       }
     }
-
-    reFetchObservableQueries();
 
     return <Component {...props} />;
   };

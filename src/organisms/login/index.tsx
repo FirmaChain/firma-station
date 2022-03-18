@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
-import { useApolloClient } from "@apollo/client";
 
 import {
   LoginContainer,
@@ -17,10 +16,9 @@ import useFirma from "../../utils/wallet";
 
 const LoginCard = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const { reFetchObservableQueries } = useApolloClient();
   const [password, setPassword] = useState("");
 
-  const { loginWallet, resetWallet } = useFirma();
+  const { loginWallet, resetWallet, setUserData } = useFirma();
 
   const onKeyDownPassword = (e: any) => {
     if (e.key === "Enter") {
@@ -38,7 +36,7 @@ const LoginCard = () => {
 
     loginWallet(password)
       .then(() => {
-        reFetchObservableQueries();
+        setUserData();
       })
       .catch(() => {
         enqueueSnackbar("Invalid Password", {

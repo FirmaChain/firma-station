@@ -5,7 +5,6 @@ import Select from "react-select";
 
 import useFirma from "../../utils/wallet";
 import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../utils/common";
-import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -88,8 +87,8 @@ const NewProposalModal = () => {
     getGasEstimationSubmitCommunityPoolSpendProposal,
     getGasEstimationSubmitSoftwareUpgrade,
     getGasEstimationSubmitTextProposal,
+    setUserData,
   } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
 
   const closeModal = () => {
     resetModal();
@@ -116,7 +115,7 @@ const NewProposalModal = () => {
       case "TEXT_PROPOSAL":
         submitTextProposal(title, description, initialDeposit, gas)
           .then(() => {
-            reFetchObservableQueries();
+            setUserData();
             resolveTx();
           })
           .catch(() => {
@@ -126,7 +125,7 @@ const NewProposalModal = () => {
       case "COMMUNITY_POOL_SPEND_PROPOSAL":
         submitCommunityPoolSpendProposal(title, description, initialDeposit, amount, recipient, gas)
           .then(() => {
-            reFetchObservableQueries();
+            setUserData();
             resolveTx();
           })
           .catch(() => {
@@ -148,7 +147,7 @@ const NewProposalModal = () => {
       case "SOFTWARE_UPGRADE":
         submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height), gas)
           .then(() => {
-            reFetchObservableQueries();
+            setUserData();
             resolveTx();
           })
           .catch(() => {

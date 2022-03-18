@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { useApolloClient } from "@apollo/client";
 import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
@@ -34,8 +33,7 @@ const DelegateModal = () => {
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { delegate, getGasEstimationDelegate } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const { delegate, getGasEstimationDelegate, setUserData } = useFirma();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
@@ -102,7 +100,7 @@ const DelegateModal = () => {
   const delegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     delegate(modalData.data.targetValidator, convertNumber(amount), gas)
       .then(() => {
-        reFetchObservableQueries();
+        setUserData();
         resolveTx();
       })
       .catch(() => {

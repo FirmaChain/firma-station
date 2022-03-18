@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 import { Modal } from "../../components/modal";
@@ -65,8 +64,7 @@ const RedelegateModal = () => {
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
 
-  const { redelegate, getGasEstimationRedelegate } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma();
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
@@ -126,7 +124,7 @@ const RedelegateModal = () => {
   const redelegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     redelegate(sourceValidator, modalData.data.targetValidator, convertNumber(amount), gas)
       .then(() => {
-        reFetchObservableQueries();
+        setUserData();
         resolveTx();
       })
       .catch(() => {

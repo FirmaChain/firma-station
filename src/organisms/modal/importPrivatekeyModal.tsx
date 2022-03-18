@@ -4,7 +4,6 @@ import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { isValidString } from "../../utils/common";
-import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -26,8 +25,7 @@ const ImportPrivatekeyModal = () => {
   const importPrivatekeyModalState = useSelector((state: rootState) => state.modal.importPrivatekey);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { storeWalletFromPrivateKey } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const { storeWalletFromPrivateKey, setUserData } = useFirma();
 
   const [isActiveImportButton, activeImportButton] = useState(false);
   const [inputWords, setInputWords] = useState("");
@@ -43,7 +41,7 @@ const ImportPrivatekeyModal = () => {
             variant: "success",
             autoHideDuration: 2000,
           });
-          reFetchObservableQueries();
+          setUserData();
           closeModal();
         })
         .catch((error: any) => {

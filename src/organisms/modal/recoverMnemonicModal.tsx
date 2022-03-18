@@ -4,7 +4,6 @@ import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { isValidString } from "../../utils/common";
-import { useApolloClient } from "@apollo/client";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -26,8 +25,7 @@ const RecoverMnemonicModal = () => {
   const recoverMnemonicModalState = useSelector((state: rootState) => state.modal.recoverMnemonic);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { storeWalletFromMnemonic } = useFirma();
-  const { reFetchObservableQueries } = useApolloClient();
+  const { storeWalletFromMnemonic, setUserData } = useFirma();
 
   const [isActiveRecoverButton, activeRecoverButton] = useState(false);
   const [inputWords, setInputWords] = useState("");
@@ -43,7 +41,7 @@ const RecoverMnemonicModal = () => {
             variant: "success",
             autoHideDuration: 2000,
           });
-          reFetchObservableQueries();
+          setUserData();
           closeModal();
         })
         .catch((error) => {
