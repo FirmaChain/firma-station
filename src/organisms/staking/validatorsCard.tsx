@@ -142,7 +142,7 @@ const Validators = ({ validatorsState }: IProps) => {
     <ListWrapper>
       <HeaderWrapper>
         <HeaderColumn>No</HeaderColumn>
-        <HeaderColumn>Moniker</HeaderColumn>
+        <HeaderColumn>Validator</HeaderColumn>
         <HeaderColumn>Voting Power</HeaderColumn>
         <HeaderColumn>Self Delegation</HeaderColumn>
         <HeaderColumn>Commission</HeaderColumn>
