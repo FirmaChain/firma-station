@@ -24,6 +24,7 @@ import {
   ModalTooltipWrapper,
   ModalTooltipIcon,
   ModalTooltipTypo,
+  MaxButton,
 } from "./styles";
 
 const DelegateModal = () => {
@@ -56,6 +57,12 @@ const DelegateModal = () => {
 
   const resetModal = () => {
     setAmount("");
+  };
+
+  const onClickMaxAmount = () => {
+    const amount = getMaxAmount().toString();
+    setAmount(amount);
+    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(modalData.data.available));
   };
 
   const onClickToggle = () => {
@@ -155,6 +162,7 @@ const DelegateModal = () => {
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput style={{ marginBottom: "10px" }}>
+            <MaxButton onClick={onClickMaxAmount}>Max</MaxButton>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
           </ModalInput>
 

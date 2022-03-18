@@ -621,6 +621,20 @@ export const QueueTypoTwo = styled.div`
   color: #ffc542;
 `;
 
+export const MaxButton = styled.div`
+  width: 50px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  position: absolute;
+  top: -38px;
+  right: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.mainblue};
+`;
+
 export {
   NewWalletIcon,
   RecoverMnemonicIcon,

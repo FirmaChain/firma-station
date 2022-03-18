@@ -23,6 +23,7 @@ import {
   ModalTooltipWrapper,
   ModalTooltipIcon,
   ModalTooltipTypo,
+  MaxButton,
 } from "./styles";
 
 import styled from "styled-components";
@@ -91,6 +92,12 @@ const RedelegateModal = () => {
     setAmount("");
     setSourceValidator("");
     setSourceAmount(0);
+  };
+
+  const onClickMaxAmount = () => {
+    const amount = getMaxAmount().toString();
+    setAmount(amount);
+    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= sourceAmount);
   };
 
   const onChangeAmount = (e: any) => {
@@ -199,6 +206,7 @@ const RedelegateModal = () => {
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
+                <MaxButton onClick={onClickMaxAmount}>Max</MaxButton>
                 <InputBoxDefault type="text" placeholder="0" onChange={onChangeAmount} value={amount} />
               </ModalInput>
             </>
