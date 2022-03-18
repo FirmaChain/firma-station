@@ -139,10 +139,15 @@ const SendModal = () => {
     const { value, balance, decimal, denom } = e;
     setAvailable(balance);
     setTokenData({ symbol: value, decimal: decimal, denom: denom });
+    setSafety(balance > 0.1);
   };
 
   const onClickToggle = () => {
-    setSafety(!isSafety);
+    if ((available > 0 && available < 0.1) || available === 0) {
+      setSafety(false);
+    } else {
+      setSafety(!isSafety);
+    }
   };
 
   const checkParams = () => {
@@ -290,7 +295,6 @@ const SendModal = () => {
           <ModalInput style={{ marginBottom: "10px" }}>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
           </ModalInput>
-          {console.log(tokenData)}
           {tokenData.symbol && tokenData.symbol === "FCT" && (
             <ModalToggleWrapper>
               <ToggleButton toggleText="Safety" isActive={isSafety} onClickToggle={onClickToggle} />

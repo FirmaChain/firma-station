@@ -44,6 +44,7 @@ const DelegateModal = () => {
 
   useEffect(() => {
     setAvailableAmount(modalData.data.available);
+    setSafety(modalData.data.available > 0.1);
   }, [delegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -60,7 +61,11 @@ const DelegateModal = () => {
   };
 
   const onClickToggle = () => {
-    setSafety(!isSafety);
+    if (modalData.data.available > 0.1) {
+      setSafety(!isSafety);
+    } else {
+      setSafety(false);
+    }
   };
 
   const onChangeAmount = (e: any) => {
