@@ -18,7 +18,7 @@ const LoginCard = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [password, setPassword] = useState("");
 
-  const { loginWallet, resetWallet, setUserData } = useFirma();
+  const { loginWallet, resetWallet, setUserData } = useFirma(false);
 
   const onKeyDownPassword = (e: any) => {
     if (e.key === "Enter") {

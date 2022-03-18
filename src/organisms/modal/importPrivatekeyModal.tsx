@@ -25,7 +25,7 @@ const ImportPrivatekeyModal = () => {
   const importPrivatekeyModalState = useSelector((state: rootState) => state.modal.importPrivatekey);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { storeWalletFromPrivateKey, setUserData } = useFirma();
+  const { storeWalletFromPrivateKey, setUserData } = useFirma(false);
 
   const [isActiveImportButton, activeImportButton] = useState(false);
   const [inputWords, setInputWords] = useState("");

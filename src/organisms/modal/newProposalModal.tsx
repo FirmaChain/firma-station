@@ -88,7 +88,7 @@ const NewProposalModal = () => {
     getGasEstimationSubmitSoftwareUpgrade,
     getGasEstimationSubmitTextProposal,
     setUserData,
-  } = useFirma();
+  } = useFirma(false);
 
   const closeModal = () => {
     resetModal();

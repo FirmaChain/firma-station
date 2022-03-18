@@ -27,7 +27,7 @@ const DepositModal = () => {
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { deposit, getGasEstimationDeposit, setUserData } = useFirma();
+  const { deposit, getGasEstimationDeposit, setUserData } = useFirma(false);
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);

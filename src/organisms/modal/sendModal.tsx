@@ -63,7 +63,7 @@ const SendModal = () => {
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress, setUserData } =
-    useFirma();
+    useFirma(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const [available, setAvailable] = useState(0);

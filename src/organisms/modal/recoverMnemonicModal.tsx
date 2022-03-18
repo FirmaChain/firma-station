@@ -25,7 +25,7 @@ const RecoverMnemonicModal = () => {
   const recoverMnemonicModalState = useSelector((state: rootState) => state.modal.recoverMnemonic);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { storeWalletFromMnemonic, setUserData } = useFirma();
+  const { storeWalletFromMnemonic, setUserData } = useFirma(false);
 
   const [isActiveRecoverButton, activeRecoverButton] = useState(false);
   const [inputWords, setInputWords] = useState("");

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import NewWalletIcon from "@mui/icons-material/AddBox";
 import RecoverMnemonicIcon from "@mui/icons-material/Restore";
@@ -565,6 +565,60 @@ export const SamplePaperWallet = styled.div`
   background-repeat: no-repeat;
   background-position: bottom;
   border-radius: 8px;
+`;
+
+export const QueueTypoWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
+`;
+
+export const QueueTypoOne = styled.div`
+  text-align: center;
+  line-height: 20px;
+  font-size: ${({ theme }) => theme.sizes.modal14};
+  color: #999;
+`;
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
+export const AfterTypo = styled.div<{ isActive: boolean }>`
+  display: ${(props) => (props.isActive ? "flex" : "none")};
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation-duration: 2s;
+  animation-timing-function: ease-out;
+  animation-name: ${fadeIn};
+  animation-fill-mode: forwards;
+`;
+
+export const QueueIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  flex: 1 1 25px;
+  margin-right: 7px;
+  background: url("${({ theme }) => theme.urls.tooltip}");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
+export const QueueTypoTwo = styled.div`
+  text-align: center;
+  line-height: 20px;
+  font-size: ${({ theme }) => theme.sizes.modal14};
+  color: #ffc542;
 `;
 
 export {

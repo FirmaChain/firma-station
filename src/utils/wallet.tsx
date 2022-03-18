@@ -16,7 +16,7 @@ import { FirmaSDKInternal } from "./firmaSDK";
 
 import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
 
-function useFirma() {
+function useFirma(isUsedState = true) {
   const { enqueueSnackbar } = useSnackbar();
   const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
   const [isVesting, setVesting] = useState(true);
@@ -340,7 +340,7 @@ function useFirma() {
               vestingPeriod,
             });
           } else {
-            setVesting(false);
+            isUsedState && setVesting(false);
             userActions.handleUserVesting({
               totalVesting: 0,
               expiredVesting: 0,
@@ -351,7 +351,7 @@ function useFirma() {
           }
         })
         .catch((e) => {
-          setVesting(false);
+          isUsedState && setVesting(false);
           userActions.handleUserVesting({
             totalVesting: 0,
             expiredVesting: 0,

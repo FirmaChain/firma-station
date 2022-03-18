@@ -33,7 +33,7 @@ const DelegateModal = () => {
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { delegate, getGasEstimationDelegate, setUserData } = useFirma();
+  const { delegate, getGasEstimationDelegate, setUserData } = useFirma(false);
 
   const [amount, setAmount] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);

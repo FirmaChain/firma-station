@@ -26,7 +26,7 @@ const VotingModal = () => {
   const [votingType, setVotingType] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { vote, getGasEstimationVote, setUserData } = useFirma();
+  const { vote, getGasEstimationVote, setUserData } = useFirma(false);
 
   const closeModal = () => {
     resetModal();
