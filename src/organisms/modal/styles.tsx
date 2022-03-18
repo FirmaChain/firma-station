@@ -75,6 +75,16 @@ export const ModalTypo = styled.div`
   color: #ffc542;
 `;
 
+export const ModalToggleWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  font-size: ${({ theme }) => theme.sizes.modal16};
+  color: #9090a2;
+`;
+
 export const ModalTooltipWrapper = styled.div`
   display: flex;
   align-items: flex-start;
@@ -141,7 +151,7 @@ export const ModalInput = styled.div`
   position: relative;
   font-size: ${({ theme }) => theme.sizes.modal14};
   color: #ccc;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   &:last-child {
     margin-bottom: 0;
   }

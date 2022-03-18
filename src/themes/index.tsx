@@ -105,6 +105,8 @@ const urls = {
   win: process.env.PUBLIC_URL + "/images/icon_win.png",
   linux: process.env.PUBLIC_URL + "/images/icon_linux.png",
   mac: process.env.PUBLIC_URL + "/images/icon_mac.png",
+  on: process.env.PUBLIC_URL + "/images/on.png",
+  off: process.env.PUBLIC_URL + "/images/off.png",
 };
 
 const theme = {

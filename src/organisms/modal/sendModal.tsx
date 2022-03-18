@@ -9,6 +9,8 @@ import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 
+import { ToggleButton } from "../../components/toggle";
+
 import {
   sendModalWidth,
   ModalContainer,
@@ -18,6 +20,10 @@ import {
   ModalInput,
   NextButton,
   InputBoxDefault,
+  ModalToggleWrapper,
+  ModalTooltipWrapper,
+  ModalTooltipIcon,
+  ModalTooltipTypo,
 } from "./styles";
 import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 
@@ -26,7 +32,7 @@ import { FIRMACHAIN_CONFIG } from "../../config";
 
 const SelectWrapper = styled.div`
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 const customStyles = {
@@ -63,14 +69,15 @@ const SendModal = () => {
 
   const [available, setAvailable] = useState(0);
   const [tokenData, setTokenData] = useState({
-    symbol: "FCT",
-    denom: "ufct",
+    symbol: "",
+    denom: "",
     decimal: 6,
   });
   const [amount, setAmount] = useState("");
   const [targetAddress, setTargetAddress] = useState("");
   const [memo, setMemo] = useState("");
   const [isActiveButton, setActiveButton] = useState(false);
+  const [isSafety, setSafety] = useState(true);
 
   const selectInputRef = useRef<any>();
 
@@ -86,6 +93,10 @@ const SendModal = () => {
   useEffect(() => {
     checkParams();
   }, [amount, targetAddress, memo]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    onChangeAmount({ target: { value: amount } });
+  }, [isSafety]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
@@ -130,6 +141,10 @@ const SendModal = () => {
     setTokenData({ symbol: value, decimal: decimal, denom: denom });
   };
 
+  const onClickToggle = () => {
+    setSafety(!isSafety);
+  };
+
   const checkParams = () => {
     setActiveButton(
       targetAddress !== "" &&
@@ -142,7 +157,9 @@ const SendModal = () => {
 
   const getMaxAmount = (): Number => {
     if (tokenData.symbol === "FCT") {
-      const value = convertNumber((available - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6));
+      const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
+
+      const value = convertNumber((available - fee).toFixed(6));
       return value > 0 ? value : 0;
     } else {
       return available;
@@ -234,7 +251,7 @@ const SendModal = () => {
           <SelectWrapper>
             <Select
               options={[
-                { value: "FCT", label: "FCT", balance: balance },
+                { value: "FCT", label: "FCT", balance: balance, decimal: 6, denom: "ufct" },
                 ...tokenList.map((value) => {
                   return {
                     value: value.symbol,
@@ -270,9 +287,21 @@ const SendModal = () => {
           <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
-          <ModalInput>
+          <ModalInput style={{ marginBottom: "10px" }}>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
           </ModalInput>
+          {console.log(tokenData)}
+          {tokenData.symbol && tokenData.symbol === "FCT" && (
+            <ModalToggleWrapper>
+              <ToggleButton toggleText="Safety" isActive={isSafety} onClickToggle={onClickToggle} />
+              <ModalTooltipWrapper>
+                <ModalTooltipIcon />
+                <ModalTooltipTypo>
+                  The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
+                </ModalTooltipTypo>
+              </ModalTooltipWrapper>
+            </ModalToggleWrapper>
+          )}
 
           <ModalLabel>Memo (optional)</ModalLabel>
           <ModalInput>
