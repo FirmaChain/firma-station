@@ -142,10 +142,10 @@ const SendModal = () => {
   };
 
   const onClickToggle = () => {
-    if ((available > 0 && available < 0.1) || available === 0) {
-      setSafety(false);
-    } else {
+    if (available > 0.1) {
       setSafety(!isSafety);
+    } else {
+      setSafety(false);
     }
   };
 
@@ -297,12 +297,14 @@ const SendModal = () => {
           {tokenData.symbol && tokenData.symbol === "FCT" && (
             <ModalToggleWrapper>
               <ToggleButton toggleText="Safety" isActive={isSafety} onClickToggle={onClickToggle} />
-              <ModalTooltipWrapper>
-                <ModalTooltipIcon />
-                <ModalTooltipTypo>
-                  The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
-                </ModalTooltipTypo>
-              </ModalTooltipWrapper>
+              {isSafety && (
+                <ModalTooltipWrapper>
+                  <ModalTooltipIcon />
+                  <ModalTooltipTypo>
+                    The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
+                  </ModalTooltipTypo>
+                </ModalTooltipWrapper>
+              )}
             </ModalToggleWrapper>
           )}
 

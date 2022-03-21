@@ -168,12 +168,14 @@ const DelegateModal = () => {
 
           <ModalToggleWrapper>
             <ToggleButton toggleText="Safety" isActive={isSafety} onClickToggle={onClickToggle} />
-            <ModalTooltipWrapper>
-              <ModalTooltipIcon />
-              <ModalTooltipTypo>
-                The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
-              </ModalTooltipTypo>
-            </ModalTooltipWrapper>
+            {isSafety && (
+              <ModalTooltipWrapper>
+                <ModalTooltipIcon />
+                <ModalTooltipTypo>
+                  The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
+                </ModalTooltipTypo>
+              </ModalTooltipWrapper>
+            )}
           </ModalToggleWrapper>
 
           <NextButton
