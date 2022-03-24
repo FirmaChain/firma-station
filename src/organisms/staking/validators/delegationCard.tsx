@@ -55,7 +55,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
         getDelegationList()
           .then((delegationList) => {
-            if (delegationList && delegationList.length === 0) {
+            if (delegationList && delegationList.filter((v) => v.value !== targetValidator).length === 0) {
               enqueueSnackbar("There is no target that has been delegated", {
                 variant: "error",
                 autoHideDuration: 2000,
