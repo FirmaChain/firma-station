@@ -60,9 +60,11 @@ const DelegateModal = () => {
   };
 
   const onClickMaxAmount = () => {
-    const amount = getMaxAmount().toString();
-    setAmount(amount);
-    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(modalData.data.available));
+    if (getMaxAmount() > 0) {
+      const amount = getMaxAmount().toString();
+      setAmount(amount);
+      setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(modalData.data.available));
+    }
   };
 
   const onClickToggle = () => {
@@ -162,7 +164,9 @@ const DelegateModal = () => {
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput style={{ marginBottom: "10px" }}>
-            <MaxButton onClick={onClickMaxAmount}>Max</MaxButton>
+            <MaxButton active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
+              Max
+            </MaxButton>
             <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
           </ModalInput>
 

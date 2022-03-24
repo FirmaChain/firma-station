@@ -206,7 +206,9 @@ const RedelegateModal = () => {
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
-                <MaxButton onClick={onClickMaxAmount}>Max</MaxButton>
+                <MaxButton active={true} onClick={onClickMaxAmount}>
+                  Max
+                </MaxButton>
                 <InputBoxDefault type="text" placeholder="0" onChange={onChangeAmount} value={amount} />
               </ModalInput>
             </>

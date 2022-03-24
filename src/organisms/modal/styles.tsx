@@ -621,7 +621,7 @@ export const QueueTypoTwo = styled.div`
   color: #ffc542;
 `;
 
-export const MaxButton = styled.div`
+export const MaxButton = styled.div<{ active: boolean }>`
   width: 50px;
   height: 28px;
   line-height: 28px;
@@ -633,6 +633,7 @@ export const MaxButton = styled.div`
   cursor: pointer;
   color: white;
   background-color: ${({ theme }) => theme.colors.mainblue};
+  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
 `;
 
 export {
