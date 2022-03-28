@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import numeral from "numeral";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
@@ -27,6 +27,7 @@ import {
   InfoLabel,
   InfoValue,
   SmallTitle,
+  SortArrow,
 } from "./styles";
 
 interface IProps {
@@ -138,19 +139,142 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
 const Validators = ({ validatorsState }: IProps) => {
   const isSmall = useMediaQuery({ query: "(max-width: 900px)" });
 
+  const [order, setOrder] = useState(1);
+  const [orderBy, setOrderBy] = useState(1);
+
+  const getOrderByFunction = () => {
+    switch (orderBy) {
+      case 0:
+        return sortMoniker;
+      case 1:
+        return sortVotingPower;
+      case 2:
+        return sortSelf;
+      case 3:
+        return sortCommission;
+      case 4:
+        return sortUptime;
+      case 5:
+        return sortAPR;
+    }
+  };
+
+  const changeOrder = (orderByIndex: number) => {
+    if (orderBy !== orderByIndex) {
+      setOrderBy(orderByIndex);
+      setOrder(0);
+    } else {
+      setOrder(order === 0 ? 1 : 0);
+    }
+  };
+
+  const sortMoniker = (a: any, b: any) => {
+    if (a.validatorMoniker < b.validatorMoniker) {
+      return order === 0 ? -1 : 1;
+    } else if (a.validatorMoniker > b.validatorMoniker) {
+      return order === 0 ? 1 : -1;
+    } else {
+      return 0;
+    }
+  };
+
+  const sortVotingPower = (a: any, b: any) => {
+    if (a.votingPowerPercent < b.votingPowerPercent) {
+      return order === 0 ? -1 : 1;
+    } else if (a.votingPowerPercent > b.votingPowerPercent) {
+      return order === 0 ? 1 : -1;
+    } else {
+      if (a.validatorMoniker < b.validatorMoniker) {
+        return -1;
+      } else if (a.validatorMoniker > b.validatorMoniker) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  };
+
+  const subSortVotingDESC = (a: any, b: any) => {
+    if (a.votingPowerPercent < b.votingPowerPercent) {
+      return 1;
+    } else if (a.votingPowerPercent > b.votingPowerPercent) {
+      return -1;
+    } else {
+      return 0;
+    }
+  };
+
+  const sortSelf = (a: any, b: any) => {
+    if (a.selfPercent < b.selfPercent) {
+      return order === 0 ? -1 : 1;
+    } else if (a.selfPercent > b.selfPercent) {
+      return order === 0 ? 1 : -1;
+    } else {
+      return subSortVotingDESC(a, b);
+    }
+  };
+
+  const sortCommission = (a: any, b: any) => {
+    if (a.commission < b.commission) {
+      return order === 0 ? -1 : 1;
+    } else if (a.commission > b.commission) {
+      return order === 0 ? 1 : -1;
+    } else {
+      return subSortVotingDESC(a, b);
+    }
+  };
+
+  const sortUptime = (a: any, b: any) => {
+    if (a.condition < b.condition) {
+      return order === 0 ? -1 : 1;
+    } else if (a.condition > b.condition) {
+      return order === 0 ? 1 : -1;
+    } else {
+      return subSortVotingDESC(a, b);
+    }
+  };
+
+  const sortAPR = (a: any, b: any) => {
+    if (a.APR < b.APR) {
+      return order === 0 ? -1 : 1;
+    } else if (a.APR > b.APR) {
+      return order === 0 ? 1 : -1;
+    } else {
+      return subSortVotingDESC(a, b);
+    }
+  };
+
   return (
     <ListWrapper>
       <HeaderWrapper>
         <HeaderColumn>No</HeaderColumn>
-        <HeaderColumn>Validator</HeaderColumn>
-        <HeaderColumn>Voting Power</HeaderColumn>
-        <HeaderColumn>Self Delegation</HeaderColumn>
-        <HeaderColumn>Commission</HeaderColumn>
-        <HeaderColumn>UpTime</HeaderColumn>
-        <HeaderColumn>APR / APY</HeaderColumn>
+        <HeaderColumn onClick={() => changeOrder(0)}>
+          Validator
+          <SortArrow order={order} orderBy={orderBy} index={0} />
+        </HeaderColumn>
+        <HeaderColumn onClick={() => changeOrder(1)}>
+          Voting Power
+          <SortArrow order={order} orderBy={orderBy} index={1} />
+        </HeaderColumn>
+        <HeaderColumn onClick={() => changeOrder(2)}>
+          Self Delegation
+          <SortArrow order={order} orderBy={orderBy} index={2} />
+        </HeaderColumn>
+        <HeaderColumn onClick={() => changeOrder(3)}>
+          Commission
+          <SortArrow order={order} orderBy={orderBy} index={3} />
+        </HeaderColumn>
+        <HeaderColumn onClick={() => changeOrder(4)}>
+          UpTime
+          <SortArrow order={order} orderBy={orderBy} index={4} />
+        </HeaderColumn>
+        <HeaderColumn onClick={() => changeOrder(5)}>
+          APR / APY
+          <SortArrow order={order} orderBy={orderBy} index={5} />
+        </HeaderColumn>
       </HeaderWrapper>
       {isSmall && <SmallTitle>Validators</SmallTitle>}
-      {validatorsState.validators.map((value, index) => {
+      {validatorsState.validators.sort(getOrderByFunction()).map((value, index) => {
         if (isSmall) {
           return <CustomSmallRow key={index} currentValidator={value} index={index} />;
         } else {

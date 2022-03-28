@@ -107,6 +107,28 @@ export const HeaderWrapper = styled(RowWrapper)`
 export const HeaderColumn = styled(Column)`
   color: #ddd;
   font-size: ${({ theme }) => theme.sizes.stakingLarge};
+  display: flex;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  &:nth-child(1),
+  &:nth-child(3),
+  &:nth-child(4),
+  &:nth-child(5),
+  &:nth-child(6),
+  &:nth-child(7) {
+    justify-content: center;
+  }
+  &:nth-child(2),
+  &:nth-child(3),
+  &:nth-child(4),
+  &:nth-child(5),
+  &:nth-child(6),
+  &:nth-child(7) {
+    cursor: pointer;
+  }
 `;
 
 export const ListWrapper = styled.div`
@@ -456,7 +478,8 @@ export const ProfileWrapper = styled.div`
 `;
 
 export const ProfileImageSmall = styled.div<{ src?: string }>`
-  width: 38px;
+  width: 30px;
+  min-width: 30px;
   height: 30px;
   border-radius: 15px;
   background-color: gray;
@@ -525,4 +548,21 @@ export const APRTypoSmall = styled.div`
 export const SmallTitle = styled.div`
   color: #ccc;
   font-size: ${({ theme }) => theme.sizes.stakingLarge};
+`;
+
+export const SortArrow = styled.div<{ order?: number; orderBy?: number; index?: number }>`
+  width: 14px;
+  height: 70px;
+  margin-left: 3px;
+  background-image: url("${(props) => {
+    if (props.orderBy === props.index) {
+      return props.order === 0 ? props.theme.urls.sortASC : props.theme.urls.sortDESC;
+    } else {
+      return props.theme.urls.sortIdle;
+    }
+  }}");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
 `;

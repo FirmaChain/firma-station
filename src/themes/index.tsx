@@ -107,6 +107,9 @@ const urls = {
   mac: process.env.PUBLIC_URL + "/images/icon_mac.png",
   on: process.env.PUBLIC_URL + "/images/on.png",
   off: process.env.PUBLIC_URL + "/images/off.png",
+  sortIdle: process.env.PUBLIC_URL + "/images/sort_idle.png",
+  sortASC: process.env.PUBLIC_URL + "/images/sort_asc.png",
+  sortDESC: process.env.PUBLIC_URL + "/images/sort_desc.png",
 };
 
 const theme = {
