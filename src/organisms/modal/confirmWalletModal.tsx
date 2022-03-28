@@ -6,6 +6,7 @@ import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_CONFIRM_WALLET } from "../../config";
 
 import {
   confirmWalletModalWidth,
@@ -20,6 +21,7 @@ import {
   SelectContainer,
   SelectMnemonic,
   CreateButton,
+  HelpIcon,
 } from "./styles";
 
 interface IInputTarget {
@@ -150,7 +152,10 @@ const ConfirmWalletModal = () => {
       width={confirmWalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>CONFIRM WALLET</ModalTitle>
+        <ModalTitle>
+          CONFIRM WALLET
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_CONFIRM_WALLET)} />
+        </ModalTitle>
         <ModalContent>
           <InputContainer>
             {inputTarget.map((data, index) => (

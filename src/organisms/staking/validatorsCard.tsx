@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import numeral from "numeral";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";

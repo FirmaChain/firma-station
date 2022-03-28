@@ -7,7 +7,7 @@ import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas }
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG } from "../../config";
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_DELEGATE } from "../../config";
 
 import { ToggleButton } from "../../components/toggle";
 
@@ -25,6 +25,7 @@ import {
   ModalTooltipIcon,
   ModalTooltipTypo,
   MaxButton,
+  HelpIcon,
 } from "./styles";
 
 const DelegateModal = () => {
@@ -154,7 +155,10 @@ const DelegateModal = () => {
   return (
     <Modal visible={delegateModalState} closable={true} onClose={closeModal} width={delegateModalWidth}>
       <ModalContainer>
-        <ModalTitle>DELEGATE</ModalTitle>
+        <ModalTitle>
+          DELEGATE
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_DELEGATE)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>{availableAmount} FCT</ModalInput>

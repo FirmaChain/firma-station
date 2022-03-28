@@ -9,6 +9,7 @@ import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 
 import { ToggleButton } from "../../components/toggle";
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_SEND } from "../../config";
 
 import {
   sendModalWidth,
@@ -23,11 +24,11 @@ import {
   ModalTooltipWrapper,
   ModalTooltipIcon,
   ModalTooltipTypo,
+  HelpIcon,
 } from "./styles";
 import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 
 import styled from "styled-components";
-import { FIRMACHAIN_CONFIG } from "../../config";
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -249,7 +250,10 @@ const SendModal = () => {
   return (
     <Modal visible={sendModalState} closable={true} onClose={closeModal} width={sendModalWidth}>
       <ModalContainer>
-        <ModalTitle>SEND</ModalTitle>
+        <ModalTitle>
+          SEND
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_SEND)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Symbol</ModalLabel>
           <SelectWrapper>

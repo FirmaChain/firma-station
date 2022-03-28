@@ -6,6 +6,7 @@ import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 import useFirma from "../../utils/wallet";
+import { GUIDE_LINK_DOWNLOAD_PAPER_WALLET } from "../../config";
 
 import {
   paperwalletModalWidth,
@@ -21,6 +22,7 @@ import {
   ExportPasswordWrapper,
   DownloadButton,
   SamplePaperWallet,
+  HelpIcon,
 } from "./styles";
 
 const PaperwalletModal = () => {
@@ -75,7 +77,10 @@ const PaperwalletModal = () => {
       width={paperwalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>DOWNLOAD PAPER WALLET</ModalTitle>
+        <ModalTitle>
+          DOWNLOAD PAPER WALLET
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_DOWNLOAD_PAPER_WALLET)} />
+        </ModalTitle>
         <ModalSubTitle>It provides a private key in a form that can be printed out.</ModalSubTitle>
         <ModalContent>
           <SamplePaperWallet />

@@ -5,6 +5,7 @@ import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_CONNECT_TO_LEDGER } from "../../config";
 
 import {
   connectLedgerModalWidth,
@@ -14,6 +15,7 @@ import {
   ModalLabel,
   ModalInput,
   NextButton,
+  HelpIcon,
 } from "./styles";
 
 const ConnectLedgerModal = () => {
@@ -53,7 +55,10 @@ const ConnectLedgerModal = () => {
       width={connectLedgerModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>CONNECT TO LEDGER</ModalTitle>
+        <ModalTitle>
+          CONNECT TO LEDGER
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_CONNECT_TO_LEDGER)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel></ModalLabel>
           <ModalInput></ModalInput>

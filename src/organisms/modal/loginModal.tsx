@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_LOGIN_WALLET } from "../../config";
 
 import {
   loginModalWidth,
@@ -16,6 +17,7 @@ import {
   RecoverMnemonicIcon,
   ImportPrivateKeyIcon,
   ConnectLedgerIcon,
+  HelpIcon,
 } from "./styles";
 
 const menuList = [
@@ -39,7 +41,10 @@ const LoginModal = () => {
 
   return (
     <Modal visible={loginModalState} closable={true} onClose={closeLoginModal} width={loginModalWidth}>
-      <ModalTitle>LOGIN WALLET</ModalTitle>
+      <ModalTitle>
+        LOGIN WALLET
+        <HelpIcon onClick={() => window.open(GUIDE_LINK_LOGIN_WALLET)} />
+      </ModalTitle>
       <MenuListWrap>
         {menuList.map((menu, index) => {
           return (

@@ -7,6 +7,7 @@ import { copyToClipboard } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_EXPORT_PRIVATE_KEY } from "../../config";
 
 import {
   exportPrivatekeyModalWidth,
@@ -19,6 +20,7 @@ import {
   InputBoxDefault,
   ExportButton,
   CopyIcon,
+  HelpIcon,
 } from "./styles";
 
 const ExportPrivatekeyModal = () => {
@@ -74,7 +76,10 @@ const ExportPrivatekeyModal = () => {
       width={exportPrivatekeyModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>EXPORT PRIVATE KEY</ModalTitle>
+        <ModalTitle>
+          EXPORT PRIVATE KEY
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_EXPORT_PRIVATE_KEY)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Password</ModalLabel>
           <ExportPasswordWrapper>

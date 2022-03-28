@@ -8,7 +8,7 @@ import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../utils/c
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG } from "../../config";
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_NEW_PROPOSAL } from "../../config";
 
 import {
   newProposalModalWidth,
@@ -27,6 +27,7 @@ import {
   Param,
   AddButton,
   DeleteButton,
+  HelpIcon,
 } from "./styles";
 
 const options = [
@@ -351,7 +352,10 @@ const NewProposalModal = () => {
   return (
     <Modal visible={newProposalState} closable={true} onClose={closeModal} width={newProposalModalWidth}>
       <ModalContainer>
-        <ModalTitle>NEW PROPOSAL</ModalTitle>
+        <ModalTitle>
+          NEW PROPOSAL
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_NEW_PROPOSAL)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Type</ModalLabel>
           <ModalInput>

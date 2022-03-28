@@ -9,7 +9,7 @@ import { rootState } from "../../redux/reducers";
 import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG } from "../../config";
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_REDELEGATE } from "../../config";
 
 import {
   redelegateModalWidth,
@@ -24,6 +24,7 @@ import {
   ModalTooltipIcon,
   ModalTooltipTypo,
   MaxButton,
+  HelpIcon,
 } from "./styles";
 
 import styled from "styled-components";
@@ -185,7 +186,10 @@ const RedelegateModal = () => {
   return (
     <Modal visible={redelegateModalState} closable={true} onClose={closeModal} width={redelegateModalWidth}>
       <ModalContainer>
-        <ModalTitle>REDELEGATE</ModalTitle>
+        <ModalTitle>
+          REDELEGATE
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_REDELEGATE)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Source Validator</ModalLabel>
           <SelectWrapper>

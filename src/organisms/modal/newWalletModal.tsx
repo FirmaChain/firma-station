@@ -7,6 +7,7 @@ import { copyToClipboard, isValidString } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_NEW_WALLET } from "../../config";
 
 import Password from "./password";
 
@@ -21,6 +22,7 @@ import {
   Mnemonic,
   CopyIcon,
   NextButton,
+  HelpIcon,
 } from "./styles";
 
 const NewWalletModal = () => {
@@ -93,7 +95,10 @@ const NewWalletModal = () => {
       width={newWalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>NEW WALLET</ModalTitle>
+        <ModalTitle>
+          NEW WALLET
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_NEW_WALLET)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>

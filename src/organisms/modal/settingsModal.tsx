@@ -6,6 +6,7 @@ import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_WALLET_SETTING } from "../../config";
 
 import {
   exportWalletModalWidth,
@@ -18,6 +19,7 @@ import {
   ImportPrivateKeyIcon,
   LogoutIcon,
   PictureAsPdfIcon,
+  HelpIcon,
 } from "./styles";
 
 const ExportWalletModal = () => {
@@ -51,7 +53,10 @@ const ExportWalletModal = () => {
       width={exportWalletModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>WALLET SETTING</ModalTitle>
+        <ModalTitle>
+          WALLET SETTING
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_WALLET_SETTING)} />
+        </ModalTitle>
         <MenuListWrap>
           {menuList.map((menu, index) => {
             return (

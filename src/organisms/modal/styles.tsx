@@ -7,6 +7,7 @@ import ConnectLedgerIcon from "@mui/icons-material/Usb";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import HelpIcon from "@mui/icons-material/Help";
 
 export const paperwalletModalWidth = "630px";
 export const qrCodeModalWidth = "500px";
@@ -44,10 +45,20 @@ export const ModalTitle = styled.div`
   margin-top: 10px;
   height: 40px;
   line-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: ${({ theme }) => theme.sizes.modalTitle};
   color: white;
   text-align: center;
   font-family: "Chakra-Medium" !important;
+
+  & > svg {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    padding-left: 5px;
+  }
 `;
 
 export const ModalSubTitle = styled.div`
@@ -644,4 +655,5 @@ export {
   QrCodeIcon,
   LogoutIcon,
   PictureAsPdfIcon,
+  HelpIcon,
 };

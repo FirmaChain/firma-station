@@ -8,7 +8,7 @@ import { rootState } from "../../redux/reducers";
 import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas, isValid } from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG } from "../../config";
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_UNDELEGATE } from "../../config";
 
 import {
   undelegateModalWidth,
@@ -23,6 +23,7 @@ import {
   ModalTooltipIcon,
   ModalTooltipTypo,
   MaxButton,
+  HelpIcon,
 } from "./styles";
 
 const UndelegateModal = () => {
@@ -139,7 +140,10 @@ const UndelegateModal = () => {
   return (
     <Modal visible={undelegateModalState} closable={true} onClose={closeModal} width={undelegateModalWidth}>
       <ModalContainer>
-        <ModalTitle>UNDELEGATE</ModalTitle>
+        <ModalTitle>
+          UNDELEGATE
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_UNDELEGATE)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>{availableAmount} FCT</ModalInput>

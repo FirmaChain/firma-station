@@ -7,6 +7,7 @@ import { copyToClipboard } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_EXPORT_MNEMONIC } from "../../config";
 
 import {
   exportMnemonicModalWidth,
@@ -19,6 +20,7 @@ import {
   InputBoxDefault,
   ExportButton,
   CopyIcon,
+  HelpIcon,
 } from "./styles";
 
 const ExportMnemonicModal = () => {
@@ -81,7 +83,10 @@ const ExportMnemonicModal = () => {
       width={exportMnemonicModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>EXPORT MNEMONIC</ModalTitle>
+        <ModalTitle>
+          EXPORT MNEMONIC
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_EXPORT_MNEMONIC)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Password</ModalLabel>
           <ExportPasswordWrapper>

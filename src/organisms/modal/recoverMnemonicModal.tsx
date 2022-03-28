@@ -7,6 +7,7 @@ import { isValidString } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_RECOVER_FROM_MNEMONIC } from "../../config";
 
 import Password from "./password";
 
@@ -19,6 +20,7 @@ import {
   ModalInput,
   MnemonicTextArea,
   RecoverButton,
+  HelpIcon,
 } from "./styles";
 
 const RecoverMnemonicModal = () => {
@@ -106,7 +108,10 @@ const RecoverMnemonicModal = () => {
       width={recoverMnemonicModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>RECOVER FROM MNEMONIC</ModalTitle>
+        <ModalTitle>
+          RECOVER FROM MNEMONIC
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_RECOVER_FROM_MNEMONIC)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Mnemonic</ModalLabel>
           <ModalInput>

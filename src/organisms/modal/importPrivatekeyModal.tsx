@@ -7,6 +7,7 @@ import { isValidString } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
+import { GUIDE_LINK_IMPORT_PRIVATE_KEY } from "../../config";
 
 import Password from "./password";
 
@@ -19,6 +20,7 @@ import {
   ModalInput,
   PrivatekeyTextArea,
   ImportButton,
+  HelpIcon,
 } from "./styles";
 
 const ImportPrivatekeyModal = () => {
@@ -106,7 +108,10 @@ const ImportPrivatekeyModal = () => {
       width={importPrivatekeyModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>IMPORT PRIVATE KEY</ModalTitle>
+        <ModalTitle>
+          IMPORT PRIVATE KEY
+          <HelpIcon onClick={() => window.open(GUIDE_LINK_IMPORT_PRIVATE_KEY)} />
+        </ModalTitle>
         <ModalContent>
           <ModalLabel>Private Key</ModalLabel>
           <ModalInput>
