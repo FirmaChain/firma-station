@@ -10,6 +10,7 @@ import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../../util
 import { modalActions } from "../../../redux/action";
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from "./styles";
+import { FIRMACHAIN_CONFIG } from "../../../config";
 
 interface IProps {
   targetStakingState: ITargetStakingState;
@@ -34,12 +35,19 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const delegateAction = () => {
-    modalActions.handleModalData({
-      action: "Delegate",
-      data: { targetValidator, available: targetStakingState.available },
-    });
+    if (targetStakingState.available > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+      modalActions.handleModalData({
+        action: "Delegate",
+        data: { targetValidator, available: targetStakingState.available },
+      });
 
-    modalActions.handleModalDelegate(true);
+      modalActions.handleModalDelegate(true);
+    } else {
+      enqueueSnackbar("The fee is insufficient. Please check the balance.", {
+        variant: "error",
+        autoHideDuration: 2000,
+      });
+    }
   };
 
   const redelegateAction = () => {
