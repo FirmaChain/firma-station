@@ -278,6 +278,7 @@ export const AddressInfoLabel = styled.div`
 `;
 export const AddressInfoValue = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingSemiMedium};
+  cursor: pointer;
 `;
 
 export const CopyIconImg = styled(FileCopyIcon)`

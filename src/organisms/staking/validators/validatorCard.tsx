@@ -3,6 +3,7 @@ import numeral from "numeral";
 import { useSnackbar } from "notistack";
 
 import { IValidatorsState } from "../hooks";
+import { EXPLORER_URI } from "../../../config";
 
 import {
   ValidatorCardWrapper,
@@ -95,12 +96,20 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
             <AddressInfo>
               <AddressWrapper>
                 <AddressInfoLabel>Operator Address</AddressInfoLabel>
-                <AddressInfoValue>{targetValidatorData.validatorAddress}</AddressInfoValue>
+                <AddressInfoValue
+                  onClick={() => window.open(`${EXPLORER_URI}/validators/${targetValidatorData.validatorAddress}`)}
+                >
+                  {targetValidatorData.validatorAddress}
+                </AddressInfoValue>
                 <CopyIconImg onClick={() => clipboard(targetValidatorData.validatorAddress)} />
               </AddressWrapper>
               <AddressWrapper>
                 <AddressInfoLabel>Account Address</AddressInfoLabel>
-                <AddressInfoValue>{targetValidatorData.selfDelegateAddress}</AddressInfoValue>
+                <AddressInfoValue
+                  onClick={() => window.open(`${EXPLORER_URI}/accounts/${targetValidatorData.selfDelegateAddress}`)}
+                >
+                  {targetValidatorData.selfDelegateAddress}
+                </AddressInfoValue>
                 <CopyIconImg onClick={() => clipboard(targetValidatorData.selfDelegateAddress)} />
               </AddressWrapper>
             </AddressInfo>
