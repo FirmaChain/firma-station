@@ -97,19 +97,19 @@ export const Column = styled.div`
     text-align: center;
   }
   &:nth-child(1) {
-    flex: 1 1 300px;
+    flex: 1 1 400px;
   }
   &:nth-child(2) {
-    flex: 1 1 350px;
+    flex: 1 1 400px;
   }
   &:nth-child(3) {
-    flex: 1 1 350px;
+    flex: 1 1 400px;
+  }
+  &:nth-child(4) {
+    flex: 1 1 800px;
   }
   &:nth-child(5) {
     flex: 1 1 300px;
-  }
-  &:nth-child(6) {
-    flex: 1 1 400px;
   }
   &:nth-child(7) {
     flex: 1 1 500px;
@@ -131,21 +131,12 @@ export const ItemColumn = styled(Column)`
   font-size: ${({ theme }) => theme.sizes.accountCardSize4};
   & > a {
     text-decoration: none !important;
-    font-weight: 300 !important;
   }
   & > a:hover {
     background: none;
     font-weight: 500 !important;
   }
-  &:nth-child(1) {
-    font-size: ${({ theme }) => theme.sizes.accountCardSize5};
-  }
-  &:nth-child(2) {
-    font-size: ${({ theme }) => theme.sizes.accountCardSize5};
-  }
-  &:nth-child(3) {
-    font-size: ${({ theme }) => theme.sizes.accountCardSize5};
-  }
+
   &:nth-child(7) {
     line-height: 25px;
     font-size: ${({ theme }) => theme.sizes.accountCardSize5};

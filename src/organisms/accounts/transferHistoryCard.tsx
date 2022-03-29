@@ -47,7 +47,7 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   };
 
   const getMemo = (memo: string) => {
-    if (memo.length > 10) return memo.substr(0, 10) + "...";
+    if (memo.length > 30) return memo.substr(0, 30) + "...";
     else return memo;
   };
 
