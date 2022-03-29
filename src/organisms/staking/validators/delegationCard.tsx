@@ -43,7 +43,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
       modalActions.handleModalDelegate(true);
     } else {
-      enqueueSnackbar("The fee is insufficient. Please check the balance.", {
+      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
         variant: "error",
         autoHideDuration: 2000,
       });
@@ -77,7 +77,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
               }
             }
 
-            if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+            if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
               modalActions.handleModalData({
                 action: "Redelegate",
                 data: { targetValidator, delegationList },
@@ -135,7 +135,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
               modalActions.handleModalUndelegate(true);
             } else {
-              enqueueSnackbar("The fee is insufficient. Please check the balance.", {
+              enqueueSnackbar("Insufficient funds. Please check your account balance.", {
                 variant: "error",
                 autoHideDuration: 2000,
               });

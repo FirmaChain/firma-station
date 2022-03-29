@@ -75,7 +75,7 @@ const DepositCard = ({ proposalState }: IProps) => {
               });
               modalActions.handleModalDeposit(true);
             } else {
-              enqueueSnackbar("The fee is insufficient. Please check the balance.", {
+              enqueueSnackbar("Insufficient funds. Please check your account balance.", {
                 variant: "error",
                 autoHideDuration: 2000,
               });

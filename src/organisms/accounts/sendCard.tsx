@@ -23,7 +23,7 @@ const SendCard = () => {
           if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
             modalActions.handleModalSend(true);
           } else {
-            enqueueSnackbar("The fee is insufficient. Please check the balance.", {
+            enqueueSnackbar("Insufficient funds. Please check your account balance.", {
               variant: "error",
               autoHideDuration: 2000,
             });
