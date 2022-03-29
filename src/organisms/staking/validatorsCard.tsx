@@ -152,11 +152,10 @@ const Validators = ({ validatorsState }: IProps) => {
       case 2:
         return sortSelf;
       case 3:
+      case 5:
         return sortCommission;
       case 4:
         return sortUptime;
-      case 5:
-        return sortAPR;
     }
   };
 
@@ -195,11 +194,11 @@ const Validators = ({ validatorsState }: IProps) => {
     }
   };
 
-  const subSortVotingDESC = (a: any, b: any) => {
-    if (convertNumber(a.votingPowerPercent) < convertNumber(b.votingPowerPercent)) {
-      return 1;
-    } else if (convertNumber(a.votingPowerPercent) > convertNumber(b.votingPowerPercent)) {
+  const subSortMoniker = (a: any, b: any) => {
+    if (a.validatorMoniker < b.validatorMoniker) {
       return -1;
+    } else if (a.validatorMoniker > b.validatorMoniker) {
+      return 1;
     } else {
       return 0;
     }
@@ -211,7 +210,7 @@ const Validators = ({ validatorsState }: IProps) => {
     } else if (convertNumber(a.selfPercent) > convertNumber(b.selfPercent)) {
       return order === 0 ? 1 : -1;
     } else {
-      return subSortVotingDESC(a, b);
+      return subSortMoniker(a, b);
     }
   };
 
@@ -221,7 +220,7 @@ const Validators = ({ validatorsState }: IProps) => {
     } else if (a.commission > b.commission) {
       return order === 0 ? 1 : -1;
     } else {
-      return subSortVotingDESC(a, b);
+      return subSortMoniker(a, b);
     }
   };
 
@@ -231,7 +230,7 @@ const Validators = ({ validatorsState }: IProps) => {
     } else if (a.condition > b.condition) {
       return order === 0 ? 1 : -1;
     } else {
-      return subSortVotingDESC(a, b);
+      return subSortMoniker(a, b);
     }
   };
 
@@ -241,7 +240,7 @@ const Validators = ({ validatorsState }: IProps) => {
     } else if (a.APR > b.APR) {
       return order === 0 ? 1 : -1;
     } else {
-      return subSortVotingDESC(a, b);
+      return subSortMoniker(a, b);
     }
   };
 
