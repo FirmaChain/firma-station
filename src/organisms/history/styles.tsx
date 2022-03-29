@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
 export const ListWrapper = styled.div`
-  width: 100%;
+  width: calc(100% - 20px);
   height: 100%;
   flex: 1;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   font-size: ${({ theme }) => theme.sizes.modal14};
+  border-radius: 4px;
+  padding: 0 10px;
+  color: #afafaf;
 `;
 
 export const RowWrapper = styled.div`
