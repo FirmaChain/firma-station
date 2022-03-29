@@ -100,7 +100,7 @@ export const ItemWrapper = styled(RowWrapper)`
 `;
 
 export const ItemColumn = styled(Column)`
-  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
 `;
 
 export const HeaderWrapper = styled(RowWrapper)`

@@ -120,12 +120,19 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
               return;
             }
 
-            modalActions.handleModalData({
-              action: "Undelegate",
-              data: { targetValidator, delegation },
-            });
+            if (targetStakingState.available > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+              modalActions.handleModalData({
+                action: "Undelegate",
+                data: { targetValidator, delegation },
+              });
 
-            modalActions.handleModalUndelegate(true);
+              modalActions.handleModalUndelegate(true);
+            } else {
+              enqueueSnackbar("The fee is insufficient. Please check the balance.", {
+                variant: "error",
+                autoHideDuration: 2000,
+              });
+            }
           })
           .catch((e) => {});
       })
