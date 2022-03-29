@@ -5,7 +5,6 @@ export const ListWrapper = styled.div`
   height: 100%;
   flex: 1;
   font-size: ${({ theme }) => theme.sizes.modal14};
-  color: #ababab;
 `;
 
 export const RowWrapper = styled.div`
