@@ -5,9 +5,10 @@ import { FixedSizeList as List } from "react-window";
 import { Link } from "react-router-dom";
 
 import { EXPLORER_URI } from "../../config";
+import { TRANSACTION_TYPE_MODEL } from "../../constants/transactions";
 import { IHistoryByAddressState } from "./hooks";
 
-import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn } from "./styles";
+import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, HistoryTypeBox } from "./styles";
 
 interface IProps {
   historyByAddressState: IHistoryByAddressState;
@@ -17,8 +18,11 @@ const Row = ({ data, index, style }: any) => {
   const currentHistory = data[index];
 
   const getMessageType = (type: string) => {
-    const messageTypeArray = type.replace("Msg", "").split(".");
-    return <span style={{ color: "white" }}>{messageTypeArray.pop()}</span>;
+    return (
+      <HistoryTypeBox baseColor={TRANSACTION_TYPE_MODEL[type].tagTheme}>
+        {TRANSACTION_TYPE_MODEL[type].tagDisplay}
+      </HistoryTypeBox>
+    );
   };
 
   const getHash = (hash: string) => {

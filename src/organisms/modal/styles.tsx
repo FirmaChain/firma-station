@@ -7,7 +7,7 @@ import ConnectLedgerIcon from "@mui/icons-material/Usb";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import HelpIcon from "@mui/icons-material/Help";
+import HelpIconOrigin from "@mui/icons-material/Help";
 
 export const paperwalletModalWidth = "630px";
 export const qrCodeModalWidth = "500px";
@@ -647,6 +647,10 @@ export const MaxButton = styled.div<{ active: boolean }>`
   ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
 `;
 
+export const HelpIcon = styled(HelpIconOrigin)`
+  opacity: 0.4;
+`;
+
 export {
   NewWalletIcon,
   RecoverMnemonicIcon,
@@ -655,5 +659,4 @@ export {
   QrCodeIcon,
   LogoutIcon,
   PictureAsPdfIcon,
-  HelpIcon,
 };

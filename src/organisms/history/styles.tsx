@@ -52,6 +52,11 @@ export const ItemColumn = styled(Column)`
   & > a:hover {
     background: none;
   }
+  &:nth-child(2) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const HeaderWrapper = styled(RowWrapper)`
@@ -62,4 +67,14 @@ export const HeaderWrapper = styled(RowWrapper)`
 
 export const HeaderColumn = styled(Column)`
   color: #ddd;
+`;
+
+export const HistoryTypeBox = styled.div<{ baseColor: string }>`
+  width: auto;
+  height: 20px;
+  line-height: 20px;
+  padding: 5px 8px 5px 8px;
+  border-radius: 4px;
+  background-color: ${(props) => props.baseColor}35;
+  color: ${(props) => props.baseColor};
 `;
