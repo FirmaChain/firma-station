@@ -152,10 +152,11 @@ const Validators = ({ validatorsState }: IProps) => {
       case 2:
         return sortSelf;
       case 3:
-      case 5:
         return sortCommission;
       case 4:
         return sortUptime;
+      case 5:
+        return sortAPR;
     }
   };
 
@@ -235,10 +236,10 @@ const Validators = ({ validatorsState }: IProps) => {
   };
 
   const sortAPR = (a: any, b: any) => {
-    if (a.APR < b.APR) {
-      return order === 0 ? -1 : 1;
-    } else if (a.APR > b.APR) {
+    if (a.commission < b.commission) {
       return order === 0 ? 1 : -1;
+    } else if (a.commission > b.commission) {
+      return order === 0 ? -1 : 1;
     } else {
       return subSortMoniker(a, b);
     }
