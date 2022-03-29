@@ -1,7 +1,10 @@
 import React from "react";
 import moment from "moment";
 import numeral from "numeral";
+import { useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
+import { rootState } from "../../../redux/reducers";
 import { convertNumber, convertToFctNumber } from "../../../utils/common";
 import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from "../../../constants/government";
 import { IProposalState } from "../hooks";
@@ -16,12 +19,16 @@ import {
   DepositMainTitle,
   DepositButton,
 } from "./styles";
+import { FIRMACHAIN_CONFIG } from "../../../config";
 
 interface IProps {
   proposalState: IProposalState;
 }
 
 const DepositCard = ({ proposalState }: IProps) => {
+  const { balance } = useSelector((state: rootState) => state.user);
+  const { enqueueSnackbar } = useSnackbar();
+
   const getAddTimeFormat = (startTime: string, second: number) => {
     return moment(startTime).add(numeral(second).value(), "seconds").format("YYYY-MM-DD HH:mm:ss+00:00");
   };
@@ -62,10 +69,17 @@ const DepositCard = ({ proposalState }: IProps) => {
         <DepositButton
           active={true}
           onClick={() => {
-            modalActions.handleModalData({
-              proposalId: proposalState.proposalId,
-            });
-            modalActions.handleModalDeposit(true);
+            if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+              modalActions.handleModalData({
+                proposalId: proposalState.proposalId,
+              });
+              modalActions.handleModalDeposit(true);
+            } else {
+              enqueueSnackbar("The fee is insufficient. Please check the balance.", {
+                variant: "error",
+                autoHideDuration: 2000,
+              });
+            }
           }}
         >
           Deposit

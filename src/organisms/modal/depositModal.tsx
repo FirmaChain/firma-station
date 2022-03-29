@@ -90,7 +90,7 @@ const DepositModal = () => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: "Deposit",
             data: { amount, fees: getFeesFromGas(gas), gas },

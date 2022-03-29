@@ -57,7 +57,7 @@ const VotingModal = () => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: "Voting",
             data: { fees: getFeesFromGas(gas), gas },

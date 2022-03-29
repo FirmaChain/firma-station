@@ -331,7 +331,7 @@ const NewProposalModal = () => {
     if (isLedger) modalActions.handleModalGasEstimation(false);
 
     if (currentGas > 0) {
-      if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(currentGas))) {
+      if (convertNumber(balance) - initialDeposit >= convertToFctNumber(getFeesFromGas(currentGas))) {
         modalActions.handleModalData({
           action: "Proposal",
           data: { fees: getFeesFromGas(currentGas), gas: currentGas },

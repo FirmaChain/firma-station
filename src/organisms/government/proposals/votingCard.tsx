@@ -191,7 +191,7 @@ const VotingCard = ({ proposalState }: IProps) => {
   };
 
   const onClickVote = () => {
-    if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+    if (convertNumber(balance) >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
       modalActions.handleModalData({
         proposalId: proposalState.proposalId,
       });

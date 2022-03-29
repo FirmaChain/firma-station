@@ -77,12 +77,19 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
               }
             }
 
-            modalActions.handleModalData({
-              action: "Redelegate",
-              data: { targetValidator, delegationList },
-            });
+            if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+              modalActions.handleModalData({
+                action: "Redelegate",
+                data: { targetValidator, delegationList },
+              });
 
-            modalActions.handleModalRedelegate(true);
+              modalActions.handleModalRedelegate(true);
+            } else {
+              enqueueSnackbar("Insufficient funds. Please check your account balance.", {
+                variant: "error",
+                autoHideDuration: 2000,
+              });
+            }
           })
           .catch((e) => {});
       })
@@ -120,7 +127,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
               return;
             }
 
-            if (targetStakingState.available > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+            if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
               modalActions.handleModalData({
                 action: "Undelegate",
                 data: { targetValidator, delegation },
@@ -146,7 +153,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
       .then((gas) => {
         if (isLedger) modalActions.handleModalGasEstimation(false);
 
-        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: "Withdraw",
             data: { amount: targetStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
