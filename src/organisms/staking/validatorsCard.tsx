@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
 import { IValidatorsState } from "./hooks";
+import { convertNumber } from "../../utils/common";
 
 import {
   ItemWrapper,
@@ -179,9 +180,9 @@ const Validators = ({ validatorsState }: IProps) => {
   };
 
   const sortVotingPower = (a: any, b: any) => {
-    if (a.votingPowerPercent < b.votingPowerPercent) {
+    if (convertNumber(a.votingPowerPercent) < convertNumber(b.votingPowerPercent)) {
       return order === 0 ? -1 : 1;
-    } else if (a.votingPowerPercent > b.votingPowerPercent) {
+    } else if (convertNumber(a.votingPowerPercent) > convertNumber(b.votingPowerPercent)) {
       return order === 0 ? 1 : -1;
     } else {
       if (a.validatorMoniker < b.validatorMoniker) {
@@ -195,9 +196,9 @@ const Validators = ({ validatorsState }: IProps) => {
   };
 
   const subSortVotingDESC = (a: any, b: any) => {
-    if (a.votingPowerPercent < b.votingPowerPercent) {
+    if (convertNumber(a.votingPowerPercent) < convertNumber(b.votingPowerPercent)) {
       return 1;
-    } else if (a.votingPowerPercent > b.votingPowerPercent) {
+    } else if (convertNumber(a.votingPowerPercent) > convertNumber(b.votingPowerPercent)) {
       return -1;
     } else {
       return 0;
@@ -205,9 +206,9 @@ const Validators = ({ validatorsState }: IProps) => {
   };
 
   const sortSelf = (a: any, b: any) => {
-    if (a.selfPercent < b.selfPercent) {
+    if (convertNumber(a.selfPercent) < convertNumber(b.selfPercent)) {
       return order === 0 ? -1 : 1;
-    } else if (a.selfPercent > b.selfPercent) {
+    } else if (convertNumber(a.selfPercent) > convertNumber(b.selfPercent)) {
       return order === 0 ? 1 : -1;
     } else {
       return subSortVotingDESC(a, b);
