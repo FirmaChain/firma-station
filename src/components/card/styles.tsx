@@ -47,7 +47,7 @@ export const SingleTitleCardStyled = styled(Card)<{ $height: string }>`
 `;
 
 export const SingleTitleCardContentStyled = styled(CardContent)<{ $height: string; $background: string }>`
-  color: ${({ theme }) => theme.colors.defaultWhite};
+  color: ${({ theme }) => theme.colors.defaultFont};
   height: calc(${(props) => props.$height} - 40px);
   background: ${(props) => props.$background};
   padding-left: 30px !important;

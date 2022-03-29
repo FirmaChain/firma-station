@@ -129,7 +129,9 @@ export const ItemColumn = styled(Column)`
   white-space: pre-line;
 
   font-size: ${({ theme }) => theme.sizes.accountCardSize4};
+  color: ${({ theme }) => theme.colors.defaultFont};
   & > a {
+    font-weight: 400 !important;
     text-decoration: none !important;
   }
   & > a:hover {
@@ -168,6 +170,7 @@ export const HeaderColumn = styled(Column)`
 export const ListWrapper2 = styled.div`
   width: 100%;
   height: 100%;
+  color: ${({ theme }) => theme.colors.defaultFont};
 `;
 
 export const RowWrapper2 = styled.div`
@@ -192,6 +195,7 @@ export const HeaderWrapper2 = styled(RowWrapper2)`
 
 export const HeaderColumn2 = styled(Column2)`
   color: ${({ theme }) => theme.colors.defaultGray3};
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
 `;
 
 export const ItemWrapper2 = styled.div`

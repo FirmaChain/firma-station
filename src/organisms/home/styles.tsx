@@ -4,6 +4,7 @@ import FileCopyIcon from "@mui/icons-material/FileCopy";
 export const ListWrapper = styled.div`
   width: 100%;
   height: 100%;
+  color: ${({ theme }) => theme.colors.defaultFont};
 `;
 
 export const RowWrapper = styled.div`
@@ -28,6 +29,7 @@ export const HeaderWrapper = styled(RowWrapper)`
 
 export const HeaderColumn = styled(Column)`
   color: ${({ theme }) => theme.colors.defaultGray3};
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
 `;
 
 export const ItemWrapper = styled.div`
@@ -211,6 +213,7 @@ export const TokenomicsDetailContent = styled.div`
   flex: 1;
   text-align: right;
   font-size: ${({ theme }) => theme.sizes.tokenomicsDetail};
+  color: ${({ theme }) => theme.colors.defaultFont};
 `;
 
 export const VotingPowerTitleTypo = styled.div`
@@ -228,6 +231,7 @@ export const VotingPowerContainer = styled.div`
 `;
 
 export const VotingPowerPercentTypo = styled.div`
+  color: ${({ theme }) => theme.colors.defaultFont};
   font-size: ${({ theme }) => theme.sizes.votingpowerSize1};
 `;
 
@@ -262,4 +266,5 @@ export const VotingPowerDetailContent = styled.div`
   flex: 1;
   text-align: right;
   font-size: ${({ theme }) => theme.sizes.votingpowerSize3};
+  color: ${({ theme }) => theme.colors.defaultFont};
 `;
