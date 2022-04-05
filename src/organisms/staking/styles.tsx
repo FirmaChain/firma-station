@@ -63,10 +63,12 @@ export const Column = styled.div`
   &:nth-child(6) {
     text-align: center;
     flex: 1 1 400px;
+    min-width: 130px;
   }
   &:nth-child(7) {
     text-align: center;
     flex: 1 1 230px;
+    min-width: 100px;
   }
 `;
 
