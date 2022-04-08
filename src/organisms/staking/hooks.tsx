@@ -235,7 +235,8 @@ export const useStakingData = () => {
           }
 
           const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
-          const votingPower = validator.validatorVotingPowers[0].votingPower;
+          const votingPower =
+            validator.validatorVotingPowers.length === 0 ? 0 : validator.validatorVotingPowers[0].votingPower;
           const votingPowerPercent = numeral(convertNumber((votingPower / totalVotingPower) * 100)).format("0.00");
           const totalDelegations = validator.delegations.reduce((prev: number, current: any) => {
             return prev + convertNumber(current.amount.amount);
@@ -251,7 +252,8 @@ export const useStakingData = () => {
           const delegations = validator.delegations.map((value: any) => {
             return { address: value.delegatorAddress, amount: convertNumber(value.amount.amount) };
           });
-          const missedBlockCounter = validator.validatorSigningInfos[0].missedBlocksCounter;
+          const missedBlockCounter =
+            validator.validatorSigningInfos.length === 0 ? 0 : validator.validatorSigningInfos[0].missedBlocksCounter;
           const commission = numeral(convertNumber(validator.validatorCommissions[0].commission * 100)).value();
           const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
           const status = validator.validatorStatuses[0].status;
@@ -262,7 +264,7 @@ export const useStakingData = () => {
             (votingPower / totalVotingPower) *
             0.98 *
             (1 - validator.validatorCommissions[0].commission);
-          const APR = rewardPerYear / votingPower;
+          const APR = isNaN(rewardPerYear / votingPower) ? 0 : rewardPerYear / votingPower;
           const APRPerDay = APR / 365;
           const APY = convertNumber(((1 + APRPerDay) ** 365 - 1).toFixed(2));
 
