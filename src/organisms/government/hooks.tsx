@@ -120,7 +120,7 @@ export const useProposalData = (proposalId: string) => {
         paramVetoThreshold: convertNumber(data.govParams[0].tallyParams["veto_threshold"]),
         periodDeposit: data.govParams[0].depositParams["max_deposit_period"] / 1000000000,
         periodVoting: data.govParams[0].votingParams["voting_period"] / 1000000000,
-        totalVotingPower: data.stakingPool[0].totalVotingPower,
+        totalVotingPower: data.proposal[0].staking_pool_snapshot.bonded_tokens,
         voters: data.proposalVote,
         depositors: data.proposal[0].proposalDeposits,
         tally: formatTally(data),

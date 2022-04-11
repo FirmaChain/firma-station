@@ -170,6 +170,9 @@ export const useProposalQuery = ({ onCompleted, proposalId }: IQueryParam) => {
             amount
             depositorAddress: depositor_address
           }
+          staking_pool_snapshot { 
+            bonded_tokens 
+          }
         }
         govParams: gov_params (limit: 1, order_by: {height: desc}) {
           depositParams: deposit_params
