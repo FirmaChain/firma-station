@@ -8,7 +8,7 @@ export const convertNumberFormat = (value: string | number, point: number = 2): 
 };
 
 export const makeDecimalPoint = (value: string | number, point: number = 2) => {
-  if (value === undefined) return 0;
+  if (value === undefined) return "0";
   const val = convertNumber(value).toString();
   const pointPos = val.indexOf(".");
 

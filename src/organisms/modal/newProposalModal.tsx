@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import Select from "react-select";
 
 import useFirma from "../../utils/wallet";
-import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../utils/common";
+import { convertNumber, convertToFctNumber, getFeesFromGas, makeDecimalPoint } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -190,7 +190,7 @@ const NewProposalModal = () => {
     const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
 
     if (!pattern.test(amount)) {
-      amount = convertNumber(amount).toFixed(6);
+      amount = makeDecimalPoint(convertNumber(amount), 6);
     }
 
     if (convertNumber(amount) > getMaxAmount()) {
@@ -201,7 +201,9 @@ const NewProposalModal = () => {
   };
 
   const getMaxAmount = () => {
-    const value = convertNumber((convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)).toFixed(6));
+    const value = convertNumber(
+      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee), 6)
+    );
 
     return value > 0 ? value : 0;
   };

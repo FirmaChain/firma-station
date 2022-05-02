@@ -3,7 +3,13 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
+import {
+  convertNumber,
+  convertToFctNumber,
+  convertToFctString,
+  getFeesFromGas,
+  makeDecimalPoint,
+} from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -89,7 +95,7 @@ const DelegateModal = () => {
     const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
 
     if (!pattern.test(amount)) {
-      amount = convertNumber(amount).toFixed(6);
+      amount = makeDecimalPoint(convertNumber(amount), 6);
     }
 
     if (convertNumber(amount) > getMaxAmount()) {
@@ -102,7 +108,7 @@ const DelegateModal = () => {
 
   const getMaxAmount = () => {
     const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
-    const value = convertNumber((modalData.data.available - fee).toFixed(6));
+    const value = convertNumber(makeDecimalPoint(modalData.data.available - fee, 6));
 
     return value > 0 ? value : 0;
   };

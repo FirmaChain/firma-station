@@ -26,7 +26,13 @@ import {
   ModalTooltipTypo,
   HelpIcon,
 } from "./styles";
-import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
+import {
+  convertNumber,
+  convertToFctNumber,
+  convertToFctString,
+  getFeesFromGas,
+  makeDecimalPoint,
+} from "../../utils/common";
 
 import styled from "styled-components";
 
@@ -111,7 +117,7 @@ const SendModal = () => {
     const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
 
     if (!pattern.test(amount)) {
-      amount = convertNumber(amount).toFixed(6);
+      amount = makeDecimalPoint(convertNumber(amount), 6);
     }
 
     if (convertNumber(amount) > getMaxAmount()) {
@@ -164,7 +170,7 @@ const SendModal = () => {
     if (tokenData.symbol === "FCT") {
       const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
 
-      const value = convertNumber((available - fee).toFixed(6));
+      const value = convertNumber(makeDecimalPoint(available - fee, 6));
       return value > 0 ? value : 0;
     } else {
       return available;

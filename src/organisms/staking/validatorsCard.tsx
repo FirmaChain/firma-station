@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
 import { IValidatorsState } from "./hooks";
-import { convertNumber, convertNumberFormat } from "../../utils/common";
+import { convertNumber, convertNumberFormat, makeDecimalPoint } from "../../utils/common";
 
 import {
   ItemWrapper,
@@ -39,15 +39,15 @@ const CustomRow = ({ currentValidator, index }: any) => {
     let result = "";
 
     if (n < 1e3) {
-      result = n.toFixed(2);
+      result = makeDecimalPoint(n, 2);
     } else if (n >= 1e3 && n < 1e6) {
-      result = +(n / 1e3).toFixed(2) + "K";
+      result = +makeDecimalPoint(n / 1e3, 2) + "K";
     } else if (n >= 1e6 && n < 1e9) {
-      result = +(n / 1e6).toFixed(2) + "M";
+      result = +makeDecimalPoint(n / 1e6, 2) + "M";
     } else if (n >= 1e9 && n < 1e12) {
-      result = +(n / 1e9).toFixed(2) + "B";
+      result = +makeDecimalPoint(n / 1e9, 2) + "B";
     } else if (n >= 1e12) {
-      result = +(n / 1e12).toFixed(2) + "T";
+      result = +makeDecimalPoint(n / 1e12, 2) + "T";
     }
 
     if (result.length > 10) result = "infinity";
@@ -82,15 +82,15 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
     let result = "";
 
     if (n < 1e3) {
-      result = n.toFixed(2);
+      result = makeDecimalPoint(n, 2);
     } else if (n >= 1e3 && n < 1e6) {
-      result = +(n / 1e3).toFixed(2) + "K";
+      result = +makeDecimalPoint(n / 1e3, 2) + "K";
     } else if (n >= 1e6 && n < 1e9) {
-      result = +(n / 1e6).toFixed(2) + "M";
+      result = +makeDecimalPoint(n / 1e6, 2) + "M";
     } else if (n >= 1e9 && n < 1e12) {
-      result = +(n / 1e9).toFixed(2) + "B";
+      result = +makeDecimalPoint(n / 1e9, 2) + "B";
     } else if (n >= 1e12) {
-      result = +(n / 1e12).toFixed(2) + "T";
+      result = +makeDecimalPoint(n / 1e12, 2) + "T";
     }
 
     if (result.length > 10) result = "infinity";

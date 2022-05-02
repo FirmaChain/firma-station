@@ -4,7 +4,7 @@ import { client } from "../../apollo";
 
 import useFirma from "../../utils/wallet";
 import { BLOCKS_PER_YEAR } from "../../config";
-import { convertNumber, convertToFctNumber, isValid, convertNumberFormat } from "../../utils/common";
+import { convertNumber, convertToFctNumber, isValid, convertNumberFormat, makeDecimalPoint } from "../../utils/common";
 import { useValidatorsQuery } from "../../apollo/gqls";
 
 export interface IValidatorsState {
@@ -270,7 +270,7 @@ export const useStakingData = () => {
             (1 - validator.validatorCommissions[0].commission);
           const APR = isNaN(rewardPerYear / votingPower) ? 0 : rewardPerYear / votingPower;
           const APRPerDay = APR / 365;
-          const APY = convertNumber(((1 + APRPerDay) ** 365 - 1).toFixed(2));
+          const APY = convertNumber(makeDecimalPoint((1 + APRPerDay) ** 365 - 1, 2));
 
           return {
             validatorAddress,

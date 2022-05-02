@@ -11,6 +11,7 @@ import {
   convertToFctNumber,
   convertToFctString,
   getFeesFromGas,
+  makeDecimalPoint,
 } from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -119,7 +120,7 @@ const RedelegateModal = () => {
     const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
 
     if (!pattern.test(amount)) {
-      amount = convertNumber(amount).toFixed(6);
+      amount = makeDecimalPoint(convertNumber(amount), 6);
     }
 
     if (convertNumber(amount) > getMaxAmount()) {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { convertToFctNumber } from "../../utils/common";
+import { convertNumberFormat, convertToFctNumber } from "../../utils/common";
 import { useBlockDataQuery, useVotingPowerQuery, useTokenomicsQuery } from "../../apollo/gqls";
 
 export interface IBlockState {
@@ -55,7 +55,7 @@ export const useBlockData = () => {
   };
 
   const formatInflation = (data: any) => {
-    return data.inflation.length > 0 ? (data.inflation[0].value * 100).toFixed(2) + " %" : "0 %";
+    return data.inflation.length > 0 ? convertNumberFormat(data.inflation[0].value * 100, 2) + " %" : "0 %";
   };
 
   const formatVotingPower = (data: any) => {
