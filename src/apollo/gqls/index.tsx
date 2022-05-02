@@ -101,6 +101,7 @@ export const useValidatorsQuery = ({ onCompleted }: IQueryParam) => {
           }
           validatorSigningInfos: validator_signing_infos(order_by: { height: desc }, limit: 1) {
             missedBlocksCounter: missed_blocks_counter
+            tombstoned
           }
           validatorInfo: validator_info {
             operatorAddress: operator_address

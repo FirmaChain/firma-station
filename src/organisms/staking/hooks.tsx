@@ -217,7 +217,7 @@ export const useStakingData = () => {
 
       const validatorsList = data.validator
         .filter((validator: any) => {
-          return validator.validatorStatuses[0].jailed === false;
+          return validator.validatorStatuses[0].jailed === false && validator.validatorStatuses[0].status === 3 && (validator.validatorSigningInfos.length !== 0 && validator.validatorSigningInfos[0].tombstoned === false);
         })
         .map((validator: any) => {
           const validatorAddress = validator.validatorInfo.operatorAddress;
@@ -262,7 +262,7 @@ export const useStakingData = () => {
           const rewardPerYear =
             mintCoinPerYear *
             (votingPower / totalVotingPower) *
-            0.98 *
+            0.97 *
             (1 - validator.validatorCommissions[0].commission);
           const APR = isNaN(rewardPerYear / votingPower) ? 0 : rewardPerYear / votingPower;
           const APRPerDay = APR / 365;

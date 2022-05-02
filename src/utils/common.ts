@@ -45,11 +45,11 @@ export const convertToTokenNumber = (amount: number | string, decimal: string) =
 };
 
 export const convertToFctString = (uFctAmount: string) => {
-  return FirmaUtil.getFCTStringFromUFCT(convertNumber(uFctAmount));
+  return FirmaUtil.getFCTStringFromUFCTStr(uFctAmount);
 };
 
 export const convertToFctNumber = (uFctAmount: number | string) => {
-  return convertNumber(FirmaUtil.getFCTStringFromUFCT(convertNumber(uFctAmount)));
+  return convertNumber(FirmaUtil.getFCTStringFromUFCTStr(uFctAmount.toString()));
 };
 
 export const copyToClipboard = (textToCopy: string) => {
