@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
-import numeral from "numeral";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -11,7 +10,7 @@ import { useMediaQuery } from "react-responsive";
 import { rootState } from "../../../redux/reducers";
 import { EXPLORER_URI, FIRMACHAIN_CONFIG } from "../../../config";
 import { IProposalState, tally } from "../hooks";
-import { convertNumber, convertToFctNumber } from "../../../utils/common";
+import { convertNumber, convertToFctNumber, convertNumberFormat } from "../../../utils/common";
 import { modalActions } from "../../../redux/action";
 import { useAvataURL } from "../../header/hooks";
 
@@ -178,7 +177,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     for (let value in votingThemeData) {
       if (votingThemeData[value].key === "abstain") continue;
       result.push({
-        percent: numeral(proposalState.tally[votingThemeData[value].key] / currentVoting).format("0.00%"),
+        percent: `${convertNumberFormat(proposalState.tally[votingThemeData[value].key] / currentVoting, 2)}%`,
         bgColor: votingThemeData[value].color,
       });
     }
@@ -223,18 +222,19 @@ const VotingCard = ({ proposalState }: IProps) => {
         </VotingDetailItem>
         <VotingDetailItem>
           <VotingLabel>Quorum</VotingLabel>
-          <VotingContent bigSize={true}>{numeral(proposalState.paramQuorum * 100).format("0.00")}%</VotingContent>
+          <VotingContent bigSize={true}>{convertNumberFormat(proposalState.paramQuorum * 100, 2)}%</VotingContent>
         </VotingDetailItem>
         <VotingDetailItem>
           <VotingLabel>Current Turnout</VotingLabel>
           <VotingContent bigSize={true}>
-            {numeral(getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower)).format("0.00")}%
+            {convertNumberFormat(getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower), 2)}%
           </VotingContent>
         </VotingDetailItem>
         <VotingGauge>
           <MultiGauge
-            percent={`${numeral(getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower)).format(
-              "0.00"
+            percent={`${convertNumberFormat(
+              getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower),
+              2
             )}%`}
             multiList={getMultiGaugeList(proposalState)}
           ></MultiGauge>
@@ -253,15 +253,15 @@ const VotingCard = ({ proposalState }: IProps) => {
             </VotingType>
 
             <VotingPercent>
-              {votingThemeData[index].type !== "Abstain" ? `${numeral(voting.percent * 100).format("0.00")}%` : "ㅤ"}
+              {votingThemeData[index].type !== "Abstain" ? `${convertNumberFormat(voting.percent * 100, 2)}%` : "ㅤ"}
             </VotingPercent>
             {/* <VotingGauge>
               <Gauge
-                percent={`${numeral(voting.percent * 100).format("0.00")}%`}
+                percent={`${convertNumberFormat(voting.percent * 100,2)}%`}
                 bgColor={votingThemeData[index].color}
               />
             </VotingGauge> */}
-            <VotingValue>{numeral(voting.value).format("0,0")}</VotingValue>
+            <VotingValue>{convertNumberFormat(voting.value, 0)}</VotingValue>
           </VotingData>
         ))}
       </VotingWrapper>

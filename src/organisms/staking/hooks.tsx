@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import numeral from "numeral";
 import gql from "graphql-tag";
 import { client } from "../../apollo";
 
 import useFirma from "../../utils/wallet";
 import { BLOCKS_PER_YEAR } from "../../config";
-import { convertNumber, convertToFctNumber, isValid } from "../../utils/common";
+import { convertNumber, convertToFctNumber, isValid, convertNumberFormat } from "../../utils/common";
 import { useValidatorsQuery } from "../../apollo/gqls";
 
 export interface IValidatorsState {
@@ -217,7 +216,12 @@ export const useStakingData = () => {
 
       const validatorsList = data.validator
         .filter((validator: any) => {
-          return validator.validatorStatuses[0].jailed === false && validator.validatorStatuses[0].status === 3 && (validator.validatorSigningInfos.length !== 0 && validator.validatorSigningInfos[0].tombstoned === false);
+          return (
+            validator.validatorStatuses[0].jailed === false &&
+            validator.validatorStatuses[0].status === 3 &&
+            validator.validatorSigningInfos.length !== 0 &&
+            validator.validatorSigningInfos[0].tombstoned === false
+          );
         })
         .map((validator: any) => {
           const validatorAddress = validator.validatorInfo.operatorAddress;
@@ -237,7 +241,7 @@ export const useStakingData = () => {
           const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
           const votingPower =
             validator.validatorVotingPowers.length === 0 ? 0 : validator.validatorVotingPowers[0].votingPower;
-          const votingPowerPercent = numeral(convertNumber((votingPower / totalVotingPower) * 100)).format("0.00");
+          const votingPowerPercent = convertNumberFormat(convertNumber((votingPower / totalVotingPower) * 100), 2);
           const totalDelegations = validator.delegations.reduce((prev: number, current: any) => {
             return prev + convertNumber(current.amount.amount);
           }, 0);
@@ -248,13 +252,13 @@ export const useStakingData = () => {
           let self = 0;
           if (selfDelegation) self = convertNumber(selfDelegation.amount.amount);
 
-          const selfPercent = numeral(convertNumber((self / (totalDelegations || 1)) * 100)).format("0.00");
+          const selfPercent = convertNumberFormat(convertNumber((self / (totalDelegations || 1)) * 100), 2);
           const delegations = validator.delegations.map((value: any) => {
             return { address: value.delegatorAddress, amount: convertNumber(value.amount.amount) };
           });
           const missedBlockCounter =
             validator.validatorSigningInfos.length === 0 ? 0 : validator.validatorSigningInfos[0].missedBlocksCounter;
-          const commission = numeral(convertNumber(validator.validatorCommissions[0].commission * 100)).value();
+          const commission = convertNumber(validator.validatorCommissions[0].commission * 100);
           const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
           const status = validator.validatorStatuses[0].status;
           const jailed = validator.validatorStatuses[0].jailed;
@@ -262,7 +266,7 @@ export const useStakingData = () => {
           const rewardPerYear =
             mintCoinPerYear *
             (votingPower / totalVotingPower) *
-            0.97 *
+            0.98 *
             (1 - validator.validatorCommissions[0].commission);
           const APR = isNaN(rewardPerYear / votingPower) ? 0 : rewardPerYear / votingPower;
           const APRPerDay = APR / 365;

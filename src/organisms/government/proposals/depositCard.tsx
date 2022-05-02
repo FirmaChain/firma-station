@@ -1,11 +1,10 @@
 import React from "react";
 import moment from "moment";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import { rootState } from "../../../redux/reducers";
-import { convertNumber, convertToFctNumber } from "../../../utils/common";
+import { convertNumber, convertToFctNumber, convertNumberFormat } from "../../../utils/common";
 import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from "../../../constants/government";
 import { IProposalState } from "../hooks";
 import { modalActions } from "../../../redux/action";
@@ -30,7 +29,7 @@ const DepositCard = ({ proposalState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const getAddTimeFormat = (startTime: string, second: number) => {
-    return moment(startTime).add(numeral(second).value(), "seconds").format("YYYY-MM-DD HH:mm:ss+00:00");
+    return moment(startTime).add(convertNumber(second), "seconds").format("YYYY-MM-DD HH:mm:ss+00:00");
   };
 
   const getCurrentDeposit = (deposits: any) => {
@@ -45,7 +44,7 @@ const DepositCard = ({ proposalState }: IProps) => {
   };
 
   const getAmountFormat = (amount: number) => {
-    return `${numeral(convertToFctNumber(amount)).format("0.00")} FCT`;
+    return `${convertNumberFormat(convertToFctNumber(amount), 2)} FCT`;
   };
 
   return (

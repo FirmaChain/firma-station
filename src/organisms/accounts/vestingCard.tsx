@@ -1,6 +1,5 @@
 import React from "react";
 import moment from "moment";
-import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 
@@ -17,7 +16,7 @@ import {
   TitleTypo,
   VestingTotal,
 } from "./styles";
-import { convertToFctString, convertToFctNumber } from "../../utils/common";
+import { convertToFctString, convertToFctNumber, convertNumberFormat } from "../../utils/common";
 
 interface IProps {
   vestingState: IVesting;
@@ -33,7 +32,7 @@ const Row = ({ data, index, style }: any) => {
   };
 
   const getAmount = (amount: string) => {
-    return numeral(convertToFctString(amount)).format("0,0.000") + " FCT";
+    return convertNumberFormat(convertToFctString(amount), 3) + " FCT";
   };
 
   const getStatus = (status: any) => {
@@ -57,9 +56,10 @@ const Row = ({ data, index, style }: any) => {
 
 const VestingCard = ({ vestingState }: IProps) => {
   const getVestingTotal = () => {
-    return `( ${numeral(
-      convertToFctString((vestingState.totalVesting - vestingState.expiredVesting).toString())
-    ).format("0,0.000")} / ${numeral(convertToFctNumber(vestingState.totalVesting)).format("0,0.000")} )`;
+    return `( ${convertNumberFormat(
+      convertToFctString((vestingState.totalVesting - vestingState.expiredVesting).toString()),
+      3
+    )} / ${convertNumberFormat(convertToFctNumber(vestingState.totalVesting), 3)} )`;
   };
 
   return (

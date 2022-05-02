@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import numeral from "numeral";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
 import { IValidatorsState } from "./hooks";
-import { convertNumber } from "../../utils/common";
+import { convertNumber, convertNumberFormat } from "../../utils/common";
 
 import {
   ItemWrapper,
@@ -64,10 +63,10 @@ const CustomRow = ({ currentValidator, index }: any) => {
           <ProfileImage src={currentValidator.validatorAvatar} />
           <MonikerTypo>{currentValidator.validatorMoniker}</MonikerTypo>
         </ItemColumn>
-        <ItemColumn>{`${numeral(currentValidator.votingPowerPercent).format("0,0.00")} %`}</ItemColumn>
-        <ItemColumn>{`${numeral(currentValidator.selfPercent).format("0,0.00")} %`}</ItemColumn>
-        <ItemColumn>{`${numeral(currentValidator.commission).format("0,0.00")} %`}</ItemColumn>
-        <ItemColumn>{`${numeral(currentValidator.condition).format("0,0.00")} %`}</ItemColumn>
+        <ItemColumn>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</ItemColumn>
+        <ItemColumn>{`${convertNumberFormat(currentValidator.selfPercent, 2)} %`}</ItemColumn>
+        <ItemColumn>{`${convertNumberFormat(currentValidator.commission, 2)} %`}</ItemColumn>
+        <ItemColumn>{`${convertNumberFormat(currentValidator.condition, 2)} %`}</ItemColumn>
         <ItemColumn>
           <APRTypo>{`${formatCash(currentValidator.APR * 100)} %`}</APRTypo>
 
@@ -110,19 +109,19 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
         <ValidatorInfoList>
           <ValidatorInfo>
             <InfoLabel>Voting Power</InfoLabel>
-            <InfoValue>{`${numeral(currentValidator.votingPowerPercent).format("0,0.00")} %`}</InfoValue>
+            <InfoValue>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Self Delegation</InfoLabel>
-            <InfoValue>{`${numeral(currentValidator.selfPercent).format("0,0.00")} %`}</InfoValue>
+            <InfoValue>{`${convertNumberFormat(currentValidator.selfPercent, 2)} %`}</InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Commission</InfoLabel>
-            <InfoValue>{`${numeral(currentValidator.commission).format("0,0.00")} %`}</InfoValue>
+            <InfoValue>{`${convertNumberFormat(currentValidator.commission, 2)} %`}</InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Uptime</InfoLabel>
-            <InfoValue>{`${numeral(currentValidator.condition).format("0,0.00")} %`}</InfoValue>
+            <InfoValue>{`${convertNumberFormat(currentValidator.condition, 2)} %`}</InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>APR/APY</InfoLabel>

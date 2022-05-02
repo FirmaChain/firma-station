@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import numeral from "numeral";
 
-import { isValid } from "../../utils/common";
+import { convertNumberFormat, isValid } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { ITotalStakingState } from "./hooks";
 
@@ -44,7 +43,7 @@ const StakingCard = ({ totalStakingState }: IProps) => {
               <span style={{ fontSize: "12px", color: "#f4b017" }}>( + Vesting )</span>
             )}
           </StakingTitleTypo>
-          <StakingContentTypo>{numeral(data.value).format("0,0.000")} FCT</StakingContentTypo>
+          <StakingContentTypo>{convertNumberFormat(data.value, 3)} FCT</StakingContentTypo>
         </StakingTextWrap>
       ))}
     </StakingWrap>

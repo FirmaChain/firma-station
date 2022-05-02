@@ -1,5 +1,4 @@
 import React from "react";
-import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { useMediaQuery } from "react-responsive";
 import { FixedSizeList as List } from "react-window";
@@ -7,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { useAvataURL } from "../../header/hooks";
 import { IValidatorsState } from "../hooks";
-import { convertToFctNumber } from "../../../utils/common";
+import { convertNumberFormat, convertToFctNumber } from "../../../utils/common";
 import { EXPLORER_URI } from "../../../config";
 
 import {
@@ -40,7 +39,7 @@ const Row = ({ data, index, style }: any) => {
           <ProfileImage2 src={avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${moniker}`}</ItemColumn>
-        <ItemColumn>{`${numeral(convertToFctNumber(currentDelegator.amount)).format("0,0.000")} FCT`}</ItemColumn>
+        <ItemColumn>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} FCT`}</ItemColumn>
       </ItemWrapper>
     </Link>
   );
@@ -57,7 +56,7 @@ const RowMobile = ({ data, index, style }: any) => {
           <ProfileImage2 src={avatarURL} />
           <DelegatorInfoMobile>
             <div>{`${moniker}`}</div>
-            <div>{`${numeral(convertToFctNumber(currentDelegator.amount)).format("0,0.000")} FCT`}</div>
+            <div>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} FCT`}</div>
           </DelegatorInfoMobile>
         </ItemMobileColumn>
       </ItemMobileWrapper>

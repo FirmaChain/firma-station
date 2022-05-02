@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
-import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas, isValid } from "../../utils/common";
+import {
+  convertNumber,
+  convertNumberFormat,
+  convertToFctNumber,
+  convertToFctString,
+  getFeesFromGas,
+  isValid,
+} from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 import { FIRMACHAIN_CONFIG, GUIDE_LINK_UNDELEGATE } from "../../config";
@@ -41,7 +47,7 @@ const UndelegateModal = () => {
 
   useEffect(() => {
     setAvailableAmount(
-      isValid(modalData.data) ? numeral(convertToFctNumber(modalData.data.delegation.amount)).format("0,0.000") : "0"
+      isValid(modalData.data) ? convertNumberFormat(convertToFctNumber(modalData.data.delegation.amount), 3) : "0"
     );
   }, [undelegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-import { convertNumber } from "../../utils/common";
+import { convertNumber, convertNumberFormat } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 
 import theme from "../../themes";
@@ -27,8 +26,8 @@ const AccountCard = () => {
     <BlankCard bgColor={theme.colors.mainblue} height="130px" backgroundLogo={true}>
       <AddressTitleTypo>FCT Balance</AddressTitleTypo>
       <UsdTypo>1 FCT ($ {currentUSDPrice})</UsdTypo>
-      <PriceTypo>$ {numeral(currentUSDPrice * convertNumber(balance)).format("0,0.00")}</PriceTypo>
-      <UserBalanceTypo>{`${numeral(balance).format("0,0.000")} FCT`}</UserBalanceTypo>
+      <PriceTypo>$ {convertNumberFormat(currentUSDPrice * convertNumber(balance), 2)}</PriceTypo>
+      <UserBalanceTypo>{`${convertNumberFormat(balance, 3)} FCT`}</UserBalanceTypo>
     </BlankCard>
   );
 };

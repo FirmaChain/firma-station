@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import moment from "moment";
-import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { Link } from "react-router-dom";
 import { FixedSizeList as List } from "react-window";
@@ -12,7 +11,13 @@ import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
 import { modalActions } from "../../redux/action";
 import { ITotalStakingState } from "./hooks";
-import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
+import {
+  convertNumber,
+  convertNumberFormat,
+  convertToFctNumber,
+  convertToFctString,
+  getFeesFromGas,
+} from "../../utils/common";
 
 import {
   ChartWrapper,
@@ -72,10 +77,8 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
           <MonikerTypo>{validatorInfo.moniker}</MonikerTypo>
         </Link>
       </DelegationItemColumn>
-      <DelegationItemColumn>{numeral(getDelegateAmount(data[index].amount)).format("0,0.000")}</DelegationItemColumn>
-      <DelegationItemColumn>
-        ≈ {numeral(getReward(data[index].validatorAddress)).format("0,0.000")}
-      </DelegationItemColumn>
+      <DelegationItemColumn>{convertNumberFormat(getDelegateAmount(data[index].amount), 3)}</DelegationItemColumn>
+      <DelegationItemColumn>≈ {convertNumberFormat(getReward(data[index].validatorAddress), 3)}</DelegationItemColumn>
     </DelegationItemWrapper>
   );
 };
@@ -105,7 +108,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
           <MonikerTypo>{getMoniker(validatorInfo.dstMoniker)}</MonikerTypo>
         </Link>
       </RedelegationItemColumn>
-      <RedelegationItemColumn>{numeral(validatorInfo.balance).format("0,0.000")}</RedelegationItemColumn>
+      <RedelegationItemColumn>{convertNumberFormat(validatorInfo.balance, 3)}</RedelegationItemColumn>
       <RedelegationItemColumn>
         {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
       </RedelegationItemColumn>
@@ -124,7 +127,7 @@ const UndelegationRow = ({ data, index, style }: any) => {
           <MonikerTypo>{validatorInfo.moniker}</MonikerTypo>
         </Link>
       </UndelegationItemColumn>
-      <UndelegationItemColumn>{numeral(validatorInfo.balance).format("0,0.000")}</UndelegationItemColumn>
+      <UndelegationItemColumn>{convertNumberFormat(validatorInfo.balance, 3)}</UndelegationItemColumn>
       <UndelegationItemColumn>
         {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
       </UndelegationItemColumn>
@@ -144,7 +147,7 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
     return {
       id: getMonikerFormat(moniker),
       value: Math.round(percentValue * 100) / 100,
-      amount: numeral(convertToFctNumber(delegate.amount)).format("0,0.000"),
+      amount: convertNumberFormat(convertToFctNumber(delegate.amount), 3),
     };
   });
 
@@ -222,7 +225,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
       <ChartWrapper>
         <ChartCenterTypoWrapper>
           <ChartCenterTypo>Delegated</ChartCenterTypo>
-          <ChartCenterTypo>{numeral(totalStakingState.delegated).format("0,0.000")}</ChartCenterTypo>
+          <ChartCenterTypo>{convertNumberFormat(totalStakingState.delegated, 3)}</ChartCenterTypo>
         </ChartCenterTypoWrapper>
         <ResponsivePie
           data={data}

@@ -1,6 +1,5 @@
 import React from "react";
 import moment from "moment";
-import numeral from "numeral";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
 import { Link } from "react-router-dom";
@@ -12,6 +11,7 @@ import { ITransferHistoryByAddressState, ITokensState } from "./hooks";
 import theme from "../../themes";
 import { BlankCard } from "../../components/card";
 import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, TitleTypo } from "./styles";
+import { convertNumberFormat } from "../../utils/common";
 
 interface IProps {
   transferHistoryByAddressState: ITransferHistoryByAddressState;
@@ -30,7 +30,7 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   };
 
   const getAmount = (denom: string, amount: number) => {
-    return `${numeral(amount / 10 ** tokenDataState[denom].decimal).format("0,0.000")} ${tokenDataState[denom].symbol}`;
+    return `${convertNumberFormat(amount / 10 ** tokenDataState[denom].decimal, 3)} ${tokenDataState[denom].symbol}`;
   };
 
   const getResult = (result: boolean) => {

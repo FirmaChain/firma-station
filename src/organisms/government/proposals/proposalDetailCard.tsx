@@ -1,6 +1,5 @@
 import React from "react";
 import moment from "moment";
-import numeral from "numeral";
 
 import {
   PROPOSAL_STATUS,
@@ -9,7 +8,7 @@ import {
   PROPOSAL_MESSAGE_TYPE_COMMUNITYPOOLSPEND,
   PROPOSAL_MESSAGE_TYPE_SOFTWAREUPGRADE,
 } from "../../../constants/government";
-import { convertToFctNumber } from "../../../utils/common";
+import { convertNumberFormat, convertToFctNumber } from "../../../utils/common";
 import { IProposalState } from "../hooks";
 
 import {
@@ -96,8 +95,9 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
             </ProposalDetailItem>
             <ProposalDetailItem>
               <Label>Amount</Label>
-              <ProposalContent>{`${numeral(convertToFctNumber(proposalState.extraData.amount)).format(
-                "0,0.00"
+              <ProposalContent>{`${convertNumberFormat(
+                convertToFctNumber(proposalState.extraData.amount),
+                2
               )} FCT`}</ProposalContent>
             </ProposalDetailItem>
           </>

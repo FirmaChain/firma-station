@@ -1,12 +1,11 @@
 import React from "react";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../../utils/wallet";
 import { rootState } from "../../../redux/reducers";
 import { ITargetStakingState, IValidatorsState } from "../hooks";
-import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../../utils/common";
+import { convertNumber, convertNumberFormat, convertToFctNumber, getFeesFromGas } from "../../../utils/common";
 import { modalActions } from "../../../redux/action";
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from "./styles";
@@ -191,7 +190,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
     <CardWrapper>
       <InnerWrapper>
         <Title>My Delegations</Title>
-        <Content>{`${numeral(targetStakingState.delegated).format("0,0.000")} ${DENOM}`}</Content>
+        <Content>{`${convertNumberFormat(targetStakingState.delegated, 3)} ${DENOM}`}</Content>
         <Buttons>
           <Button onClick={delegateAction} isActive={true}>
             Delegate
@@ -211,7 +210,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
       </InnerWrapper>
       <InnerWrapper>
         <Title>Rewards</Title>
-        <Content>{`${numeral(targetStakingState.stakingReward).format("0,0.000")} ${DENOM}`}</Content>
+        <Content>{`${convertNumberFormat(targetStakingState.stakingReward, 3)} ${DENOM}`}</Content>
         <Buttons>
           <Button
             onClick={() => {

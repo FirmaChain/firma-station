@@ -1,12 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
-import numeral from "numeral";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
 import { rootState } from "../../redux/reducers";
-import { convertNumber, convertToFctNumber, convertToFctString, getFeesFromGas } from "../../utils/common";
+import {
+  convertNumber,
+  convertNumberFormat,
+  convertToFctNumber,
+  convertToFctString,
+  getFeesFromGas,
+} from "../../utils/common";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
 import { FIRMACHAIN_CONFIG, GUIDE_LINK_REDELEGATE } from "../../config";
@@ -203,7 +208,7 @@ const RedelegateModal = () => {
           {sourceValidator && (
             <>
               <ModalLabel>Available</ModalLabel>
-              <ModalInput>{numeral(sourceAmount).format("0,0.000")} FCT</ModalInput>
+              <ModalInput>{convertNumberFormat(sourceAmount, 3)} FCT</ModalInput>
 
               <ModalLabel>Fee estimation</ModalLabel>
               <ModalInput>{`${convertToFctString((FIRMACHAIN_CONFIG.defaultFee * 1.5).toString())} FCT`}</ModalInput>

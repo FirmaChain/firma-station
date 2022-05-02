@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 import useFirma from "../../utils/wallet";
-import { convertToFctString, isValidString } from "../../utils/common";
+import { convertToFctString, isValidString, convertNumberFormat } from "../../utils/common";
 import { rootState } from "../../redux/reducers";
 import { Modal } from "../../components/modal";
 import { modalActions } from "../../redux/action";
@@ -93,12 +92,12 @@ const ConfirmTxModal = () => {
           {isValidString(amount) && (
             <ConfirmWrapper>
               <ConfirmLabel>Amount</ConfirmLabel>
-              <ConfirmInput>{`${numeral(amount).format("0,0.000000")} ${DENOM}`}</ConfirmInput>
+              <ConfirmInput>{`${convertNumberFormat(amount, 6)} ${DENOM}`}</ConfirmInput>
             </ConfirmWrapper>
           )}
           <ConfirmWrapper>
             <ConfirmLabel>Fee</ConfirmLabel>
-            <ConfirmInput>{`${numeral(fee).format("0,0.000000")} ${DENOM}`}</ConfirmInput>
+            <ConfirmInput>{`${convertNumberFormat(fee, 6)} ${DENOM}`}</ConfirmInput>
           </ConfirmWrapper>
           {isLedger === false && (
             <PasswordWrapper>

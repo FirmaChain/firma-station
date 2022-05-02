@@ -1,5 +1,4 @@
 import React from "react";
-import numeral from "numeral";
 import { useSnackbar } from "notistack";
 
 import { IValidatorsState } from "../hooks";
@@ -26,7 +25,7 @@ import {
   CopyIconImg,
   LeftWrapper,
 } from "./styles";
-import { convertToFctNumber, copyToClipboard } from "../../../utils/common";
+import { convertNumberFormat, convertToFctNumber, copyToClipboard } from "../../../utils/common";
 
 interface IProps {
   validatorsState: IValidatorsState;
@@ -117,25 +116,26 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
           <StatusWrapper>
             <StatusItem>
               <StatusTitle>Voting Power</StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.votingPowerPercent).format("0.00")} %`}</StatusContent>
-              <StatusSubContent>{`${numeral(targetValidatorData.votingPower).format("0,0.00")} FCT`}</StatusSubContent>
+              <StatusContent>{`${convertNumberFormat(targetValidatorData.votingPowerPercent, 2)} %`}</StatusContent>
+              <StatusSubContent>{`${convertNumberFormat(targetValidatorData.votingPower, 2)} FCT`}</StatusSubContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Self-delegation</StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.selfPercent).format("0.00")} %`}</StatusContent>
-              <StatusSubContent>{`${numeral(convertToFctNumber(targetValidatorData.self)).format(
-                "0,0.00"
+              <StatusContent>{`${convertNumberFormat(targetValidatorData.selfPercent, 2)} %`}</StatusContent>
+              <StatusSubContent>{`${convertNumberFormat(
+                convertToFctNumber(targetValidatorData.self),
+                2
               )} FCT`}</StatusSubContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Commission</StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.commission).format("0.00")} %`}</StatusContent>
+              <StatusContent>{`${convertNumberFormat(targetValidatorData.commission, 2)} %`}</StatusContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>
                 Uptime <span style={{ fontSize: "12px" }}>(Last 10k blocks)</span>
               </StatusTitle>
-              <StatusContent>{`${numeral(targetValidatorData.condition).format("0.00")} %`}</StatusContent>
+              <StatusContent>{`${convertNumberFormat(targetValidatorData.condition, 2)} %`}</StatusContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>

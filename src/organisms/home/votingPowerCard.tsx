@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import numeral from "numeral";
 
 import { IVotingPowerState } from "./hooks";
 
@@ -16,6 +15,7 @@ import {
   VotingPowerDetailTitle,
   VotingPowerDetailContent,
 } from "./styles";
+import { convertNumberFormat } from "../../utils/common";
 
 interface IProps {
   votingPowerState: IVotingPowerState;
@@ -41,7 +41,7 @@ const VotingPowerCard = ({ votingPowerState }: IProps) => {
         <VotingPowerDetailWrapper>
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Block</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>{numeral(votingPowerState.height).format("0,0")}</VotingPowerDetailContent>
+            <VotingPowerDetailContent>{convertNumberFormat(votingPowerState.height, 0)}</VotingPowerDetailContent>
           </VotingPowerDetail>
 
           <VotingPowerDetail>
@@ -51,13 +51,13 @@ const VotingPowerCard = ({ votingPowerState }: IProps) => {
 
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Voting Power</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>{numeral(votingPowerState.votingPower).format("0,0")}</VotingPowerDetailContent>
+            <VotingPowerDetailContent>{convertNumberFormat(votingPowerState.votingPower, 0)}</VotingPowerDetailContent>
           </VotingPowerDetail>
 
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Total Voting Power</VotingPowerDetailTitle>
             <VotingPowerDetailContent>
-              {numeral(votingPowerState.totalVotingPower).format("0,0")}
+              {convertNumberFormat(votingPowerState.totalVotingPower, 0)}
             </VotingPowerDetailContent>
           </VotingPowerDetail>
         </VotingPowerDetailWrapper>

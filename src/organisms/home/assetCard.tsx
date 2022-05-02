@@ -1,5 +1,4 @@
 import React from "react";
-import numeral from "numeral";
 import { useSelector } from "react-redux";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList as List } from "react-window";
@@ -9,6 +8,7 @@ import { rootState } from "../../redux/reducers";
 import theme from "../../themes";
 import { BlankCard } from "../../components/card";
 import { AddressTitleTypo, ListWrapper, HeaderWrapper, HeaderColumn, ItemWrapper, ItemColumn } from "./styles";
+import { convertNumberFormat } from "../../utils/common";
 
 const Row = ({ data, index, style, tokenDataState }: any) => {
   const currentAsset = data[index];
@@ -27,7 +27,7 @@ const AssetCard = () => {
   const assetList = [
     ["FCT", balance],
     ...tokenList.map((data) => {
-      return [data.symbol, numeral(data.balance).format("0.000")];
+      return [data.symbol, convertNumberFormat(data.balance, 3)];
     }),
     ...nftList.map((data) => {
       return [`NFT #${data.id}`, "1"];

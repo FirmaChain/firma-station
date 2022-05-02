@@ -1,5 +1,4 @@
 import React from "react";
-import numeral from "numeral";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
 import { ITokenomicsState } from "./hooks";
@@ -23,6 +22,7 @@ import {
   TokenomicsDetailTitle,
   TokenomicsDetailContent,
 } from "./styles";
+import { convertNumberFormat } from "../../utils/common";
 
 interface IProps {
   tokenomicsState: ITokenomicsState;
@@ -35,7 +35,7 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <CustomTooltipContainer>
         <CustomTooltipTypo>{payload[0].payload.payload.legendKey}</CustomTooltipTypo>
-        <CustomTooltipTypo>{`${numeral(payload[0].value).format("0,0")} ${DENOM}`}</CustomTooltipTypo>
+        <CustomTooltipTypo>{`${convertNumberFormat(payload[0].value, 0)} ${DENOM}`}</CustomTooltipTypo>
       </CustomTooltipContainer>
     );
   }
@@ -48,24 +48,24 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
     {
       legendKey: "delegated",
       percentKey: "delegatedPercent",
-      value: numeral(tokenomicsState.delegated).format("0,0"),
+      value: convertNumberFormat(tokenomicsState.delegated, 0),
       rawValue: tokenomicsState.delegated,
-      percent: `${numeral((tokenomicsState.delegated * 100) / tokenomicsState.supply).format("0.00")}%`,
+      percent: `${convertNumberFormat((tokenomicsState.delegated * 100) / tokenomicsState.supply, 2)}%`,
       fill: theme.colors.mainblue,
     },
     {
       legendKey: "undelegated",
       percentKey: "undelegatedPercent",
-      value: numeral(tokenomicsState.undelegated).format("0,0"),
+      value: convertNumberFormat(tokenomicsState.undelegated, 0),
       rawValue: tokenomicsState.undelegated,
-      percent: `${numeral((tokenomicsState.undelegated * 100) / tokenomicsState.supply).format("0.00")}%`,
+      percent: `${convertNumberFormat((tokenomicsState.undelegated * 100) / tokenomicsState.supply, 2)}%`,
       fill: theme.colors.mainpurple,
     },
     {
       legendKey: "undelegate",
-      value: numeral(tokenomicsState.undelegate).format("0,0"),
+      value: convertNumberFormat(tokenomicsState.undelegate, 0),
       rawValue: tokenomicsState.undelegate,
-      percent: `${numeral((tokenomicsState.undelegate * 100) / tokenomicsState.supply).format("0.00")}%`,
+      percent: `${convertNumberFormat((tokenomicsState.undelegate * 100) / tokenomicsState.supply, 2)}%`,
       fill: theme.colors.maingreen,
     },
   ];
@@ -108,29 +108,33 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
         <TokenomicsDetailWrapper>
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Total Supply</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${numeral(tokenomicsState.supply).format(
-              "0,0"
+            <TokenomicsDetailContent>{`${convertNumberFormat(
+              tokenomicsState.supply,
+              0
             )} ${DENOM}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Delegated</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${numeral(tokenomicsState.delegated).format(
-              "0,0"
+            <TokenomicsDetailContent>{`${convertNumberFormat(
+              tokenomicsState.delegated,
+              0
             )} ${DENOM}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Undelegated</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${numeral(tokenomicsState.undelegated).format(
-              "0,0"
+            <TokenomicsDetailContent>{`${convertNumberFormat(
+              tokenomicsState.undelegated,
+              0
             )} ${DENOM}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Undelegate</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${numeral(tokenomicsState.undelegate).format(
-              "0,0"
+            <TokenomicsDetailContent>{`${convertNumberFormat(
+              tokenomicsState.undelegate,
+              0
             )} ${DENOM}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
         </TokenomicsDetailWrapper>
