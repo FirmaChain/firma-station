@@ -177,7 +177,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     for (let value in votingThemeData) {
       if (votingThemeData[value].key === "abstain") continue;
       result.push({
-        percent: `${convertNumberFormat(proposalState.tally[votingThemeData[value].key] / currentVoting, 2)}%`,
+        percent: `${convertNumberFormat(proposalState.tally[votingThemeData[value].key] / currentVoting * 100, 2)}%`,
         bgColor: votingThemeData[value].color,
       });
     }
