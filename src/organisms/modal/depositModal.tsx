@@ -73,7 +73,7 @@ const DepositModal = () => {
 
   const getMaxAmount = () => {
     const value = convertNumber(
-      makeDecimalPoint((convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee), 6))
+      makeDecimalPoint((convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)), 6)
     );
     return value > 0 ? value : 0;
   };
