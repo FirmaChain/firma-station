@@ -110,7 +110,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     let currentVoting = 0;
     for (let value in proposalState.tally) {
       if (value === "abstain") continue;
-      currentVoting += proposalState.tally[value];
+      currentVoting += convertNumber(proposalState.tally[value]);
     }
 
     return proposalState.tally[targetKey] / currentVoting;
@@ -155,7 +155,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     let currentVoting = 0;
     for (let value in tally) {
       if (value === "abstain") continue;
-      currentVoting += tally[value];
+      currentVoting += convertNumber(tally[value]);
     }
 
     return (currentVoting / totalVotingPower) * 100;
@@ -171,7 +171,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     let currentVoting = 0;
     for (let value in proposalState.tally) {
       if (value === "abstain") continue;
-      currentVoting += proposalState.tally[value];
+      currentVoting += convertNumber(proposalState.tally[value]);
     }
 
     for (let value in votingThemeData) {
