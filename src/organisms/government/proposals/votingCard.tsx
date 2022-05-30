@@ -227,7 +227,7 @@ const VotingCard = ({ proposalState }: IProps) => {
         <VotingDetailItem>
           <VotingLabel>Current Turnout</VotingLabel>
           <VotingContent bigSize={true}>
-            {convertNumberFormat(getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower), 2)}%
+            {getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower).toFixed(2)}%
           </VotingContent>
         </VotingDetailItem>
         <VotingGauge>
@@ -238,7 +238,7 @@ const VotingCard = ({ proposalState }: IProps) => {
             )}%`}
             multiList={getMultiGaugeList(proposalState)}
           ></MultiGauge>
-          <Quorum>
+          <Quorum percent={(proposalState.paramQuorum * 100).toFixed(2)}>
             <Arrow>▲</Arrow>
             Quorum
           </Quorum>
