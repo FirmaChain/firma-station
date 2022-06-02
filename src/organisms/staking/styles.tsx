@@ -59,13 +59,12 @@ export const Column = styled.div`
   }
   &:nth-child(3),
   &:nth-child(4),
-  &:nth-child(5),
-  &:nth-child(6) {
+  &:nth-child(5) {
     text-align: center;
     flex: 1 1 400px;
     min-width: 130px;
   }
-  &:nth-child(7) {
+  &:nth-child(6) {
     text-align: center;
     flex: 1 1 230px;
     min-width: 100px;
@@ -119,16 +118,14 @@ export const HeaderColumn = styled(Column)`
   &:nth-child(3),
   &:nth-child(4),
   &:nth-child(5),
-  &:nth-child(6),
-  &:nth-child(7) {
+  &:nth-child(6) {
     justify-content: center;
   }
   &:nth-child(2),
   &:nth-child(3),
   &:nth-child(4),
   &:nth-child(5),
-  &:nth-child(6),
-  &:nth-child(7) {
+  &:nth-child(6) {
     cursor: pointer;
   }
 `;

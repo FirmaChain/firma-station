@@ -1,13 +1,12 @@
-import React from "react";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { useMediaQuery } from "react-responsive";
-import { FixedSizeList as List } from "react-window";
-import { Link } from "react-router-dom";
+import React from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { useMediaQuery } from 'react-responsive';
+import { FixedSizeList as List } from 'react-window';
+import { Link } from 'react-router-dom';
 
-import { useAvataURL } from "../../header/hooks";
-import { IValidatorsState } from "../hooks";
-import { convertNumberFormat, convertToFctNumber } from "../../../utils/common";
-import { EXPLORER_URI } from "../../../config";
+import { useAvataURL } from '../../header/hooks';
+import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
+import { EXPLORER_URI } from '../../../config';
 
 import {
   DelegatorsCardWrapper,
@@ -22,18 +21,18 @@ import {
   ItemMobileColumn,
   ProfileImage2,
   DelegatorInfoMobile,
-} from "./styles";
+} from './styles';
 
 interface IProps {
-  validatorsState: IValidatorsState;
+  delegateState: any;
 }
 
 const Row = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
-  const { avatarURL, moniker } = useAvataURL(currentDelegator.address);
+  const { avatarURL, moniker } = useAvataURL(currentDelegator.delegatorAddress);
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={"_blank"}>
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn>
           <ProfileImage2 src={avatarURL} />
@@ -47,10 +46,10 @@ const Row = ({ data, index, style }: any) => {
 
 const RowMobile = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
-  const { avatarURL, moniker } = useAvataURL(currentDelegator.address);
+  const { avatarURL, moniker } = useAvataURL(currentDelegator.delegatorAddress);
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={"_blank"}>
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }} target={'_blank'}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
           <ProfileImage2 src={avatarURL} />
@@ -64,20 +63,12 @@ const RowMobile = ({ data, index, style }: any) => {
   );
 };
 
-const DelegatorsCard = ({ validatorsState }: IProps) => {
-  const isMobile = useMediaQuery({ query: "(min-width:0px) and (max-width:599px)" });
-
-  const getValidatorAddress = () => {
-    return window.location.pathname.replace("/staking/validators/", "");
-  };
-
-  const [targetValidatorData] = validatorsState.validators.filter(
-    (value: any) => value.validatorAddress === getValidatorAddress()
-  );
+const DelegatorsCard = ({ delegateState }: IProps) => {
+  const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 
   return (
     <DelegatorsCardWrapper>
-      {targetValidatorData && (
+      {delegateState && (
         <DelegatorList>
           <AutoSizer>
             {({ height, width }) => (
@@ -90,9 +81,9 @@ const DelegatorsCard = ({ validatorsState }: IProps) => {
                     <List
                       width={width}
                       height={height - 70}
-                      itemCount={targetValidatorData.delegations.length}
+                      itemCount={delegateState.delegateList.length}
                       itemSize={68}
-                      itemData={targetValidatorData.delegations.sort((a: any, b: any) =>
+                      itemData={delegateState.delegateList.sort((a: any, b: any) =>
                         a.amount > b.amount ? -1 : a.amount < b.amount ? 0 : 1
                       )}
                     >
@@ -109,9 +100,9 @@ const DelegatorsCard = ({ validatorsState }: IProps) => {
                     <List
                       width={width}
                       height={height - 70}
-                      itemCount={targetValidatorData.delegations.length}
+                      itemCount={delegateState.delegateList.length}
                       itemSize={50}
-                      itemData={targetValidatorData.delegations.sort((a: any, b: any) =>
+                      itemData={delegateState.delegateList.sort((a: any, b: any) =>
                         a.amount > b.amount ? -1 : a.amount < b.amount ? 0 : 1
                       )}
                     >

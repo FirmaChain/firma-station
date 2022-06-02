@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
 
 interface IQueryParam {
   onCompleted: (data: any) => void;
@@ -71,6 +71,26 @@ export const useTokenomicsQuery = ({ onCompleted }: IQueryParam) => {
   );
 };
 
+export const useDelegationsQuery = ({ onCompleted, address }: IQueryParam) => {
+  return useQuery(
+    gql`
+      query ValidatorDelegations($address: String!) {
+        delegations: action_validator_delegations(address: $address) {
+          delegations
+        }
+      }
+    `,
+    {
+      onCompleted,
+      pollInterval: 5000,
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        address,
+      },
+    }
+  );
+};
+
 export const useValidatorsQuery = ({ onCompleted }: IQueryParam) => {
   return useQuery(
     gql`
@@ -112,10 +132,6 @@ export const useValidatorsQuery = ({ onCompleted }: IQueryParam) => {
           }
           validatorCommissions: validator_commissions(order_by: { height: desc }, limit: 1) {
             commission
-          }
-          delegations {
-            amount
-            delegatorAddress: delegator_address
           }
           validatorSigningInfos: validator_signing_infos(order_by: { height: desc }, limit: 1) {
             missedBlocksCounter: missed_blocks_counter
@@ -259,7 +275,7 @@ export const useTransferHistoryByAddressQuery = ({ onCompleted, address }: IQuer
       notifyOnNetworkStatusChange: true,
       variables: {
         address,
-        types: "{cosmos.bank.v1beta1.MsgSend}",
+        types: '{cosmos.bank.v1beta1.MsgSend}',
         limit: 99999,
       },
     }
@@ -282,7 +298,6 @@ export const useAvataURLFromAddress = ({ onCompleted, address }: IQueryParam) =>
     `,
     {
       onCompleted,
-      pollInterval: 5000,
       notifyOnNetworkStatusChange: true,
       variables: {
         limit: 99999,

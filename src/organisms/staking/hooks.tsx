@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import gql from "graphql-tag";
-import { client } from "../../apollo";
+import { useState, useEffect, useRef } from 'react';
+import gql from 'graphql-tag';
+import { client } from '../../apollo';
 
-import useFirma from "../../utils/wallet";
-import { BLOCKS_PER_YEAR, COMMUNITY_POOL } from "../../config";
-import { convertNumber, convertToFctNumber, isValid, convertNumberFormat, makeDecimalPoint } from "../../utils/common";
-import { useValidatorsQuery } from "../../apollo/gqls";
+import useFirma from '../../utils/wallet';
+import { BLOCKS_PER_YEAR, COMMUNITY_POOL } from '../../config';
+import { convertNumber, convertToFctNumber, isValid, convertNumberFormat, makeDecimalPoint } from '../../utils/common';
+import { useValidatorsQuery, useDelegationsQuery } from '../../apollo/gqls';
 
 export interface IValidatorsState {
   totalVotingPower: number;
@@ -57,9 +57,20 @@ export interface ITargetStakingState {
   stakingReward: number;
 }
 
+export interface IDelegateInfo {
+  delegatorAddress: string;
+  amount: number;
+}
+
+export interface IDelegationState {
+  self: number;
+  selfPercent: number;
+  delegateList: Array<IDelegateInfo>;
+}
+
 export const useStakingDataFromTarget = () => {
   const { getStakingFromValidator } = useFirma();
-  const targetValidator = window.location.pathname.replace("/staking/validators/", "");
+  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
   const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
     available: 0,
@@ -69,7 +80,7 @@ export const useStakingDataFromTarget = () => {
   });
 
   useInterval(() => {
-    if (targetValidator !== "") {
+    if (targetValidator !== '') {
       getStakingFromValidator(targetValidator)
         .then((result: ITargetStakingState | undefined) => {
           if (result) setTargetStakingState(result);
@@ -80,6 +91,50 @@ export const useStakingDataFromTarget = () => {
 
   return {
     targetStakingState,
+  };
+};
+
+export const useDelegations = (validatorAddress: string, selfDelegateAddress: string | undefined) => {
+  const [delegateState, setDelegateState] = useState<IDelegationState>({
+    self: 0,
+    selfPercent: 0,
+    delegateList: [],
+  });
+
+  useDelegationsQuery({
+    address: validatorAddress,
+    onCompleted: (result) => {
+      const delegations = result.delegations.delegations;
+
+      if (delegations === undefined || delegations.length === 0) return;
+
+      let self = 0;
+      let totalDelegationAmount = 0;
+      let delegateList = [];
+
+      for (const delegate of delegations) {
+        const amount = convertNumber(delegate.coins[0].amount);
+        const delegatorAddress = delegate.delegator_address;
+
+        if (delegatorAddress === selfDelegateAddress) self = amount;
+
+        totalDelegationAmount += amount;
+
+        delegateList.push({ delegatorAddress, amount });
+      }
+
+      const selfPercent = (self / totalDelegationAmount) * 100;
+
+      setDelegateState({
+        self,
+        selfPercent,
+        delegateList,
+      });
+    },
+  });
+
+  return {
+    delegateState,
   };
 };
 
@@ -106,7 +161,7 @@ export const useStakingData = () => {
     getStaking()
       .then((result: ITotalStakingState | undefined) => {
         if (result) {
-          let queryIn = "";
+          let queryIn = '';
           for (let i = 0; i < result.delegateList.length; i++) {
             queryIn += `"${result.delegateList[i].validatorAddress}",`;
           }
@@ -209,7 +264,7 @@ export const useStakingData = () => {
       const { signed_blocks_window } = slashingParams;
 
       const inflation = convertNumber(data.inflation[0].value);
-      const totalSupply = convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount);
+      const totalSupply = convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === 'ufct')[0].amount);
 
       const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / BLOCKS_PER_YEAR);
       const mintCoinPerYear = mintCoinPerDay * 365;
@@ -226,10 +281,10 @@ export const useStakingData = () => {
         .map((validator: any) => {
           const validatorAddress = validator.validatorInfo.operatorAddress;
 
-          let validatorMoniker = "";
-          let validatorAvatar = "";
-          let validatorDetail = "";
-          let validatorWebsite = "";
+          let validatorMoniker = '';
+          let validatorAvatar = '';
+          let validatorDetail = '';
+          let validatorWebsite = '';
 
           if (isValid(validator.validator_descriptions[0])) {
             validatorMoniker = validator.validator_descriptions[0].moniker;
@@ -242,20 +297,7 @@ export const useStakingData = () => {
           const votingPower =
             validator.validatorVotingPowers.length === 0 ? 0 : validator.validatorVotingPowers[0].votingPower;
           const votingPowerPercent = convertNumberFormat(convertNumber((votingPower / totalVotingPower) * 100), 2);
-          const totalDelegations = validator.delegations.reduce((prev: number, current: any) => {
-            return prev + convertNumber(current.amount.amount);
-          }, 0);
-          const [selfDelegation] = validator.delegations.filter((y: any) => {
-            return y.delegatorAddress === validator.validatorInfo.selfDelegateAddress;
-          });
 
-          let self = 0;
-          if (selfDelegation) self = convertNumber(selfDelegation.amount.amount);
-
-          const selfPercent = convertNumberFormat(convertNumber((self / (totalDelegations || 1)) * 100), 2);
-          const delegations = validator.delegations.map((value: any) => {
-            return { address: value.delegatorAddress, amount: convertNumber(value.amount.amount) };
-          });
           const missedBlockCounter =
             validator.validatorSigningInfos.length === 0 ? 0 : validator.validatorSigningInfos[0].missedBlocksCounter;
           const commission = convertNumber(validator.validatorCommissions[0].commission * 100);
@@ -282,9 +324,6 @@ export const useStakingData = () => {
             votingPower,
             votingPowerPercent,
             commission,
-            self,
-            selfPercent,
-            delegations,
             condition,
             status,
             jailed,

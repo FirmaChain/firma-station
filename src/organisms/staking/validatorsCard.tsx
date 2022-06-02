@@ -64,7 +64,6 @@ const CustomRow = ({ currentValidator, index }: any) => {
           <MonikerTypo>{currentValidator.validatorMoniker}</MonikerTypo>
         </ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</ItemColumn>
-        <ItemColumn>{`${convertNumberFormat(currentValidator.selfPercent, 2)} %`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.commission, 2)} %`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.condition, 2)} %`}</ItemColumn>
         <ItemColumn>
@@ -110,10 +109,6 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
           <ValidatorInfo>
             <InfoLabel>Voting Power</InfoLabel>
             <InfoValue>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</InfoValue>
-          </ValidatorInfo>
-          <ValidatorInfo>
-            <InfoLabel>Self Delegation</InfoLabel>
-            <InfoValue>{`${convertNumberFormat(currentValidator.selfPercent, 2)} %`}</InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Commission</InfoLabel>
@@ -255,10 +250,6 @@ const Validators = ({ validatorsState }: IProps) => {
         <HeaderColumn onClick={() => changeOrder(1)}>
           Voting Power
           <SortArrow order={order} orderBy={orderBy} index={1} />
-        </HeaderColumn>
-        <HeaderColumn onClick={() => changeOrder(2)}>
-          Self Delegation
-          <SortArrow order={order} orderBy={orderBy} index={2} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(3)}>
           Commission
