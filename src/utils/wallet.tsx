@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { FirmaUtil } from '@firmachain/firma-js';
-import axios from 'axios';
 import moment from 'moment';
 
 import { Wallet } from './types';
-import { LCD_REST_URI, VESTING_ACCOUNTS } from '../config';
+import { VESTING_ACCOUNTS } from '../config';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
 import { rootState } from '../redux/reducers';
 import { userActions, walletActions } from '../redux/action';
@@ -349,6 +348,8 @@ function useFirma(isUsedState = true) {
           vestingPeriod: [],
         });
 
+        setVesting(false);
+        
         resolve({ totalVesting: 0, expiredVesting: 0 });
       }
     });
