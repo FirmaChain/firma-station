@@ -69,12 +69,16 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
     return convertToFctNumber(amount);
   };
 
+  const getMoniker = (moniker: string) => {
+    return moniker.length > 20? `${moniker.substring(0, 20)}...` : moniker;
+  };
+
   return (
     <DelegationItemWrapper style={style}>
       <DelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${data[index].validatorAddress}` }}>
           <ProfileImage2 src={validatorInfo.avatarURL} />
-          <MonikerTypo>{validatorInfo.moniker}</MonikerTypo>
+          <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
         </Link>
       </DelegationItemColumn>
       <DelegationItemColumn>{convertNumberFormat(getDelegateAmount(data[index].amount), 3)}</DelegationItemColumn>
@@ -87,11 +91,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
   const validatorInfo = data[index];
 
   const getMoniker = (moniker: string) => {
-    if (moniker.length > 12) {
-      return moniker.substr(0, 8) + "...";
-    } else {
-      return moniker;
-    }
+    return moniker.length > 15? `${moniker.substring(0, 15)}...` : moniker;
   };
 
   return (
@@ -119,12 +119,16 @@ const RedelegationRow = ({ data, index, style }: any) => {
 const UndelegationRow = ({ data, index, style }: any) => {
   const validatorInfo = data[index];
 
+  const getMoniker = (moniker: string) => {
+    return moniker.length > 30? `${moniker.substring(0, 30)}...` : moniker;
+  };
+
   return (
     <UndelegationItemWrapper style={style}>
       <UndelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.validatorAddress}` }}>
           <ProfileImage2 src={validatorInfo.avatarURL} />
-          <MonikerTypo>{validatorInfo.moniker}</MonikerTypo>
+          <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
         </Link>
       </UndelegationItemColumn>
       <UndelegationItemColumn>{convertNumberFormat(validatorInfo.balance, 3)}</UndelegationItemColumn>
