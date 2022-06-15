@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
 import {
   convertNumber,
   convertNumberFormat,
@@ -12,10 +12,10 @@ import {
   getFeesFromGas,
   isValid,
   makeDecimalPoint,
-} from "../../utils/common";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_UNDELEGATE } from "../../config";
+} from '../../utils/common';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_UNDELEGATE, SYMBOL } from '../../config';
 
 import {
   undelegateModalWidth,
@@ -31,7 +31,7 @@ import {
   ModalTooltipTypo,
   MaxButton,
   HelpIcon,
-} from "./styles";
+} from './styles';
 
 const UndelegateModal = () => {
   const undelegateModalState = useSelector((state: rootState) => state.modal.undelegate);
@@ -41,14 +41,14 @@ const UndelegateModal = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { undelegate, getGasEstimationUndelegate, setUserData } = useFirma(false);
 
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
 
-  const [availableAmount, setAvailableAmount] = useState("");
+  const [availableAmount, setAvailableAmount] = useState('');
 
   useEffect(() => {
     setAvailableAmount(
-      isValid(modalData.data) ? convertNumberFormat(convertToFctNumber(modalData.data.delegation.amount), 3) : "0"
+      isValid(modalData.data) ? convertNumberFormat(convertToFctNumber(modalData.data.delegation.amount), 3) : '0'
     );
   }, [undelegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -58,7 +58,7 @@ const UndelegateModal = () => {
   };
 
   const resetModal = () => {
-    setAmount("");
+    setAmount('');
   };
 
   const onClickMaxAmount = () => {
@@ -72,10 +72,10 @@ const UndelegateModal = () => {
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
 
-    let amount: string = value.replace(/[^0-9.]/g, "");
+    let amount: string = value.replace(/[^0-9.]/g, '');
 
-    if (amount === "") {
-      setAmount("");
+    if (amount === '') {
+      setAmount('');
       return;
     }
 
@@ -121,7 +121,7 @@ const UndelegateModal = () => {
 
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
-            action: "Undelegate",
+            action: 'Undelegate',
             data: { amount: amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalUndelegate,
             txAction: undelegateTx,
@@ -129,15 +129,15 @@ const UndelegateModal = () => {
 
           modalActions.handleModalConfirmTx(true);
         } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         }
       })
       .catch((e) => {
         enqueueSnackbar(e, {
-          variant: "error",
+          variant: 'error',
           autoHideDuration: 5000,
         });
         if (isLedger) modalActions.handleModalGasEstimation(false);
@@ -153,17 +153,19 @@ const UndelegateModal = () => {
         </ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{availableAmount} FCT</ModalInput>
+          <ModalInput>
+            {availableAmount} {SYMBOL}
+          </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
+          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} ${SYMBOL}`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>
             <MaxButton active={true} onClick={onClickMaxAmount}>
               Max
             </MaxButton>
-            <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
+            <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
           </ModalInput>
 
           <ModalTooltipWrapper>

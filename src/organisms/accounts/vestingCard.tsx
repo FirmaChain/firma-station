@@ -1,12 +1,12 @@
-import React from "react";
-import moment from "moment";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List } from "react-window";
+import React from 'react';
+import moment from 'moment';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList as List } from 'react-window';
 
-import { IVesting } from "../../redux/reducers/userReducer";
+import { IVesting } from '../../redux/reducers/userReducer';
 
-import theme from "../../themes";
-import { BlankCard } from "../../components/card";
+import theme from '../../themes';
+import { BlankCard } from '../../components/card';
 import {
   ListWrapper,
   ItemWrapper3,
@@ -15,8 +15,9 @@ import {
   HeaderColumn3,
   TitleTypo,
   VestingTotal,
-} from "./styles";
-import { convertToFctString, convertToFctNumber, convertNumberFormat } from "../../utils/common";
+} from './styles';
+import { SYMBOL } from '../../config';
+import { convertToFctString, convertToFctNumber, convertNumberFormat } from '../../utils/common';
 
 interface IProps {
   vestingState: IVesting;
@@ -28,19 +29,19 @@ const Row = ({ data, index, style }: any) => {
   const getTimestamp = (timestamp: number) => {
     return moment(timestamp * 1000)
       .utc()
-      .format("YYYY-MM-DD HH:mm:ss+00:00");
+      .format('YYYY-MM-DD HH:mm:ss+00:00');
   };
 
   const getAmount = (amount: string) => {
-    return convertNumberFormat(convertToFctString(amount), 3) + " FCT";
+    return convertNumberFormat(convertToFctString(amount), 3) + ` ${SYMBOL}`;
   };
 
   const getStatus = (status: any) => {
     switch (status) {
       case 0:
-        return <span style={{ color: "#707070" }}>{"LOCKED"}</span>;
+        return <span style={{ color: '#707070' }}>{'LOCKED'}</span>;
       case 1:
-        return <span style={{ color: "#f4b017" }}>{"UNLOCKED"}</span>;
+        return <span style={{ color: '#f4b017' }}>{'UNLOCKED'}</span>;
     }
   };
 

@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
+import useFirma from '../../utils/wallet';
 import {
   convertNumber,
   convertToFctNumber,
   convertToFctString,
   getFeesFromGas,
   makeDecimalPoint,
-} from "../../utils/common";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_DELEGATE } from "../../config";
+} from '../../utils/common';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_DELEGATE, SYMBOL } from '../../config';
 
-import { ToggleButton } from "../../components/toggle";
+import { ToggleButton } from '../../components/toggle';
 
 import {
   delegateModalWidth,
@@ -32,7 +32,7 @@ import {
   ModalTooltipTypo,
   MaxButton,
   HelpIcon,
-} from "./styles";
+} from './styles';
 
 const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
@@ -43,9 +43,9 @@ const DelegateModal = () => {
 
   const { delegate, getGasEstimationDelegate, setUserData } = useFirma(false);
 
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
-  const [availableAmount, setAvailableAmount] = useState("");
+  const [availableAmount, setAvailableAmount] = useState('');
   const [isSafety, setSafety] = useState(true);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const DelegateModal = () => {
   };
 
   const resetModal = () => {
-    setAmount("");
+    setAmount('');
   };
 
   const onClickMaxAmount = () => {
@@ -85,10 +85,10 @@ const DelegateModal = () => {
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
 
-    let amount: string = value.replace(/[^0-9.]/g, "");
+    let amount: string = value.replace(/[^0-9.]/g, '');
 
-    if (amount === "") {
-      setAmount("");
+    if (amount === '') {
+      setAmount('');
       return;
     }
 
@@ -135,7 +135,7 @@ const DelegateModal = () => {
 
         if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
-            action: "Delegate",
+            action: 'Delegate',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalDelegate,
             txAction: delegateTx,
@@ -143,15 +143,15 @@ const DelegateModal = () => {
 
           modalActions.handleModalConfirmTx(true);
         } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         }
       })
       .catch((e) => {
         enqueueSnackbar(e, {
-          variant: "error",
+          variant: 'error',
           autoHideDuration: 5000,
         });
         if (isLedger) modalActions.handleModalGasEstimation(false);
@@ -167,26 +167,29 @@ const DelegateModal = () => {
         </ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{availableAmount} FCT</ModalInput>
+          <ModalInput>
+            {availableAmount} {SYMBOL}
+          </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
+          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} ${SYMBOL}`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
-          <ModalInput style={{ marginBottom: "10px" }}>
+          <ModalInput style={{ marginBottom: '10px' }}>
             <MaxButton active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
               Max
             </MaxButton>
-            <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
+            <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
           </ModalInput>
 
           <ModalToggleWrapper>
-            <ToggleButton toggleText="Safety" isActive={isSafety} onClickToggle={onClickToggle} />
+            <ToggleButton toggleText='Safety' isActive={isSafety} onClickToggle={onClickToggle} />
             {isSafety && (
               <ModalTooltipWrapper>
                 <ModalTooltipIcon />
                 <ModalTooltipTypo>
-                  The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
+                  The entire amount is automatically entered except 0.1{SYMBOL}, which will be used as a transaction
+                  fee.
                 </ModalTooltipTypo>
               </ModalTooltipWrapper>
             )}

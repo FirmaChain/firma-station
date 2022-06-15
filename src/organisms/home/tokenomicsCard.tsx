@@ -1,10 +1,10 @@
-import React from "react";
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import React from 'react';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
-import { ITokenomicsState } from "./hooks";
+import { ITokenomicsState } from './hooks';
 
-import theme from "../../themes";
-import { BlankCard } from "../../components/card";
+import theme from '../../themes';
+import { BlankCard } from '../../components/card';
 
 import {
   TokenomicsTitleTypo,
@@ -21,21 +21,20 @@ import {
   TokenomicsDetail,
   TokenomicsDetailTitle,
   TokenomicsDetailContent,
-} from "./styles";
-import { convertNumberFormat } from "../../utils/common";
+} from './styles';
+import { SYMBOL } from '../../config';
+import { convertNumberFormat } from '../../utils/common';
 
 interface IProps {
   tokenomicsState: ITokenomicsState;
 }
-
-const DENOM = "FCT";
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
       <CustomTooltipContainer>
         <CustomTooltipTypo>{payload[0].payload.payload.legendKey}</CustomTooltipTypo>
-        <CustomTooltipTypo>{`${convertNumberFormat(payload[0].value, 0)} ${DENOM}`}</CustomTooltipTypo>
+        <CustomTooltipTypo>{`${convertNumberFormat(payload[0].value, 0)} ${SYMBOL}`}</CustomTooltipTypo>
       </CustomTooltipContainer>
     );
   }
@@ -46,23 +45,23 @@ const CustomTooltip = ({ active, payload }: any) => {
 const TokenomicsCard = ({ tokenomicsState }: IProps) => {
   const data = [
     {
-      legendKey: "delegated",
-      percentKey: "delegatedPercent",
+      legendKey: 'delegated',
+      percentKey: 'delegatedPercent',
       value: convertNumberFormat(tokenomicsState.delegated, 0),
       rawValue: tokenomicsState.delegated,
       percent: `${convertNumberFormat((tokenomicsState.delegated * 100) / tokenomicsState.supply, 2)}%`,
       fill: theme.colors.mainblue,
     },
     {
-      legendKey: "undelegated",
-      percentKey: "undelegatedPercent",
+      legendKey: 'undelegated',
+      percentKey: 'undelegatedPercent',
       value: convertNumberFormat(tokenomicsState.undelegated, 0),
       rawValue: tokenomicsState.undelegated,
       percent: `${convertNumberFormat((tokenomicsState.undelegated * 100) / tokenomicsState.supply, 2)}%`,
       fill: theme.colors.mainpurple,
     },
     {
-      legendKey: "undelegate",
+      legendKey: 'undelegate',
       value: convertNumberFormat(tokenomicsState.undelegate, 0),
       rawValue: tokenomicsState.undelegate,
       percent: `${convertNumberFormat((tokenomicsState.undelegate * 100) / tokenomicsState.supply, 2)}%`,
@@ -71,7 +70,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
   ];
 
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height={"100%"}>
+    <BlankCard bgColor={theme.colors.backgroundSideBar} height={'100%'}>
       <TokenomicsTitleTypo>Tokenomics</TokenomicsTitleTypo>
       <TokenomicsContainer>
         <PichartWrapper>
@@ -83,8 +82,8 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
                 startAngle={180}
                 endAngle={0}
                 outerRadius={95}
-                dataKey="rawValue"
-                stroke={"0"}
+                dataKey='rawValue'
+                stroke={'0'}
                 isAnimationActive={false}
               >
                 {data.map((entry) => {
@@ -111,7 +110,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
             <TokenomicsDetailContent>{`${convertNumberFormat(
               tokenomicsState.supply,
               0
-            )} ${DENOM}`}</TokenomicsDetailContent>
+            )} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
@@ -119,7 +118,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
             <TokenomicsDetailContent>{`${convertNumberFormat(
               tokenomicsState.delegated,
               0
-            )} ${DENOM}`}</TokenomicsDetailContent>
+            )} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
@@ -127,7 +126,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
             <TokenomicsDetailContent>{`${convertNumberFormat(
               tokenomicsState.undelegated,
               0
-            )} ${DENOM}`}</TokenomicsDetailContent>
+            )} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
@@ -135,7 +134,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
             <TokenomicsDetailContent>{`${convertNumberFormat(
               tokenomicsState.undelegate,
               0
-            )} ${DENOM}`}</TokenomicsDetailContent>
+            )} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
         </TokenomicsDetailWrapper>
       </TokenomicsContainer>

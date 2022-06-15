@@ -1,13 +1,13 @@
-import React from "react";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { useMediaQuery } from "react-responsive";
-import { FixedSizeList as List } from "react-window";
-import { Link } from "react-router-dom";
+import React from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { useMediaQuery } from 'react-responsive';
+import { FixedSizeList as List } from 'react-window';
+import { Link } from 'react-router-dom';
 
-import { useAvataURL } from "../../header/hooks";
-import { IValidatorsState } from "../hooks";
-import { convertNumberFormat, convertToFctNumber } from "../../../utils/common";
-import { EXPLORER_URI } from "../../../config";
+import { useAvataURL } from '../../header/hooks';
+import { IValidatorsState } from '../hooks';
+import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
+import { EXPLORER_URI, SYMBOL } from '../../../config';
 
 import {
   DelegatorsCardWrapper,
@@ -22,7 +22,7 @@ import {
   ItemMobileColumn,
   ProfileImage2,
   DelegatorInfoMobile,
-} from "./styles";
+} from './styles';
 
 interface IProps {
   validatorsState: IValidatorsState;
@@ -33,13 +33,13 @@ const Row = ({ data, index, style }: any) => {
   const { avatarURL, moniker } = useAvataURL(currentDelegator.address);
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={"_blank"}>
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn>
           <ProfileImage2 src={avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${moniker}`}</ItemColumn>
-        <ItemColumn>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} FCT`}</ItemColumn>
+        <ItemColumn>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${SYMBOL}`}</ItemColumn>
       </ItemWrapper>
     </Link>
   );
@@ -50,13 +50,13 @@ const RowMobile = ({ data, index, style }: any) => {
   const { avatarURL, moniker } = useAvataURL(currentDelegator.address);
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={"_blank"}>
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.address}` }} target={'_blank'}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
           <ProfileImage2 src={avatarURL} />
           <DelegatorInfoMobile>
             <div>{`${moniker}`}</div>
-            <div>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} FCT`}</div>
+            <div>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${SYMBOL}`}</div>
           </DelegatorInfoMobile>
         </ItemMobileColumn>
       </ItemMobileWrapper>
@@ -65,10 +65,10 @@ const RowMobile = ({ data, index, style }: any) => {
 };
 
 const DelegatorsCard = ({ validatorsState }: IProps) => {
-  const isMobile = useMediaQuery({ query: "(min-width:0px) and (max-width:599px)" });
+  const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 
   const getValidatorAddress = () => {
-    return window.location.pathname.replace("/staking/validators/", "");
+    return window.location.pathname.replace('/staking/validators/', '');
   };
 
   const [targetValidatorData] = validatorsState.validators.filter(

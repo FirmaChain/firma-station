@@ -1,20 +1,19 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import { FirmaUtil } from "@firmachain/firma-js";
-import axios from "axios";
-import moment from "moment";
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import { FirmaUtil } from '@firmachain/firma-js';
+import moment from 'moment';
 
-import { Wallet } from "./types";
-import { LCD_REST_URI } from "../config";
-import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from "./common";
-import { rootState } from "../redux/reducers";
-import { userActions, walletActions } from "../redux/action";
-import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from "./keyBridge";
-import { FirmaPaperWallet } from "../paperwallet";
-import { FirmaSDKInternal } from "./firmaSDK";
+import { Wallet } from './types';
+import { DENOM, SYMBOL, VESTING_ACCOUNTS } from '../config';
+import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
+import { rootState } from '../redux/reducers';
+import { userActions, walletActions } from '../redux/action';
+import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from './keyBridge';
+import { FirmaPaperWallet } from '../paperwallet';
+import { FirmaSDKInternal } from './firmaSDK';
 
-import { ITotalStakingState, ITargetStakingState } from "../organisms/staking/hooks";
+import { ITotalStakingState, ITargetStakingState } from '../organisms/staking/hooks';
 
 function useFirma(isUsedState = true) {
   const { enqueueSnackbar } = useSnackbar();
@@ -32,21 +31,21 @@ function useFirma(isUsedState = true) {
   };
 
   const getDecryptPrivateKey = (): string => {
-    if (!isInit) throw new Error("INVALID WALLET");
+    if (!isInit) throw new Error('INVALID WALLET');
 
     const wallet = restoreWalletInternal(timeKey);
 
     if (wallet?.privateKey !== undefined) return wallet.privateKey;
-    else throw new Error("INVALID WALLET");
+    else throw new Error('INVALID WALLET');
   };
 
   const getDecryptMnemonic = (): string => {
-    if (!isInit) throw new Error("INVALID WALLET");
+    if (!isInit) throw new Error('INVALID WALLET');
 
     const wallet = restoreWalletInternal(timeKey);
 
     if (wallet?.mnemonic !== undefined) return wallet.mnemonic;
-    else return "";
+    else return '';
   };
 
   const FirmaSDK = FirmaSDKInternal({ isLedger, getDecryptPrivateKey });
@@ -80,21 +79,21 @@ function useFirma(isUsedState = true) {
     initWallet(true);
   };
 
-  const storeWalletFromMnemonic = async (password: string, mnemonic: string, newTimeKey: string = "") => {
+  const storeWalletFromMnemonic = async (password: string, mnemonic: string, newTimeKey: string = '') => {
     const firmaSDK = FirmaSDK.getSDK();
     const walletService = await firmaSDK.Wallet.fromMnemonic(mnemonic);
     const privateKey = walletService.getPrivateKey();
     const address = await walletService.getAddress();
 
-    storeWalletInternal(password, mnemonic, privateKey, address, newTimeKey !== "" ? newTimeKey : timeKey);
+    storeWalletInternal(password, mnemonic, privateKey, address, newTimeKey !== '' ? newTimeKey : timeKey);
   };
 
-  const storeWalletFromPrivateKey = async (password: string, privateKey: string, newTimeKey: string = "") => {
+  const storeWalletFromPrivateKey = async (password: string, privateKey: string, newTimeKey: string = '') => {
     const firmaSDK = FirmaSDK.getSDK();
     const walletService = await firmaSDK.Wallet.fromPrivateKey(privateKey);
     const address = await walletService.getAddress();
 
-    storeWalletInternal(password, "", privateKey, address, newTimeKey !== "" ? newTimeKey : timeKey);
+    storeWalletInternal(password, '', privateKey, address, newTimeKey !== '' ? newTimeKey : timeKey);
   };
 
   const connectLedger = async () => {
@@ -106,13 +105,13 @@ function useFirma(isUsedState = true) {
         walletActions.handleWalletLedger(true);
         initWallet(true);
       } else {
-        enqueueSnackbar("Failed connect ledger", {
-          variant: "error",
+        enqueueSnackbar('Failed connect ledger', {
+          variant: 'error',
           autoHideDuration: 5000,
         });
       }
     } catch (e) {
-      console.log("ERROR : " + e);
+      console.log('ERROR : ' + e);
     }
   };
 
@@ -143,7 +142,7 @@ function useFirma(isUsedState = true) {
 
     walletActions.handleWalletTimeKey(timeKey);
 
-    if (wallet.mnemonic !== "") {
+    if (wallet.mnemonic !== '') {
       await storeWalletFromMnemonic(password, wallet.mnemonic, timeKey);
     } else {
       await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
@@ -157,20 +156,20 @@ function useFirma(isUsedState = true) {
   const resetWallet = () => {
     initWallet(false);
 
-    walletActions.handleWalletAddress("");
+    walletActions.handleWalletAddress('');
     walletActions.handleWalletLedger(false);
     walletActions.handleWalletTimeKey(getRandomKey());
 
     userActions.handleUserNFTList([]);
-    userActions.handleUserBalance("0");
+    userActions.handleUserBalance('0');
     userActions.handleUserTokenList([]);
 
     clearKey();
   };
 
   const getAddressInternal = (): string => {
-    if (!isInit) throw new Error("INVALID WALLET");
-    if (!isValidString(address)) throw new Error("INVALID WALLET");
+    if (!isInit) throw new Error('INVALID WALLET');
+    if (!isValidString(address)) throw new Error('INVALID WALLET');
 
     return address;
   };
@@ -192,7 +191,7 @@ function useFirma(isUsedState = true) {
     });
 
     let base64URI = null;
-    if (mnemonic === "") {
+    if (mnemonic === '') {
       base64URI = await paperWallet.privatekeyToDataURI();
     } else {
       base64URI = await paperWallet.mnemonicToDataURI();
@@ -209,6 +208,8 @@ function useFirma(isUsedState = true) {
 
     for (let token of tokenList) {
       try {
+        if (token.denom === DENOM) continue;
+
         const tokenData = await firmaSDK.Token.getTokenData(token.denom);
         tokenDataList.push({
           denom: token.denom,
@@ -283,7 +284,7 @@ function useFirma(isUsedState = true) {
       const newbalance = convertToFctNumber(availableBalance);
 
       userActions.handleUserNFTList([]);
-      userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : "0");
+      userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : '0');
       userActions.handleUserTokenList(tokenDataList);
 
       getRedelegationList();
@@ -293,78 +294,75 @@ function useFirma(isUsedState = true) {
 
   const getVestingAccount = async () => {
     return new Promise((resolve, reject) => {
-      if (isVesting === false || address === "") {
+      if (isVesting === false || address === '') {
         resolve({ totalVesting: 0, expiredVesting: 0 });
         return;
       }
 
-      axios
-        .get(`${LCD_REST_URI}/cosmos/auth/v1beta1/accounts/${address}`, {
-          validateStatus: (status) => {
-            return (status >= 200 && status < 300) || status === 404;
-          },
-        })
-        .then((res) => {
+      let isChecked = false;
+
+      if (VESTING_ACCOUNTS.length > 0) {
+        for (let account of VESTING_ACCOUNTS) {
           if (
-            res.status !== 404 &&
-            res.data.account &&
-            res.data.account["@type"] === "/cosmos.vesting.v1beta1.PeriodicVestingAccount"
+            account['base_vesting_account']['base_account']['address'] === address &&
+            account['@type'] === '/cosmos.vesting.v1beta1.PeriodicVestingAccount'
           ) {
-            let endTimeAcc = res.data.account.start_time * 1;
+            let endTimeAcc = convertNumber(account['start_time']) * 1;
             let expiredVesting = 0;
 
-            const vestingPeriod = res.data.account.vesting_periods.map((value: any) => {
-              endTimeAcc += value.length * 1;
+            const periods: any[] = account['vesting_periods'];
 
-              let status = 0;
+            if (periods !== undefined) {
+              const vestingPeriod = periods.map((value: any) => {
+                endTimeAcc += value.length * 1;
 
-              if (endTimeAcc <= moment().unix()) {
-                expiredVesting += value.amount[0].amount * 1;
-                status = 1;
-              }
+                let status = 0;
 
-              return {
-                endTime: endTimeAcc,
-                amount: value.amount[0].amount * 1,
-                status,
-              };
-            });
+                if (endTimeAcc <= moment().unix()) {
+                  expiredVesting += value.amount[0].amount * 1;
+                  status = 1;
+                }
 
-            const totalVesting = res.data.account.base_vesting_account.original_vesting[0].amount * 1;
+                return {
+                  endTime: endTimeAcc,
+                  amount: value.amount[0].amount * 1,
+                  status,
+                };
+              });
 
-            resolve({ totalVesting, expiredVesting });
+              const totalVesting = convertNumber(account['base_vesting_account']['original_vesting'][0]['amount']);
 
-            userActions.handleUserVesting({
-              totalVesting,
-              expiredVesting,
-              vestingPeriod,
-            });
-          } else {
-            isUsedState && setVesting(false);
-            userActions.handleUserVesting({
-              totalVesting: 0,
-              expiredVesting: 0,
-              vestingPeriod: [],
-            });
+              resolve({ totalVesting, expiredVesting });
 
-            resolve({ totalVesting: 0, expiredVesting: 0 });
+              userActions.handleUserVesting({
+                totalVesting,
+                expiredVesting,
+                vestingPeriod,
+              });
+
+              isChecked = true;
+              break;
+            }
           }
-        })
-        .catch((e) => {
-          isUsedState && setVesting(false);
-          userActions.handleUserVesting({
-            totalVesting: 0,
-            expiredVesting: 0,
-            vestingPeriod: [],
-          });
+        }
+      }
 
-          resolve({ totalVesting: 0, expiredVesting: 0 });
+      if (isChecked === false) {
+        userActions.handleUserVesting({
+          totalVesting: 0,
+          expiredVesting: 0,
+          vestingPeriod: [],
         });
+
+        setVesting(false);
+
+        resolve({ totalVesting: 0, expiredVesting: 0 });
+      }
     });
   };
 
   const getTokenData = async (denom: string) => {
-    if (denom !== "ufct") {
+    if (denom !== DENOM) {
       const firmaSDK = FirmaSDK.getSDK();
       const tokenData = await firmaSDK.Token.getTokenData(denom);
 
@@ -376,8 +374,8 @@ function useFirma(isUsedState = true) {
     }
 
     return {
-      denom: "ufct",
-      symbol: "FCT",
+      denom: DENOM,
+      symbol: SYMBOL,
       decimal: 6,
     };
   };
@@ -398,7 +396,7 @@ function useFirma(isUsedState = true) {
         delegatorAddress: value.delegation.delegator_address,
         amount: convertNumber(value.balance.amount),
         moniker: value.delegation.validator_address,
-        avatarURL: "",
+        avatarURL: '',
       };
     });
 
@@ -511,11 +509,11 @@ function useFirma(isUsedState = true) {
 
         parseList.push({
           srcAddress,
-          srcMoniker: "",
-          srcAvatarURL: "",
+          srcMoniker: '',
+          srcAvatarURL: '',
           dstAddress,
-          dstMoniker: "",
-          dstAvatarURL: "",
+          dstMoniker: '',
+          dstAvatarURL: '',
           balance,
           completionTime,
         });
@@ -545,8 +543,8 @@ function useFirma(isUsedState = true) {
 
         parseList.push({
           validatorAddress,
-          moniker: "",
-          avatarURL: "",
+          moniker: '',
+          avatarURL: '',
           balance,
           completionTime,
         });
@@ -578,13 +576,13 @@ function useFirma(isUsedState = true) {
     return delegation;
   };
 
-  const sendFCT = async (address: string, amount: string, memo = "", estimatedGas: number) => {
+  const sendFCT = async (address: string, amount: string, memo = '', estimatedGas: number) => {
     const result = await FirmaSDK.send(address, convertNumber(amount), memo, estimatedGas);
 
     checkVlidateResult(result);
   };
 
-  const getGasEstimationSendFCT = async (address: string, amount: string, memo = "") => {
+  const getGasEstimationSendFCT = async (address: string, amount: string, memo = '') => {
     return await FirmaSDK.getGasEstimationSend(address, convertNumber(amount), memo);
   };
 
@@ -593,7 +591,7 @@ function useFirma(isUsedState = true) {
     amount: string,
     tokenID: string,
     decimal: number,
-    memo = "",
+    memo = '',
     estimatedGas: number
   ) => {
     const result = await FirmaSDK.sendToken(address, tokenID, convertNumber(amount), decimal, memo, estimatedGas);
@@ -606,7 +604,7 @@ function useFirma(isUsedState = true) {
     amount: string,
     tokenID: string,
     decimal: number,
-    memo = ""
+    memo = ''
   ) => {
     return await FirmaSDK.getGasEstimationSendToken(address, tokenID, convertNumber(amount), decimal, memo);
   };
@@ -808,17 +806,17 @@ function useFirma(isUsedState = true) {
     if (result.code === undefined) {
       console.log(result);
       enqueueSnackbar(JSON.stringify(result), {
-        variant: "error",
+        variant: 'error',
         autoHideDuration: 5000,
       });
-      throw new Error("INVALID TX");
+      throw new Error('INVALID TX');
     } else if (result.code !== 0) {
       console.log(result);
       enqueueSnackbar(JSON.stringify(result), {
-        variant: "error",
+        variant: 'error',
         autoHideDuration: 5000,
       });
-      throw new Error("FAILED TX");
+      throw new Error('FAILED TX');
     }
   };
 

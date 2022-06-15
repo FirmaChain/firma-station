@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
+import useFirma from '../../utils/wallet';
 import {
   convertNumber,
   convertToFctNumber,
   convertToFctString,
   getFeesFromGas,
   makeDecimalPoint,
-} from "../../utils/common";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG } from "../../config";
+} from '../../utils/common';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { FIRMACHAIN_CONFIG, SYMBOL } from '../../config';
 
 import {
   depositModalWidth,
@@ -24,7 +24,7 @@ import {
   ModalInput,
   NextButton,
   InputBoxDefault,
-} from "./styles";
+} from './styles';
 
 const DepositModal = () => {
   const depositModalState = useSelector((state: rootState) => state.modal.deposit);
@@ -35,7 +35,7 @@ const DepositModal = () => {
 
   const { deposit, getGasEstimationDeposit, setUserData } = useFirma(false);
 
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
 
   const closeModal = () => {
@@ -44,16 +44,16 @@ const DepositModal = () => {
   };
 
   const resetModal = () => {
-    setAmount("");
+    setAmount('');
   };
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
 
-    let amount: string = value.replace(/[^0-9.]/g, "");
+    let amount: string = value.replace(/[^0-9.]/g, '');
 
-    if (amount === "") {
-      setAmount("");
+    if (amount === '') {
+      setAmount('');
       return;
     }
 
@@ -73,7 +73,7 @@ const DepositModal = () => {
 
   const getMaxAmount = () => {
     const value = convertNumber(
-      makeDecimalPoint((convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)), 6)
+      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee), 6)
     );
     return value > 0 ? value : 0;
   };
@@ -100,7 +100,7 @@ const DepositModal = () => {
 
         if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
-            action: "Deposit",
+            action: 'Deposit',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalDeposit,
             txAction: depositTx,
@@ -108,15 +108,15 @@ const DepositModal = () => {
 
           modalActions.handleModalConfirmTx(true);
         } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         }
       })
       .catch((e) => {
         enqueueSnackbar(e, {
-          variant: "error",
+          variant: 'error',
           autoHideDuration: 5000,
         });
         if (isLedger) modalActions.handleModalGasEstimation(false);
@@ -129,14 +129,16 @@ const DepositModal = () => {
         <ModalTitle>DEPOSIT</ModalTitle>
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
-          <ModalInput>{balance} FCT</ModalInput>
+          <ModalInput>
+            {balance} {SYMBOL}
+          </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
+          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} ${SYMBOL}`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>
-            <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
+            <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
           </ModalInput>
           <NextButton
             onClick={() => {

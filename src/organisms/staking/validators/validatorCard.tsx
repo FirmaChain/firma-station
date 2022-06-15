@@ -1,8 +1,8 @@
-import React from "react";
-import { useSnackbar } from "notistack";
+import React from 'react';
+import { useSnackbar } from 'notistack';
 
-import { IValidatorsState } from "../hooks";
-import { EXPLORER_URI } from "../../../config";
+import { IValidatorsState } from '../hooks';
+import { EXPLORER_URI, SYMBOL } from '../../../config';
 
 import {
   ValidatorCardWrapper,
@@ -24,8 +24,8 @@ import {
   AddressInfoValue,
   CopyIconImg,
   LeftWrapper,
-} from "./styles";
-import { convertNumberFormat, convertToFctNumber, copyToClipboard, makeDecimalPoint } from "../../../utils/common";
+} from './styles';
+import { convertNumberFormat, convertToFctNumber, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
 
 interface IProps {
   validatorsState: IValidatorsState;
@@ -34,7 +34,7 @@ interface IProps {
 const ValidatorCard = ({ validatorsState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const getValidatorAddress = () => {
-    return window.location.pathname.replace("/staking/validators/", "");
+    return window.location.pathname.replace('/staking/validators/', '');
   };
 
   const [targetValidatorData] = validatorsState.validators.filter(
@@ -44,28 +44,28 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
   const clipboard = (value: string) => {
     copyToClipboard(value);
 
-    enqueueSnackbar("Copied", {
-      variant: "success",
+    enqueueSnackbar('Copied', {
+      variant: 'success',
       autoHideDuration: 1000,
     });
   };
 
   const formatCash = (n: any) => {
-    let result = "";
+    let result = '';
 
     if (n < 1e3) {
       result = makeDecimalPoint(n, 2);
     } else if (n >= 1e3 && n < 1e6) {
-      result = +makeDecimalPoint(n / 1e3, 2) + "K";
+      result = +makeDecimalPoint(n / 1e3, 2) + 'K';
     } else if (n >= 1e6 && n < 1e9) {
-      result = +makeDecimalPoint(n / 1e6, 2) + "M";
+      result = +makeDecimalPoint(n / 1e6, 2) + 'M';
     } else if (n >= 1e9 && n < 1e12) {
-      result = +makeDecimalPoint(n / 1e9, 2) + "B";
+      result = +makeDecimalPoint(n / 1e9, 2) + 'B';
     } else if (n >= 1e12) {
-      result = +makeDecimalPoint(n / 1e12, 2) + "T";
+      result = +makeDecimalPoint(n / 1e12, 2) + 'T';
     }
 
-    if (result.length > 10) result = "infinity";
+    if (result.length > 10) result = 'infinity';
 
     return result;
   };
@@ -84,7 +84,7 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
                 <DescriptionTypo>
                   <div>{targetValidatorData.validatorDetail}</div>
                   {targetValidatorData.validatorWebsite && (
-                    <LinkTypo href={targetValidatorData.validatorWebsite} target="_blank">
+                    <LinkTypo href={targetValidatorData.validatorWebsite} target='_blank'>
                       {targetValidatorData.validatorWebsite}
                     </LinkTypo>
                   )}
@@ -117,7 +117,10 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
             <StatusItem>
               <StatusTitle>Voting Power</StatusTitle>
               <StatusContent>{`${convertNumberFormat(targetValidatorData.votingPowerPercent, 2)} %`}</StatusContent>
-              <StatusSubContent>{`${convertNumberFormat(targetValidatorData.votingPower, 2)} FCT`}</StatusSubContent>
+              <StatusSubContent>{`${convertNumberFormat(
+                targetValidatorData.votingPower,
+                2
+              )} ${SYMBOL}`}</StatusSubContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Self-delegation</StatusTitle>
@@ -125,7 +128,7 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
               <StatusSubContent>{`${convertNumberFormat(
                 convertToFctNumber(targetValidatorData.self),
                 2
-              )} FCT`}</StatusSubContent>
+              )} ${SYMBOL}`}</StatusSubContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Commission</StatusTitle>
@@ -133,15 +136,15 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
             </StatusItem>
             <StatusItem>
               <StatusTitle>
-                Uptime <span style={{ fontSize: "12px" }}>(Last 10k blocks)</span>
+                Uptime <span style={{ fontSize: '12px' }}>(Last 10k blocks)</span>
               </StatusTitle>
               <StatusContent>{`${convertNumberFormat(targetValidatorData.condition, 2)} %`}</StatusContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>
-                APR <span style={{ fontSize: "12px" }}>/ APY</span>
+                APR <span style={{ fontSize: '12px' }}>/ APY</span>
               </StatusTitle>
-              <StatusContent style={{ color: "#f4b017" }}>{`${formatCash(
+              <StatusContent style={{ color: '#f4b017' }}>{`${formatCash(
                 targetValidatorData.APR * 100
               )} %`}</StatusContent>
               <StatusSubContent>{`${formatCash(targetValidatorData.APY * 100)} %`}</StatusSubContent>

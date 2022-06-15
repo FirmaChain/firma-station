@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { convertToFctString, isValidString, convertNumberFormat } from "../../utils/common";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
+import useFirma from '../../utils/wallet';
+import { convertToFctString, isValidString, convertNumberFormat } from '../../utils/common';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
 
 import {
   confirmTxModalWidth,
@@ -19,10 +19,8 @@ import {
   NextButton,
   InputBoxDefault,
   PasswordWrapper,
-} from "./styles";
-import { FIRMACHAIN_CONFIG } from "../../config";
-
-const DENOM = "FCT";
+} from './styles';
+import { FIRMACHAIN_CONFIG, SYMBOL } from '../../config';
 
 const ConfirmTxModal = () => {
   const confirmTxModalState = useSelector((state: rootState) => state.modal.confirmTx);
@@ -32,10 +30,10 @@ const ConfirmTxModal = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { isCorrectPassword } = useFirma();
 
-  const [password, setPassword] = useState("");
-  const [actionName, setActionName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [fee, setFee] = useState("0.2");
+  const [password, setPassword] = useState('');
+  const [actionName, setActionName] = useState('');
+  const [amount, setAmount] = useState('');
+  const [fee, setFee] = useState('0.2');
   const [isActive, setActive] = useState(false);
 
   const inputRef = useRef(null);
@@ -65,8 +63,8 @@ const ConfirmTxModal = () => {
       closeConfirmTxModal();
       modalActions.handleModalQueueTx(true);
     } else {
-      enqueueSnackbar("Invalid Password", {
-        variant: "error",
+      enqueueSnackbar('Invalid Password', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
     }
@@ -79,7 +77,7 @@ const ConfirmTxModal = () => {
   };
 
   const onKeyDownPassword = (e: any) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       if (isActive) queueTx();
     }
   };
@@ -92,19 +90,19 @@ const ConfirmTxModal = () => {
           {isValidString(amount) && (
             <ConfirmWrapper>
               <ConfirmLabel>Amount</ConfirmLabel>
-              <ConfirmInput>{`${convertNumberFormat(amount, 6)} ${DENOM}`}</ConfirmInput>
+              <ConfirmInput>{`${convertNumberFormat(amount, 6)} ${SYMBOL}`}</ConfirmInput>
             </ConfirmWrapper>
           )}
           <ConfirmWrapper>
             <ConfirmLabel>Fee</ConfirmLabel>
-            <ConfirmInput>{`${convertNumberFormat(fee, 6)} ${DENOM}`}</ConfirmInput>
+            <ConfirmInput>{`${convertNumberFormat(fee, 6)} ${SYMBOL}`}</ConfirmInput>
           </ConfirmWrapper>
           {isLedger === false && (
             <PasswordWrapper>
               <InputBoxDefault
                 ref={inputRef}
-                placeholder="PASSWORD"
-                type="password"
+                placeholder='PASSWORD'
+                type='password'
                 value={password}
                 onChange={onChangePassword}
                 onKeyDown={onKeyDownPassword}
@@ -113,7 +111,7 @@ const ConfirmTxModal = () => {
             </PasswordWrapper>
           )}
           <NextButton
-            style={{ marginTop: "50px" }}
+            style={{ marginTop: '50px' }}
             onClick={() => {
               if (isActive || isLedger) queueTx();
             }}

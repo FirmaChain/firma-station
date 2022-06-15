@@ -8,6 +8,7 @@ import { rootState } from "../../redux/reducers";
 import theme from "../../themes";
 import { BlankCard } from "../../components/card";
 import { AddressTitleTypo, UsdTypo, UserBalanceTypo, PriceTypo } from "./styles";
+import { SYMBOL } from "../../config";
 
 const AccountCard = () => {
   const { balance } = useSelector((state: rootState) => state.user);
@@ -24,10 +25,10 @@ const AccountCard = () => {
 
   return (
     <BlankCard bgColor={theme.colors.mainblue} height="130px" backgroundLogo={true}>
-      <AddressTitleTypo>FCT Balance</AddressTitleTypo>
-      <UsdTypo>1 FCT ($ {currentUSDPrice})</UsdTypo>
+      <AddressTitleTypo>{SYMBOL} Balance</AddressTitleTypo>
+      <UsdTypo>1 {SYMBOL} ($ {currentUSDPrice})</UsdTypo>
       <PriceTypo>$ {convertNumberFormat(currentUSDPrice * convertNumber(balance), 2)}</PriceTypo>
-      <UserBalanceTypo>{`${convertNumberFormat(balance, 3)} FCT`}</UserBalanceTypo>
+      <UserBalanceTypo>{`${convertNumberFormat(balance, 3)} ${SYMBOL}`}</UserBalanceTypo>
     </BlankCard>
   );
 };

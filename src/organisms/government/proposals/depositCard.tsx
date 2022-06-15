@@ -1,13 +1,13 @@
-import React from "react";
-import moment from "moment";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React from 'react';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import { rootState } from "../../../redux/reducers";
-import { convertNumber, convertToFctNumber, convertNumberFormat } from "../../../utils/common";
-import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from "../../../constants/government";
-import { IProposalState } from "../hooks";
-import { modalActions } from "../../../redux/action";
+import { rootState } from '../../../redux/reducers';
+import { convertNumber, convertToFctNumber, convertNumberFormat } from '../../../utils/common';
+import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from '../../../constants/government';
+import { IProposalState } from '../hooks';
+import { modalActions } from '../../../redux/action';
 
 import {
   CardWrapper,
@@ -17,8 +17,8 @@ import {
   DepositContent,
   DepositMainTitle,
   DepositButton,
-} from "./styles";
-import { FIRMACHAIN_CONFIG } from "../../../config";
+} from './styles';
+import { FIRMACHAIN_CONFIG, SYMBOL } from '../../../config';
 
 interface IProps {
   proposalState: IProposalState;
@@ -29,7 +29,7 @@ const DepositCard = ({ proposalState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const getAddTimeFormat = (startTime: string, second: number) => {
-    return moment(startTime).add(convertNumber(second), "seconds").format("YYYY-MM-DD HH:mm:ss+00:00");
+    return moment(startTime).add(convertNumber(second), 'seconds').format('YYYY-MM-DD HH:mm:ss+00:00');
   };
 
   const getCurrentDeposit = (deposits: any) => {
@@ -44,7 +44,7 @@ const DepositCard = ({ proposalState }: IProps) => {
   };
 
   const getAmountFormat = (amount: number) => {
-    return `${convertNumberFormat(convertToFctNumber(amount), 2)} FCT`;
+    return `${convertNumberFormat(convertToFctNumber(amount), 2)} ${SYMBOL}`;
   };
 
   return (
@@ -74,8 +74,8 @@ const DepositCard = ({ proposalState }: IProps) => {
               });
               modalActions.handleModalDeposit(true);
             } else {
-              enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-                variant: "error",
+              enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+                variant: 'error',
                 autoHideDuration: 2000,
               });
             }

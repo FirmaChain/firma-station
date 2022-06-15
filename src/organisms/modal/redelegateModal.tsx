@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import Select from "react-select";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState, useRef, useEffect } from 'react';
+import Select from 'react-select';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
 import {
   convertNumber,
   convertNumberFormat,
@@ -12,10 +12,10 @@ import {
   convertToFctString,
   getFeesFromGas,
   makeDecimalPoint,
-} from "../../utils/common";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_REDELEGATE } from "../../config";
+} from '../../utils/common';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_REDELEGATE, SYMBOL } from '../../config';
 
 import {
   redelegateModalWidth,
@@ -31,9 +31,9 @@ import {
   ModalTooltipTypo,
   MaxButton,
   HelpIcon,
-} from "./styles";
+} from './styles';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -43,25 +43,25 @@ const SelectWrapper = styled.div`
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: "#21212f",
-    border: "1px solid #696974",
+    backgroundColor: '#21212f',
+    border: '1px solid #696974',
   }),
   option: (provided: any) => ({
     ...provided,
-    color: "#3550DE",
+    color: '#3550DE',
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    color: "white",
+    color: 'white',
   }),
   indicatorSeparator: (provided: any) => ({
     ...provided,
-    color: "#324ab8aa",
-    backgroundColor: "#324ab8aa",
+    color: '#324ab8aa',
+    backgroundColor: '#324ab8aa',
   }),
   dropdownIndicator: (provided: any) => ({
     ...provided,
-    color: "#324ab8aa",
+    color: '#324ab8aa',
   }),
 };
 
@@ -74,12 +74,12 @@ const RedelegateModal = () => {
 
   const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma(false);
 
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
-  const [sourceValidator, setSourceValidator] = useState("");
+  const [sourceValidator, setSourceValidator] = useState('');
   const [sourceAmount, setSourceAmount] = useState(0);
   const [delegationList, setDelegationList] = useState([]);
-  const [targetValidator, setTargetValidator] = useState("");
+  const [targetValidator, setTargetValidator] = useState('');
 
   const selectInputRef = useRef<any>();
 
@@ -96,8 +96,8 @@ const RedelegateModal = () => {
   const resetModal = () => {
     selectInputRef.current.clearValue();
     setActiveButton(false);
-    setAmount("");
-    setSourceValidator("");
+    setAmount('');
+    setSourceValidator('');
     setSourceAmount(0);
   };
 
@@ -110,10 +110,10 @@ const RedelegateModal = () => {
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
 
-    let amount: string = value.replace(/[^0-9.]/g, "");
+    let amount: string = value.replace(/[^0-9.]/g, '');
 
-    if (amount === "") {
-      setAmount("");
+    if (amount === '') {
+      setAmount('');
       return;
     }
 
@@ -150,7 +150,7 @@ const RedelegateModal = () => {
     if (e == null) return;
     const { value, amount } = e;
 
-    setAmount("");
+    setAmount('');
     setSourceValidator(value);
     setSourceAmount(convertToFctNumber(amount));
   };
@@ -166,7 +166,7 @@ const RedelegateModal = () => {
 
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
-            action: "Redelegate",
+            action: 'Redelegate',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalRedelegate,
             txAction: redelegateTx,
@@ -174,15 +174,15 @@ const RedelegateModal = () => {
 
           modalActions.handleModalConfirmTx(true);
         } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         }
       })
       .catch((e) => {
         enqueueSnackbar(e, {
-          variant: "error",
+          variant: 'error',
           autoHideDuration: 5000,
         });
         if (isLedger) modalActions.handleModalGasEstimation(false);
@@ -209,17 +209,21 @@ const RedelegateModal = () => {
           {sourceValidator && (
             <>
               <ModalLabel>Available</ModalLabel>
-              <ModalInput>{convertNumberFormat(sourceAmount, 3)} FCT</ModalInput>
+              <ModalInput>
+                {convertNumberFormat(sourceAmount, 3)} {SYMBOL}
+              </ModalInput>
 
               <ModalLabel>Fee estimation</ModalLabel>
-              <ModalInput>{`${convertToFctString((FIRMACHAIN_CONFIG.defaultFee * 1.5).toString())} FCT`}</ModalInput>
+              <ModalInput>{`${convertToFctString(
+                (FIRMACHAIN_CONFIG.defaultFee * 1.5).toString()
+              )} ${SYMBOL}`}</ModalInput>
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
                 <MaxButton active={true} onClick={onClickMaxAmount}>
                   Max
                 </MaxButton>
-                <InputBoxDefault type="text" placeholder="0" onChange={onChangeAmount} value={amount} />
+                <InputBoxDefault type='text' placeholder='0' onChange={onChangeAmount} value={amount} />
               </ModalInput>
             </>
           )}

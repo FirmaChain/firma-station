@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
-import Select from "react-select";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useEffect, useState, useRef } from 'react';
+import Select from 'react-select';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
 
-import { ToggleButton } from "../../components/toggle";
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_SEND } from "../../config";
+import { ToggleButton } from '../../components/toggle';
+import { DENOM, FIRMACHAIN_CONFIG, GUIDE_LINK_SEND, SYMBOL } from '../../config';
 
 import {
   sendModalWidth,
@@ -25,16 +25,16 @@ import {
   ModalTooltipIcon,
   ModalTooltipTypo,
   HelpIcon,
-} from "./styles";
+} from './styles';
 import {
   convertNumber,
   convertToFctNumber,
   convertToFctString,
   getFeesFromGas,
   makeDecimalPoint,
-} from "../../utils/common";
+} from '../../utils/common';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -44,24 +44,24 @@ const SelectWrapper = styled.div`
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: "#21212f",
-    border: "1px solid #696974",
+    backgroundColor: '#21212f',
+    border: '1px solid #696974',
   }),
   option: (provided: any) => ({
     ...provided,
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    color: "white",
+    color: 'white',
   }),
   indicatorSeparator: (provided: any) => ({
     ...provided,
-    color: "#324ab8aa",
-    backgroundColor: "#324ab8aa",
+    color: '#324ab8aa',
+    backgroundColor: '#324ab8aa',
   }),
   dropdownIndicator: (provided: any) => ({
     ...provided,
-    color: "#324ab8aa",
+    color: '#324ab8aa',
   }),
 };
 
@@ -75,13 +75,13 @@ const SendModal = () => {
 
   const [available, setAvailable] = useState(0);
   const [tokenData, setTokenData] = useState({
-    symbol: "",
-    denom: "",
+    symbol: '',
+    denom: '',
     decimal: 6,
   });
-  const [amount, setAmount] = useState("");
-  const [targetAddress, setTargetAddress] = useState("");
-  const [memo, setMemo] = useState("");
+  const [amount, setAmount] = useState('');
+  const [targetAddress, setTargetAddress] = useState('');
+  const [memo, setMemo] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
   const [isSafety, setSafety] = useState(true);
 
@@ -93,7 +93,7 @@ const SendModal = () => {
   };
 
   const resetModal = () => {
-    setAmount("");
+    setAmount('');
   };
 
   useEffect(() => {
@@ -107,10 +107,10 @@ const SendModal = () => {
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
 
-    let amount: string = value.replace(/[^0-9.]/g, "");
+    let amount: string = value.replace(/[^0-9.]/g, '');
 
-    if (amount === "") {
-      setAmount("");
+    if (amount === '') {
+      setAmount('');
       return;
     }
 
@@ -129,7 +129,7 @@ const SendModal = () => {
 
   const onChangeTargetAddress = (e: any) => {
     const { value } = e.target;
-    const address = value.replace(/ /g, "");
+    const address = value.replace(/ /g, '');
 
     setTargetAddress(address);
   };
@@ -158,16 +158,16 @@ const SendModal = () => {
 
   const checkParams = () => {
     setActiveButton(
-      targetAddress !== "" &&
+      targetAddress !== '' &&
         isValidAddress(targetAddress) &&
-        amount !== "" &&
+        amount !== '' &&
         convertNumber(amount) <= convertNumber(available) &&
         convertNumber(amount) > 0
     );
   };
 
   const getMaxAmount = (): Number => {
-    if (tokenData.symbol === "FCT") {
+    if (tokenData.symbol === SYMBOL) {
       const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
 
       const value = convertNumber(makeDecimalPoint(available - fee, 6));
@@ -178,7 +178,7 @@ const SendModal = () => {
   };
 
   const sendTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
-    if (tokenData.symbol === "FCT") {
+    if (tokenData.symbol === SYMBOL) {
       sendFCT(targetAddress, amount, memo, gas)
         .then(() => {
           setUserData();
@@ -204,13 +204,13 @@ const SendModal = () => {
 
     closeModal();
 
-    if (tokenData.symbol === "FCT") {
+    if (tokenData.symbol === SYMBOL) {
       getGasEstimationSendFCT(targetAddress, amount, memo)
         .then((gas) => {
           if (isLedger) modalActions.handleModalGasEstimation(false);
 
           modalActions.handleModalData({
-            action: "Send",
+            action: 'Send',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalSend,
             txAction: sendTx,
@@ -220,8 +220,8 @@ const SendModal = () => {
         })
         .catch(() => {
           if (isLedger) {
-            enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
-              variant: "error",
+            enqueueSnackbar('Gas estimate failed. Please check your ledger.', {
+              variant: 'error',
               autoHideDuration: 3000,
             });
             modalActions.handleModalGasEstimation(false);
@@ -233,7 +233,7 @@ const SendModal = () => {
           if (isLedger) modalActions.handleModalGasEstimation(false);
 
           modalActions.handleModalData({
-            action: "Send",
+            action: 'Send',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalSend,
             txAction: sendTx,
@@ -243,8 +243,8 @@ const SendModal = () => {
         })
         .catch(() => {
           if (isLedger) {
-            enqueueSnackbar("Gas estimate failed. Please check your ledger.", {
-              variant: "error",
+            enqueueSnackbar('Gas estimate failed. Please check your ledger.', {
+              variant: 'error',
               autoHideDuration: 3000,
             });
             modalActions.handleModalGasEstimation(false);
@@ -265,7 +265,7 @@ const SendModal = () => {
           <SelectWrapper>
             <Select
               options={[
-                { value: "FCT", label: "FCT", balance: balance, decimal: 6, denom: "ufct" },
+                { value: SYMBOL, label: SYMBOL, balance: balance, decimal: 6, denom: DENOM },
                 ...tokenList.map((value) => {
                   return {
                     value: value.symbol,
@@ -285,8 +285,8 @@ const SendModal = () => {
           <ModalLabel>Send To</ModalLabel>
           <ModalInput>
             <InputBoxDefault
-              type="text"
-              placeholder="Wallet Address"
+              type='text'
+              placeholder='Wallet Address'
               value={targetAddress}
               onChange={onChangeTargetAddress}
             />
@@ -301,17 +301,18 @@ const SendModal = () => {
           <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
-          <ModalInput style={{ marginBottom: "10px" }}>
-            <InputBoxDefault type="text" placeholder="0" value={amount} onChange={onChangeAmount} />
+          <ModalInput style={{ marginBottom: '10px' }}>
+            <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
           </ModalInput>
-          {tokenData.symbol && tokenData.symbol === "FCT" && (
+          {tokenData.symbol && tokenData.symbol === SYMBOL && (
             <ModalToggleWrapper>
-              <ToggleButton toggleText="Safety" isActive={isSafety} onClickToggle={onClickToggle} />
+              <ToggleButton toggleText='Safety' isActive={isSafety} onClickToggle={onClickToggle} />
               {isSafety && (
                 <ModalTooltipWrapper>
                   <ModalTooltipIcon />
                   <ModalTooltipTypo>
-                    The entire amount is automatically entered except 0.1FCT, which will be used as a transaction fee.
+                    The entire amount is automatically entered except 0.1{SYMBOL}, which will be used as a transaction
+                    fee.
                   </ModalTooltipTypo>
                 </ModalTooltipWrapper>
               )}
@@ -320,7 +321,7 @@ const SendModal = () => {
 
           <ModalLabel>Memo (optional)</ModalLabel>
           <ModalInput>
-            <InputBoxDefault type="text" placeholder="" value={memo} onChange={onChangeMemo} />
+            <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
           </ModalInput>
           <NextButton
             onClick={() => {

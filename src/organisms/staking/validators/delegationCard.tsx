@@ -1,25 +1,23 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../../utils/wallet";
-import { rootState } from "../../../redux/reducers";
-import { ITargetStakingState, IValidatorsState } from "../hooks";
-import { convertNumber, convertNumberFormat, convertToFctNumber, getFeesFromGas } from "../../../utils/common";
-import { modalActions } from "../../../redux/action";
+import useFirma from '../../../utils/wallet';
+import { rootState } from '../../../redux/reducers';
+import { ITargetStakingState, IValidatorsState } from '../hooks';
+import { convertNumber, convertNumberFormat, convertToFctNumber, getFeesFromGas } from '../../../utils/common';
+import { modalActions } from '../../../redux/action';
 
-import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from "./styles";
-import { FIRMACHAIN_CONFIG } from "../../../config";
+import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from './styles';
+import { FIRMACHAIN_CONFIG, SYMBOL } from '../../../config';
 
 interface IProps {
   targetStakingState: ITargetStakingState;
   validatorsState: IValidatorsState;
 }
 
-const DENOM = "FCT";
-
 const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
-  const targetValidator = window.location.pathname.replace("/staking/validators/", "");
+  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const {
@@ -36,14 +34,14 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const delegateAction = () => {
     if (targetStakingState.available > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
       modalActions.handleModalData({
-        action: "Delegate",
+        action: 'Delegate',
         data: { targetValidator, available: targetStakingState.available },
       });
 
       modalActions.handleModalDelegate(true);
     } else {
-      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-        variant: "error",
+      enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
     }
@@ -63,8 +61,8 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
         getDelegationList()
           .then((delegationList) => {
             if (delegationList && delegationList.filter((v) => v.value !== targetValidator).length === 0) {
-              enqueueSnackbar("There is no target that has been delegated", {
-                variant: "error",
+              enqueueSnackbar('There is no target that has been delegated', {
+                variant: 'error',
                 autoHideDuration: 2000,
               });
               return;
@@ -78,14 +76,14 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
             if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
               modalActions.handleModalData({
-                action: "Redelegate",
+                action: 'Redelegate',
                 data: { targetValidator, delegationList },
               });
 
               modalActions.handleModalRedelegate(true);
             } else {
-              enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-                variant: "error",
+              enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+                variant: 'error',
                 autoHideDuration: 2000,
               });
             }
@@ -110,8 +108,8 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
     getUndelegationList()
       .then((undelegationList) => {
         if (undelegationList.filter((v) => v.validatorAddress === targetValidator).length >= 7) {
-          enqueueSnackbar("You cannot undelegate more than 7 times per validator!", {
-            variant: "error",
+          enqueueSnackbar('You cannot undelegate more than 7 times per validator!', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
           return;
@@ -119,8 +117,8 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
         getDelegation(targetValidator)
           .then((delegation) => {
             if (delegation === undefined) {
-              enqueueSnackbar("There is no target that has been delegated", {
-                variant: "error",
+              enqueueSnackbar('There is no target that has been delegated', {
+                variant: 'error',
                 autoHideDuration: 2000,
               });
               return;
@@ -128,14 +126,14 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
             if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
               modalActions.handleModalData({
-                action: "Undelegate",
+                action: 'Undelegate',
                 data: { targetValidator, delegation },
               });
 
               modalActions.handleModalUndelegate(true);
             } else {
-              enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-                variant: "error",
+              enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+                variant: 'error',
                 autoHideDuration: 2000,
               });
             }
@@ -154,22 +152,22 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
-            action: "Withdraw",
+            action: 'Withdraw',
             data: { amount: targetStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
             txAction: withdrawTx,
           });
 
           modalActions.handleModalConfirmTx(true);
         } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         }
       })
       .catch((e) => {
         enqueueSnackbar(e, {
-          variant: "error",
+          variant: 'error',
           autoHideDuration: 5000,
         });
         if (isLedger) modalActions.handleModalGasEstimation(false);
@@ -190,7 +188,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
     <CardWrapper>
       <InnerWrapper>
         <Title>My Delegations</Title>
-        <Content>{`${convertNumberFormat(targetStakingState.delegated, 3)} ${DENOM}`}</Content>
+        <Content>{`${convertNumberFormat(targetStakingState.delegated, 3)} ${SYMBOL}`}</Content>
         <Buttons>
           <Button onClick={delegateAction} isActive={true}>
             Delegate
@@ -210,7 +208,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
       </InnerWrapper>
       <InnerWrapper>
         <Title>Rewards</Title>
-        <Content>{`${convertNumberFormat(targetStakingState.stakingReward, 3)} ${DENOM}`}</Content>
+        <Content>{`${convertNumberFormat(targetStakingState.stakingReward, 3)} ${SYMBOL}`}</Content>
         <Buttons>
           <Button
             onClick={() => {

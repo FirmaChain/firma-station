@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
-import gql from "graphql-tag";
-import { client } from "../../apollo";
+import { useState, useEffect, useRef } from 'react';
+import gql from 'graphql-tag';
+import { client } from '../../apollo';
 
-import useFirma from "../../utils/wallet";
-import { BLOCKS_PER_YEAR, COMMUNITY_POOL } from "../../config";
-import { convertNumber, convertToFctNumber, isValid, convertNumberFormat, makeDecimalPoint } from "../../utils/common";
-import { useValidatorsQuery } from "../../apollo/gqls";
+import useFirma from '../../utils/wallet';
+import { BLOCKS_PER_YEAR, COMMUNITY_POOL, DENOM } from '../../config';
+import { convertNumber, convertToFctNumber, isValid, convertNumberFormat, makeDecimalPoint } from '../../utils/common';
+import { useValidatorsQuery } from '../../apollo/gqls';
 
 export interface IValidatorsState {
   totalVotingPower: number;
@@ -59,7 +59,7 @@ export interface ITargetStakingState {
 
 export const useStakingDataFromTarget = () => {
   const { getStakingFromValidator } = useFirma();
-  const targetValidator = window.location.pathname.replace("/staking/validators/", "");
+  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
   const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
     available: 0,
@@ -69,7 +69,7 @@ export const useStakingDataFromTarget = () => {
   });
 
   useInterval(() => {
-    if (targetValidator !== "") {
+    if (targetValidator !== '') {
       getStakingFromValidator(targetValidator)
         .then((result: ITargetStakingState | undefined) => {
           if (result) setTargetStakingState(result);
@@ -106,7 +106,7 @@ export const useStakingData = () => {
     getStaking()
       .then((result: ITotalStakingState | undefined) => {
         if (result) {
-          let queryIn = "";
+          let queryIn = '';
           for (let i = 0; i < result.delegateList.length; i++) {
             queryIn += `"${result.delegateList[i].validatorAddress}",`;
           }
@@ -209,7 +209,7 @@ export const useStakingData = () => {
       const { signed_blocks_window } = slashingParams;
 
       const inflation = convertNumber(data.inflation[0].value);
-      const totalSupply = convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount);
+      const totalSupply = convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === DENOM)[0].amount);
 
       const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / BLOCKS_PER_YEAR);
       const mintCoinPerYear = mintCoinPerDay * 365;
@@ -226,10 +226,10 @@ export const useStakingData = () => {
         .map((validator: any) => {
           const validatorAddress = validator.validatorInfo.operatorAddress;
 
-          let validatorMoniker = "";
-          let validatorAvatar = "";
-          let validatorDetail = "";
-          let validatorWebsite = "";
+          let validatorMoniker = '';
+          let validatorAvatar = '';
+          let validatorDetail = '';
+          let validatorWebsite = '';
 
           if (isValid(validator.validator_descriptions[0])) {
             validatorMoniker = validator.validator_descriptions[0].moniker;

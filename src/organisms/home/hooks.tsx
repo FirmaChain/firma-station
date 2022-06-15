@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { convertNumberFormat, convertToFctNumber } from "../../utils/common";
-import { useBlockDataQuery, useVotingPowerQuery, useTokenomicsQuery } from "../../apollo/gqls";
+import { DENOM } from '../../config';
+import { convertNumberFormat, convertToFctNumber } from '../../utils/common';
+import { useBlockDataQuery, useVotingPowerQuery, useTokenomicsQuery } from '../../apollo/gqls';
 
 export interface IBlockState {
   height: number;
@@ -26,7 +27,7 @@ export const useBlockData = () => {
   const [blockState, setBlockState] = useState<IBlockState>({
     height: 0,
     transactions: 0,
-    inflation: "0 %",
+    inflation: '0 %',
   });
 
   const [votingPowerState, setVotingPowerState] = useState<IVotingPowerState>({
@@ -55,7 +56,7 @@ export const useBlockData = () => {
   };
 
   const formatInflation = (data: any) => {
-    return data.inflation.length > 0 ? convertNumberFormat(data.inflation[0].value * 100, 2) + " %" : "0 %";
+    return data.inflation.length > 0 ? convertNumberFormat(data.inflation[0].value * 100, 2) + ' %' : '0 %';
   };
 
   const formatVotingPower = (data: any) => {
@@ -68,7 +69,7 @@ export const useBlockData = () => {
 
   const formatSupply = (data: any) => {
     return data.supply.length > 0
-      ? convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount)
+      ? convertToFctNumber(data.supply[0].coins.filter((v: any) => v.denom === DENOM)[0].amount)
       : 0;
   };
   const formatDelegated = (data: any) => {
@@ -78,7 +79,7 @@ export const useBlockData = () => {
   const formatUndelegated = (data: any) => {
     return data.supply.length > 0
       ? convertToFctNumber(
-          data.supply[0].coins.filter((v: any) => v.denom === "ufct")[0].amount -
+          data.supply[0].coins.filter((v: any) => v.denom === DENOM)[0].amount -
             data.stakingPool[0].bonded -
             data.stakingPool[0].unbonded
         )

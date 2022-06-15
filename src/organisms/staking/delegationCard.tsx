@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import moment from "moment";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { Link } from "react-router-dom";
-import { FixedSizeList as List } from "react-window";
-import { ResponsivePie } from "@nivo/pie";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState } from 'react';
+import moment from 'moment';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { Link } from 'react-router-dom';
+import { FixedSizeList as List } from 'react-window';
+import { ResponsivePie } from '@nivo/pie';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
-import { modalActions } from "../../redux/action";
-import { ITotalStakingState } from "./hooks";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
+import { modalActions } from '../../redux/action';
+import { ITotalStakingState } from './hooks';
 import {
   convertNumber,
   convertNumberFormat,
   convertToFctNumber,
   convertToFctString,
   getFeesFromGas,
-} from "../../utils/common";
+} from '../../utils/common';
 
 import {
   ChartWrapper,
@@ -44,7 +44,7 @@ import {
   ChartCenterTypo,
   ButtonWrapper,
   Button,
-} from "./styles";
+} from './styles';
 
 interface IProps {
   totalStakingState: ITotalStakingState;
@@ -70,7 +70,7 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
   };
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 20? `${moniker.substring(0, 20)}...` : moniker;
+    return moniker.length > 20 ? `${moniker.substring(0, 20)}...` : moniker;
   };
 
   return (
@@ -91,7 +91,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
   const validatorInfo = data[index];
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 15? `${moniker.substring(0, 15)}...` : moniker;
+    return moniker.length > 15 ? `${moniker.substring(0, 15)}...` : moniker;
   };
 
   return (
@@ -110,7 +110,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
       </RedelegationItemColumn>
       <RedelegationItemColumn>{convertNumberFormat(validatorInfo.balance, 3)}</RedelegationItemColumn>
       <RedelegationItemColumn>
-        {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
+        {moment(validatorInfo.completionTime).format('YYYY-MM-DD HH:mm:ss+00:00')}
       </RedelegationItemColumn>
     </RedelegationItemWrapper>
   );
@@ -120,7 +120,7 @@ const UndelegationRow = ({ data, index, style }: any) => {
   const validatorInfo = data[index];
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 30? `${moniker.substring(0, 30)}...` : moniker;
+    return moniker.length > 30 ? `${moniker.substring(0, 30)}...` : moniker;
   };
 
   return (
@@ -133,7 +133,7 @@ const UndelegationRow = ({ data, index, style }: any) => {
       </UndelegationItemColumn>
       <UndelegationItemColumn>{convertNumberFormat(validatorInfo.balance, 3)}</UndelegationItemColumn>
       <UndelegationItemColumn>
-        {moment(validatorInfo.completionTime).format("YYYY-MM-DD HH:mm:ss+00:00")}
+        {moment(validatorInfo.completionTime).format('YYYY-MM-DD HH:mm:ss+00:00')}
       </UndelegationItemColumn>
     </UndelegationItemWrapper>
   );
@@ -141,7 +141,7 @@ const UndelegationRow = ({ data, index, style }: any) => {
 
 const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
   const getMonikerFormat = (moniker: string) => {
-    if (moniker.length > 20) return moniker.substr(0, 20) + "...";
+    if (moniker.length > 20) return moniker.substr(0, 20) + '...';
     else return moniker;
   };
 
@@ -186,22 +186,22 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
 
         if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
-            action: "Withdraw",
+            action: 'Withdraw',
             data: { amount: totalStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
             txAction: withdrawAllValidatorTx,
           });
 
           modalActions.handleModalConfirmTx(true);
         } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         }
       })
       .catch((e) => {
         enqueueSnackbar(e, {
-          variant: "error",
+          variant: 'error',
           autoHideDuration: 5000,
         });
         if (isLedger) modalActions.handleModalGasEstimation(false);
@@ -238,23 +238,21 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
           padAngle={0.7}
           cornerRadius={3}
           activeOuterRadiusOffset={8}
-          colors={{ scheme: "dark2" }}
-          borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
+          colors={{ scheme: 'dark2' }}
+          borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
           enableArcLabels={false}
           arcLinkLabel={function (e) {
-            return e.id + "\n[" + e.value + "%]";
+            return e.id + '\n[' + e.value + '%]';
           }}
           arcLinkLabelsSkipAngle={10}
-          arcLinkLabelsTextColor="#fff"
+          arcLinkLabelsTextColor='#fff'
           arcLinkLabelsThickness={2}
-          arcLinkLabelsColor={{ from: "color" }}
+          arcLinkLabelsColor={{ from: 'color' }}
           arcLabelsSkipAngle={10}
-          arcLabelsTextColor={{ from: "color", modifiers: [["darker", 2]] }}
+          arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
           tooltip={function (e) {
             const t = e.datum;
-            return (
-              <div style={{ backgroundColor: "#eee", padding: "10px", borderRadius: "4px" }}>{t.data.amount} FCT</div>
-            );
+            return <div style={{ backgroundColor: '#eee', padding: '10px', borderRadius: '4px' }}>{t.data.amount}</div>;
           }}
           legends={[]}
         />

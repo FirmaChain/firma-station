@@ -1,5 +1,5 @@
-import React from "react";
-import moment from "moment";
+import React from 'react';
+import moment from 'moment';
 
 import {
   PROPOSAL_STATUS,
@@ -7,9 +7,10 @@ import {
   PROPOSAL_MESSAGE_TYPE_PARAMETERCHANGE,
   PROPOSAL_MESSAGE_TYPE_COMMUNITYPOOLSPEND,
   PROPOSAL_MESSAGE_TYPE_SOFTWAREUPGRADE,
-} from "../../../constants/government";
-import { convertNumberFormat, convertToFctNumber } from "../../../utils/common";
-import { IProposalState } from "../hooks";
+} from '../../../constants/government';
+import { SYMBOL } from '../../../config';
+import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
+import { IProposalState } from '../hooks';
 
 import {
   CardWrapper,
@@ -22,7 +23,7 @@ import {
   Label,
   ProposalContent,
   ProposalMainTitle,
-} from "./styles";
+} from './styles';
 
 interface IProps {
   proposalState: IProposalState;
@@ -30,12 +31,12 @@ interface IProps {
 
 const ProposalDetailCard = ({ proposalState }: IProps) => {
   const getStatusTypo = (status: string) => {
-    const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : "UNKNOWN";
+    const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : 'UNKNOWN';
     return typo;
   };
 
   const getProposalTypeTypo = (proposalType: string) => {
-    const typo = PROPOSAL_MESSAGE_TYPE[proposalType] ? PROPOSAL_MESSAGE_TYPE[proposalType] : "UNKNOWN";
+    const typo = PROPOSAL_MESSAGE_TYPE[proposalType] ? PROPOSAL_MESSAGE_TYPE[proposalType] : 'UNKNOWN';
     return typo;
   };
 
@@ -52,7 +53,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
   };
 
   const getTimeFormat = (time: string) => {
-    return moment(time).format("YYYY-MM-DD HH:mm:ss+00:00");
+    return moment(time).format('YYYY-MM-DD HH:mm:ss+00:00');
   };
 
   return (
@@ -75,7 +76,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
         <ProposalDetailItem>
           <Label>Description</Label>
           <ProposalContent>
-            {proposalState.description.split("\n").map((line, index) => {
+            {proposalState.description.split('\n').map((line, index) => {
               return (
                 <span key={index}>
                   {line}
@@ -98,7 +99,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
               <ProposalContent>{`${convertNumberFormat(
                 convertToFctNumber(proposalState.extraData.amount),
                 2
-              )} FCT`}</ProposalContent>
+              )} ${SYMBOL}`}</ProposalContent>
             </ProposalDetailItem>
           </>
         )}
@@ -124,7 +125,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
             </ProposalDetailItem>
             <ProposalDetailItem>
               <Label>Info</Label>
-              <ProposalContent>{proposalState.extraData.info ? proposalState.extraData.info : "-"}</ProposalContent>
+              <ProposalContent>{proposalState.extraData.info ? proposalState.extraData.info : '-'}</ProposalContent>
             </ProposalDetailItem>
           </>
         )}
