@@ -19,6 +19,8 @@ export const IS_DEFAULT_GAS = true;
 export const DENOM = 'ufct';
 export const SYMBOL = 'FCT';
 
+export const IS_HASURA_ACTION = true;
+
 export const DOWNLOAD_LINK_LIST = [];
 
 export const GUIDE_LINK_LOGIN_WALLET = '';
@@ -36,3 +38,5 @@ export const GUIDE_LINK_DELEGATE = '';
 export const GUIDE_LINK_REDELEGATE = '';
 export const GUIDE_LINK_UNDELEGATE = '';
 export const GUIDE_LINK_NEW_PROPOSAL = '';
+
+export const VESTING_ACCOUNTS = [];

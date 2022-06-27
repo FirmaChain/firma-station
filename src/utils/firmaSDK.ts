@@ -1,9 +1,9 @@
-import { FirmaSDK } from "@firmachain/firma-js";
-import { FirmaWebLedgerWallet, FirmaBridgeLedgerWallet } from "@firmachain/firma-js-ledger";
-import TransportHID from "@ledgerhq/hw-transport-webhid";
+import { FirmaSDK } from '@firmachain/firma-js';
+import { FirmaWebLedgerWallet, FirmaBridgeLedgerWallet } from '@firmachain/firma-js-ledger';
+import TransportHID from '@ledgerhq/hw-transport-webhid';
 
-import { FIRMACHAIN_CONFIG, IS_DEFAULT_GAS } from "../config";
-import { getFeesFromGas, isElectron } from "./common";
+import { FIRMACHAIN_CONFIG, IS_DEFAULT_GAS } from '../config';
+import { getFeesFromGas, isElectron } from './common';
 
 declare global {
   interface Window {
@@ -20,25 +20,25 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
 
   if (isElectron) {
     bridgeLedgerWallet.registerShowAddressOnDevice(async (): Promise<void> => {
-      window.electron.sendSync("ledger-showAddressOnDevice", {});
+      window.electron.sendSync('ledger-showAddressOnDevice', {});
     });
 
     bridgeLedgerWallet.registerGetAddressAndPublicKeyCallback(
       async (): Promise<{ address: string; publicKey: Uint8Array }> => {
-        return window.electron.sendSync("ledger-getAddressAndPublicKey", {});
+        return window.electron.sendSync('ledger-getAddressAndPublicKey', {});
       }
     );
 
     bridgeLedgerWallet.registerGetAddressCallback(async (): Promise<string> => {
-      return window.electron.sendSync("ledger-getAddress", {});
+      return window.electron.sendSync('ledger-getAddress', {});
     });
 
     bridgeLedgerWallet.registerGetPublicKeyCallback(async (): Promise<Uint8Array> => {
-      return window.electron.sendSync("ledger-getPublicKey", {});
+      return window.electron.sendSync('ledger-getPublicKey', {});
     });
 
     bridgeLedgerWallet.registerGetSignCallback(async (message: string): Promise<Uint8Array> => {
-      return window.electron.sendSync("ledger-sign", { message: message });
+      return window.electron.sendSync('ledger-sign', { message: message });
     });
   }
 
@@ -80,7 +80,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     }
   };
 
-  const send = async (address: string, amount: number, memo = "", estimatedGas: number) => {
+  const send = async (address: string, amount: number, memo = '', estimatedGas: number) => {
     const wallet = await getWallet();
     const result = await firmaSDK.Bank.send(wallet, address, amount, {
       memo,
@@ -91,7 +91,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     return result;
   };
 
-  const getGasEstimationSend = async (address: string, amount: number, memo = "") => {
+  const getGasEstimationSend = async (address: string, amount: number, memo = '') => {
     if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
 
     const wallet = await getWallet();
@@ -105,7 +105,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     tokenID: string,
     amount: number,
     decimal: number,
-    memo = "",
+    memo = '',
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
@@ -123,7 +123,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     tokenID: string,
     amount: number,
     decimal: number,
-    memo = ""
+    memo = ''
   ) => {
     if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
 

@@ -46,10 +46,12 @@ const DelegateModal = () => {
   const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
   const [availableAmount, setAvailableAmount] = useState('');
+  const [rewardAmount, setRewardAmount] = useState('');
   const [isSafety, setSafety] = useState(true);
 
   useEffect(() => {
     setAvailableAmount(modalData.data.available);
+    setRewardAmount(modalData.data.reward);
     setSafety(modalData.data.available > 0.1);
   }, [delegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -70,7 +72,10 @@ const DelegateModal = () => {
     if (getMaxAmount() > 0) {
       const amount = getMaxAmount().toString();
       setAmount(amount);
-      setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(modalData.data.available));
+      setActiveButton(
+        convertNumber(amount) > 0 &&
+          convertNumber(amount) <= convertNumber(modalData.data.available) + convertNumber(modalData.data.reward)
+      );
     }
   };
 
@@ -103,14 +108,17 @@ const DelegateModal = () => {
     }
 
     setAmount(amount);
-    setActiveButton(convertNumber(amount) > 0 && convertNumber(amount) <= convertNumber(modalData.data.available));
+    setActiveButton(
+      convertNumber(amount) > 0 &&
+        convertNumber(amount) <= convertNumber(modalData.data.available) + convertNumber(modalData.data.reward)
+    );
   };
 
   const getMaxAmount = () => {
     const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
     const value = convertNumber(makeDecimalPoint(modalData.data.available - fee, 6));
 
-    return value > 0 ? value : 0;
+    return value > 0 ? value + convertNumber(rewardAmount) : 0;
   };
 
   const delegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
@@ -169,6 +177,11 @@ const DelegateModal = () => {
           <ModalLabel>Available</ModalLabel>
           <ModalInput>
             {availableAmount} {SYMBOL}
+          </ModalInput>
+
+          <ModalLabel>Reward </ModalLabel>
+          <ModalInput>
+            {rewardAmount} {SYMBOL}
           </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>

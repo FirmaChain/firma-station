@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
-import { IValidatorsState } from "./hooks";
-import { convertNumber, convertNumberFormat, makeDecimalPoint } from "../../utils/common";
+import { IValidatorsState } from './hooks';
+import { convertNumber, convertNumberFormat, makeDecimalPoint } from '../../utils/common';
 
 import {
   ItemWrapper,
@@ -28,7 +28,7 @@ import {
   InfoValue,
   SmallTitle,
   SortArrow,
-} from "./styles";
+} from './styles';
 
 interface IProps {
   validatorsState: IValidatorsState;
@@ -36,21 +36,21 @@ interface IProps {
 
 const CustomRow = ({ currentValidator, index }: any) => {
   const formatCash = (n: any) => {
-    let result = "";
+    let result = '';
 
     if (n < 1e3) {
       result = makeDecimalPoint(n, 2);
     } else if (n >= 1e3 && n < 1e6) {
-      result = +makeDecimalPoint(n / 1e3, 2) + "K";
+      result = +makeDecimalPoint(n / 1e3, 2) + 'K';
     } else if (n >= 1e6 && n < 1e9) {
-      result = +makeDecimalPoint(n / 1e6, 2) + "M";
+      result = +makeDecimalPoint(n / 1e6, 2) + 'M';
     } else if (n >= 1e9 && n < 1e12) {
-      result = +makeDecimalPoint(n / 1e9, 2) + "B";
+      result = +makeDecimalPoint(n / 1e9, 2) + 'B';
     } else if (n >= 1e12) {
-      result = +makeDecimalPoint(n / 1e12, 2) + "T";
+      result = +makeDecimalPoint(n / 1e12, 2) + 'T';
     }
 
-    if (result.length > 10) result = "infinity";
+    if (result.length > 10) result = 'infinity';
 
     return result;
   };
@@ -64,7 +64,6 @@ const CustomRow = ({ currentValidator, index }: any) => {
           <MonikerTypo>{currentValidator.validatorMoniker}</MonikerTypo>
         </ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</ItemColumn>
-        <ItemColumn>{`${convertNumberFormat(currentValidator.selfPercent, 2)} %`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.commission, 2)} %`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.condition, 2)} %`}</ItemColumn>
         <ItemColumn>
@@ -79,21 +78,21 @@ const CustomRow = ({ currentValidator, index }: any) => {
 
 const CustomSmallRow = ({ currentValidator, index }: any) => {
   const formatCash = (n: any) => {
-    let result = "";
+    let result = '';
 
     if (n < 1e3) {
       result = makeDecimalPoint(n, 2);
     } else if (n >= 1e3 && n < 1e6) {
-      result = +makeDecimalPoint(n / 1e3, 2) + "K";
+      result = +makeDecimalPoint(n / 1e3, 2) + 'K';
     } else if (n >= 1e6 && n < 1e9) {
-      result = +makeDecimalPoint(n / 1e6, 2) + "M";
+      result = +makeDecimalPoint(n / 1e6, 2) + 'M';
     } else if (n >= 1e9 && n < 1e12) {
-      result = +makeDecimalPoint(n / 1e9, 2) + "B";
+      result = +makeDecimalPoint(n / 1e9, 2) + 'B';
     } else if (n >= 1e12) {
-      result = +makeDecimalPoint(n / 1e12, 2) + "T";
+      result = +makeDecimalPoint(n / 1e12, 2) + 'T';
     }
 
-    if (result.length > 10) result = "infinity";
+    if (result.length > 10) result = 'infinity';
 
     return result;
   };
@@ -110,10 +109,6 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
           <ValidatorInfo>
             <InfoLabel>Voting Power</InfoLabel>
             <InfoValue>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</InfoValue>
-          </ValidatorInfo>
-          <ValidatorInfo>
-            <InfoLabel>Self Delegation</InfoLabel>
-            <InfoValue>{`${convertNumberFormat(currentValidator.selfPercent, 2)} %`}</InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Commission</InfoLabel>
@@ -137,7 +132,7 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
 };
 
 const Validators = ({ validatorsState }: IProps) => {
-  const isSmall = useMediaQuery({ query: "(max-width: 900px)" });
+  const isSmall = useMediaQuery({ query: '(max-width: 900px)' });
 
   const [order, setOrder] = useState(1);
   const [orderBy, setOrderBy] = useState(1);
@@ -255,10 +250,6 @@ const Validators = ({ validatorsState }: IProps) => {
         <HeaderColumn onClick={() => changeOrder(1)}>
           Voting Power
           <SortArrow order={order} orderBy={orderBy} index={1} />
-        </HeaderColumn>
-        <HeaderColumn onClick={() => changeOrder(2)}>
-          Self Delegation
-          <SortArrow order={order} orderBy={orderBy} index={2} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(3)}>
           Commission

@@ -20,14 +20,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
-  const {
-    getDelegationList,
-    getDelegation,
-    withdraw,
-    getGasEstimationWithdraw,
-    getRedelegationList,
-    getUndelegationList,
-  } = useFirma();
+  const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw, getUndelegationList } = useFirma();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -35,7 +28,7 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
     if (targetStakingState.available > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
       modalActions.handleModalData({
         action: 'Delegate',
-        data: { targetValidator, available: targetStakingState.available },
+        data: { targetValidator, available: targetStakingState.available, reward: targetStakingState.stakingReward },
       });
 
       modalActions.handleModalDelegate(true);
@@ -48,47 +41,35 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
   };
 
   const redelegateAction = () => {
-    getRedelegationList()
-      .then((redelegationList) => {
-        // if (redelegationList.length >= 7) {
-        //   enqueueSnackbar("You cannot redelegate more than 7 times!", {
-        //     variant: "error",
-        //     autoHideDuration: 2000,
-        //   });
-        //   return;
-        // }
+    getDelegationList()
+      .then((delegationList) => {
+        if (delegationList && delegationList.filter((v) => v.value !== targetValidator).length === 0) {
+          enqueueSnackbar('There is no target that has been delegated', {
+            variant: 'error',
+            autoHideDuration: 2000,
+          });
+          return;
+        }
 
-        getDelegationList()
-          .then((delegationList) => {
-            if (delegationList && delegationList.filter((v) => v.value !== targetValidator).length === 0) {
-              enqueueSnackbar('There is no target that has been delegated', {
-                variant: 'error',
-                autoHideDuration: 2000,
-              });
-              return;
-            }
+        if (delegationList !== undefined) {
+          for (let i = 0; i < delegationList.length; i++) {
+            delegationList[i].label = getMoniker(delegationList[i].value);
+          }
+        }
 
-            if (delegationList !== undefined) {
-              for (let i = 0; i < delegationList.length; i++) {
-                delegationList[i].label = getMoniker(delegationList[i].value);
-              }
-            }
+        if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
+          modalActions.handleModalData({
+            action: 'Redelegate',
+            data: { targetValidator, delegationList },
+          });
 
-            if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
-              modalActions.handleModalData({
-                action: 'Redelegate',
-                data: { targetValidator, delegationList },
-              });
-
-              modalActions.handleModalRedelegate(true);
-            } else {
-              enqueueSnackbar('Insufficient funds. Please check your account balance.', {
-                variant: 'error',
-                autoHideDuration: 2000,
-              });
-            }
-          })
-          .catch((e) => {});
+          modalActions.handleModalRedelegate(true);
+        } else {
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
+            autoHideDuration: 2000,
+          });
+        }
       })
       .catch((e) => {});
   };

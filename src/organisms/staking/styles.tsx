@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StakingWrap = styled.div`
   width: calc(100% - 40px);
@@ -59,13 +59,12 @@ export const Column = styled.div`
   }
   &:nth-child(3),
   &:nth-child(4),
-  &:nth-child(5),
-  &:nth-child(6) {
+  &:nth-child(5) {
     text-align: center;
     flex: 1 1 400px;
     min-width: 130px;
   }
-  &:nth-child(7) {
+  &:nth-child(6) {
     text-align: center;
     flex: 1 1 230px;
     min-width: 100px;
@@ -119,16 +118,14 @@ export const HeaderColumn = styled(Column)`
   &:nth-child(3),
   &:nth-child(4),
   &:nth-child(5),
-  &:nth-child(6),
-  &:nth-child(7) {
+  &:nth-child(6) {
     justify-content: center;
   }
   &:nth-child(2),
   &:nth-child(3),
   &:nth-child(4),
   &:nth-child(5),
-  &:nth-child(6),
-  &:nth-child(7) {
+  &:nth-child(6) {
     cursor: pointer;
   }
 `;
@@ -556,13 +553,13 @@ export const SortArrow = styled.div<{ order?: number; orderBy?: number; index?: 
   width: 14px;
   height: 70px;
   margin-left: 3px;
-  background-image: url("${(props) => {
+  background-image: url('${(props) => {
     if (props.orderBy === props.index) {
       return props.order === 0 ? props.theme.urls.sortASC : props.theme.urls.sortDESC;
     } else {
       return props.theme.urls.sortIdle;
     }
-  }}");
+  }}');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
 
-import { IValidatorsState } from '../hooks';
 import { EXPLORER_URI, SYMBOL } from '../../../config';
 
 import {
@@ -26,20 +25,15 @@ import {
   LeftWrapper,
 } from './styles';
 import { convertNumberFormat, convertToFctNumber, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
+import { IDelegationState } from '../hooks';
 
 interface IProps {
-  validatorsState: IValidatorsState;
+  targetValidatorData: any;
+  delegateState: IDelegationState;
 }
 
-const ValidatorCard = ({ validatorsState }: IProps) => {
+const ValidatorCard = ({ targetValidatorData, delegateState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const getValidatorAddress = () => {
-    return window.location.pathname.replace('/staking/validators/', '');
-  };
-
-  const [targetValidatorData] = validatorsState.validators.filter(
-    (value) => value.validatorAddress === getValidatorAddress()
-  );
 
   const clipboard = (value: string) => {
     copyToClipboard(value);
@@ -122,13 +116,21 @@ const ValidatorCard = ({ validatorsState }: IProps) => {
                 2
               )} ${SYMBOL}`}</StatusSubContent>
             </StatusItem>
-            <StatusItem>
+            {/* <StatusItem>
               <StatusTitle>Self-delegation</StatusTitle>
               <StatusContent>{`${convertNumberFormat(targetValidatorData.selfPercent, 2)} %`}</StatusContent>
               <StatusSubContent>{`${convertNumberFormat(
                 convertToFctNumber(targetValidatorData.self),
                 2
               )} ${SYMBOL}`}</StatusSubContent>
+            </StatusItem> */}
+            <StatusItem>
+              <StatusTitle>Self-delegation</StatusTitle>
+              <StatusContent>{`${convertNumberFormat(delegateState.selfPercent, 2)} %`}</StatusContent>
+              <StatusSubContent>{`${convertNumberFormat(
+                convertToFctNumber(delegateState.self),
+                2
+              )} FCT`}</StatusSubContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>Commission</StatusTitle>

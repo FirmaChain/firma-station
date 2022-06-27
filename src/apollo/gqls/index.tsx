@@ -1,5 +1,6 @@
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
+import { IS_HASURA_ACTION } from '../../config';
 
 interface IQueryParam {
   onCompleted: (data: any) => void;
@@ -71,6 +72,40 @@ export const useTokenomicsQuery = ({ onCompleted }: IQueryParam) => {
   );
 };
 
+export const useDelegationsQuery = ({ onCompleted, address }: IQueryParam) => {
+  let query;
+
+  if (IS_HASURA_ACTION) {
+    query = gql`
+      query ValidatorDelegations($address: String!) {
+        delegations: action_validator_delegations(address: $address) {
+          delegations
+        }
+      }
+    `;
+  } else {
+    query = gql`
+      query ValidatorDelegations($address: String!) {
+        validator(where: { validator_info: { operator_address: { _eq: $address } } }) {
+          delegations {
+            coins: amount
+            delegator_address
+          }
+        }
+      }
+    `;
+  }
+
+  return useQuery(query, {
+    onCompleted,
+    pollInterval: 5000,
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      address,
+    },
+  });
+};
+
 export const useValidatorsQuery = ({ onCompleted }: IQueryParam) => {
   return useQuery(
     gql`
@@ -112,10 +147,6 @@ export const useValidatorsQuery = ({ onCompleted }: IQueryParam) => {
           }
           validatorCommissions: validator_commissions(order_by: { height: desc }, limit: 1) {
             commission
-          }
-          delegations {
-            amount
-            delegatorAddress: delegator_address
           }
           validatorSigningInfos: validator_signing_infos(order_by: { height: desc }, limit: 1) {
             missedBlocksCounter: missed_blocks_counter
@@ -259,7 +290,7 @@ export const useTransferHistoryByAddressQuery = ({ onCompleted, address }: IQuer
       notifyOnNetworkStatusChange: true,
       variables: {
         address,
-        types: "{cosmos.bank.v1beta1.MsgSend}",
+        types: '{cosmos.bank.v1beta1.MsgSend}',
         limit: 99999,
       },
     }
