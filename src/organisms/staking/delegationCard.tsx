@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import moment from 'moment';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { Link } from 'react-router-dom';
 import { FixedSizeList as List } from 'react-window';
@@ -18,6 +17,7 @@ import {
   convertToFctString,
   getFeesFromGas,
 } from '../../utils/common';
+import { getDateTimeFormat } from '../../utils/dateUtil';
 
 import {
   ChartWrapper,
@@ -109,9 +109,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
         </Link>
       </RedelegationItemColumn>
       <RedelegationItemColumn>{convertNumberFormat(validatorInfo.balance, 3)}</RedelegationItemColumn>
-      <RedelegationItemColumn>
-        {moment(validatorInfo.completionTime).format('YYYY-MM-DD HH:mm:ss+00:00')}
-      </RedelegationItemColumn>
+      <RedelegationItemColumn>{getDateTimeFormat(validatorInfo.completionTime)}</RedelegationItemColumn>
     </RedelegationItemWrapper>
   );
 };
@@ -132,9 +130,7 @@ const UndelegationRow = ({ data, index, style }: any) => {
         </Link>
       </UndelegationItemColumn>
       <UndelegationItemColumn>{convertNumberFormat(validatorInfo.balance, 3)}</UndelegationItemColumn>
-      <UndelegationItemColumn>
-        {moment(validatorInfo.completionTime).format('YYYY-MM-DD HH:mm:ss+00:00')}
-      </UndelegationItemColumn>
+      <UndelegationItemColumn>{getDateTimeFormat(validatorInfo.completionTime)}</UndelegationItemColumn>
     </UndelegationItemWrapper>
   );
 };

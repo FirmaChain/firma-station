@@ -1,17 +1,16 @@
-import React from "react";
-import moment from "moment";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List } from "react-window";
-import { Link } from "react-router-dom";
+import React from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList as List } from 'react-window';
+import { Link } from 'react-router-dom';
 
-import { EXPLORER_URI } from "../../config";
-// import { convertToFctNumber } from "../../utils/common";
-import { ITransferHistoryByAddressState, ITokensState } from "./hooks";
+import { EXPLORER_URI } from '../../config';
+import { ITransferHistoryByAddressState, ITokensState } from './hooks';
+import { getDateFormat, getTimeFormat } from '../../utils/dateUtil';
+import { convertNumberFormat } from '../../utils/common';
 
-import theme from "../../themes";
-import { BlankCard } from "../../components/card";
-import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, TitleTypo } from "./styles";
-import { convertNumberFormat } from "../../utils/common";
+import theme from '../../themes';
+import { BlankCard } from '../../components/card';
+import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, TitleTypo } from './styles';
 
 interface IProps {
   transferHistoryByAddressState: ITransferHistoryByAddressState;
@@ -22,11 +21,11 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   const currentHistory = data[index];
 
   const getHash = (hash: string) => {
-    return "0x" + hash.substr(0, 4) + "...";
+    return '0x' + hash.substr(0, 4) + '...';
   };
 
   const getAddress = (address: string) => {
-    return address.substr(0, 10) + "...";
+    return address.substr(0, 10) + '...';
   };
 
   const getAmount = (denom: string, amount: number) => {
@@ -34,37 +33,37 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   };
 
   const getResult = (result: boolean) => {
-    return result ? "SUCCESS" : "FAILED";
+    return result ? 'SUCCESS' : 'FAILED';
   };
 
   const getTimestamp = (timestamp: string) => {
     return (
       <>
-        <div>{moment(timestamp).format("YYYY-MM-DD")}</div>
-        <div>{moment(timestamp).format("HH:mm:ss+00:00")}</div>
+        <div>{getDateFormat(timestamp, false)}</div>
+        <div>{getTimeFormat(timestamp)}</div>
       </>
     );
   };
 
   const getMemo = (memo: string) => {
-    if (memo.length > 30) return memo.substr(0, 30) + "...";
+    if (memo.length > 30) return memo.substr(0, 30) + '...';
     else return memo;
   };
 
   return (
     <ItemWrapper style={style}>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={"_blank"}>
+        <Link to={{ pathname: `${EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentHistory.from}` }} target={"_blank"}>
+        <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentHistory.from}` }} target={'_blank'}>
           {getAddress(currentHistory.from)}
         </Link>
       </ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentHistory.to}` }} target={"_blank"}>
+        <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentHistory.to}` }} target={'_blank'}>
           {getAddress(currentHistory.to)}
         </Link>
       </ItemColumn>

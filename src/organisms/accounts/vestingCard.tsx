@@ -18,6 +18,7 @@ import {
 } from './styles';
 import { SYMBOL } from '../../config';
 import { convertToFctString, convertToFctNumber, convertNumberFormat } from '../../utils/common';
+import { getDateTimeFormat } from '../../utils/dateUtil';
 
 interface IProps {
   vestingState: IVesting;
@@ -27,9 +28,11 @@ const Row = ({ data, index, style }: any) => {
   const currentVesting = data[index];
 
   const getTimestamp = (timestamp: number) => {
-    return moment(timestamp * 1000)
-      .utc()
-      .format('YYYY-MM-DD HH:mm:ss+00:00');
+    return getDateTimeFormat(
+      moment(timestamp * 1000)
+        .utc()
+        .toISOString()
+    );
   };
 
   const getAmount = (amount: string) => {

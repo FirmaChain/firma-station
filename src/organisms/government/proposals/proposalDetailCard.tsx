@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 
 import {
   PROPOSAL_STATUS,
@@ -11,6 +10,7 @@ import {
 import { SYMBOL } from '../../../config';
 import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
 import { IProposalState } from '../hooks';
+import { getDateTimeFormat } from '../../../utils/dateUtil';
 
 import {
   CardWrapper,
@@ -53,7 +53,7 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
   };
 
   const getTimeFormat = (time: string) => {
-    return moment(time).format('YYYY-MM-DD HH:mm:ss+00:00');
+    return getDateTimeFormat(time);
   };
 
   return (

@@ -1,14 +1,14 @@
-import React from "react";
-import moment from "moment";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List } from "react-window";
-import { Link } from "react-router-dom";
+import React from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList as List } from 'react-window';
+import { Link } from 'react-router-dom';
 
-import { EXPLORER_URI } from "../../config";
-import { TRANSACTION_TYPE_MODEL } from "../../constants/transactions";
-import { IHistoryByAddressState } from "./hooks";
+import { EXPLORER_URI } from '../../config';
+import { TRANSACTION_TYPE_MODEL } from '../../constants/transactions';
+import { IHistoryByAddressState } from './hooks';
 
-import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, HistoryTypeBox } from "./styles";
+import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, HistoryTypeBox } from './styles';
+import { getDateTimeFormat } from '../../utils/dateUtil';
 
 interface IProps {
   historyByAddressState: IHistoryByAddressState;
@@ -26,18 +26,18 @@ const Row = ({ data, index, style }: any) => {
   };
 
   const getHash = (hash: string) => {
-    return "0x" + hash.substr(0, 16) + "...";
+    return '0x' + hash.substr(0, 16) + '...';
   };
 
   const getResult = (result: boolean) => {
-    return result ? "SUCCESS" : "FAILED";
+    return result ? 'SUCCESS' : 'FAILED';
   };
 
   const getTimestamp = (timestamp: string) => {
-    return moment(timestamp).format("YYYY-MM-DD HH:mm:ss+00:00");
+    return getDateTimeFormat(timestamp);
   };
   const getMemo = (memo: string) => {
-    return memo.length > 0 ? memo : "-";
+    return memo.length > 0 ? memo : '-';
   };
 
   return (
@@ -45,7 +45,7 @@ const Row = ({ data, index, style }: any) => {
       <ItemColumn>{currentHistory.height}</ItemColumn>
       <ItemColumn>{getMessageType(currentHistory.type)}</ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={"_blank"}>
+        <Link to={{ pathname: `${EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>

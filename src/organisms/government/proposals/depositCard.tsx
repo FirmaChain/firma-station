@@ -19,6 +19,7 @@ import {
   DepositButton,
 } from './styles';
 import { FIRMACHAIN_CONFIG, SYMBOL } from '../../../config';
+import { getDateTimeFormat } from '../../../utils/dateUtil';
 
 interface IProps {
   proposalState: IProposalState;
@@ -29,7 +30,7 @@ const DepositCard = ({ proposalState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const getAddTimeFormat = (startTime: string, second: number) => {
-    return moment(startTime).add(convertNumber(second), 'seconds').format('YYYY-MM-DD HH:mm:ss+00:00');
+    return getDateTimeFormat(moment.utc(startTime).add(convertNumber(second), 'seconds').toISOString());
   };
 
   const getCurrentDeposit = (deposits: any) => {

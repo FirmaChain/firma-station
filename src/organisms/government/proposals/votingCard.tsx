@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList as List } from "react-window";
-import moment from "moment";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import { useMediaQuery } from "react-responsive";
+import React, { useState } from 'react';
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList as List } from 'react-window';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import { useMediaQuery } from 'react-responsive';
 
-import { rootState } from "../../../redux/reducers";
-import { EXPLORER_URI, FIRMACHAIN_CONFIG } from "../../../config";
-import { IProposalState, tally } from "../hooks";
-import { convertNumber, convertToFctNumber, convertNumberFormat } from "../../../utils/common";
-import { modalActions } from "../../../redux/action";
-import { useAvataURL } from "../../header/hooks";
+import { rootState } from '../../../redux/reducers';
+import { EXPLORER_URI, FIRMACHAIN_CONFIG } from '../../../config';
+import { IProposalState, tally } from '../hooks';
+import { convertNumber, convertToFctNumber, convertNumberFormat } from '../../../utils/common';
+import { modalActions } from '../../../redux/action';
+import { useAvataURL } from '../../header/hooks';
 
 import {
   CardWrapper,
@@ -37,8 +36,9 @@ import {
   ProfileImage,
   Quorum,
   Arrow,
-} from "./styles";
-import { MultiGauge } from "../../../components/gauge";
+} from './styles';
+import { MultiGauge } from '../../../components/gauge';
+import { getDateTimeFormat } from '../../../utils/dateUtil';
 
 interface IProps {
   proposalState: IProposalState;
@@ -46,28 +46,28 @@ interface IProps {
 
 const votingThemeData = [
   {
-    type: "YES",
-    key: "yes",
-    option: "VOTE_OPTION_YES",
-    color: "#2BA891",
+    type: 'YES',
+    key: 'yes',
+    option: 'VOTE_OPTION_YES',
+    color: '#2BA891',
   },
   {
-    type: "NO",
-    key: "no",
-    option: "VOTE_OPTION_NO",
-    color: "#F17047",
+    type: 'NO',
+    key: 'no',
+    option: 'VOTE_OPTION_NO',
+    color: '#F17047',
   },
   {
-    type: "NoWithVeto",
-    key: "noWithVeto",
-    option: "VOTE_OPTION_NO_WITH_VETO",
-    color: "#E79720",
+    type: 'NoWithVeto',
+    key: 'noWithVeto',
+    option: 'VOTE_OPTION_NO_WITH_VETO',
+    color: '#E79720',
   },
   {
-    type: "Abstain",
-    key: "abstain",
-    option: "VOTE_OPTION_ABSTAIN",
-    color: "#9438DC",
+    type: 'Abstain',
+    key: 'abstain',
+    option: 'VOTE_OPTION_ABSTAIN',
+    color: '#9438DC',
   },
 ];
 
@@ -84,7 +84,7 @@ const Row = ({ data, index, style }: any) => {
   };
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentVoter.voterAddress}` }} target={"_blank"}>
+    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentVoter.voterAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn>
           <ProfileImage src={avatarURL} />
@@ -104,12 +104,12 @@ const VotingCard = ({ proposalState }: IProps) => {
   const { balance } = useSelector((state: rootState) => state.user);
   const { enqueueSnackbar } = useSnackbar();
 
-  const isSmall = useMediaQuery({ query: "(max-width: 900px)" });
+  const isSmall = useMediaQuery({ query: '(max-width: 900px)' });
 
   const getTallyPercent = (proposalState: IProposalState, targetKey: string) => {
     let currentVoting = 0;
     for (let value in proposalState.tally) {
-      if (value === "abstain") continue;
+      if (value === 'abstain') continue;
       currentVoting += convertNumber(proposalState.tally[value]);
     }
 
@@ -122,20 +122,20 @@ const VotingCard = ({ proposalState }: IProps) => {
 
   const votingData = [
     {
-      percent: getTallyPercent(proposalState, "yes"),
-      value: getTallyValue(proposalState, "yes"),
+      percent: getTallyPercent(proposalState, 'yes'),
+      value: getTallyValue(proposalState, 'yes'),
     },
     {
-      percent: getTallyPercent(proposalState, "no"),
-      value: getTallyValue(proposalState, "no"),
+      percent: getTallyPercent(proposalState, 'no'),
+      value: getTallyValue(proposalState, 'no'),
     },
     {
-      percent: getTallyPercent(proposalState, "noWithVeto"),
-      value: getTallyValue(proposalState, "noWithVeto"),
+      percent: getTallyPercent(proposalState, 'noWithVeto'),
+      value: getTallyValue(proposalState, 'noWithVeto'),
     },
     {
-      percent: getTallyPercent(proposalState, "abstain"),
-      value: getTallyValue(proposalState, "abstain"),
+      percent: getTallyPercent(proposalState, 'abstain'),
+      value: getTallyValue(proposalState, 'abstain'),
     },
   ];
 
@@ -148,13 +148,13 @@ const VotingCard = ({ proposalState }: IProps) => {
   });
 
   const getTimeFormat = (time: string) => {
-    return moment(time).format("YYYY-MM-DD HH:mm:ss+00:00");
+    return getDateTimeFormat(time);
   };
 
   const getCurrentVotingPower = (tally: tally, totalVotingPower: number) => {
     let currentVoting = 0;
     for (let value in tally) {
-      if (value === "abstain") continue;
+      if (value === 'abstain') continue;
       currentVoting += convertNumber(tally[value]);
     }
 
@@ -162,7 +162,7 @@ const VotingCard = ({ proposalState }: IProps) => {
   };
 
   const getVotingCountByOption = (option: string) => {
-    if (option === "ALL") return proposalState.voters.length;
+    if (option === 'ALL') return proposalState.voters.length;
     else return proposalState.voters.filter((v) => v.option === option).length;
   };
 
@@ -170,14 +170,14 @@ const VotingCard = ({ proposalState }: IProps) => {
     let result = [];
     let currentVoting = 0;
     for (let value in proposalState.tally) {
-      if (value === "abstain") continue;
+      if (value === 'abstain') continue;
       currentVoting += convertNumber(proposalState.tally[value]);
     }
 
     for (let value in votingThemeData) {
-      if (votingThemeData[value].key === "abstain") continue;
+      if (votingThemeData[value].key === 'abstain') continue;
       result.push({
-        percent: `${convertNumberFormat(proposalState.tally[votingThemeData[value].key] / currentVoting * 100, 2)}%`,
+        percent: `${convertNumberFormat((proposalState.tally[votingThemeData[value].key] / currentVoting) * 100, 2)}%`,
         bgColor: votingThemeData[value].color,
       });
     }
@@ -196,8 +196,8 @@ const VotingCard = ({ proposalState }: IProps) => {
       });
       modalActions.handleModalVoting(true);
     } else {
-      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-        variant: "error",
+      enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
     }
@@ -212,7 +212,7 @@ const VotingCard = ({ proposalState }: IProps) => {
           <VotingContent>
             {isSmall ? (
               <>
-                <div style={{ marginBottom: "5px" }}>{getTimeFormat(proposalState.votingStartTime)} ~</div>
+                <div style={{ marginBottom: '5px' }}>{getTimeFormat(proposalState.votingStartTime)} ~</div>
                 <div>{getTimeFormat(proposalState.votingEndTime)}</div>
               </>
             ) : (
@@ -253,7 +253,7 @@ const VotingCard = ({ proposalState }: IProps) => {
             </VotingType>
 
             <VotingPercent>
-              {votingThemeData[index].type !== "Abstain" ? `${convertNumberFormat(voting.percent * 100, 2)}%` : "ㅤ"}
+              {votingThemeData[index].type !== 'Abstain' ? `${convertNumberFormat(voting.percent * 100, 2)}%` : 'ㅤ'}
             </VotingPercent>
             {/* <VotingGauge>
               <Gauge
@@ -265,7 +265,7 @@ const VotingCard = ({ proposalState }: IProps) => {
           </VotingData>
         ))}
       </VotingWrapper>
-      {proposalState.status === "PROPOSAL_STATUS_VOTING_PERIOD" && (
+      {proposalState.status === 'PROPOSAL_STATUS_VOTING_PERIOD' && (
         <VotingButton active={true} onClick={onClickVote}>
           Vote
         </VotingButton>
@@ -274,7 +274,7 @@ const VotingCard = ({ proposalState }: IProps) => {
         <VotingListWrap>
           <VotingTabWrap>
             <VotingTabItem active={currentVotingTab === 0} onClick={() => changeVotingTab(0)}>
-              All ({getVotingCountByOption("ALL")})
+              All ({getVotingCountByOption('ALL')})
             </VotingTabItem>
             <VotingTabItem active={currentVotingTab === 1} onClick={() => changeVotingTab(1)}>
               Yes ({getVotingCountByOption(votingThemeData[0].option)})
