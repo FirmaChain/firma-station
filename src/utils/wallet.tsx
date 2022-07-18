@@ -303,45 +303,44 @@ function useFirma(isUsedState = true) {
 
       if (VESTING_ACCOUNTS.length > 0) {
         for (let account of VESTING_ACCOUNTS) {
-          if (
-            account['base_vesting_account']['base_account']['address'] === address &&
-            account['@type'] === '/cosmos.vesting.v1beta1.PeriodicVestingAccount'
-          ) {
-            let endTimeAcc = convertNumber(account['start_time']) * 1;
-            let expiredVesting = 0;
+          if (account['@type'] === '/cosmos.vesting.v1beta1.PeriodicVestingAccount') {
+            if (account['base_vesting_account']['base_account']['address'] === address) {
+              let endTimeAcc = convertNumber(account['start_time']) * 1;
+              let expiredVesting = 0;
 
-            const periods: any[] = account['vesting_periods'];
+              const periods: any[] = account['vesting_periods'];
 
-            if (periods !== undefined) {
-              const vestingPeriod = periods.map((value: any) => {
-                endTimeAcc += value.length * 1;
+              if (periods !== undefined) {
+                const vestingPeriod = periods.map((value: any) => {
+                  endTimeAcc += value.length * 1;
 
-                let status = 0;
+                  let status = 0;
 
-                if (endTimeAcc <= moment().unix()) {
-                  expiredVesting += value.amount[0].amount * 1;
-                  status = 1;
-                }
+                  if (endTimeAcc <= moment().unix()) {
+                    expiredVesting += value.amount[0].amount * 1;
+                    status = 1;
+                  }
 
-                return {
-                  endTime: endTimeAcc,
-                  amount: value.amount[0].amount * 1,
-                  status,
-                };
-              });
+                  return {
+                    endTime: endTimeAcc,
+                    amount: value.amount[0].amount * 1,
+                    status,
+                  };
+                });
 
-              const totalVesting = convertNumber(account['base_vesting_account']['original_vesting'][0]['amount']);
+                const totalVesting = convertNumber(account['base_vesting_account']['original_vesting'][0]['amount']);
 
-              resolve({ totalVesting, expiredVesting });
+                resolve({ totalVesting, expiredVesting });
 
-              userActions.handleUserVesting({
-                totalVesting,
-                expiredVesting,
-                vestingPeriod,
-              });
+                userActions.handleUserVesting({
+                  totalVesting,
+                  expiredVesting,
+                  vestingPeriod,
+                });
 
-              isChecked = true;
-              break;
+                isChecked = true;
+                break;
+              }
             }
           }
         }
