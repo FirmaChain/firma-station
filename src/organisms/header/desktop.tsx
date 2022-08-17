@@ -1,14 +1,14 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import { isMobile, isTablet } from "react-device-detect";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import { isMobile, isTablet } from 'react-device-detect';
 
-import useFirma from "../../utils/wallet";
-import { copyToClipboard } from "../../utils/common";
-import { FIRMACHAIN_CONFIG } from "../../config";
-import { modalActions } from "../../redux/action";
-import { rootState } from "../../redux/reducers";
-import { useAvataURL, useUserData } from "./hooks";
+import useFirma from '../../utils/wallet';
+import { copyToClipboard } from '../../utils/common';
+import { FIRMACHAIN_CONFIG } from '../../config';
+import { modalActions } from '../../redux/action';
+import { rootState } from '../../redux/reducers';
+import { useAvataURL, useUserData } from './hooks';
 
 import {
   PaperwalletModal,
@@ -35,7 +35,8 @@ import {
   QueueTxModal,
   ResultTxModal,
   GasEstimationModal,
-} from "../modal";
+  RestakeModal,
+} from '../modal';
 
 import {
   HeaderContainer,
@@ -54,7 +55,7 @@ import {
   BarDiv,
   LedgerIconImg,
   QrIconImg,
-} from "./styles";
+} from './styles';
 
 function HeaderDesktop() {
   const { enqueueSnackbar } = useSnackbar();
@@ -84,12 +85,13 @@ function HeaderDesktop() {
     queueTx,
     resultTx,
     gasEstimation,
+    restake,
   } = useSelector((state: rootState) => state.modal);
 
   const { avatarURL } = useAvataURL(address);
   const { showAddressOnDevice } = useFirma();
 
-  useUserData();
+  useUserData(isInit);
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);
@@ -102,8 +104,8 @@ function HeaderDesktop() {
   const clipboard = () => {
     copyToClipboard(address);
 
-    enqueueSnackbar("Copied", {
-      variant: "success",
+    enqueueSnackbar('Copied', {
+      variant: 'success',
       autoHideDuration: 1000,
     });
   };
@@ -116,8 +118,8 @@ function HeaderDesktop() {
     showAddressOnDevice()
       .then(() => {})
       .catch(() => {
-        enqueueSnackbar("Failed connect ledger", {
-          variant: "success",
+        enqueueSnackbar('Failed connect ledger', {
+          variant: 'success',
           autoHideDuration: 2000,
         });
       });
@@ -181,6 +183,7 @@ function HeaderDesktop() {
       {queueTx && <QueueTxModal />}
       {resultTx && <ResultTxModal />}
       {gasEstimation && <GasEstimationModal />}
+      {restake && <RestakeModal />}
     </HeaderContainer>
   );
 }

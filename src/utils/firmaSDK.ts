@@ -1,8 +1,8 @@
-import { FirmaSDK } from '@firmachain/firma-js';
+import { FirmaSDK, AuthorizationType } from '@firmachain/firma-js';
 import { FirmaWebLedgerWallet, FirmaBridgeLedgerWallet } from '@firmachain/firma-js-ledger';
 import TransportHID from '@ledgerhq/hw-transport-webhid';
 
-import { FIRMACHAIN_CONFIG, IS_DEFAULT_GAS } from '../config';
+import { FIRMACHAIN_CONFIG, IS_DEFAULT_GAS, RESTAKE_ADDRESS } from '../config';
 import { getFeesFromGas, isElectron } from './common';
 
 declare global {
@@ -224,7 +224,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
 
   const withdrawAllRewardsFromAllValidator = async (estimatedGas: number) => {
     const wallet = await getWallet();
-    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress());
+    const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress())).dataList;
 
     const result = await firmaSDK.Distribution.withdrawAllRewardsFromAllValidator(wallet, delegationList, {
       gas: estimatedGas,
@@ -236,7 +236,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
 
   const getGasEstimationWithdrawAllRewardsFromAllValidator = async () => {
     const wallet = await getWallet();
-    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress());
+    const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress())).dataList;
     const gasEstimation = await firmaSDK.Distribution.getGasEstimationWithdrawAllRewardsFromAllValidator(
       wallet,
       delegationList
@@ -444,6 +444,77 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     return result;
   };
 
+  const grantStakeAuthorizationDelegate = async (
+    validatorAddressList: Array<string>,
+    expirationDate: Date,
+    maxFCT: number,
+    estimatedGas: number
+  ) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Authz.grantStakeAuthorization(
+      wallet,
+      RESTAKE_ADDRESS,
+      validatorAddressList,
+      AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
+      expirationDate,
+      maxFCT,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationGrantStakeAuthorizationDelegate = async (
+    validatorAddressList: Array<string>,
+    expirationDate: Date,
+    maxFCT: number
+  ) => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Authz.getGasEstimationGrantStakeAuthorization(
+      wallet,
+      RESTAKE_ADDRESS,
+      validatorAddressList,
+      AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
+      expirationDate,
+      maxFCT
+    );
+
+    return result;
+  };
+
+  const revokeStakeAuthorizationDelegate = async (estimatedGas: number) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Authz.revokeStakeAuthorization(
+      wallet,
+      RESTAKE_ADDRESS,
+      AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationRevokeStakeAuthorizationDelegate = async () => {
+    if (IS_DEFAULT_GAS) return FIRMACHAIN_CONFIG.defaultGas;
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Authz.getGasEstimationRevokeStakeAuthorization(
+      wallet,
+      RESTAKE_ADDRESS,
+      AuthorizationType.AUTHORIZATION_TYPE_DELEGATE
+    );
+
+    return result;
+  };
+
   return {
     getSDK,
     showAddressOnDevice,
@@ -462,6 +533,8 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     submitCommunityPoolSpendProposal,
     submitTextProposal,
     submitSoftwareUpgradeProposalByHeight,
+    grantStakeAuthorizationDelegate,
+    revokeStakeAuthorizationDelegate,
 
     getGasEstimationSend,
     getGasEstimationSendToken,
@@ -476,6 +549,8 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     getGasEstimationSubmitCommunityPoolSpendProposal,
     getGasEstimationSubmitTextProposal,
     getGasEstimationSubmitSoftwareUpgradeProposalByHeight,
+    getGasEstimationGrantStakeAuthorizationDelegate,
+    getGasEstimationRevokeStakeAuthorizationDelegate,
   };
 };
 

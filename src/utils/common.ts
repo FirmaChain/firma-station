@@ -98,3 +98,39 @@ export const copyToClipboard = (textToCopy: string) => {
     }
   } catch (e) {}
 };
+
+export const getUTCDateFormat = (date: Date) => {
+  return `${date.getUTCFullYear()}-${('00' + (date.getUTCMonth() + 1)).slice(-2)}-${('00' + date.getUTCDate()).slice(
+    -2
+  )}`;
+};
+
+export const getRestakeStatus = (status: number, isLedger = false) => {
+  if (isLedger) return 'Not supported';
+
+  switch (status) {
+    case -1:
+      return 'Maintenance';
+    case 0:
+      return 'Inactive';
+    case 1:
+      return 'Active';
+    case 2:
+      return 'Not yet delegated';
+  }
+};
+
+export const getRestakeStatusColor = (status: number, isLedger = false) => {
+  if (isLedger) return '#888888';
+
+  switch (status) {
+    case -1:
+      return '#D89614';
+    case 0:
+      return '#b08dff';
+    case 1:
+      return '#48b495';
+    case 2:
+      return '#888888';
+  }
+};

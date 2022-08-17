@@ -24,15 +24,13 @@ import {
   CopyIconImg,
   LeftWrapper,
 } from './styles';
-import { convertNumberFormat, convertToFctNumber, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
-import { IDelegationState } from '../hooks';
+import { convertNumberFormat, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
 
 interface IProps {
   targetValidatorData: any;
-  delegateState: IDelegationState;
 }
 
-const ValidatorCard = ({ targetValidatorData, delegateState }: IProps) => {
+const ValidatorCard = ({ targetValidatorData }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const clipboard = (value: string) => {
@@ -124,14 +122,6 @@ const ValidatorCard = ({ targetValidatorData, delegateState }: IProps) => {
                 2
               )} ${SYMBOL}`}</StatusSubContent>
             </StatusItem> */}
-            <StatusItem>
-              <StatusTitle>Self-delegation</StatusTitle>
-              <StatusContent>{`${convertNumberFormat(delegateState.selfPercent, 2)} %`}</StatusContent>
-              <StatusSubContent>{`${convertNumberFormat(
-                convertToFctNumber(delegateState.self),
-                2
-              )} FCT`}</StatusSubContent>
-            </StatusItem>
             <StatusItem>
               <StatusTitle>Commission</StatusTitle>
               <StatusContent>{`${convertNumberFormat(targetValidatorData.commission, 2)} %`}</StatusContent>

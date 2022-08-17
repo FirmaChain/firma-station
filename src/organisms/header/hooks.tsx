@@ -1,20 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
-import { useAvataURLFromAddress } from "../../apollo/gqls";
-import useFirma from "../../utils/wallet";
+import { useAvataURLFromAddress } from '../../apollo/gqls';
+import useFirma from '../../utils/wallet';
 
-export const useUserData = () => {
+export const useUserData = (isInit: boolean) => {
   const { setUserData } = useFirma();
 
   useInterval(() => {
-    setUserData()
-      .then(() => {})
-      .catch(() => {});
+    if (isInit) {
+      setUserData()
+        .then(() => {})
+        .catch(() => {});
+    }
   }, 5000);
 };
 
 export const useAvataURL = (address: string) => {
-  const [avatarURL, setAvataURL] = useState("");
+  const [avatarURL, setAvataURL] = useState('');
   const [moniker, setMoniker] = useState(address);
 
   useAvataURLFromAddress({
@@ -28,7 +30,7 @@ export const useAvataURL = (address: string) => {
 
         if (
           data.validator[0].validator_descriptions[0].moniker !== undefined &&
-          data.validator[0].validator_descriptions[0].moniker !== ""
+          data.validator[0].validator_descriptions[0].moniker !== ''
         )
           setMoniker(data.validator[0].validator_descriptions[0].moniker);
       }

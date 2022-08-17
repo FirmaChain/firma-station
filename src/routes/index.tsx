@@ -1,10 +1,21 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import { Route, Redirect, Switch } from "react-router-dom";
-import { rootState } from "../redux/reducers";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import { Route, Redirect, Switch } from 'react-router-dom';
+import { rootState } from '../redux/reducers';
 
-import { Home, Staking, Accounts, History, Validators, Government, Proposals, Community, Download } from "../pages";
+import {
+  Home,
+  Staking,
+  Accounts,
+  History,
+  Validators,
+  Government,
+  Proposals,
+  Community,
+  Download,
+  Restake,
+} from '../pages';
 
 const routePublic = (path: string, component: React.FC) => ({
   path,
@@ -19,15 +30,16 @@ const routePrivate = (path: string, component: React.FC) => ({
 });
 
 const routes = {
-  Home: routePublic("/", Home),
-  Accounts: routePrivate("/accounts", Accounts),
-  History: routePrivate("/history", History),
-  Staking: routePublic("/staking", Staking),
-  Validators: routePublic("/staking/validators/:address", Validators),
-  Government: routePublic("/government", Government),
-  Proposals: routePublic("/government/proposals/:id", Proposals),
-  Community: routePublic("/community", Community),
-  Download: routePublic("/download", Download),
+  Home: routePublic('/', Home),
+  Accounts: routePrivate('/accounts', Accounts),
+  History: routePrivate('/history', History),
+  Staking: routePublic('/staking', Staking),
+  Validators: routePublic('/staking/validators/:address', Validators),
+  Government: routePublic('/government', Government),
+  Proposals: routePublic('/government/proposals/:id', Proposals),
+  Community: routePublic('/community', Community),
+  Download: routePublic('/download', Download),
+  Restake: routePrivate('/restake', Restake),
 };
 
 interface IProps {
@@ -43,13 +55,13 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
 
   const renderFunc = (props: any) => {
     if (auth) {
-      if (address === "") {
-        enqueueSnackbar("You Need Login First", {
-          variant: "error",
+      if (address === '') {
+        enqueueSnackbar('You Need Login First', {
+          variant: 'error',
           autoHideDuration: 2000,
         });
 
-        return <Redirect to={{ pathname: "/" }} />;
+        return <Redirect to={{ pathname: '/' }} />;
       }
     }
 
@@ -64,7 +76,7 @@ const route = () => (
     {Object.values(routes).map((x, i) => (
       <CustomRoute key={i} exact path={x.path} component={x.component} auth={x.auth} />
     ))}
-    <Route render={() => <Redirect to="/" />} />
+    <Route render={() => <Redirect to='/' />} />
   </Switch>
 );
 

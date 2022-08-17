@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const GaugeWrapper = styled.div<{ $bgColor: string }>`
   width: 100%;
@@ -6,7 +6,7 @@ export const GaugeWrapper = styled.div<{ $bgColor: string }>`
   display: flex;
   overflow: hidden;
   border-radius: 4px;
-  background: ${(props) => props.$bgColor}50;
+  background: ${(props) => props.$bgColor}30;
 `;
 
 export const GaugePercent = styled.div<{ percent: string; $bgColor: string }>`

@@ -20,6 +20,9 @@ export const DENOM = 'ufct';
 export const SYMBOL = 'FCT';
 
 export const IS_HASURA_ACTION = true;
+export const VESTING_ACCOUNTS = [];
+export const RESTAKE_API = 'http://0.0.0.0/restake/info';
+export const RESTAKE_ADDRESS = '';
 
 export const DOWNLOAD_LINK_LIST = [];
 
@@ -38,5 +41,3 @@ export const GUIDE_LINK_DELEGATE = '';
 export const GUIDE_LINK_REDELEGATE = '';
 export const GUIDE_LINK_UNDELEGATE = '';
 export const GUIDE_LINK_NEW_PROPOSAL = '';
-
-export const VESTING_ACCOUNTS = [];

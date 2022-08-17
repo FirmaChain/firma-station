@@ -1,4 +1,4 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer } from '@reduxjs/toolkit';
 import {
   HANDLE_MODAL_RESET,
   HANDLE_MODAL_DATA,
@@ -26,7 +26,8 @@ import {
   HANDLE_MODAL_QUEUETX,
   HANDLE_MODAL_RESULTTX,
   HANDLE_MODAL_GASESTIMATION,
-} from "../types";
+  HANDLE_MODAL_RESTAKE,
+} from '../types';
 
 export interface IModalState {
   data: any;
@@ -54,6 +55,7 @@ export interface IModalState {
   queueTx: boolean;
   resultTx: boolean;
   gasEstimation: boolean;
+  restake: boolean;
 }
 
 const initialState: IModalState = {
@@ -82,6 +84,7 @@ const initialState: IModalState = {
   queueTx: false,
   resultTx: false,
   gasEstimation: false,
+  restake: false,
 };
 
 export default createReducer(initialState, {
@@ -164,5 +167,8 @@ export default createReducer(initialState, {
   },
   [HANDLE_MODAL_GASESTIMATION]: (state: IModalState, { isVisible }) => {
     state.gasEstimation = isVisible;
+  },
+  [HANDLE_MODAL_RESTAKE]: (state: IModalState, { isVisible }) => {
+    state.restake = isVisible;
   },
 });

@@ -1,37 +1,38 @@
-import styled, { keyframes } from "styled-components";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import NewWalletIcon from "@mui/icons-material/AddBox";
-import RecoverMnemonicIcon from "@mui/icons-material/Restore";
-import ImportPrivateKeyIcon from "@mui/icons-material/ImportExport";
-import ConnectLedgerIcon from "@mui/icons-material/Usb";
-import QrCodeIcon from "@mui/icons-material/QrCode";
-import LogoutIcon from "@mui/icons-material/Logout";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import HelpIconOrigin from "@mui/icons-material/Help";
+import styled, { keyframes } from 'styled-components';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import NewWalletIcon from '@mui/icons-material/AddBox';
+import RecoverMnemonicIcon from '@mui/icons-material/Restore';
+import ImportPrivateKeyIcon from '@mui/icons-material/ImportExport';
+import ConnectLedgerIcon from '@mui/icons-material/Usb';
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import HelpIconOrigin from '@mui/icons-material/Help';
 
-export const paperwalletModalWidth = "630px";
-export const qrCodeModalWidth = "500px";
-export const loginModalWidth = "900px";
-export const exportWalletModalWidth = "900px";
-export const newWalletModalWidth = "650px";
-export const confirmWalletModalWidth = "650px";
-export const recoverMnemonicModalWidth = "600px";
-export const importPrivatekeyModalWidth = "600px";
-export const exportPrivatekeyModalWidth = "600px";
-export const exportMnemonicModalWidth = "600px";
-export const connectLedgerModalWidth = "600px";
-export const confirmTxModalWidth = "400px";
-export const delegateModalWidth = "500px";
-export const depositModalWidth = "500px";
-export const networksModalWidth = "500px";
-export const newProposalModalWidth = "500px";
-export const queueTxModalWidth = "500px";
-export const gasEstimationModalWidth = "500px";
-export const redelegateModalWidth = "500px";
-export const resultTxModalWidth = "500px";
-export const sendModalWidth = "500px";
-export const undelegateModalWidth = "500px";
-export const votingModalWidth = "500px";
+export const paperwalletModalWidth = '630px';
+export const qrCodeModalWidth = '500px';
+export const restakeModalWidth = '500px';
+export const loginModalWidth = '900px';
+export const exportWalletModalWidth = '900px';
+export const newWalletModalWidth = '650px';
+export const confirmWalletModalWidth = '650px';
+export const recoverMnemonicModalWidth = '600px';
+export const importPrivatekeyModalWidth = '600px';
+export const exportPrivatekeyModalWidth = '600px';
+export const exportMnemonicModalWidth = '600px';
+export const connectLedgerModalWidth = '600px';
+export const confirmTxModalWidth = '400px';
+export const delegateModalWidth = '500px';
+export const depositModalWidth = '500px';
+export const networksModalWidth = '500px';
+export const newProposalModalWidth = '500px';
+export const queueTxModalWidth = '500px';
+export const gasEstimationModalWidth = '500px';
+export const redelegateModalWidth = '500px';
+export const resultTxModalWidth = '500px';
+export const sendModalWidth = '500px';
+export const undelegateModalWidth = '500px';
+export const votingModalWidth = '500px';
 
 export const ModalContainer = styled.div`
   width: 100%;
@@ -51,7 +52,7 @@ export const ModalTitle = styled.div`
   font-size: ${({ theme }) => theme.sizes.modalTitle};
   color: white;
   text-align: center;
-  font-family: "Chakra-Medium" !important;
+  font-family: 'Chakra-Medium' !important;
 
   & > svg {
     cursor: pointer;
@@ -116,7 +117,7 @@ export const ModalTooltipIcon = styled.div`
   height: 20px;
   flex: 1 1 25px;
   margin-right: 7px;
-  background: url("${({ theme }) => theme.urls.tooltip}");
+  background: url('${({ theme }) => theme.urls.tooltip}');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -198,7 +199,7 @@ export const InputBoxDefault = styled.input<{ isInvalid?: boolean }>`
   padding: 0 10px;
   color: white;
   background-color: #21212f;
-  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}` : "#696974")};
+  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}` : '#696974')};
   border-radius: 4px;
   ::-webkit-outer-spin-button,
   ::-webkit-inner-spin-button {
@@ -570,7 +571,7 @@ export const SamplePaperWallet = styled.div`
   margin: auto;
   margin-top: 20px;
   margin-bottom: 30px;
-  background: url("${({ theme }) => theme.urls.paperwallet}");
+  background: url('${({ theme }) => theme.urls.paperwallet}');
   background-color: #44444f;
   background-size: contain;
   background-repeat: no-repeat;
@@ -604,7 +605,7 @@ const fadeIn = keyframes`
 `;
 
 export const AfterTypo = styled.div<{ isActive: boolean }>`
-  display: ${(props) => (props.isActive ? "flex" : "none")};
+  display: ${(props) => (props.isActive ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -619,7 +620,7 @@ export const QueueIcon = styled.div`
   height: 20px;
   flex: 1 1 25px;
   margin-right: 7px;
-  background: url("${({ theme }) => theme.urls.tooltip}");
+  background: url('${({ theme }) => theme.urls.tooltip}');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -649,6 +650,84 @@ export const MaxButton = styled.div<{ active: boolean }>`
 
 export const HelpIcon = styled(HelpIconOrigin)`
   opacity: 0.4;
+`;
+
+export const ValueContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  font-size: 1.4rem;
+  margin-top: 20px;
+`;
+
+export const ValueItem = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+export const ValueLabel = styled.div`
+  width: 100%;
+  color: #999;
+`;
+
+export const ValueText = styled.div`
+  width: 100%;
+  text-align: right;
+  color: #efefef;
+`;
+
+export const MoreViewContainer = styled.div`
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+export const MoreView = styled.div`
+  display: flex;
+  color: #5972a8;
+  text-decoration: underline;
+  font-size: 1.4rem;
+  cursor: pointer;
+`;
+
+export const ButtonWrapper = styled.div`
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+`;
+
+export const RestakeButton = styled.div<{ active: boolean }>`
+  width: 100%;
+  height: 48px;
+  font-size: ${({ theme }) => theme.sizes.modal18};
+  line-height: 48px;
+  text-align: center;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.mainblue};
+  border: 1px solid ${({ theme }) => theme.colors.mainblue};
+  border-radius: 4px;
+  cursor: pointer;
+  ${(props) => (props.active ? `` : `background-color: transparent;color:#ddd;border:1px solid #888`)}
+`;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px dashed #555;
+`;
+
+export const DividerSolid = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #555;
 `;
 
 export {

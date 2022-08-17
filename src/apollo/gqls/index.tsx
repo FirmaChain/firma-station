@@ -313,7 +313,6 @@ export const useAvataURLFromAddress = ({ onCompleted, address }: IQueryParam) =>
     `,
     {
       onCompleted,
-      pollInterval: 5000,
       notifyOnNetworkStatusChange: true,
       variables: {
         limit: 99999,

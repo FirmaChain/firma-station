@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { FirmaUtil } from '@firmachain/firma-js';
+import { FirmaUtil, AuthorizationType } from '@firmachain/firma-js';
 import moment from 'moment';
 
 import { Wallet } from './types';
-import { DENOM, SYMBOL, VESTING_ACCOUNTS } from '../config';
+import { DENOM, RESTAKE_ADDRESS, SYMBOL, VESTING_ACCOUNTS } from '../config';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
 import { rootState } from '../redux/reducers';
 import { userActions, walletActions } from '../redux/action';
@@ -210,7 +210,15 @@ function useFirma(isUsedState = true) {
       try {
         if (token.denom === DENOM) continue;
 
-        const tokenData = await firmaSDK.Token.getTokenData(token.denom);
+        let tokenData = {
+          decimal: 0,
+          symbol: token.denom,
+        };
+
+        if (token.denom.includes('ibc') === false) {
+          tokenData = await firmaSDK.Token.getTokenData(token.denom);
+        }
+
         tokenDataList.push({
           denom: token.denom,
           balance: convertToTokenString(token.amount, tokenData.decimal),
@@ -227,11 +235,11 @@ function useFirma(isUsedState = true) {
 
   const getTotalDelegated = async (address: string) => {
     const firmaSDK = FirmaSDK.getSDK();
-    const delegateListOrigin = await firmaSDK.Staking.getTotalDelegationInfo(address);
+    const delegateListOrigin = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
 
     let totalDelegated = 0;
     for (let i = 0; i < delegateListOrigin.length; i++) {
-      totalDelegated += convertNumber(delegateListOrigin[i].balance.amount);
+      totalDelegated += convertNumber(delegateListOrigin[i].delegation.shares);
     }
 
     return totalDelegated;
@@ -289,7 +297,9 @@ function useFirma(isUsedState = true) {
 
       getRedelegationList();
       getUndelegationList();
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const getVestingAccount = async () => {
@@ -384,23 +394,23 @@ function useFirma(isUsedState = true) {
     const address = getAddressInternal();
 
     const balance = await firmaSDK.Bank.getBalance(address);
-    const delegateListOrigin = await firmaSDK.Staking.getTotalDelegationInfo(address);
+    const delegateListOrigin = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
     const undelegateListOrigin = await firmaSDK.Staking.getTotalUndelegateInfo(address);
     const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
-    const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.balance.amount - a.balance.amount);
+    const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.delegation.shares - a.delegation.shares);
 
     const delegateList = delegateListSort.map((value) => {
       return {
         validatorAddress: value.delegation.validator_address,
         delegatorAddress: value.delegation.delegator_address,
-        amount: convertNumber(value.balance.amount),
+        amount: convertNumber(value.delegation.shares),
         moniker: value.delegation.validator_address,
         avatarURL: '',
       };
     });
 
     const delegationBalanceList = delegateListSort.map((value) => {
-      return value.balance.amount;
+      return value.delegation.shares;
     });
 
     const undelegationBalanceList = undelegateListOrigin.map((value) => {
@@ -453,14 +463,14 @@ function useFirma(isUsedState = true) {
     const address = getAddressInternal();
 
     const balance = await firmaSDK.Bank.getBalance(address);
-    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(address);
+    const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
     const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
 
     const targetDelegation = delegationList.find((value) => value.delegation.validator_address === validatorAddress);
     const targetReward = totalReward.rewards.find((value) => value.validator_address === validatorAddress);
 
     const available = convertToFctNumber(balance);
-    const delegated = convertToFctNumber(targetDelegation ? targetDelegation.balance.amount : 0);
+    const delegated = convertToFctNumber(targetDelegation ? targetDelegation.delegation.shares : 0);
     const undelegate = 0;
     const stakingReward = convertToFctNumber(targetReward ? targetReward.amount : 0);
 
@@ -478,15 +488,52 @@ function useFirma(isUsedState = true) {
     const firmaSDK = FirmaSDK.getSDK();
     const address = getAddressInternal();
 
-    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(address);
+    const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
 
     const parseList = delegationList.map((value) => {
       return {
         value: value.delegation.validator_address,
         label: value.delegation.validator_address,
-        amount: value.balance.amount,
+        amount: value.delegation.shares,
       };
     });
+
+    return parseList;
+  };
+
+  const getDelegationListWithReward = async () => {
+    const firmaSDK = FirmaSDK.getSDK();
+    const address = getAddressInternal();
+
+    const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
+
+    const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
+
+    let parseList = [];
+    for (let i = 0; i < delegationList.length; i++) {
+      let value = delegationList[i].delegation.validator_address;
+      let amount = delegationList[i].delegation.shares;
+      let rewards = '0';
+
+      if (Math.ceil(convertNumber(amount.split('.')[0])) === 0) {
+        continue;
+      }
+
+      for (let j = 0; j < totalReward.rewards.length; j++) {
+        if (totalReward.rewards[j].validator_address === value) {
+          rewards = totalReward.rewards[j].amount;
+        }
+      }
+
+      amount = Math.ceil(convertNumber(amount.split('.')[0])).toString();
+      rewards = Math.ceil(convertNumber(rewards.split('.')[0])).toString();
+
+      parseList.push({
+        value,
+        amount,
+        rewards,
+      });
+    }
 
     return parseList;
   };
@@ -561,7 +608,7 @@ function useFirma(isUsedState = true) {
     const firmaSDK = FirmaSDK.getSDK();
     const address = getAddressInternal();
 
-    const delegationList = await firmaSDK.Staking.getTotalDelegationInfo(address);
+    const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
 
     const [delegation] = delegationList
       .filter((value) => value.delegation.validator_address === targetValidator)
@@ -801,6 +848,58 @@ function useFirma(isUsedState = true) {
     );
   };
 
+  const getStakingGrantDataList = async () => {
+    try {
+      const firmaSDK = FirmaSDK.getSDK();
+      let address = getAddressInternal();
+
+      const grantData = await firmaSDK.Authz.getStakingGrantData(
+        address,
+        RESTAKE_ADDRESS,
+        AuthorizationType.AUTHORIZATION_TYPE_DELEGATE
+      );
+      const grantList = grantData.dataList;
+
+      return grantList;
+    } catch (e) {
+      return [];
+    }
+  };
+
+  const grantStakeAuthorizationDelegate = async (
+    validatorAddressList: Array<string>,
+    expirationDate: Date,
+    maxFCT: number,
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.grantStakeAuthorizationDelegate(
+      validatorAddressList,
+      expirationDate,
+      maxFCT,
+      estimatedGas
+    );
+
+    checkVlidateResult(result);
+  };
+
+  const getGasEstimationGrantStakeAuthorizationDelegate = async (
+    validatorAddressList: Array<string>,
+    expirationDate: Date,
+    maxFCT: number
+  ) => {
+    return await FirmaSDK.getGasEstimationGrantStakeAuthorizationDelegate(validatorAddressList, expirationDate, maxFCT);
+  };
+
+  const revokeStakeAuthorizationDelegate = async (estimatedGas: number) => {
+    const result = await FirmaSDK.revokeStakeAuthorizationDelegate(estimatedGas);
+
+    checkVlidateResult(result);
+  };
+
+  const getGasEstimationRevokeStakeAuthorizationDelegate = async () => {
+    return await FirmaSDK.getGasEstimationRevokeStakeAuthorizationDelegate();
+  };
+
   const checkVlidateResult = (result: any) => {
     if (result.code === undefined) {
       console.log(result);
@@ -840,6 +939,7 @@ function useFirma(isUsedState = true) {
     getTokenData,
     getStaking,
     getStakingFromValidator,
+    getDelegationListWithReward,
     getDelegationList,
     getDelegation,
     getRedelegationList,
@@ -857,6 +957,9 @@ function useFirma(isUsedState = true) {
     submitSoftwareUpgrade,
     deposit,
     vote,
+    grantStakeAuthorizationDelegate,
+    revokeStakeAuthorizationDelegate,
+    getStakingGrantDataList,
     getGasEstimationSendFCT,
     getGasEstimationsendToken,
     getGasEstimationDelegate,
@@ -870,6 +973,8 @@ function useFirma(isUsedState = true) {
     getGasEstimationSubmitCommunityPoolSpendProposal,
     getGasEstimationSubmitTextProposal,
     getGasEstimationSubmitSoftwareUpgrade,
+    getGasEstimationGrantStakeAuthorizationDelegate,
+    getGasEstimationRevokeStakeAuthorizationDelegate,
     isValidWallet,
     isValidAddress,
     downloadPaperWallet,

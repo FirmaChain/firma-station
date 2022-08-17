@@ -29,7 +29,7 @@ const Validators = () => {
       )}
       {validatorsState && (
         <>
-          <ValidatorCard targetValidatorData={targetValidatorData} delegateState={delegateState} />
+          <ValidatorCard targetValidatorData={targetValidatorData} />
           <DelegatorsCard delegateState={delegateState} />
         </>
       )}

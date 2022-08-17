@@ -26,9 +26,13 @@ const AssetCard = () => {
   const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
 
   const assetList = [
-    [`${SYMBOL}`, balance],
+    [`${SYMBOL}`, convertNumberFormat(balance, 3)],
     ...tokenList.map((data) => {
-      return [data.symbol, convertNumberFormat(data.balance, 3)];
+      let symbol = data.symbol;
+      if (data.symbol.length > 10) {
+        symbol = data.symbol.substring(0, 10) + '...';
+      }
+      return [symbol, convertNumberFormat(data.balance, 3)];
     }),
     ...nftList.map((data) => {
       return [`NFT #${data.id}`, '1'];
