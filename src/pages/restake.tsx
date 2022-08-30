@@ -2,7 +2,17 @@ import React from 'react';
 import { useDelegationRewards, useRestakeState } from '../organisms/restake/hooks';
 import { TotalCard, RestakeCard, RestakeList } from '../organisms/restake';
 
-import { ContentContainer, RestakeContainer, RestakeLeft, RestakeRight, Label } from '../styles/restake';
+import {
+  ContentContainer,
+  RestakeContainer,
+  RestakeLeft,
+  RestakeRight,
+  LabelWrapper,
+  Label,
+  MoreView,
+  OpenIcon,
+} from '../styles/restake';
+import { RESTAKE_PAGE_LINK } from '../config';
 
 const Restake = () => {
   const { totalDelegateState, grantsDataState } = useDelegationRewards();
@@ -10,7 +20,16 @@ const Restake = () => {
 
   return (
     <ContentContainer>
-      <Label>Recent restake</Label>
+      <LabelWrapper>
+        <Label>Recent restake</Label>
+        <MoreView
+          onClick={() => {
+            window.open(RESTAKE_PAGE_LINK);
+          }}
+        >
+          More View <OpenIcon />
+        </MoreView>
+      </LabelWrapper>
       <TotalCard restakeState={restakeState} />
       <Label>My restake</Label>
       <RestakeContainer>

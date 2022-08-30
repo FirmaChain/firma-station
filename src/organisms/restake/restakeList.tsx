@@ -162,10 +162,14 @@ const RestakeList = ({ totalDelegateState, grantsDataState, restakeState }: IPro
     if (isLedger) return;
 
     const validatorAddressList = restakeDataList.map((data: any) => data.validatorAddress);
+    const totalDelegated = totalDelegateState.totalDelegated;
+    const totalRewards = totalDelegateState.totalRewards;
 
     modalActions.handleModalData({
       validatorAddressList: validatorAddressList,
       isActiveRestake: false,
+      totalDelegated,
+      totalRewards,
     });
 
     modalActions.handleModalRestake(true);

@@ -6,6 +6,7 @@ export const ContentContainer = styled.div`
   width: calc(100% - 80px);
   height: 100%;
   padding: 0 40px;
+  position: relative;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
   display: flex;
@@ -53,11 +54,31 @@ export const RestakeRight = styled.div`
     flex-grow: 1;
   }
 `;
+export const LabelWrapper = styled.div`
+  display: inline-block;
+  width: 100%;
+`;
 
 export const Label = styled.div`
-  width: 100%;
+  display: inline-block;
   font-size: 2.2rem;
   color: #bbb;
-
   margin-top: 10px;
+`;
+
+export const MoreView = styled.div`
+  float: right;
+  display: flex;
+  width: 100px;
+  font-size: 16px;
+  line-height: 22px;
+  margin-top: 7px;
+  color: #ccc;
+  cursor: pointer;
+`;
+
+export const OpenIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  background-image: url('${(props) => props.theme.urls.openArrow}');
 `;

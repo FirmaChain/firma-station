@@ -32,7 +32,7 @@ const menus = [
   { name: 'Accounts', path: '/accounts', icon: AccountsIcon, externalLink: '' },
   { name: 'History', path: '/history', icon: HistoryIcon, externalLink: '' },
   { name: 'Staking', path: '/staking', icon: StakingIcon, externalLink: '' },
-  { name: 'Restake', path: '/restake', icon: AutorenewIcon, externalLink: '' },
+  { name: 'Restake (Beta)', path: '/restake', icon: AutorenewIcon, externalLink: '' },
   { name: 'Governance', path: '/government', icon: GovernmentIcon, externalLink: '' },
   { name: 'Community', path: '/community', icon: ForumIcon, externalLink: '' },
   {

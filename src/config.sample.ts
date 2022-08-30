@@ -23,6 +23,7 @@ export const IS_HASURA_ACTION = true;
 export const VESTING_ACCOUNTS = [];
 export const RESTAKE_API = 'http://0.0.0.0/restake/info';
 export const RESTAKE_ADDRESS = '';
+export const RESTAKE_PAGE_LINK = '';
 
 export const DOWNLOAD_LINK_LIST = [];
 
