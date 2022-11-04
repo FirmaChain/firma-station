@@ -29,7 +29,11 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   };
 
   const getAmount = (denom: string, amount: number) => {
-    return `${convertNumberFormat(amount / 10 ** tokenDataState[denom].decimal, 3)} ${tokenDataState[denom].symbol}`;
+    if (tokenDataState[denom] !== undefined) {
+      return `${convertNumberFormat(amount / 10 ** tokenDataState[denom].decimal, 3)} ${tokenDataState[denom].symbol}`;
+    } else {
+      return amount;
+    }
   };
 
   const getResult = (result: boolean) => {

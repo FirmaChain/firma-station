@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { rootState } from "../../redux/reducers";
-import { useTransferHistoryByAddressQuery } from "../../apollo/gqls";
-import useFirma from "../../utils/wallet";
-import { convertNumber } from "../../utils/common";
+import { rootState } from '../../redux/reducers';
+import { useTransferHistoryByAddressQuery } from '../../apollo/gqls';
+import useFirma from '../../utils/wallet';
+import { convertNumber } from '../../utils/common';
 
 export interface IHistory {
   height: number;
@@ -43,6 +43,8 @@ export const useTransferHistoryByAddress = () => {
 
   const updateTokenData = async (data: any) => {
     for (let message of data.messagesByAddress) {
+      if (message.transaction.success === false) continue;
+
       const denom = message.transaction.messages[0].amount[0].denom;
 
       if (Object.keys(tokenDataState).includes(denom) === false) {
@@ -76,7 +78,7 @@ export const useTransferHistoryByAddress = () => {
       return {
         height: message.transaction.height,
         hash: message.transaction.hash,
-        type: message.transaction.messages[0]["@type"],
+        type: message.transaction.messages[0]['@type'],
         from: message.transaction.messages[0].from_address,
         to: message.transaction.messages[0].to_address,
         denom: message.transaction.messages[0].amount[0].denom,

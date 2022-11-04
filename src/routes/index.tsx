@@ -39,7 +39,7 @@ const routes = {
   Proposals: routePublic('/government/proposals/:id', Proposals),
   Community: routePublic('/community', Community),
   Download: routePublic('/download', Download),
-  Restake: routePrivate('/restake', Restake),
+  // Restake: routePrivate('/restake', Restake),
 };
 
 interface IProps {
