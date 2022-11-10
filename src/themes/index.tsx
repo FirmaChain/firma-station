@@ -85,7 +85,7 @@ const sizes = {
   votingpowerSize3: '1.6rem',
   comingTitle: '5.0rem',
   communityTitle: '4.0rem',
-  communitySubTitle: '2.0rem',
+  communitySubTitle: '1.8rem',
   sideMenuDrawer: '210px',
 };
 
@@ -107,6 +107,7 @@ const urls = {
   linux: process.env.PUBLIC_URL + '/images/icon_linux.png',
   mac: process.env.PUBLIC_URL + '/images/icon_mac.png',
   google: process.env.PUBLIC_URL + '/images/icon_google.png',
+  apple: process.env.PUBLIC_URL + '/images/icon_apple.png',
   on: process.env.PUBLIC_URL + '/images/on.png',
   off: process.env.PUBLIC_URL + '/images/off.png',
   sortIdle: process.env.PUBLIC_URL + '/images/sort_idle.png',

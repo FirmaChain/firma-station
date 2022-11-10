@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import Hamburger from "hamburger-react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import Hamburger from 'hamburger-react';
+import { Link } from 'react-router-dom';
 
-import { EXPLORER_URI } from "../../config";
+import { EXPLORER_URI } from '../../config';
 
 import {
   HeaderMobileContainer,
@@ -13,21 +13,26 @@ import {
   HeaderIcon,
   MobileMenuList,
   MobileMenuItem,
-} from "./styles";
+} from './styles';
 
 const menus = [
-  { name: "Home", path: "/", externalLink: "" },
-  { name: "Staking", path: "/staking", externalLink: "" },
-  { name: "Governance", path: "/government", externalLink: "" },
-  { name: "Community", path: "/community", externalLink: "" },
+  { name: 'Home', path: '/', externalLink: '' },
+  { name: 'Staking', path: '/staking', externalLink: '' },
+  { name: 'Governance', path: '/government', externalLink: '' },
+  { name: 'Community', path: '/community', externalLink: '' },
   {
-    name: "Buy Firma",
-    path: "/market",
-    externalLink: "https://coinmarketcap.com/currencies/firmachain/markets",
+    name: 'Download',
+    path: '/download',
+    externalLink: '',
   },
   {
-    name: "Explorer",
-    path: "/explorer",
+    name: 'Buy Firma',
+    path: '/market',
+    externalLink: 'https://coinmarketcap.com/currencies/firmachain/markets',
+  },
+  {
+    name: 'Explorer',
+    path: '/explorer',
     externalLink: EXPLORER_URI,
   },
 ];
@@ -50,11 +55,11 @@ const HeaderMobile = () => {
       </HeaderWrapper>
       <MobileMenuList isShow={isOpen}>
         {menus.map((menu, index) => {
-          if (menu.externalLink !== "") {
+          if (menu.externalLink !== '') {
             return (
               <MobileMenuItem
                 key={index}
-                to={"#"}
+                to={'#'}
                 onClick={() => {
                   window.open(menu.externalLink);
                 }}

@@ -6,7 +6,7 @@ export const TopCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   @media only screen and (max-width: 900px) {
-    margin: 30px 0 30px 0;
+    margin: 50px 0 50px 0;
   }
 `;
 
@@ -16,12 +16,14 @@ export const TitleTypo = styled.div`
   line-height: 50px;
   font-size: ${({ theme }) => theme.sizes.communityTitle};
   color: #eee;
+  margin-bottom: 1.6rem;
 `;
 
 export const SubTitleTypo = styled.div`
   width: 100%;
   text-align: center;
-  line-height: 30px;
+  line-height: 25px;
+  color: #a1a1ac;
   font-size: ${({ theme }) => theme.sizes.communitySubTitle};
 `;
 
@@ -32,12 +34,11 @@ export const DownloadWrapper = styled.div`
   gap: 30px;
   flex-wrap: wrap;
   @media only screen and (max-width: 900px) {
-    max-width: 200px;
+    gap: 10px;
   }
 `;
 
 export const DownloadItem = styled.div`
-  width: 70px;
   cursor: pointer;
   text-align: center;
   opacity: 0.8;
@@ -48,8 +49,18 @@ export const DownloadItem = styled.div`
 `;
 
 export const DownloadItemIcon = styled.div<{ icon: string }>`
-  width: 70px;
-  height: 70px;
+  width: 68px;
+  height: 68px;
+  background-image: url('${(props) => props.icon}');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  margin: auto;
+`;
+
+export const DownloadItemIconMobile = styled.div<{ icon: string }>`
+  width: 168px;
+  height: 53px;
   background-image: url('${(props) => props.icon}');
   background-repeat: no-repeat;
   background-size: contain;
@@ -60,12 +71,15 @@ export const DownloadItemIcon = styled.div<{ icon: string }>`
 export const DownloadItemTypo = styled.div`
   width: 100%;
   margin-top: 20px;
+  font-size: 1.4rem;
   color: #eee;
 `;
 
 export const DownloadCard = styled.div`
+  width: calc(100% - 80px);
+  max-width: 600px;
   position: relative;
-  padding: 24px;
+  padding: 40px 24px;
   border-radius: 4px;
   box-shadow: none !important;
   & > * {
@@ -76,15 +90,17 @@ export const DownloadCard = styled.div`
 `;
 
 export const DownloadTitle = styled.div`
-  font-size: 1.6rem;
-  color: white;
+  font-size: 2rem;
+  color: #c5c5d1;
   margin-bottom: 30px;
+  text-align: center;
 `;
 
 export const DownloadContainer = styled.div`
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
-  @media only screen and (max-width: 900px) {
-    flex-direction: column;
-  }
 `;

@@ -6,7 +6,7 @@ const TopCard = () => {
   return (
     <TopCardWrapper>
       <TitleTypo>Download</TitleTypo>
-      <SubTitleTypo>Firma Station App</SubTitleTypo>
+      <SubTitleTypo>Get the firma station apps to seamlessly manage your assets in one place.</SubTitleTypo>
     </TopCardWrapper>
   );
 };

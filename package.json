@@ -51,7 +51,7 @@
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
     "react-app-env": "^1.2.3",
-    "react-device-detect": "^2.1.2",
+    "react-device-detect": "^2.2.2",
     "react-dom": "^17.0.2",
     "react-idle-timer": "^4.6.4",
     "react-redux": "^7.2.6",
