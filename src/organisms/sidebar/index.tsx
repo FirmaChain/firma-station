@@ -12,7 +12,7 @@ import BuyFirmaIcon from '@mui/icons-material/Payment';
 import ExplorerIcon from '@mui/icons-material/Public';
 import DownloadIcon from '@mui/icons-material/Archive';
 import HelpIcon from '@mui/icons-material/Help';
-import AutorenewIcon from '@mui/icons-material/Autorenew';
+// import AutorenewIcon from '@mui/icons-material/Autorenew';
 // import SettingsIcon from "@mui/icons-material/Settings";
 
 import {

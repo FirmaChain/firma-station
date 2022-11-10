@@ -14,7 +14,7 @@ import {
   Proposals,
   Community,
   Download,
-  Restake,
+  // Restake,
 } from '../pages';
 
 const routePublic = (path: string, component: React.FC) => ({

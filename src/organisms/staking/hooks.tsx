@@ -1,15 +1,33 @@
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import gql from 'graphql-tag';
 import { client } from '../../apollo';
 
 import useFirma from '../../utils/wallet';
-import { BLOCKS_PER_YEAR, COMMUNITY_POOL, DENOM, IS_HASURA_ACTION } from '../../config';
+import { BLOCKS_PER_YEAR, COMMUNITY_POOL, DENOM, FIRMACHAIN_CONFIG, IS_HASURA_ACTION } from '../../config';
 import { convertNumber, convertToFctNumber, isValid, convertNumberFormat, makeDecimalPoint } from '../../utils/common';
 import { useValidatorsQuery, useDelegationsQuery } from '../../apollo/gqls';
 
+export interface IValidator {
+  validatorAddress: string;
+  validatorMoniker: string;
+  validatorAvatar: string;
+  validatorDetail: string;
+  validatorWebsite: string;
+  selfDelegateAddress: string;
+  votingPower: number;
+  votingPowerPercent: string;
+  commission: number | null;
+  condition: number;
+  status: number;
+  jailed: boolean;
+  APR: number | null;
+  APY: number | null;
+}
+
 export interface IValidatorsState {
   totalVotingPower: number;
-  validators: Array<any>;
+  validators: Array<IValidator>;
 }
 
 export interface IStakeInfo {
@@ -239,7 +257,7 @@ export const useStakingData = () => {
   }, 5000);
 
   useValidatorsQuery({
-    onCompleted: (data) => {
+    onCompleted: async (data) => {
       if (data.inflation.length === 0) return;
 
       const averageBlockTimePerDay =
@@ -269,68 +287,81 @@ export const useStakingData = () => {
       const mintCoinPerDay = (86400 / averageBlockTime) * ((inflation * totalSupply) / BLOCKS_PER_YEAR);
       const mintCoinPerYear = mintCoinPerDay * 365;
 
-      const validatorsList = data.validator
-        .filter((validator: any) => {
-          return (
-            validator.validatorStatuses[0].jailed === false &&
-            validator.validatorStatuses[0].status === 3 &&
-            validator.validatorSigningInfos.length !== 0 &&
-            validator.validatorSigningInfos[0].tombstoned === false
-          );
-        })
-        .map((validator: any) => {
-          const validatorAddress = validator.validatorInfo.operatorAddress;
+      const validatorsList: Array<IValidator> = await Promise.all(
+        data.validator
+          .filter((validator: any) => {
+            return (
+              validator.validatorStatuses[0].jailed === false &&
+              validator.validatorStatuses[0].status === 3 &&
+              validator.validatorSigningInfos.length !== 0 &&
+              validator.validatorSigningInfos[0].tombstoned === false
+            );
+          })
+          .map(async (validator: any, index: number) => {
+            const validatorAddress = validator.validatorInfo.operatorAddress;
 
-          let validatorMoniker = '';
-          let validatorAvatar = '';
-          let validatorDetail = '';
-          let validatorWebsite = '';
+            let validatorMoniker = '';
+            let validatorAvatar = '';
+            let validatorDetail = '';
+            let validatorWebsite = '';
 
-          if (isValid(validator.validator_descriptions[0])) {
-            validatorMoniker = validator.validator_descriptions[0].moniker;
-            validatorAvatar = validator.validator_descriptions[0].avatar_url;
-            validatorDetail = validator.validator_descriptions[0].details;
-            validatorWebsite = validator.validator_descriptions[0].website;
-          }
+            if (isValid(validator.validator_descriptions[0])) {
+              validatorMoniker = validator.validator_descriptions[0].moniker;
+              validatorAvatar = validator.validator_descriptions[0].avatar_url;
+              validatorDetail = validator.validator_descriptions[0].details;
+              validatorWebsite = validator.validator_descriptions[0].website;
+            }
 
-          const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
-          const votingPower =
-            validator.validatorVotingPowers.length === 0 ? 0 : validator.validatorVotingPowers[0].votingPower;
-          const votingPowerPercent = convertNumberFormat(convertNumber((votingPower / totalVotingPower) * 100), 2);
+            const selfDelegateAddress = validator.validatorInfo.selfDelegateAddress;
+            const votingPower =
+              validator.validatorVotingPowers.length === 0 ? 0 : validator.validatorVotingPowers[0].votingPower;
+            const votingPowerPercent = convertNumberFormat(convertNumber((votingPower / totalVotingPower) * 100), 2);
 
-          const missedBlockCounter =
-            validator.validatorSigningInfos.length === 0 ? 0 : validator.validatorSigningInfos[0].missedBlocksCounter;
-          const commission = convertNumber(validator.validatorCommissions[0].commission * 100);
-          const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
-          const status = validator.validatorStatuses[0].status;
-          const jailed = validator.validatorStatuses[0].jailed;
+            const missedBlockCounter =
+              validator.validatorSigningInfos.length === 0 ? 0 : validator.validatorSigningInfos[0].missedBlocksCounter;
+            const condition = (1 - missedBlockCounter / signed_blocks_window) * 100;
+            const status = validator.validatorStatuses[0].status;
+            const jailed = validator.validatorStatuses[0].jailed;
 
-          const rewardPerYear =
-            mintCoinPerYear *
-            (votingPower / totalVotingPower) *
-            (1 - COMMUNITY_POOL) *
-            (1 - validator.validatorCommissions[0].commission);
-          const APR = isNaN(rewardPerYear / votingPower) ? 0 : rewardPerYear / votingPower;
-          const APRPerDay = APR / 365;
-          const APY = convertNumber(makeDecimalPoint((1 + APRPerDay) ** 365 - 1, 2));
+            let commission = null;
+            try {
+              const response = await axios.get(
+                `${FIRMACHAIN_CONFIG.restApiAddress}/cosmos/staking/v1beta1/validators/${validatorAddress}`
+              );
+              const commissionRate = response.data.validator.commission.commission_rates.rate;
+              commission = convertNumber(commissionRate) * 100;
+            } catch (error) {}
 
-          return {
-            validatorAddress,
-            validatorMoniker,
-            validatorAvatar,
-            validatorDetail,
-            validatorWebsite,
-            selfDelegateAddress,
-            votingPower,
-            votingPowerPercent,
-            commission,
-            condition,
-            status,
-            jailed,
-            APR,
-            APY,
-          };
-        });
+            let APR = null;
+            let APY = null;
+            if (commission !== null) {
+              const rewardPerYear =
+                mintCoinPerYear *
+                (votingPower / totalVotingPower) *
+                (1 - COMMUNITY_POOL) *
+                (1 - validator.validatorCommissions[0].commission);
+              APR = isNaN(rewardPerYear / votingPower) ? 0 : rewardPerYear / votingPower;
+              APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
+            }
+
+            return {
+              validatorAddress,
+              validatorMoniker,
+              validatorAvatar,
+              validatorDetail,
+              validatorWebsite,
+              selfDelegateAddress,
+              votingPower,
+              votingPowerPercent,
+              commission,
+              condition,
+              status,
+              jailed,
+              APR,
+              APY,
+            };
+          })
+      );
 
       const validators = validatorsList.sort((a: any, b: any) => b.votingPower - a.votingPower);
 

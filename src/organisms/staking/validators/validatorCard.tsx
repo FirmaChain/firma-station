@@ -3,6 +3,9 @@ import { useSnackbar } from 'notistack';
 
 import { EXPLORER_URI, SYMBOL } from '../../../config';
 
+import { IValidator } from '../hooks';
+import { convertNumberFormat, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
+
 import {
   ValidatorCardWrapper,
   ProfileWrapper,
@@ -24,10 +27,9 @@ import {
   CopyIconImg,
   LeftWrapper,
 } from './styles';
-import { convertNumberFormat, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
 
 interface IProps {
-  targetValidatorData: any;
+  targetValidatorData: IValidator;
 }
 
 const ValidatorCard = ({ targetValidatorData }: IProps) => {
@@ -124,7 +126,11 @@ const ValidatorCard = ({ targetValidatorData }: IProps) => {
             </StatusItem> */}
             <StatusItem>
               <StatusTitle>Commission</StatusTitle>
-              <StatusContent>{`${convertNumberFormat(targetValidatorData.commission, 2)} %`}</StatusContent>
+              <StatusContent>
+                {targetValidatorData.commission === null
+                  ? 'N/A'
+                  : `${convertNumberFormat(targetValidatorData.commission, 2)} %`}
+              </StatusContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>
@@ -136,10 +142,12 @@ const ValidatorCard = ({ targetValidatorData }: IProps) => {
               <StatusTitle>
                 APR <span style={{ fontSize: '12px' }}>/ APY</span>
               </StatusTitle>
-              <StatusContent style={{ color: '#f4b017' }}>{`${formatCash(
-                targetValidatorData.APR * 100
-              )} %`}</StatusContent>
-              <StatusSubContent>{`${formatCash(targetValidatorData.APY * 100)} %`}</StatusSubContent>
+              <StatusContent style={{ color: '#f4b017' }}>
+                {targetValidatorData.APR === null ? 'N/A' : `${formatCash(targetValidatorData.APR * 100)} %`}
+              </StatusContent>
+              <StatusSubContent>
+                {targetValidatorData.APY === null ? 'N/A' : `${formatCash(targetValidatorData.APY * 100)} %`}
+              </StatusSubContent>
             </StatusItem>
           </StatusWrapper>
         </>

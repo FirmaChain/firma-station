@@ -163,7 +163,7 @@ export const useValidatorsQuery = ({ onCompleted }: IQueryParam) => {
         }
       }
     `,
-    { onCompleted, pollInterval: 5000, notifyOnNetworkStatusChange: true }
+    { onCompleted, pollInterval: 3600000, notifyOnNetworkStatusChange: true }
   );
 };
 

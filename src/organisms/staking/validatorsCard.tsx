@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
-import { IValidatorsState } from './hooks';
+import { IValidator, IValidatorsState } from './hooks';
 import { convertNumber, convertNumberFormat, makeDecimalPoint } from '../../utils/common';
 
 import {
@@ -34,7 +34,7 @@ interface IProps {
   validatorsState: IValidatorsState;
 }
 
-const CustomRow = ({ currentValidator, index }: any) => {
+const CustomRow = ({ currentValidator, index }: { currentValidator: IValidator; index: number }) => {
   const formatCash = (n: any) => {
     let result = '';
 
@@ -64,19 +64,20 @@ const CustomRow = ({ currentValidator, index }: any) => {
           <MonikerTypo>{currentValidator.validatorMoniker}</MonikerTypo>
         </ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</ItemColumn>
-        <ItemColumn>{`${convertNumberFormat(currentValidator.commission, 2)} %`}</ItemColumn>
+        <ItemColumn>
+          {currentValidator.commission === null ? 'N/A' : `${convertNumberFormat(currentValidator.commission, 2)} %`}
+        </ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.condition, 2)} %`}</ItemColumn>
         <ItemColumn>
-          <APRTypo>{`${formatCash(currentValidator.APR * 100)} %`}</APRTypo>
-
-          <APYTypo>{`${formatCash(currentValidator.APY * 100)} %`}</APYTypo>
+          <APRTypo>{currentValidator.APR === null ? 'N/A' : `${formatCash(currentValidator.APR * 100)} %`}</APRTypo>
+          <APYTypo>{currentValidator.APY === null ? 'N/A' : `${formatCash(currentValidator.APY * 100)} %`}</APYTypo>
         </ItemColumn>
       </ItemWrapper>
     </Link>
   );
 };
 
-const CustomSmallRow = ({ currentValidator, index }: any) => {
+const CustomSmallRow = ({ currentValidator, index }: { currentValidator: IValidator; index: number }) => {
   const formatCash = (n: any) => {
     let result = '';
 
@@ -112,7 +113,11 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Commission</InfoLabel>
-            <InfoValue>{`${convertNumberFormat(currentValidator.commission, 2)} %`}</InfoValue>
+            <InfoValue>
+              {currentValidator.commission === null
+                ? 'N/A'
+                : `${convertNumberFormat(currentValidator.commission, 2)} %`}
+            </InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Uptime</InfoLabel>
@@ -121,8 +126,12 @@ const CustomSmallRow = ({ currentValidator, index }: any) => {
           <ValidatorInfo>
             <InfoLabel>APR/APY</InfoLabel>
             <InfoValue>
-              <APRTypoSmall>{`${formatCash(currentValidator.APR * 100)} % /`}&nbsp;</APRTypoSmall>
-              <APYTypoSmall>{`${formatCash(currentValidator.APY * 100)} %`}</APYTypoSmall>
+              <APRTypoSmall>
+                {currentValidator.APR === null ? 'N/A' : `${formatCash(currentValidator.APR * 100)} % /`}&nbsp;
+              </APRTypoSmall>
+              <APYTypoSmall>
+                {currentValidator.APY === null ? 'N/A' : `${formatCash(currentValidator.APY * 100)} %`}
+              </APYTypoSmall>
             </InfoValue>
           </ValidatorInfo>
         </ValidatorInfoList>
@@ -210,6 +219,10 @@ const Validators = ({ validatorsState }: IProps) => {
   };
 
   const sortCommission = (a: any, b: any) => {
+    if (a.commission === null) return 1;
+    if (b.commission === null) return -1;
+    if (a.commission === b.commission) return 0;
+
     if (a.commission < b.commission) {
       return order === 0 ? -1 : 1;
     } else if (a.commission > b.commission) {
@@ -230,6 +243,10 @@ const Validators = ({ validatorsState }: IProps) => {
   };
 
   const sortAPR = (a: any, b: any) => {
+    if (a.commission === null) return 1;
+    if (b.commission === null) return -1;
+    if (a.commission === b.commission) return 0;
+
     if (a.commission < b.commission) {
       return order === 0 ? 1 : -1;
     } else if (a.commission > b.commission) {
@@ -265,7 +282,7 @@ const Validators = ({ validatorsState }: IProps) => {
         </HeaderColumn>
       </HeaderWrapper>
       {isSmall && <SmallTitle>Validators</SmallTitle>}
-      {validatorsState.validators.sort(getOrderByFunction()).map((value, index) => {
+      {validatorsState.validators.sort(getOrderByFunction()).map((value: IValidator, index: number) => {
         if (isSmall) {
           return <CustomSmallRow key={index} currentValidator={value} index={index} />;
         } else {
