@@ -106,6 +106,7 @@ const urls = {
   win: process.env.PUBLIC_URL + '/images/icon_win.png',
   linux: process.env.PUBLIC_URL + '/images/icon_linux.png',
   mac: process.env.PUBLIC_URL + '/images/icon_mac.png',
+  google: process.env.PUBLIC_URL + '/images/icon_google.png',
   on: process.env.PUBLIC_URL + '/images/on.png',
   off: process.env.PUBLIC_URL + '/images/off.png',
   sortIdle: process.env.PUBLIC_URL + '/images/sort_idle.png',

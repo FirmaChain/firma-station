@@ -48,7 +48,7 @@ const menus = [
     externalLink: EXPLORER_URI,
   },
   {
-    name: 'Desktop App',
+    name: 'Download',
     path: '/download',
     icon: DownloadIcon,
     externalLink: '',

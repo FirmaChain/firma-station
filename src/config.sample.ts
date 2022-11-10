@@ -25,7 +25,7 @@ export const RESTAKE_API = 'http://0.0.0.0/restake/info';
 export const RESTAKE_ADDRESS = '';
 export const RESTAKE_PAGE_LINK = '';
 
-export const DOWNLOAD_LINK_LIST = [];
+export const DOWNLOAD_LINK_LIST = ['win', 'ubuntu', 'mac-intel', 'mac-m1', 'googleplay', 'appstore'];
 
 export const GUIDE_LINK_LOGIN_WALLET = '';
 export const GUIDE_LINK_NEW_WALLET = '';

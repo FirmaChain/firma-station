@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { TopCardWrapper, TitleTypo, SubTitleTypo } from "./styles";
+import { TopCardWrapper, TitleTypo, SubTitleTypo } from './styles';
 
 const TopCard = () => {
   return (
     <TopCardWrapper>
       <TitleTypo>Download</TitleTypo>
-      <SubTitleTypo>Firma Station Desktop App</SubTitleTypo>
+      <SubTitleTypo>Firma Station App</SubTitleTypo>
     </TopCardWrapper>
   );
 };

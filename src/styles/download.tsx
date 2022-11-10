@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ContentContainer = styled.div`
   flex: 1;
@@ -6,6 +6,9 @@ export const ContentContainer = styled.div`
   width: calc(100% - 80px);
   height: 100%;
   padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: ${({ theme }) => theme.colors.backgroundBlack};
   color: ${({ theme }) => theme.colors.defaultFont};
   @media only screen and (max-width: 1400px) {
