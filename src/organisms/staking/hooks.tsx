@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
+import { rootState } from '../../redux/reducers';
 import useFirma from '../../utils/wallet';
 import { AVERAGE_BLOCK_TIME, BLOCKS_PER_YEAR, COMMUNITY_POOL } from '../../config';
 import { convertNumber, makeDecimalPoint } from '../../utils/common';
+import { getAvatarInfo } from '../../utils/avatar';
 import {
   IDelegationState,
   IDelegateInfo,
@@ -128,6 +131,8 @@ const useStakingDataFromTarget = () => {
 };
 
 const useValidators = () => {
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
+
   const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
     totalVotingPower: 0,
     validators: [],
@@ -152,11 +157,11 @@ const useValidators = () => {
             return validator.jailed === false && validator.status === 'BOND_STATUS_BONDED';
           })
           .map((validator) => {
-            const missedBlockCounter = validatorSigningInfoList.find(
+            const signingInfo = validatorSigningInfoList.find(
               (signingInfo: ISigningInfo) => signingInfo.address === validator.valconsAddress
             );
-            const condition = missedBlockCounter
-              ? (1 - convertNumber(missedBlockCounter.missed_blocks_counter) / signedBlocksWindow) * 100
+            const condition = signingInfo
+              ? (1 - convertNumber(signingInfo.missed_blocks_counter) / signedBlocksWindow) * 100
               : 0;
 
             const rewardPerYear =
@@ -167,12 +172,19 @@ const useValidators = () => {
             const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
             const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
 
+            const { moniker, avatarURL } = getAvatarInfo(avatarList, validator.validatorAddress);
+            const validatorMoniker = moniker;
+            const validatorAvatar = avatarURL;
+            const tombstoned = signingInfo ? signingInfo.tombstoned : false;
+
             return {
               ...validator,
+              validatorMoniker,
+              validatorAvatar,
               condition,
               APR,
               APY,
-              tombstoned: false,
+              tombstoned,
             };
           });
 
@@ -186,7 +198,7 @@ const useValidators = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [avatarList]);
 
   return {
     validatorsState,
@@ -195,6 +207,7 @@ const useValidators = () => {
 
 const useValidatorFromTarget = () => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
 
   const [validatorState, setValidatorState] = useState<IValidator>({
     validatorAddress: '',
@@ -226,11 +239,11 @@ const useValidatorFromTarget = () => {
           ]);
 
           const validatorSigningInfoList = await getSigningInfos();
-          const missedBlockCounter = validatorSigningInfoList.find(
+          const signingInfo = validatorSigningInfoList.find(
             (signingInfo: ISigningInfo) => signingInfo.address === validator.valconsAddress
           );
-          const condition = missedBlockCounter
-            ? (1 - convertNumber(missedBlockCounter.missed_blocks_counter) / signedBlocksWindow) * 100
+          const condition = signingInfo
+            ? (1 - convertNumber(signingInfo.missed_blocks_counter) / signedBlocksWindow) * 100
             : 0;
 
           const mintCoinPerDay = (86400 / AVERAGE_BLOCK_TIME) * ((inflation * totalSupply) / BLOCKS_PER_YEAR);
@@ -243,10 +256,17 @@ const useValidatorFromTarget = () => {
           const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
           const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
 
+          const { moniker, avatarURL } = getAvatarInfo(avatarList, validator.validatorAddress);
+          const validatorMoniker = moniker;
+          const validatorAvatar = avatarURL;
+          const tombstoned = signingInfo ? signingInfo.tombstoned : false;
+
           setValidatorState({
             ...validator,
+            validatorMoniker,
+            validatorAvatar,
             condition,
-            tombstoned: false,
+            tombstoned,
             APR,
             APY,
           });

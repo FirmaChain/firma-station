@@ -44,11 +44,6 @@ export interface IProposalData {
   };
 }
 
-export interface IAvatarInfo {
-  operatorAddress: string;
-  url: string;
-}
-
 interface ISoftwareUpgrade {
   height: string;
   name: string;

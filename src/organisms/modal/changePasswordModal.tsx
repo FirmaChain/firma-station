@@ -1,12 +1,10 @@
-import React, { useState, useRef } from "react";
-import { useSelector } from "react-redux";
-// import { useSnackbar } from "notistack";
+import React, { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
-import Password from "./password";
-// import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
+import Password from './password';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
 
 import {
   exportPrivatekeyModalWidth,
@@ -17,15 +15,12 @@ import {
   ExportPasswordWrapper,
   InputBoxDefault,
   ChangeButton,
-} from "./styles";
+} from './styles';
 
 const ChangePasswordModal = () => {
   const changePasswordModalState = useSelector((state: rootState) => state.modal.changePassword);
-  // const { isCorrectPassword } = useFirma();
-  // const { enqueueSnackbar } = useSnackbar();
 
-  const [password, setPassword] = useState("");
-  // const [newPassword, setNewPassword] = useState("");
+  const [password, setPassword] = useState('');
   const inputRef = useRef(null);
 
   const closeModal = () => {
@@ -37,9 +32,7 @@ const ChangePasswordModal = () => {
     setPassword(e.target.value);
   };
 
-  const onChangeNewPassword = (newPassword: string) => {
-    // setNewPassword(newPassword);
-  };
+  const onChangeNewPassword = (newPassword: string) => {};
 
   const onKeyDownPassword = () => {};
 
@@ -55,11 +48,11 @@ const ChangePasswordModal = () => {
         <ModalTitle>CHANGE PASSWORD</ModalTitle>
         <ModalContent>
           <ModalLabel>Current Password</ModalLabel>
-          <ExportPasswordWrapper style={{ marginBottom: "50px" }}>
+          <ExportPasswordWrapper style={{ marginBottom: '50px' }}>
             <InputBoxDefault
               ref={inputRef}
-              placeholder="********"
-              type="password"
+              placeholder='********'
+              type='password'
               value={password}
               onChange={onChangePassword}
               autoFocus={true}

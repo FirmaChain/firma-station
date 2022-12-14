@@ -16,12 +16,16 @@ import { RightContainer, MainContainer } from './styles/common';
 
 import theme from './themes';
 import './default.css';
+import { initializeAvatar } from './utils/avatar';
 
 const App = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
-  const { initalizeFirma, checkSession, isValidWallet } = useFirma();
+  const { lastUpdated } = useSelector((state: rootState) => state.avatar);
 
-  useEffect(() => initalizeFirma, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
+  const { initializeFirma, checkSession, isValidWallet } = useFirma();
+
+  useEffect(() => initializeFirma(), [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => initializeAvatar(lastUpdated), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   SessionTimer(() => checkSession());
 

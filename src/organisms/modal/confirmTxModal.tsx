@@ -53,11 +53,6 @@ const ConfirmTxModal = () => {
     modalActions.handleModalConfirmTx(false);
   };
 
-  // const prevModal = () => {
-  //   closeConfirmTxModal();
-  //   modalData.prevModalAction && modalData.prevModalAction(true);
-  // };
-
   const queueTx = () => {
     if (isCorrectPassword(password) || isLedger) {
       closeConfirmTxModal();

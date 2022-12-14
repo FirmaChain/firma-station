@@ -1,6 +1,6 @@
 import { FirmaSDK, FirmaUtil, ValidatorDataType } from '@firmachain/firma-js';
 
-import { IAvatarInfo, IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
+import { IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
 import { DENOM, FIRMACHAIN_CONFIG, SYMBOL } from '../config';
 import { convertNumber, convertNumberFormat } from './common';
 
@@ -19,7 +19,6 @@ export {
   getAccAddressFromValOperAddress,
   getProposalList,
   getProposalFromId,
-  getAvatarInfoListAll,
 };
 
 const firmaSDK = new FirmaSDK(FIRMACHAIN_CONFIG);
@@ -127,11 +126,10 @@ const getValidatorDelegationsFromAddress = async (
 const getValidatorList = async (): Promise<IValidatorData[]> => {
   const validatorDataList = (await firmaSDK.Staking.getValidatorList()).dataList;
   const totalVotingPower = await getTotalVotingPower();
-  const avatarInfoList = await getAvatarInfoListAll();
 
   let validatorList: IValidatorData[] = [];
   for (let validator of validatorDataList) {
-    validatorList.push(parseValidator(validator, totalVotingPower, avatarInfoList));
+    validatorList.push(parseValidator(validator, totalVotingPower));
   }
 
   return validatorList;
@@ -140,12 +138,11 @@ const getValidatorList = async (): Promise<IValidatorData[]> => {
 const getValidatorFromAddress = async (valoperAddress: string): Promise<IValidatorData> => {
   const validator = await firmaSDK.Staking.getValidator(valoperAddress);
   const totalVotingPower = await getTotalVotingPower();
-  const avatarInfoList = await getAvatarInfoListAll();
 
-  return parseValidator(validator, totalVotingPower, avatarInfoList);
+  return parseValidator(validator, totalVotingPower);
 };
 
-const parseValidator = (validator: ValidatorDataType, totalVotingPower: number, avatarInfoList: IAvatarInfo[]) => {
+const parseValidator = (validator: ValidatorDataType, totalVotingPower: number) => {
   const validatorAddress = validator.operator_address;
   const validatorMoniker = validator.description.moniker;
   const validatorDetail = validator.description.details;
@@ -159,17 +156,10 @@ const parseValidator = (validator: ValidatorDataType, totalVotingPower: number, 
   const votingPowerPercent = convertNumberFormat(+(votingPower / totalVotingPower).toFixed(5) * 100, 2);
   const commission = convertNumber(validator.commission.commission_rates.rate);
 
-  let validatorAvatar = '';
-  for (let avatarInfo of avatarInfoList) {
-    if (avatarInfo.operatorAddress === validatorAddress) {
-      validatorAvatar = avatarInfo.url;
-    }
-  }
-
   return {
     validatorAddress,
     validatorMoniker,
-    validatorAvatar,
+    validatorAvatar: '',
     validatorDetail,
     validatorWebsite,
     selfDelegateAddress,
@@ -315,8 +305,4 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
     periodDeposit,
     tally,
   };
-};
-
-const getAvatarInfoListAll = async (): Promise<IAvatarInfo[]> => {
-  return [];
 };

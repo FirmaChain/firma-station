@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
+import { rootState } from '../../redux/reducers';
 import { getProposalQueryFromId } from '../../apollo/gqls/query';
 import { getProposalFromId, getProposalList } from '../../utils/lcdQuery';
+import { getAvatarInfoFromAcc } from '../../utils/avatar';
 
 import { IProposalsState, IProposalDetailState } from '../../interfaces/governance';
 import { IProposalData } from '../../interfaces/lcd';
@@ -30,6 +33,8 @@ export const useGovernmentData = () => {
 };
 
 export const useProposalData = (proposalId: string) => {
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
+
   const [proposalState, setProposalState] = useState<IProposalDetailState | null>(null);
 
   const formatProposalQueryData = (data: IProposalQueryData | null) => {
@@ -37,11 +42,13 @@ export const useProposalData = (proposalId: string) => {
       const depositors = data.proposal[0].proposal_deposits;
       const totalVotingPower = data.proposal[0].staking_pool_snapshot.bonded_tokens;
       const votes = data.proposal[0].proposal_votes.map((vote: any) => {
+        const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, vote.voter_address);
+
         return {
           option: vote.option,
           voterAddress: vote.voter_address,
-          moniker: vote.voter_address,
-          avatarURL: '',
+          moniker,
+          avatarURL,
         };
       });
 

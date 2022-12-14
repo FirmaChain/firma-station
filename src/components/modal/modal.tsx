@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import Portal from "./portal";
+import Portal from './portal';
 
-import { ModalOverlay, ModalWrapper, ModalInner, PrevButton, CloseButton } from "./styles";
+import { ModalOverlay, ModalWrapper, ModalInner, PrevButton, CloseButton } from './styles';
 
 interface IProps {
   onClose: () => void;
@@ -34,12 +34,12 @@ const Modal = ({ onClose, closable, visible, prev, width, maskClosable = false, 
     return () => {
       const scrollY = document.body.style.top;
       document.body.style.cssText = `position: ""; top: "";`;
-      window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
     };
   }, []);
 
   return (
-    <Portal elementId="modal-root">
+    <Portal elementId='modal-root'>
       <ModalOverlay visible={visible} />
       <ModalWrapper tabIndex={-1} visible={visible} onClick={onMaskClick}>
         <ModalInner tabIndex={0} width={width}>
@@ -52,4 +52,4 @@ const Modal = ({ onClose, closable, visible, prev, width, maskClosable = false, 
   );
 };
 
-export default Modal;
+export default React.memo(Modal);

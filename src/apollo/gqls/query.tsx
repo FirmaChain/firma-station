@@ -58,7 +58,7 @@ export const getHistoryByAddress = async (
   try {
     const { data } = await client.query({
       query: gql`
-        query GetMessagesByAddress($address: _text, $limit: bigint = 20, $offset: bigint = 0, $types: _text = "{}") {
+        query GetMessagesByAddress($address: _text, $limit: bigint = 50, $offset: bigint = 0, $types: _text = "{}") {
           messagesByAddress: messages_by_address(
             args: { addresses: $address, types: $types, limit: $limit, offset: $offset }
           ) {

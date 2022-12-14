@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Wallet } from './types';
 import { DENOM, RESTAKE_ADDRESS, VESTING_ACCOUNTS } from '../config';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
+import { getAvatarInfo } from './avatar';
 import { rootState } from '../redux/reducers';
 import { userActions, walletActions } from '../redux/action';
 import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from './keyBridge';
@@ -17,9 +18,11 @@ import { ITargetStakingState, ITotalStakingState } from '../interfaces/staking';
 function useFirma() {
   const { enqueueSnackbar } = useSnackbar();
   const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
   const [isVesting, setVesting] = useState(true);
 
-  const initalizeFirma = () => {
+  const initializeFirma = () => {
+    console.log(isInit);
     isInit && setUserData();
   };
 
@@ -386,12 +389,13 @@ function useFirma() {
     const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.balance.amount - a.balance.amount);
 
     const delegateList = delegateListSort.map((value) => {
+      const avatar = avatarList.find((avatar) => avatar.operatorAddress === value.delegation.validator_address);
       return {
         validatorAddress: value.delegation.validator_address,
         delegatorAddress: value.delegation.delegator_address,
         amount: convertNumber(value.balance.amount),
-        moniker: value.delegation.validator_address,
-        avatarURL: '',
+        moniker: avatar ? avatar.moniker : value.delegation.validator_address,
+        avatarURL: avatar ? avatar.url : '',
       };
     });
 
@@ -534,6 +538,8 @@ function useFirma() {
     for (let redelegation of redelegationList) {
       const srcAddress = redelegation.redelegation.validator_src_address;
       const dstAddress = redelegation.redelegation.validator_dst_address;
+      const srcAvatar = getAvatarInfo(avatarList, srcAddress);
+      const dstAvatar = getAvatarInfo(avatarList, dstAddress);
 
       for (let entry of redelegation.entries) {
         const completionTime = entry.redelegation_entry.completion_time;
@@ -541,11 +547,11 @@ function useFirma() {
 
         parseList.push({
           srcAddress,
-          srcMoniker: '',
-          srcAvatarURL: '',
+          srcMoniker: srcAvatar.moniker,
+          srcAvatarURL: srcAvatar.avatarURL,
           dstAddress,
-          dstMoniker: '',
-          dstAvatarURL: '',
+          dstMoniker: dstAvatar.moniker,
+          dstAvatarURL: dstAvatar.avatarURL,
           balance,
           completionTime,
         });
@@ -568,6 +574,7 @@ function useFirma() {
     let parseList = [];
     for (let undelegation of undelegationList) {
       const validatorAddress = undelegation.validator_address;
+      const avatar = getAvatarInfo(avatarList, validatorAddress);
 
       for (let entry of undelegation.entries) {
         const completionTime = entry.completion_time;
@@ -575,8 +582,8 @@ function useFirma() {
 
         parseList.push({
           validatorAddress,
-          moniker: validatorAddress,
-          avatarURL: '',
+          moniker: avatar.moniker,
+          avatarURL: avatar.avatarURL,
           balance,
           completionTime,
         });
@@ -909,7 +916,7 @@ function useFirma() {
   };
 
   return {
-    initalizeFirma,
+    initializeFirma,
     checkSession,
     getNewMnemonic,
     storeWalletFromMnemonic,
