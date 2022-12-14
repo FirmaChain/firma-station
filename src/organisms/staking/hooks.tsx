@@ -5,7 +5,7 @@ import { rootState } from '../../redux/reducers';
 import useFirma from '../../utils/wallet';
 import { AVERAGE_BLOCK_TIME, BLOCKS_PER_YEAR, COMMUNITY_POOL } from '../../config';
 import { convertNumber, makeDecimalPoint } from '../../utils/common';
-import { getAvatarInfo } from '../../utils/avatar';
+import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
 import {
   IDelegationState,
   IDelegateInfo,
@@ -32,6 +32,7 @@ export { useDelegations, useStakingData, useStakingDataFromTarget, useValidators
 
 const useDelegations = () => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
 
   const [delegateState, setDelegateState] = useState<IDelegationState>({
     self: 0,
@@ -55,7 +56,13 @@ const useDelegations = () => {
               self = delegate.amount;
             }
 
-            delegateList.push(delegate);
+            const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
+
+            delegateList.push({
+              ...delegate,
+              moniker,
+              avatarURL,
+            });
           }
 
           const selfPercent = (self / totalDelegationAmount) * 100;
