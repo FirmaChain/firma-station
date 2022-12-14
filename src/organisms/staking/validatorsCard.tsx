@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { IValidator, IValidatorsState } from '../../interfaces/staking';
 
-import { IValidator, IValidatorsState } from './hooks';
 import { convertNumber, convertNumberFormat, makeDecimalPoint } from '../../utils/common';
 
 import {
@@ -65,9 +65,13 @@ const CustomRow = ({ currentValidator, index }: { currentValidator: IValidator; 
         </ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</ItemColumn>
         <ItemColumn>
-          {currentValidator.commission === null ? 'N/A' : `${convertNumberFormat(currentValidator.commission, 2)} %`}
+          {currentValidator.commission === null
+            ? 'N/A'
+            : `${convertNumberFormat(currentValidator.commission * 100, 2)} %`}
         </ItemColumn>
-        <ItemColumn>{`${convertNumberFormat(currentValidator.condition, 2)} %`}</ItemColumn>
+        <ItemColumn>
+          {currentValidator.condition === null ? 'N/A' : `${convertNumberFormat(currentValidator.condition, 2)} %`}
+        </ItemColumn>
         <ItemColumn>
           <APRTypo>{currentValidator.APR === null ? 'N/A' : `${formatCash(currentValidator.APR * 100)} %`}</APRTypo>
           <APYTypo>{currentValidator.APY === null ? 'N/A' : `${formatCash(currentValidator.APY * 100)} %`}</APYTypo>
@@ -116,12 +120,14 @@ const CustomSmallRow = ({ currentValidator, index }: { currentValidator: IValida
             <InfoValue>
               {currentValidator.commission === null
                 ? 'N/A'
-                : `${convertNumberFormat(currentValidator.commission, 2)} %`}
+                : `${convertNumberFormat(currentValidator.commission * 100, 2)} %`}
             </InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>Uptime</InfoLabel>
-            <InfoValue>{`${convertNumberFormat(currentValidator.condition, 2)} %`}</InfoValue>
+            <InfoValue>
+              {currentValidator.condition === null ? 'N/A' : `${convertNumberFormat(currentValidator.condition, 2)} %`}
+            </InfoValue>
           </ValidatorInfo>
           <ValidatorInfo>
             <InfoLabel>APR/APY</InfoLabel>
@@ -183,9 +189,9 @@ const Validators = ({ validatorsState }: IProps) => {
   };
 
   const sortVotingPower = (a: any, b: any) => {
-    if (convertNumber(a.votingPowerPercent) < convertNumber(b.votingPowerPercent)) {
+    if (convertNumber(a.votingPower) < convertNumber(b.votingPower)) {
       return order === 0 ? -1 : 1;
-    } else if (convertNumber(a.votingPowerPercent) > convertNumber(b.votingPowerPercent)) {
+    } else if (convertNumber(a.votingPower) > convertNumber(b.votingPower)) {
       return order === 0 ? 1 : -1;
     } else {
       if (a.validatorMoniker < b.validatorMoniker) {

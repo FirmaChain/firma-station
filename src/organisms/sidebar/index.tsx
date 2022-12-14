@@ -12,27 +12,14 @@ import BuyFirmaIcon from '@mui/icons-material/Payment';
 import ExplorerIcon from '@mui/icons-material/Public';
 import DownloadIcon from '@mui/icons-material/Archive';
 import HelpIcon from '@mui/icons-material/Help';
-// import AutorenewIcon from '@mui/icons-material/Autorenew';
-// import SettingsIcon from "@mui/icons-material/Settings";
 
-import {
-  DrawerStyled,
-  LogoImg,
-  ListStyled,
-  ListItemStyled,
-  ListItemIconStyled,
-  ListItemTextStyled,
-  // BottomWrap,
-  // BottomMenuTypo,
-  // BottomIcon,
-} from './styles';
+import { DrawerStyled, LogoImg, ListStyled, ListItemStyled, ListItemIconStyled, ListItemTextStyled } from './styles';
 
 const menus = [
   { name: 'Home', path: '/', icon: HomeIcon, externalLink: '' },
   { name: 'Accounts', path: '/accounts', icon: AccountsIcon, externalLink: '' },
   { name: 'History', path: '/history', icon: HistoryIcon, externalLink: '' },
   { name: 'Staking', path: '/staking', icon: StakingIcon, externalLink: '' },
-  // { name: 'Restake (Beta)', path: '/restake', icon: AutorenewIcon, externalLink: '' },
   { name: 'Governance', path: '/government', icon: GovernmentIcon, externalLink: '' },
   { name: 'Community', path: '/community', icon: ForumIcon, externalLink: '' },
   {
@@ -105,13 +92,6 @@ function Sidebar() {
           }
         })}
       </ListStyled>
-
-      {/* <BottomWrap>
-        <BottomIcon>
-          <SettingsIcon />
-        </BottomIcon>
-        <BottomMenuTypo>Settings</BottomMenuTypo>
-      </BottomWrap> */}
     </DrawerStyled>
   );
 }

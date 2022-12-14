@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
-import { ITokenomicsState } from './hooks';
+import { convertNumberFormat } from '../../utils/common';
+import { ITokenomicsState } from '../../interfaces/home';
+import { SYMBOL } from '../../config';
 
 import theme from '../../themes';
 import { BlankCard } from '../../components/card';
@@ -22,8 +24,6 @@ import {
   TokenomicsDetailTitle,
   TokenomicsDetailContent,
 } from './styles';
-import { SYMBOL } from '../../config';
-import { convertNumberFormat } from '../../utils/common';
 
 interface IProps {
   tokenomicsState: ITokenomicsState;
@@ -43,31 +43,46 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const TokenomicsCard = ({ tokenomicsState }: IProps) => {
-  const data = [
-    {
-      legendKey: 'delegated',
-      percentKey: 'delegatedPercent',
-      value: convertNumberFormat(tokenomicsState.delegated, 0),
-      rawValue: tokenomicsState.delegated,
-      percent: `${convertNumberFormat((tokenomicsState.delegated * 100) / tokenomicsState.supply, 2)}%`,
-      fill: theme.colors.mainblue,
-    },
-    {
-      legendKey: 'undelegated',
-      percentKey: 'undelegatedPercent',
-      value: convertNumberFormat(tokenomicsState.undelegated, 0),
-      rawValue: tokenomicsState.undelegated,
-      percent: `${convertNumberFormat((tokenomicsState.undelegated * 100) / tokenomicsState.supply, 2)}%`,
-      fill: theme.colors.mainpurple,
-    },
-    {
-      legendKey: 'undelegate',
-      value: convertNumberFormat(tokenomicsState.undelegate, 0),
-      rawValue: tokenomicsState.undelegate,
-      percent: `${convertNumberFormat((tokenomicsState.undelegate * 100) / tokenomicsState.supply, 2)}%`,
-      fill: theme.colors.maingreen,
-    },
-  ];
+  const [pieData, setPieData] = useState<any>([]);
+  const [supply, setSupply] = useState('');
+  const [delegated, setDelegated] = useState('');
+  const [undelegated, setUndelegated] = useState('');
+  const [undelegate, setUndelegate] = useState('');
+
+  useEffect(() => {
+    if (tokenomicsState) {
+      setSupply(convertNumberFormat(tokenomicsState.supply, 0));
+      setDelegated(convertNumberFormat(tokenomicsState.delegated, 0));
+      setUndelegated(convertNumberFormat(tokenomicsState.undelegated, 0));
+      setUndelegate(convertNumberFormat(tokenomicsState.undelegate, 0));
+
+      setPieData([
+        {
+          legendKey: 'delegated',
+          percentKey: 'delegatedPercent',
+          value: convertNumberFormat(tokenomicsState.delegated, 0),
+          rawValue: tokenomicsState.delegated,
+          percent: `${convertNumberFormat((tokenomicsState.delegated * 100) / tokenomicsState.supply, 2)}%`,
+          fill: theme.colors.mainblue,
+        },
+        {
+          legendKey: 'undelegated',
+          percentKey: 'undelegatedPercent',
+          value: convertNumberFormat(tokenomicsState.undelegated, 0),
+          rawValue: tokenomicsState.undelegated,
+          percent: `${convertNumberFormat((tokenomicsState.undelegated * 100) / tokenomicsState.supply, 2)}%`,
+          fill: theme.colors.mainpurple,
+        },
+        {
+          legendKey: 'undelegate',
+          value: convertNumberFormat(tokenomicsState.undelegate, 0),
+          rawValue: tokenomicsState.undelegate,
+          percent: `${convertNumberFormat((tokenomicsState.undelegate * 100) / tokenomicsState.supply, 2)}%`,
+          fill: theme.colors.maingreen,
+        },
+      ]);
+    }
+  }, [tokenomicsState]);
 
   return (
     <BlankCard bgColor={theme.colors.backgroundSideBar} height={'100%'}>
@@ -78,7 +93,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
             <PieChart width={240} height={94} cy={100}>
               <Pie
                 cy={90}
-                data={data}
+                data={pieData}
                 startAngle={180}
                 endAngle={0}
                 outerRadius={95}
@@ -86,7 +101,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
                 stroke={'0'}
                 isAnimationActive={false}
               >
-                {data.map((entry) => {
+                {pieData.map((entry: any) => {
                   return <Cell key={entry.legendKey} fill={entry.fill} />;
                 })}
               </Pie>
@@ -94,7 +109,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
             </PieChart>
           </PiechartContainer>
           <PiechartLabelContainer>
-            {data.map((x) => {
+            {pieData.map((x: any) => {
               return (
                 <PiechartLabelWrapper key={x.legendKey}>
                   <PiechartLabelIcon bgColor={x.fill} />
@@ -107,34 +122,22 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
         <TokenomicsDetailWrapper>
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Total Supply</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${convertNumberFormat(
-              tokenomicsState.supply,
-              0
-            )} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${supply} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Delegated</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${convertNumberFormat(
-              tokenomicsState.delegated,
-              0
-            )} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${delegated} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Undelegated</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${convertNumberFormat(
-              tokenomicsState.undelegated,
-              0
-            )} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${undelegated} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Undelegate</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${convertNumberFormat(
-              tokenomicsState.undelegate,
-              0
-            )} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${undelegate} ${SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
         </TokenomicsDetailWrapper>
       </TokenomicsContainer>

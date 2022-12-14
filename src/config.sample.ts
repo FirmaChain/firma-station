@@ -6,6 +6,7 @@ export const FAUCET_URI = '';
 export const EXPLORER_URI = '';
 export const LCD_REST_URI = '';
 export const HELP_URI = '';
+export const VALIDATOR_IDENTITY_JSON_URI = '';
 
 export const GRAPHQL_CONFIG = {
   URI: 'http://:8080/v1/graphql',
@@ -19,7 +20,6 @@ export const IS_DEFAULT_GAS = true;
 export const DENOM = 'ufct';
 export const SYMBOL = 'FCT';
 
-export const IS_HASURA_ACTION = true;
 export const VESTING_ACCOUNTS = [];
 export const RESTAKE_API = 'http://0.0.0.0/restake/info';
 export const RESTAKE_ADDRESS = '';

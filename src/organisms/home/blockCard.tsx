@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { IBlockState } from './hooks';
+import { IBlockState } from '../../interfaces/home';
+
+import { SingleTitleCard } from '../../components/card';
 
 import theme from '../../themes';
-import { SingleTitleCard } from '../../components/card';
 
 interface IProps {
   blockState: IBlockState;
@@ -18,7 +19,7 @@ const BlockCard = ({ blockState }: IProps) => {
   const [dashboradData, setBlockData] = useState([0, 0, '0']);
 
   useEffect(() => {
-    setBlockData([blockState.height, blockState.transactions, blockState.inflation]);
+    blockState && setBlockData([blockState.height, blockState.transactions, blockState.inflation]);
   }, [blockState]);
 
   return (

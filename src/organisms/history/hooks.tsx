@@ -1,20 +1,9 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-import { rootState } from "../../redux/reducers";
-import { useHistoryByAddressQuery } from "../../apollo/gqls";
-
-export interface IHistory {
-  height: number;
-  hash: string;
-  type: string;
-  timestamp: string;
-  success: boolean;
-}
-
-export interface IHistoryByAddressState {
-  historyList: Array<IHistory>;
-}
+import { rootState } from '../../redux/reducers';
+import { IHistoryByAddressState } from '../../interfaces/history';
+import { getHistoryByAddress } from '../../apollo/gqls/query';
 
 export const useHistoryByAddress = () => {
   const [historyByAddressState, setHistoryByAddressState] = useState<IHistoryByAddressState>({
@@ -27,7 +16,7 @@ export const useHistoryByAddress = () => {
       return {
         height: message.transaction.height,
         hash: message.transaction.hash,
-        type: message.transaction.messages[0]["@type"],
+        type: message.transaction.messages[0]['@type'],
         memo: message.transaction.memo,
         timestamp: message.transaction.block.timestamp,
         success: message.transaction.success,
@@ -35,14 +24,17 @@ export const useHistoryByAddress = () => {
     });
   };
 
-  useHistoryByAddressQuery({
-    onCompleted: (data) => {
-      setHistoryByAddressState({
-        historyList: formatHistoryList(data),
+  useEffect(() => {
+    getHistoryByAddress(address)
+      .then(async (data) => {
+        setHistoryByAddressState({
+          historyList: formatHistoryList(data),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    },
-    address: `{${address}}`,
-  });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     historyByAddressState,

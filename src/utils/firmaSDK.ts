@@ -289,7 +289,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     title: string,
     description: string,
     initialDeposit: number,
-    paramList: Array<any>,
+    paramList: any[],
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
@@ -312,7 +312,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     title: string,
     description: string,
     initialDeposit: number,
-    paramList: Array<any>
+    paramList: any[]
   ) => {
     if (IS_DEFAULT_GAS || isLedger) return FIRMACHAIN_CONFIG.defaultGas;
 
@@ -447,7 +447,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const grantStakeAuthorizationDelegate = async (
-    validatorAddressList: Array<string>,
+    validatorAddressList: string[],
     expirationDate: Date,
     maxFCT: number,
     estimatedGas: number
@@ -470,7 +470,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationGrantStakeAuthorizationDelegate = async (
-    validatorAddressList: Array<string>,
+    validatorAddressList: string[],
     expirationDate: Date,
     maxFCT: number
   ) => {

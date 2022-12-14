@@ -96,7 +96,7 @@ export const copyToClipboard = (textToCopy: string) => {
         textArea.remove();
       });
     }
-  } catch (e) {}
+  } catch (error) {}
 };
 
 export const getUTCDateFormat = (date: Date) => {

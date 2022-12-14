@@ -9,7 +9,7 @@ import { useSnackbar } from 'notistack';
 import useFirma from '../../utils/wallet';
 import { rootState } from '../../redux/reducers';
 import { modalActions } from '../../redux/action';
-import { ITotalStakingState } from './hooks';
+import { ITotalStakingState } from '../../interfaces/staking';
 import {
   convertNumber,
   convertNumberFormat,

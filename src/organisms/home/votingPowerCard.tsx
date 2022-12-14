@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import { IVotingPowerState } from "./hooks";
+import { convertNumberFormat } from '../../utils/common';
+import { IVotingPowerState } from '../../interfaces/home';
 
-import { Gauge } from "../../components/gauge";
-import { BlankCard } from "../../components/card";
-import theme from "../../themes";
+import theme from '../../themes';
+import { Gauge } from '../../components/gauge';
+import { BlankCard } from '../../components/card';
+
 import {
   VotingPowerTitleTypo,
   VotingPowerContainer,
@@ -14,8 +16,7 @@ import {
   VotingPowerDetail,
   VotingPowerDetailTitle,
   VotingPowerDetailContent,
-} from "./styles";
-import { convertNumberFormat } from "../../utils/common";
+} from './styles';
 
 interface IProps {
   votingPowerState: IVotingPowerState;
@@ -23,15 +24,24 @@ interface IProps {
 
 const VotingPowerCard = ({ votingPowerState }: IProps) => {
   const [percent, setPercent] = useState(0);
+  const [height, setHeight] = useState('');
+  const [votingPower, setVotingPower] = useState('');
+  const [totalVotingPower, setTotalVotingPower] = useState('');
 
   useEffect(() => {
-    let p = Math.round((votingPowerState.votingPower / votingPowerState.totalVotingPower) * 10000) / 100;
-    if (isNaN(p)) p = 0;
-    setPercent(p);
+    if (votingPowerState) {
+      let p = Math.round((votingPowerState.votingPower / votingPowerState.totalVotingPower) * 10000) / 100;
+      if (isNaN(p)) p = 0;
+      setPercent(p);
+
+      setHeight(convertNumberFormat(votingPowerState.height, 0));
+      setVotingPower(convertNumberFormat(votingPowerState.votingPower, 0));
+      setTotalVotingPower(convertNumberFormat(votingPowerState.totalVotingPower, 0));
+    }
   }, [votingPowerState]);
 
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height={"100%"}>
+    <BlankCard bgColor={theme.colors.backgroundSideBar} height={'100%'}>
       <VotingPowerTitleTypo>Online Voting Power</VotingPowerTitleTypo>
       <VotingPowerContainer>
         <VotingPowerPercentTypo>{`${percent} %`}</VotingPowerPercentTypo>
@@ -41,7 +51,7 @@ const VotingPowerCard = ({ votingPowerState }: IProps) => {
         <VotingPowerDetailWrapper>
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Block</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>{convertNumberFormat(votingPowerState.height, 0)}</VotingPowerDetailContent>
+            <VotingPowerDetailContent>{height}</VotingPowerDetailContent>
           </VotingPowerDetail>
 
           <VotingPowerDetail>
@@ -51,14 +61,12 @@ const VotingPowerCard = ({ votingPowerState }: IProps) => {
 
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Voting Power</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>{convertNumberFormat(votingPowerState.votingPower, 0)}</VotingPowerDetailContent>
+            <VotingPowerDetailContent>{votingPower}</VotingPowerDetailContent>
           </VotingPowerDetail>
 
           <VotingPowerDetail>
             <VotingPowerDetailTitle>Total Voting Power</VotingPowerDetailTitle>
-            <VotingPowerDetailContent>
-              {convertNumberFormat(votingPowerState.totalVotingPower, 0)}
-            </VotingPowerDetailContent>
+            <VotingPowerDetailContent>{totalVotingPower}</VotingPowerDetailContent>
           </VotingPowerDetail>
         </VotingPowerDetailWrapper>
       </VotingPowerContainer>

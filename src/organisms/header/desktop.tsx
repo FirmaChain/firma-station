@@ -8,7 +8,6 @@ import { copyToClipboard } from '../../utils/common';
 import { FIRMACHAIN_CONFIG } from '../../config';
 import { modalActions } from '../../redux/action';
 import { rootState } from '../../redux/reducers';
-import { useAvataURL, useUserData } from './hooks';
 
 import {
   PaperwalletModal,
@@ -88,10 +87,7 @@ function HeaderDesktop() {
     restake,
   } = useSelector((state: rootState) => state.modal);
 
-  const { avatarURL } = useAvataURL(address);
   const { showAddressOnDevice } = useFirma();
-
-  useUserData(isInit);
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);
@@ -141,7 +137,7 @@ function HeaderDesktop() {
         <HeaderRightWrapper>
           {isInit && (
             <HeaderLeftWrapper>
-              <ProfileImg src={avatarURL} />
+              <ProfileImg src={''} />
               <AddressTypo onClick={clipboard}>{address}</AddressTypo>
               <BarDiv />
               {isLedger && <LedgerIconImg onClick={onClickLedger} />}

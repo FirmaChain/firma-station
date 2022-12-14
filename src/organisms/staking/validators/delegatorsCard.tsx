@@ -4,9 +4,9 @@ import { useMediaQuery } from 'react-responsive';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 
-import { useAvataURL } from '../../header/hooks';
 import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
 import { EXPLORER_URI, SYMBOL } from '../../../config';
+import { IDelegationState } from '../../../interfaces/staking';
 
 import {
   DelegatorsCardWrapper,
@@ -24,20 +24,19 @@ import {
 } from './styles';
 
 interface IProps {
-  delegateState: any;
+  delegateState: IDelegationState;
 }
 
 const Row = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
-  const { avatarURL, moniker } = useAvataURL(currentDelegator.delegatorAddress);
 
   return (
     <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn>
-          <ProfileImage2 src={avatarURL} />
+          <ProfileImage2 src={currentDelegator.avatarURL} />
         </ItemColumn>
-        <ItemColumn>{`${moniker}`}</ItemColumn>
+        <ItemColumn>{`${currentDelegator.moniker}`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${SYMBOL}`}</ItemColumn>
       </ItemWrapper>
     </Link>
@@ -46,15 +45,14 @@ const Row = ({ data, index, style }: any) => {
 
 const RowMobile = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
-  const { avatarURL, moniker } = useAvataURL(currentDelegator.delegatorAddress);
 
   return (
     <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }} target={'_blank'}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
-          <ProfileImage2 src={avatarURL} />
+          <ProfileImage2 src={data.avatarURL} />
           <DelegatorInfoMobile>
-            <div>{`${moniker}`}</div>
+            <div>{`${data.moniker}`}</div>
             <div>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${SYMBOL}`}</div>
           </DelegatorInfoMobile>
         </ItemMobileColumn>

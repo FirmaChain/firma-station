@@ -1,37 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { rootState } from '../../redux/reducers';
-import { useTransferHistoryByAddressQuery } from '../../apollo/gqls';
-import useFirma from '../../utils/wallet';
+import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
 import { convertNumber } from '../../utils/common';
-
-export interface IHistory {
-  height: number;
-  hash: string;
-  type: string;
-  from: string;
-  to: string;
-  denom: string;
-  amount: string;
-  memo: string;
-  timestamp: string;
-  success: boolean;
-}
-
-export interface IToken {
-  denom: string;
-  symbol: string;
-  decimal: number;
-}
-
-export interface ITokensState {
-  [key: string]: IToken;
-}
-
-export interface ITransferHistoryByAddressState {
-  historyList: Array<IHistory>;
-}
+import { getHistoryByAddress } from '../../apollo/gqls/query';
+import { getTokenData } from '../../utils/lcdQuery';
 
 export const useTransferHistoryByAddress = () => {
   const [transferHistoryByAddressState, setTransferHistoryByAddressState] = useState<ITransferHistoryByAddressState>({
@@ -39,7 +13,6 @@ export const useTransferHistoryByAddress = () => {
   });
   const [tokenDataState, setTokenDatas] = useState<ITokensState>({});
   const { address } = useSelector((state: rootState) => state.wallet);
-  const { getTokenData } = useFirma();
 
   const updateTokenData = async (data: any) => {
     for (let message of data.messagesByAddress) {
@@ -66,7 +39,7 @@ export const useTransferHistoryByAddress = () => {
               ...newData,
             };
           });
-        } catch (e) {
+        } catch (error) {
           continue;
         }
       }
@@ -90,16 +63,19 @@ export const useTransferHistoryByAddress = () => {
     });
   };
 
-  useTransferHistoryByAddressQuery({
-    onCompleted: async (data) => {
-      await updateTokenData(data);
+  useEffect(() => {
+    getHistoryByAddress(address, 'cosmos.bank.v1beta1.MsgSend')
+      .then(async (data) => {
+        await updateTokenData(data);
 
-      setTransferHistoryByAddressState({
-        historyList: formatHistoryList(data),
+        setTransferHistoryByAddressState({
+          historyList: formatHistoryList(data),
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    },
-    address: `{${address}}`,
-  });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     transferHistoryByAddressState,

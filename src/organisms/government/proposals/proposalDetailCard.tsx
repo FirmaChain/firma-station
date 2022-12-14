@@ -9,8 +9,8 @@ import {
 } from '../../../constants/government';
 import { SYMBOL } from '../../../config';
 import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
-import { IProposalState } from '../hooks';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
+import { IProposalDetailState } from '../../../interfaces/governance';
 
 import {
   CardWrapper,
@@ -26,7 +26,7 @@ import {
 } from './styles';
 
 interface IProps {
-  proposalState: IProposalState;
+  proposalState: IProposalDetailState;
 }
 
 const ProposalDetailCard = ({ proposalState }: IProps) => {

@@ -1,10 +1,10 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { rootState } from "../redux/reducers";
-import { useBlockData } from "../organisms/home/hooks";
+import { rootState } from '../redux/reducers';
+import { useDashboard } from '../organisms/home/hooks';
 
-import { AccountCard, AssetCard, BlockCard, VotingPowerCard, TokenomicsCard } from "../organisms/home";
+import { AccountCard, AssetCard, BlockCard, VotingPowerCard, TokenomicsCard } from '../organisms/home';
 import {
   ContentContainer,
   CardWrap,
@@ -12,11 +12,11 @@ import {
   RightCardWrap,
   RightCardTopWrap,
   RightCardMiddleWrap,
-} from "../styles/home";
+} from '../styles/home';
 
 const Home = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
-  const { blockState, tokenomicsState, votingPowerState } = useBlockData();
+  const { blockState, tokenomicsState, votingPowerState } = useDashboard();
 
   return (
     <ContentContainer>
@@ -28,10 +28,12 @@ const Home = () => {
           </LeftCardWrap>
         )}
         <RightCardWrap>
-          <RightCardTopWrap>{blockState && <BlockCard blockState={blockState} />}</RightCardTopWrap>
+          <RightCardTopWrap>
+            <BlockCard blockState={blockState} />
+          </RightCardTopWrap>
           <RightCardMiddleWrap>
-            {votingPowerState && <VotingPowerCard votingPowerState={votingPowerState} />}
-            {tokenomicsState && <TokenomicsCard tokenomicsState={tokenomicsState} />}
+            <VotingPowerCard votingPowerState={votingPowerState} />
+            <TokenomicsCard tokenomicsState={tokenomicsState} />
           </RightCardMiddleWrap>
         </RightCardWrap>
       </CardWrap>

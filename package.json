@@ -12,7 +12,7 @@
     "@apollo/react-hooks": "^4.0.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@firmachain/firma-js": "^0.2.43",
+    "@firmachain/firma-js": "^0.2.48",
     "@firmachain/firma-js-ledger": "^0.0.8",
     "@ledgerhq/hw-transport-webhid": "6.20.0",
     "@mui/icons-material": "^5.0.5",

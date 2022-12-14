@@ -1,54 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 
-import { convertNumber } from "../../utils/common";
-import { useGovernmentQuery, useProposalQuery } from "../../apollo/gqls";
+import { getProposalQueryFromId } from '../../apollo/gqls/query';
+import { getProposalFromId, getProposalList } from '../../utils/lcdQuery';
 
-export interface tally {
-  yes: number;
-  no: number;
-  noWithVeto: number;
-  abstain: number;
-  [key: string]: number;
-}
-
-export interface IProposalsState {
-  proposals: Array<any>;
-}
-
-export interface IProposalState {
-  proposalId: number;
-  title: string;
-  description: string;
-  status: string;
-  proposalType: string;
-  submitTime: string;
-  votingStartTime: string;
-  votingEndTime: string;
-  paramMinDepositAmount: number;
-  paramQuorum: number;
-  paramThreshold: number;
-  paramVetoThreshold: number;
-  periodDeposit: number;
-  periodVoting: number;
-  totalVotingPower: number;
-  voters: Array<any>;
-  depositors: Array<any>;
-  tally: tally;
-  extraData: any;
-}
+import { IProposalsState, IProposalDetailState } from '../../interfaces/governance';
+import { IProposalData } from '../../interfaces/lcd';
+import { IProposalQueryData } from '../../interfaces/gql';
 
 export const useGovernmentData = () => {
   const [proposalsState, setProposalsState] = useState<IProposalsState>({
     proposals: [],
   });
 
-  useGovernmentQuery({
-    onCompleted: (data) => {
-      setProposalsState({
-        proposals: data.proposals,
-      });
-    },
-  });
+  useEffect(() => {
+    getProposalList()
+      .then((proposalList) => {
+        setProposalsState({
+          proposals: proposalList.map(({ proposalId, proposalType, status, title, description }) => {
+            return { proposalId, proposalType, status, title, description };
+          }),
+        });
+      })
+      .catch(() => {});
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     proposalsState,
@@ -56,78 +30,69 @@ export const useGovernmentData = () => {
 };
 
 export const useProposalData = (proposalId: string) => {
-  const [proposalState, setProposalState] = useState<IProposalState | null>(null);
+  const [proposalState, setProposalState] = useState<IProposalDetailState | null>(null);
 
-  const formatTally = (data: any) => {
-    let result: tally = {
-      yes: 0,
-      no: 0,
-      noWithVeto: 0,
-      abstain: 0,
-    };
-
-    if (data.proposalTallyResult.length > 0)
-      result = {
-        yes: data.proposalTallyResult[0].yes,
-        no: data.proposalTallyResult[0].no,
-        noWithVeto: data.proposalTallyResult[0].noWithVeto,
-        abstain: data.proposalTallyResult[0].abstain,
-      };
-
-    return result;
-  };
-
-  const formatExtraData = (data: any) => {
-    if (data.proposal[0].content.plan) {
-      return {
-        height: data.proposal[0].content.plan.height,
-        name: data.proposal[0].content.plan.name,
-        info: data.proposal[0].content.plan.info,
-      };
-    }
-    if (data.proposal[0].content.recipient) {
-      return {
-        recipient: data.proposal[0].content.recipient,
-        amount: data.proposal[0].content.amount[0].amount,
-      };
-    }
-    if (data.proposal[0].content.changes) {
-      return {
-        changes: data.proposal[0].content.changes,
-      };
-    }
-  };
-
-  const formatProposalType = (data: any) => {
-    return data.proposal[0].content["@type"];
-  };
-
-  useProposalQuery({
-    proposalId,
-    onCompleted: (data) => {
-      setProposalState({
-        proposalId: data.proposal[0].proposalId,
-        title: data.proposal[0].title,
-        description: data.proposal[0].description,
-        status: data.proposal[0].status,
-        proposalType: formatProposalType(data),
-        submitTime: data.proposal[0].submitTime,
-        votingStartTime: data.proposal[0].votingStartTime,
-        votingEndTime: data.proposal[0].votingEndTime,
-        paramMinDepositAmount: convertNumber(data.govParams[0].depositParams["min_deposit"][0].amount),
-        paramQuorum: convertNumber(data.govParams[0].tallyParams.quorum),
-        paramThreshold: convertNumber(data.govParams[0].tallyParams.threshold),
-        paramVetoThreshold: convertNumber(data.govParams[0].tallyParams["veto_threshold"]),
-        periodDeposit: data.govParams[0].depositParams["max_deposit_period"] / 1000000000,
-        periodVoting: data.govParams[0].votingParams["voting_period"] / 1000000000,
-        totalVotingPower: data.proposal[0].staking_pool_snapshot.bonded_tokens,
-        voters: data.proposalVote,
-        depositors: data.proposal[0].proposalDeposits,
-        tally: formatTally(data),
-        extraData: formatExtraData(data),
+  const formatProposalQueryData = (data: IProposalQueryData | null) => {
+    if (data) {
+      const depositors = data.proposal[0].proposal_deposits;
+      const totalVotingPower = data.proposal[0].staking_pool_snapshot.bonded_tokens;
+      const votes = data.proposal[0].proposal_votes.map((vote: any) => {
+        return {
+          option: vote.option,
+          voterAddress: vote.voter_address,
+          moniker: vote.voter_address,
+          avatarURL: '',
+        };
       });
-    },
-  });
+
+      return {
+        depositors,
+        totalVotingPower,
+        votes,
+      };
+    }
+  };
+
+  useEffect(() => {
+    getProposalFromId(proposalId).then((proposalData: IProposalData) => {
+      const title = proposalData.title;
+      const description = proposalData.description;
+      const status = proposalData.status;
+      const proposalType = proposalData.proposalType;
+      const submitTime = proposalData.submitTime;
+      const votingStartTime = proposalData.votingStartTime;
+      const votingEndTime = proposalData.votingEndTime;
+      const paramMinDepositAmount = proposalData.paramMinDepositAmount;
+      const paramQuorum = proposalData.paramQuorum;
+      const periodDeposit = proposalData.periodDeposit;
+      const extraData = proposalData.extraData;
+      const tally = proposalData.tally;
+
+      setProposalState({
+        proposalId,
+        title,
+        description,
+        status,
+        proposalType,
+        submitTime,
+        votingStartTime,
+        votingEndTime,
+        paramMinDepositAmount,
+        paramQuorum,
+        periodDeposit,
+        extraData,
+        tally,
+        totalVotingPower: 0,
+        votes: [],
+        depositors: [],
+      });
+
+      getProposalQueryFromId(proposalId).then((proposalQueryData) => {
+        const formatProposalData = formatProposalQueryData(proposalQueryData);
+        setProposalState((prevState) => prevState && { ...prevState, ...formatProposalData });
+      });
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     proposalState,

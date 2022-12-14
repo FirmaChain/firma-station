@@ -2,8 +2,8 @@ import React from 'react';
 import { useSnackbar } from 'notistack';
 
 import { EXPLORER_URI, SYMBOL } from '../../../config';
+import { IValidator } from '../../../interfaces/staking';
 
-import { IValidator } from '../hooks';
 import { convertNumberFormat, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
 
 import {
@@ -129,14 +129,18 @@ const ValidatorCard = ({ targetValidatorData }: IProps) => {
               <StatusContent>
                 {targetValidatorData.commission === null
                   ? 'N/A'
-                  : `${convertNumberFormat(targetValidatorData.commission, 2)} %`}
+                  : `${convertNumberFormat(targetValidatorData.commission * 100, 2)} %`}
               </StatusContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>
                 Uptime <span style={{ fontSize: '12px' }}>(Last 10k blocks)</span>
               </StatusTitle>
-              <StatusContent>{`${convertNumberFormat(targetValidatorData.condition, 2)} %`}</StatusContent>
+              <StatusContent>
+                {targetValidatorData.condition === null
+                  ? 'N/A'
+                  : `${convertNumberFormat(targetValidatorData.condition, 2)} %`}
+              </StatusContent>
             </StatusItem>
             <StatusItem>
               <StatusTitle>

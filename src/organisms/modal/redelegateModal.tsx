@@ -72,7 +72,7 @@ const RedelegateModal = () => {
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
 
-  const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma(false);
+  const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma();
 
   const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);

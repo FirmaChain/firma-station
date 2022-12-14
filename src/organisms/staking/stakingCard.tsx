@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 
 import { convertNumberFormat, isValid } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
-import { ITotalStakingState } from './hooks';
+import { ITotalStakingState } from '../../interfaces/staking';
+import { SYMBOL } from '../../config';
 
 import theme from '../../themes';
 import { StakingWrap, StakingTextWrap, StakingTitleTypo, StakingContentTypo } from './styles';
-import { SYMBOL } from '../../config';
 
 interface IProps {
   totalStakingState: ITotalStakingState;

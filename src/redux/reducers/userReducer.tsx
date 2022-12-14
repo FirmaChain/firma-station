@@ -1,5 +1,5 @@
-import { createReducer } from "@reduxjs/toolkit";
-import { HANDLE_USER_BALANCE, HANDLE_USER_TOKEN_LIST, HANDLE_USER_VESTING, HANDLE_USER_NFT_LIST } from "../types";
+import { createReducer } from '@reduxjs/toolkit';
+import { HANDLE_USER_BALANCE, HANDLE_USER_TOKEN_LIST, HANDLE_USER_VESTING, HANDLE_USER_NFT_LIST } from '../types';
 
 interface IToken {
   denom: string;
@@ -11,7 +11,7 @@ interface IToken {
 export interface IVesting {
   totalVesting: number;
   expiredVesting: number;
-  vestingPeriod: Array<IVestingPeriod>;
+  vestingPeriod: IVestingPeriod[];
 }
 
 export interface IVestingPeriod {
@@ -23,12 +23,12 @@ export interface IVestingPeriod {
 export interface IUserState {
   balance: string;
   vesting: IVesting;
-  nftList: Array<any>;
-  tokenList: Array<IToken>;
+  nftList: any[];
+  tokenList: IToken[];
 }
 
 const initialState: IUserState = {
-  balance: "",
+  balance: '',
   vesting: { totalVesting: 0, expiredVesting: 0, vestingPeriod: [] },
   nftList: [],
   tokenList: [],

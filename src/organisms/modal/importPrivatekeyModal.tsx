@@ -1,15 +1,15 @@
-import React, { useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { isValidString } from "../../utils/common";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { GUIDE_LINK_IMPORT_PRIVATE_KEY } from "../../config";
+import useFirma from '../../utils/wallet';
+import { isValidString } from '../../utils/common';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { GUIDE_LINK_IMPORT_PRIVATE_KEY } from '../../config';
 
-import Password from "./password";
+import Password from './password';
 
 import {
   importPrivatekeyModalWidth,
@@ -21,17 +21,17 @@ import {
   PrivatekeyTextArea,
   ImportButton,
   HelpIcon,
-} from "./styles";
+} from './styles';
 
 const ImportPrivatekeyModal = () => {
   const importPrivatekeyModalState = useSelector((state: rootState) => state.modal.importPrivatekey);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { storeWalletFromPrivateKey, setUserData } = useFirma(false);
+  const { storeWalletFromPrivateKey } = useFirma();
 
   const [isActiveImportButton, activeImportButton] = useState(false);
-  const [inputWords, setInputWords] = useState("");
-  const [password, setPassword] = useState("");
+  const [inputWords, setInputWords] = useState('');
+  const [password, setPassword] = useState('');
 
   const inputRef = useRef<HTMLTextAreaElement>();
 
@@ -39,23 +39,22 @@ const ImportPrivatekeyModal = () => {
     if (isValidString(password)) {
       storeWalletFromPrivateKey(password, inputWords)
         .then(() => {
-          enqueueSnackbar("Success Import Your Wallet", {
-            variant: "success",
+          enqueueSnackbar('Success Import Your Wallet', {
+            variant: 'success',
             autoHideDuration: 2000,
           });
-          setUserData();
           closeModal();
         })
         .catch((error: any) => {
           console.log(error);
-          enqueueSnackbar("Invalidate Private Key", {
-            variant: "error",
+          enqueueSnackbar('Invalidate Private Key', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         });
     } else {
-      enqueueSnackbar("Invalid input fields", {
-        variant: "error",
+      enqueueSnackbar('Invalid input fields', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
     }
@@ -71,10 +70,10 @@ const ImportPrivatekeyModal = () => {
   };
 
   const closeModal = () => {
-    if (inputRef.current) inputRef.current.value = "";
+    if (inputRef.current) inputRef.current.value = '';
 
     activeImportButton(false);
-    setInputWords("");
+    setInputWords('');
     modalActions.handleModalImportPrivatekey(false);
   };
 
@@ -84,9 +83,9 @@ const ImportPrivatekeyModal = () => {
       return;
     }
 
-    e.target.value = e.target.value.replace(/[^A-Za-z0-9]/gi, "");
+    e.target.value = e.target.value.replace(/[^A-Za-z0-9]/gi, '');
 
-    const checkValue = e.target.value.replace(/ +/g, " ").replace(/^\s+|\s+$/g, "");
+    const checkValue = e.target.value.replace(/ +/g, ' ').replace(/^\s+|\s+$/g, '');
     activeImportButton(checkValue.length === 66);
     setInputWords(checkValue);
   };

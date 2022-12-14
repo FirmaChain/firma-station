@@ -1,14 +1,14 @@
-import React, { useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import Select from "react-select";
+import React, { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import Select from 'react-select';
 
-import useFirma from "../../utils/wallet";
-import { convertNumber, convertToFctNumber, getFeesFromGas, makeDecimalPoint } from "../../utils/common";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_NEW_PROPOSAL } from "../../config";
+import useFirma from '../../utils/wallet';
+import { convertNumber, convertToFctNumber, getFeesFromGas, makeDecimalPoint } from '../../utils/common';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { FIRMACHAIN_CONFIG, GUIDE_LINK_NEW_PROPOSAL } from '../../config';
 
 import {
   newProposalModalWidth,
@@ -28,37 +28,37 @@ import {
   AddButton,
   DeleteButton,
   HelpIcon,
-} from "./styles";
+} from './styles';
 
 const options = [
-  { value: "TEXT_PROPOSAL", label: "Text" },
-  { value: "COMMUNITY_POOL_SPEND_PROPOSAL", label: "CommunityPoolSpend" },
-  { value: "PARAMETER_CHANGE_PROPOSAL", label: "ParameterChange" },
-  { value: "SOFTWARE_UPGRADE", label: "SoftwareUpgrade" },
+  { value: 'TEXT_PROPOSAL', label: 'Text' },
+  { value: 'COMMUNITY_POOL_SPEND_PROPOSAL', label: 'CommunityPoolSpend' },
+  { value: 'PARAMETER_CHANGE_PROPOSAL', label: 'ParameterChange' },
+  { value: 'SOFTWARE_UPGRADE', label: 'SoftwareUpgrade' },
 ];
 
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: "#21212f",
-    border: "1px solid #696974",
+    backgroundColor: '#21212f',
+    border: '1px solid #696974',
   }),
   option: (provided: any) => ({
     ...provided,
-    color: "#3550DE",
+    color: '#3550DE',
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    color: "white",
+    color: 'white',
   }),
   indicatorSeparator: (provided: any) => ({
     ...provided,
-    color: "#324ab8aa",
-    backgroundColor: "#324ab8aa",
+    color: '#324ab8aa',
+    backgroundColor: '#324ab8aa',
   }),
   dropdownIndicator: (provided: any) => ({
     ...provided,
-    color: "#324ab8aa",
+    color: '#324ab8aa',
   }),
 };
 
@@ -69,15 +69,15 @@ const NewProposalModal = () => {
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
 
-  const [proposalType, setProposalType] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [proposalType, setProposalType] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [initialDeposit, setInitialDeposit] = useState(0);
-  const [recipient, setRecipient] = useState("");
+  const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState(0);
-  const [upgradeName, setUpgradeName] = useState("");
+  const [upgradeName, setUpgradeName] = useState('');
   const [height, setHeight] = useState(1);
-  const [paramList, setParamList] = useState<Array<any>>([]);
+  const [paramList, setParamList] = useState<any[]>([]);
 
   const {
     submitParameterChangeProposal,
@@ -89,7 +89,7 @@ const NewProposalModal = () => {
     getGasEstimationSubmitSoftwareUpgrade,
     getGasEstimationSubmitTextProposal,
     setUserData,
-  } = useFirma(false);
+  } = useFirma();
 
   const closeModal = () => {
     resetModal();
@@ -98,22 +98,22 @@ const NewProposalModal = () => {
 
   const resetModal = () => {
     selectInputRef.current.clearValue();
-    setProposalType("");
+    setProposalType('');
     resetAllParams();
   };
 
   const resetAllParams = () => {
-    setTitle("");
-    setDescription("");
+    setTitle('');
+    setDescription('');
     setInitialDeposit(0);
-    setRecipient("");
+    setRecipient('');
     setAmount(0);
     setParamList([]);
   };
 
   const newProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     switch (proposalType) {
-      case "TEXT_PROPOSAL":
+      case 'TEXT_PROPOSAL':
         submitTextProposal(title, description, initialDeposit, gas)
           .then(() => {
             setUserData();
@@ -123,7 +123,7 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
-      case "COMMUNITY_POOL_SPEND_PROPOSAL":
+      case 'COMMUNITY_POOL_SPEND_PROPOSAL':
         submitCommunityPoolSpendProposal(title, description, initialDeposit, amount, recipient, gas)
           .then(() => {
             setUserData();
@@ -133,9 +133,9 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
-      case "PARAMETER_CHANGE_PROPOSAL":
+      case 'PARAMETER_CHANGE_PROPOSAL':
         const validParamList = paramList.filter(
-          (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
+          (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
         );
         submitParameterChangeProposal(title, description, initialDeposit, validParamList, gas)
           .then(() => {
@@ -145,7 +145,7 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
-      case "SOFTWARE_UPGRADE":
+      case 'SOFTWARE_UPGRADE':
         submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height), gas)
           .then(() => {
             setUserData();
@@ -180,9 +180,9 @@ const NewProposalModal = () => {
     if (e === null) return;
     const { value } = e.target;
 
-    let amount: string = value.replace(/[^0-9.]/g, "");
+    let amount: string = value.replace(/[^0-9.]/g, '');
 
-    if (amount === "") {
+    if (amount === '') {
       setInitialDeposit(0);
       return;
     }
@@ -245,7 +245,7 @@ const NewProposalModal = () => {
   };
 
   const addParam = () => {
-    setParamList((prevState) => [...prevState, { subspace: "", key: "", value: "" }]);
+    setParamList((prevState) => [...prevState, { subspace: '', key: '', value: '' }]);
   };
 
   const deleteParam = (index: number) => {
@@ -254,18 +254,18 @@ const NewProposalModal = () => {
 
   const nextStep = async () => {
     const validParamList = paramList.filter(
-      (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
+      (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
     );
 
-    const isCommonInvalid = title === "" || description === "" || initialDeposit === 0;
+    const isCommonInvalid = title === '' || description === '' || initialDeposit === 0;
     const isCommunityPoolInvalid =
-      proposalType === "COMMUNITY_POOL_SPEND_PROPOSAL" && (recipient === "" || amount === 0);
-    const isParameterChangeInvalid = proposalType === "PARAMETER_CHANGE_PROPOSAL" && validParamList.length === 0;
-    const isSoftwareUpgradeInvalid = proposalType === "SOFTWARE_UPGRADE" && (upgradeName === "" || height <= 0);
+      proposalType === 'COMMUNITY_POOL_SPEND_PROPOSAL' && (recipient === '' || amount === 0);
+    const isParameterChangeInvalid = proposalType === 'PARAMETER_CHANGE_PROPOSAL' && validParamList.length === 0;
+    const isSoftwareUpgradeInvalid = proposalType === 'SOFTWARE_UPGRADE' && (upgradeName === '' || height <= 0);
 
     if (initialDeposit === 0) {
-      enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-        variant: "error",
+      enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
 
@@ -273,8 +273,8 @@ const NewProposalModal = () => {
     }
 
     if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid || isSoftwareUpgradeInvalid) {
-      enqueueSnackbar("Invalid Parameters", {
-        variant: "error",
+      enqueueSnackbar('Invalid Parameters', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
 
@@ -288,10 +288,10 @@ const NewProposalModal = () => {
 
     try {
       switch (proposalType) {
-        case "TEXT_PROPOSAL":
+        case 'TEXT_PROPOSAL':
           currentGas = await getGasEstimationSubmitTextProposal(title, description, initialDeposit);
           break;
-        case "COMMUNITY_POOL_SPEND_PROPOSAL":
+        case 'COMMUNITY_POOL_SPEND_PROPOSAL':
           currentGas = await getGasEstimationSubmitCommunityPoolSpendProposal(
             title,
             description,
@@ -300,9 +300,9 @@ const NewProposalModal = () => {
             recipient
           );
           break;
-        case "PARAMETER_CHANGE_PROPOSAL":
+        case 'PARAMETER_CHANGE_PROPOSAL':
           const validParamList = paramList.filter(
-            (value: any) => value.subspace !== "" && value.key !== "" && value.value !== ""
+            (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
           );
           currentGas = await getGasEstimationSubmitParameterChangeProposal(
             title,
@@ -311,7 +311,7 @@ const NewProposalModal = () => {
             validParamList
           );
           break;
-        case "SOFTWARE_UPGRADE":
+        case 'SOFTWARE_UPGRADE':
           currentGas = await getGasEstimationSubmitSoftwareUpgrade(
             title,
             description,
@@ -323,9 +323,9 @@ const NewProposalModal = () => {
         default:
           break;
       }
-    } catch (e) {
-      enqueueSnackbar(e + "", {
-        variant: "error",
+    } catch (error) {
+      enqueueSnackbar(error + '', {
+        variant: 'error',
         autoHideDuration: 5000,
       });
     }
@@ -335,7 +335,7 @@ const NewProposalModal = () => {
     if (currentGas > 0) {
       if (convertNumber(balance) - initialDeposit >= convertToFctNumber(getFeesFromGas(currentGas))) {
         modalActions.handleModalData({
-          action: "Proposal",
+          action: 'Proposal',
           data: { fees: getFeesFromGas(currentGas), gas: currentGas },
           prevModalAction: modalActions.handleModalNewProposal,
           txAction: newProposalTx,
@@ -343,8 +343,8 @@ const NewProposalModal = () => {
 
         modalActions.handleModalConfirmTx(true);
       } else {
-        enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-          variant: "error",
+        enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+          variant: 'error',
           autoHideDuration: 2000,
         });
       }
@@ -368,7 +368,7 @@ const NewProposalModal = () => {
 
           <ModalLabel>Title</ModalLabel>
           <ModalInput>
-            <InputBoxDefault type="text" placeholder="" value={title} onChange={onChangeTitle} />
+            <InputBoxDefault type='text' placeholder='' value={title} onChange={onChangeTitle} />
           </ModalInput>
 
           <ModalLabel>Description</ModalLabel>
@@ -378,11 +378,11 @@ const NewProposalModal = () => {
 
           <ModalLabel>Initial Deposit</ModalLabel>
           <ModalInput>
-            <InputBoxDefault type="number" placeholder="" value={initialDeposit} onChange={onChangeInitialDeposit} />
+            <InputBoxDefault type='number' placeholder='' value={initialDeposit} onChange={onChangeInitialDeposit} />
           </ModalInput>
 
           {/* Parameter */}
-          {proposalType === "PARAMETER_CHANGE_PROPOSAL" && (
+          {proposalType === 'PARAMETER_CHANGE_PROPOSAL' && (
             <>
               <ModalLabel>Changes</ModalLabel>
               <ModalInput>
@@ -398,24 +398,24 @@ const NewProposalModal = () => {
                     <ParamBody key={index}>
                       <Param>
                         <InputBoxDefault
-                          type="text"
-                          placeholder=""
+                          type='text'
+                          placeholder=''
                           value={param.subspace}
                           onChange={(e) => onChangeSubspace(e, index)}
                         />
                       </Param>
                       <Param>
                         <InputBoxDefault
-                          type="text"
-                          placeholder=""
+                          type='text'
+                          placeholder=''
                           value={param.key}
                           onChange={(e) => onChangeKey(e, index)}
                         />
                       </Param>
                       <Param>
                         <InputBoxDefault
-                          type="text"
-                          placeholder=""
+                          type='text'
+                          placeholder=''
                           value={param.value}
                           onChange={(e) => onChangeValue(e, index)}
                         />
@@ -431,31 +431,31 @@ const NewProposalModal = () => {
           )}
 
           {/* CommunityPool */}
-          {proposalType === "COMMUNITY_POOL_SPEND_PROPOSAL" && (
+          {proposalType === 'COMMUNITY_POOL_SPEND_PROPOSAL' && (
             <>
               <ModalLabel>Recipient</ModalLabel>
               <ModalInput>
-                <InputBoxDefault type="text" placeholder="" value={recipient} onChange={onChangeRecipient} />
+                <InputBoxDefault type='text' placeholder='' value={recipient} onChange={onChangeRecipient} />
               </ModalInput>
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
-                <InputBoxDefault type="number" placeholder="" value={amount} onChange={onChangeAmount} />
+                <InputBoxDefault type='number' placeholder='' value={amount} onChange={onChangeAmount} />
               </ModalInput>
             </>
           )}
 
           {/* CommunityPool */}
-          {proposalType === "SOFTWARE_UPGRADE" && (
+          {proposalType === 'SOFTWARE_UPGRADE' && (
             <>
               <ModalLabel>Upgrade Name</ModalLabel>
               <ModalInput>
-                <InputBoxDefault type="text" placeholder="v0.1.0" value={upgradeName} onChange={onChangeUpgradeName} />
+                <InputBoxDefault type='text' placeholder='v0.1.0' value={upgradeName} onChange={onChangeUpgradeName} />
               </ModalInput>
 
               <ModalLabel>Height</ModalLabel>
               <ModalInput>
-                <InputBoxDefault type="number" placeholder="1" value={height} onChange={onChangeHeight} />
+                <InputBoxDefault type='number' placeholder='1' value={height} onChange={onChangeHeight} />
               </ModalInput>
             </>
           )}
@@ -464,7 +464,7 @@ const NewProposalModal = () => {
             onClick={() => {
               if (proposalType) nextStep();
             }}
-            active={proposalType !== ""}
+            active={proposalType !== ''}
           >
             Next
           </NextButton>

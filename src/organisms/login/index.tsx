@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useSnackbar } from "notistack";
+import React, { useState } from 'react';
+import { useSnackbar } from 'notistack';
 
 import {
   LoginContainer,
@@ -11,17 +11,17 @@ import {
   LogoutWrap,
   LogoutIconImg,
   LogoutTypo,
-} from "./styles";
-import useFirma from "../../utils/wallet";
+} from './styles';
+import useFirma from '../../utils/wallet';
 
 const LoginCard = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
 
-  const { loginWallet, resetWallet, setUserData } = useFirma(false);
+  const { loginWallet, resetWallet, setUserData } = useFirma();
 
   const onKeyDownPassword = (e: any) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       login();
     }
   };
@@ -32,15 +32,15 @@ const LoginCard = () => {
   };
 
   const login = () => {
-    if (password === "") return;
+    if (password === '') return;
 
     loginWallet(password)
       .then(() => {
         setUserData();
       })
       .catch(() => {
-        enqueueSnackbar("Invalid Password", {
-          variant: "error",
+        enqueueSnackbar('Invalid Password', {
+          variant: 'error',
           autoHideDuration: 2000,
         });
       });
@@ -57,14 +57,14 @@ const LoginCard = () => {
         <LogoImg />
         <LoginInputWrapper>
           <InputBoxDefault
-            placeholder="PASSWORD"
-            type="password"
+            placeholder='PASSWORD'
+            type='password'
             onKeyDown={onKeyDownPassword}
             value={password}
             onChange={onChangePassword}
             autoFocus={true}
           />
-          <LoginButton active={password !== ""} onClick={login}>
+          <LoginButton active={password !== ''} onClick={login}>
             LOGIN
           </LoginButton>
         </LoginInputWrapper>

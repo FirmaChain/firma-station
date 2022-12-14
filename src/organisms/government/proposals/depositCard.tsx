@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack';
 import { rootState } from '../../../redux/reducers';
 import { convertNumber, convertToFctNumber, convertNumberFormat } from '../../../utils/common';
 import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from '../../../constants/government';
-import { IProposalState } from '../hooks';
+import { IProposalDetailState } from '../../../interfaces/governance';
 import { modalActions } from '../../../redux/action';
 
 import {
@@ -22,7 +22,7 @@ import { FIRMACHAIN_CONFIG, SYMBOL } from '../../../config';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
 
 interface IProps {
-  proposalState: IProposalState;
+  proposalState: IProposalDetailState;
 }
 
 const DepositCard = ({ proposalState }: IProps) => {

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { convertNumber, convertToFctNumber, getFeesFromGas } from "../../utils/common";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { convertNumber, convertToFctNumber, getFeesFromGas } from '../../utils/common';
 
 import {
   votingModalWidth,
@@ -16,7 +16,7 @@ import {
   NextButton,
   VotingWrapper,
   VotingItem,
-} from "./styles";
+} from './styles';
 
 const VotingModal = () => {
   const votingModalState = useSelector((state: rootState) => state.modal.voting);
@@ -26,7 +26,7 @@ const VotingModal = () => {
   const [votingType, setVotingType] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { vote, getGasEstimationVote, setUserData } = useFirma(false);
+  const { vote, getGasEstimationVote, setUserData } = useFirma();
 
   const closeModal = () => {
     resetModal();
@@ -59,7 +59,7 @@ const VotingModal = () => {
 
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
-            action: "Voting",
+            action: 'Voting',
             data: { fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalVoting,
             txAction: votingTx,
@@ -67,15 +67,15 @@ const VotingModal = () => {
 
           modalActions.handleModalConfirmTx(true);
         } else {
-          enqueueSnackbar("Insufficient funds. Please check your account balance.", {
-            variant: "error",
+          enqueueSnackbar('Insufficient funds. Please check your account balance.', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         }
       })
       .catch((e) => {
         enqueueSnackbar(e, {
-          variant: "error",
+          variant: 'error',
           autoHideDuration: 5000,
         });
         if (isLedger) modalActions.handleModalGasEstimation(false);

@@ -8,6 +8,5 @@ import Government from './government';
 import Proposals from './proposals';
 import Community from './community';
 import Download from './download';
-import Restake from './restake';
 
-export { Home, Coming, Accounts, History, Staking, Validators, Government, Proposals, Community, Download, Restake };
+export { Home, Coming, Accounts, History, Staking, Validators, Government, Proposals, Community, Download };

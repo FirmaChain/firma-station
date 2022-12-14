@@ -1,18 +1,19 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useMediaQuery } from "react-responsive";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 
-import { rootState } from "../redux/reducers";
+import { rootState } from '../redux/reducers';
 
-import { StakingCard, ValidatorsCard, DelegationCard } from "../organisms/staking";
-import { useStakingData } from "../organisms/staking/hooks";
-import { ContentContainer } from "../styles/staking";
+import { StakingCard, ValidatorsCard, DelegationCard } from '../organisms/staking';
+import { useStakingData, useValidators } from '../organisms/staking/hooks';
+import { ContentContainer } from '../styles/staking';
 
 const Staking = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
-  const { totalStakingState, validatorsState } = useStakingData();
+  const { totalStakingState } = useStakingData();
+  const { validatorsState } = useValidators();
 
-  const isMobile = useMediaQuery({ query: "(min-width:0px) and (max-width:599px)" });
+  const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 
   return (
     <ContentContainer>

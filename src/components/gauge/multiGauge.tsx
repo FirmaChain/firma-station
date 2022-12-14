@@ -1,16 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import theme from "../../themes";
-import { MultiGaugeWrapper, MultiGaugePercent, MultiGaugeItem } from "./styles";
+import theme from '../../themes';
+import { MultiGaugeWrapper, MultiGaugePercent, MultiGaugeItem } from './styles';
 
-interface GaugeItem {
-  percent: string;
-  bgColor: string;
-}
 interface IProps {
   percent: string;
   bgColor?: string;
-  multiList: Array<GaugeItem>;
+  multiList: {
+    percent: string;
+    bgColor: string;
+  }[];
 }
 
 const MultiGauge = ({ percent, bgColor = theme.colors.mainblue, multiList }: IProps) => {

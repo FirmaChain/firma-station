@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 import { EXPLORER_URI } from '../../config';
 import { TRANSACTION_TYPE_MODEL } from '../../constants/transactions';
-import { IHistoryByAddressState } from './hooks';
+import { IHistoryByAddressState } from '../../interfaces/history';
+import { getDateTimeFormat } from '../../utils/dateUtil';
 
 import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, HistoryTypeBox } from './styles';
-import { getDateTimeFormat } from '../../utils/dateUtil';
 
 interface IProps {
   historyByAddressState: IHistoryByAddressState;

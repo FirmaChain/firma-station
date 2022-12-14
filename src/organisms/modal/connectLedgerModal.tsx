@@ -1,11 +1,11 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { GUIDE_LINK_CONNECT_TO_LEDGER } from "../../config";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { GUIDE_LINK_CONNECT_TO_LEDGER } from '../../config';
 
 import {
   connectLedgerModalWidth,
@@ -16,7 +16,7 @@ import {
   ModalInput,
   NextButton,
   HelpIcon,
-} from "./styles";
+} from './styles';
 
 const ConnectLedgerModal = () => {
   const connectLedgerModalState = useSelector((state: rootState) => state.modal.connectLedger);
@@ -41,8 +41,8 @@ const ConnectLedgerModal = () => {
         console.log(result);
         closeConnectLedgerModal();
       })
-      .catch((e) => {
-        console.log(e);
+      .catch((error) => {
+        console.log(error);
       });
   };
 

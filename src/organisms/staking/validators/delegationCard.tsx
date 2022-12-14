@@ -4,19 +4,18 @@ import { useSnackbar } from 'notistack';
 
 import useFirma from '../../../utils/wallet';
 import { rootState } from '../../../redux/reducers';
-import { ITargetStakingState, IValidatorsState } from '../hooks';
 import { convertNumber, convertNumberFormat, convertToFctNumber, getFeesFromGas } from '../../../utils/common';
 import { modalActions } from '../../../redux/action';
+import { ITargetStakingState } from '../../../interfaces/staking';
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from './styles';
 import { FIRMACHAIN_CONFIG, SYMBOL } from '../../../config';
 
 interface IProps {
   targetStakingState: ITargetStakingState;
-  validatorsState: IValidatorsState;
 }
 
-const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
+const DelegationCard = ({ targetStakingState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
@@ -76,11 +75,6 @@ const DelegationCard = ({ targetStakingState, validatorsState }: IProps) => {
 
   const getMoniker = (validatorAddress: string) => {
     let moniker = validatorAddress;
-
-    for (let i = 0; i < validatorsState.validators.length; i++) {
-      if (validatorsState.validators[i].validatorAddress === validatorAddress)
-        moniker = validatorsState.validators[i].validatorMoniker;
-    }
 
     return moniker;
   };

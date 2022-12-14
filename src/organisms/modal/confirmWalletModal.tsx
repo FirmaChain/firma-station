@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { GUIDE_LINK_CONFIRM_WALLET } from "../../config";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { GUIDE_LINK_CONFIRM_WALLET } from '../../config';
 
 import {
   confirmWalletModalWidth,
@@ -22,13 +22,7 @@ import {
   SelectMnemonic,
   CreateButton,
   HelpIcon,
-} from "./styles";
-
-interface IInputTarget {
-  index: number;
-  mnemonic: string;
-  text: string;
-}
+} from './styles';
 
 const ConfirmWalletModal = () => {
   const confirmWalletModalState = useSelector((state: rootState) => state.modal.confirmWallet);
@@ -36,14 +30,14 @@ const ConfirmWalletModal = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { storeWalletFromMnemonic } = useFirma();
 
-  const [inputTarget, setInputTarget] = useState<Array<IInputTarget>>([]);
-  const [selectTarget, setSelectTarget] = useState<Array<string>>([]);
+  const [inputTarget, setInputTarget] = useState<{ index: number; mnemonic: string; text: string }[]>([]);
+  const [selectTarget, setSelectTarget] = useState<string[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
   const [isActiveCreateButton, activeCreateButton] = useState<boolean>(false);
 
   useEffect(() => {
     if (confirmWalletModalState) {
-      let mnemonicArray = mnemonic.split(" ").map((mnemonicWord: string, index: number) => {
+      let mnemonicArray = mnemonic.split(' ').map((mnemonicWord: string, index: number) => {
         return {
           index,
           mnemonic: mnemonicWord,
@@ -57,7 +51,7 @@ const ConfirmWalletModal = () => {
         inputTargetList.push({
           index: mnemonicArray[randomIndex].index,
           mnemonic: mnemonicArray[randomIndex].mnemonic,
-          text: "",
+          text: '',
         });
         selectTargetList.push(mnemonicArray[randomIndex].mnemonic);
         mnemonicArray.splice(randomIndex, 1);
@@ -82,8 +76,8 @@ const ConfirmWalletModal = () => {
 
   const confirmWallet = () => {
     storeWalletFromMnemonic(password, mnemonic).then(() => {
-      enqueueSnackbar("Success Create Wallet", {
-        variant: "success",
+      enqueueSnackbar('Success Create Wallet', {
+        variant: 'success',
         autoHideDuration: 2000,
       });
       closeModal();
@@ -123,17 +117,17 @@ const ConfirmWalletModal = () => {
   const getIndexText = (index: number) => {
     switch (index + 1) {
       case 1:
-        return index + 1 + "st";
+        return index + 1 + 'st';
       case 2:
-        return index + 1 + "nd";
+        return index + 1 + 'nd';
       case 3:
-        return index + 1 + "rd";
+        return index + 1 + 'rd';
       default:
-        return index + 1 + "th";
+        return index + 1 + 'th';
     }
   };
 
-  const shuffleArray = (array: Array<string>) => {
+  const shuffleArray = (array: string[]) => {
     for (let i = 0; i < array.length; i++) {
       let j = Math.floor(Math.random() * (i + 1));
       const x = array[i];

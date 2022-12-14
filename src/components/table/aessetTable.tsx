@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import {
   TableStyled,
@@ -7,18 +7,18 @@ import {
   TableContainerStyled,
   TableHeadStyled,
   TableRowStyled,
-} from "./styles";
+} from './styles';
 
 interface columnItem {
   name: string;
-  align?: "center" | "inherit" | "justify" | "left" | "right";
+  align?: 'center' | 'inherit' | 'justify' | 'left' | 'right';
   width?: string;
 }
 
 interface IProps {
-  columns: Array<columnItem>;
-  assets: Array<Array<string>>;
-  size?: "small" | "medium";
+  columns: columnItem[];
+  assets: string[][];
+  size?: 'small' | 'medium';
 }
 
 const AessetTable = ({ columns, assets, size }: IProps) => {
@@ -38,7 +38,7 @@ const AessetTable = ({ columns, assets, size }: IProps) => {
           {assets.map((data, i) => (
             <TableRowStyled key={i}>
               {data.map((value, j) => (
-                <TableCellStyled align={columns[j].align} key={j} style={{ color: "#bbb" }}>
+                <TableCellStyled align={columns[j].align} key={j} style={{ color: '#bbb' }}>
                   {value}
                 </TableCellStyled>
               ))}

@@ -1,15 +1,15 @@
-import React, { useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { isValidString } from "../../utils/common";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { GUIDE_LINK_RECOVER_FROM_MNEMONIC } from "../../config";
+import useFirma from '../../utils/wallet';
+import { isValidString } from '../../utils/common';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { GUIDE_LINK_RECOVER_FROM_MNEMONIC } from '../../config';
 
-import Password from "./password";
+import Password from './password';
 
 import {
   recoverMnemonicModalWidth,
@@ -21,17 +21,17 @@ import {
   MnemonicTextArea,
   RecoverButton,
   HelpIcon,
-} from "./styles";
+} from './styles';
 
 const RecoverMnemonicModal = () => {
   const recoverMnemonicModalState = useSelector((state: rootState) => state.modal.recoverMnemonic);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { storeWalletFromMnemonic, setUserData } = useFirma(false);
+  const { storeWalletFromMnemonic } = useFirma();
 
   const [isActiveRecoverButton, activeRecoverButton] = useState(false);
-  const [inputWords, setInputWords] = useState("");
-  const [password, setPassword] = useState("");
+  const [inputWords, setInputWords] = useState('');
+  const [password, setPassword] = useState('');
 
   const inputRef = useRef<HTMLTextAreaElement>();
 
@@ -39,23 +39,22 @@ const RecoverMnemonicModal = () => {
     if (isValidString(password)) {
       storeWalletFromMnemonic(password, inputWords)
         .then(() => {
-          enqueueSnackbar("Success Recovered Your Wallet", {
-            variant: "success",
+          enqueueSnackbar('Success Recovered Your Wallet', {
+            variant: 'success',
             autoHideDuration: 2000,
           });
-          setUserData();
           closeModal();
         })
         .catch((error) => {
           console.log(error);
-          enqueueSnackbar("Invalidate Mnemonic Words", {
-            variant: "error",
+          enqueueSnackbar('Invalidate Mnemonic Words', {
+            variant: 'error',
             autoHideDuration: 2000,
           });
         });
     } else {
-      enqueueSnackbar("Invalid input fields", {
-        variant: "error",
+      enqueueSnackbar('Invalid input fields', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
     }
@@ -71,10 +70,10 @@ const RecoverMnemonicModal = () => {
   };
 
   const closeModal = () => {
-    if (inputRef.current) inputRef.current.value = "";
+    if (inputRef.current) inputRef.current.value = '';
 
     activeRecoverButton(false);
-    setInputWords("");
+    setInputWords('');
     modalActions.handleModalRecoverMnemonic(false);
   };
 
@@ -84,10 +83,10 @@ const RecoverMnemonicModal = () => {
       return;
     }
 
-    e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, "");
+    e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, '');
 
-    const checkValue = e.target.value.replace(/ +/g, " ").replace(/^\s+|\s+$/g, "");
-    activeRecoverButton(checkValue.split(" ").length === 24);
+    const checkValue = e.target.value.replace(/ +/g, ' ').replace(/^\s+|\s+$/g, '');
+    activeRecoverButton(checkValue.split(' ').length === 24);
     setInputWords(checkValue);
   };
 

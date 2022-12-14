@@ -39,7 +39,7 @@ const UndelegateModal = () => {
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
-  const { undelegate, getGasEstimationUndelegate, setUserData } = useFirma(false);
+  const { undelegate, getGasEstimationUndelegate, setUserData } = useFirma();
 
   const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);

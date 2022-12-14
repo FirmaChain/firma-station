@@ -5,27 +5,38 @@ import { FirmaUtil, AuthorizationType } from '@firmachain/firma-js';
 import moment from 'moment';
 
 import { Wallet } from './types';
-import { DENOM, RESTAKE_ADDRESS, SYMBOL, VESTING_ACCOUNTS } from '../config';
+import { DENOM, RESTAKE_ADDRESS, VESTING_ACCOUNTS } from '../config';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
 import { rootState } from '../redux/reducers';
 import { userActions, walletActions } from '../redux/action';
 import { getRandomKey, clearKey, storeWallet, restoreWallet, isInvalidWallet } from './keyBridge';
 import { FirmaPaperWallet } from '../paperwallet';
 import { FirmaSDKInternal } from './firmaSDK';
+import { ITargetStakingState, ITotalStakingState } from '../interfaces/staking';
 
-import { ITotalStakingState, ITargetStakingState } from '../organisms/staking/hooks';
-
-function useFirma(isUsedState = true) {
+function useFirma() {
   const { enqueueSnackbar } = useSnackbar();
   const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
   const [isVesting, setVesting] = useState(true);
+
+  const initalizeFirma = () => {
+    isInit && setUserData();
+  };
+
+  const checkSession = () => {
+    if (isLedger === false && isInit === true) {
+      walletActions.handleWalletTimeKey(getRandomKey());
+      initWallet(false);
+      window.location.reload();
+    }
+  };
 
   const restoreWalletInternal = (timeKey: string) => {
     let wallet = null;
 
     try {
       wallet = restoreWallet(timeKey, true);
-    } catch (e) {}
+    } catch (error) {}
 
     return wallet;
   };
@@ -110,8 +121,8 @@ function useFirma(isUsedState = true) {
           autoHideDuration: 5000,
         });
       }
-    } catch (e) {
-      console.log('ERROR : ' + e);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -122,7 +133,7 @@ function useFirma(isUsedState = true) {
     let wallet = null;
     try {
       wallet = restoreWallet(timeKey, true);
-    } catch (e) {}
+    } catch (error) {}
 
     return wallet !== null;
   };
@@ -131,7 +142,7 @@ function useFirma(isUsedState = true) {
     try {
       restoreWallet(password);
       return true;
-    } catch (e) {
+    } catch (error) {
       return false;
     }
   };
@@ -225,7 +236,7 @@ function useFirma(isUsedState = true) {
           symbol: tokenData.symbol,
           decimal: tokenData.decimal,
         });
-      } catch (e) {
+      } catch (error) {
         continue;
       }
     }
@@ -239,7 +250,7 @@ function useFirma(isUsedState = true) {
 
     let totalDelegated = 0;
     for (let i = 0; i < delegateListOrigin.length; i++) {
-      totalDelegated += convertNumber(delegateListOrigin[i].delegation.shares);
+      totalDelegated += convertNumber(delegateListOrigin[i].balance.amount);
     }
 
     return totalDelegated;
@@ -267,15 +278,14 @@ function useFirma(isUsedState = true) {
   };
 
   const setUserData = async () => {
-    const firmaSDK = FirmaSDK.getSDK();
-
     try {
-      const address = getAddressInternal();
+      const firmaSDK = FirmaSDK.getSDK();
+      const userAddress = getAddressInternal();
 
-      const balance = await firmaSDK.Bank.getBalance(address);
-      const tokenDataList = await getTokenDataList(address);
-      const totalDelegated = await getTotalDelegated(address);
-      const totalUndelegated = await getTotalUndelegated(address);
+      const balance = await firmaSDK.Bank.getBalance(userAddress);
+      const tokenDataList = await getTokenDataList(userAddress);
+      const totalDelegated = await getTotalDelegated(userAddress);
+      const totalUndelegated = await getTotalUndelegated(userAddress);
 
       const vestingData: any = await getVestingAccount();
       const stakingBalance = totalDelegated + totalUndelegated;
@@ -294,12 +304,7 @@ function useFirma(isUsedState = true) {
       userActions.handleUserNFTList([]);
       userActions.handleUserBalance(newbalance > 0 ? newbalance.toString() : '0');
       userActions.handleUserTokenList(tokenDataList);
-
-      getRedelegationList();
-      getUndelegationList();
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (error) {}
   };
 
   const getVestingAccount = async () => {
@@ -370,25 +375,6 @@ function useFirma(isUsedState = true) {
     });
   };
 
-  const getTokenData = async (denom: string) => {
-    if (denom !== DENOM) {
-      const firmaSDK = FirmaSDK.getSDK();
-      const tokenData = await firmaSDK.Token.getTokenData(denom);
-
-      return {
-        denom: denom,
-        symbol: tokenData.symbol,
-        decimal: tokenData.decimal,
-      };
-    }
-
-    return {
-      denom: DENOM,
-      symbol: SYMBOL,
-      decimal: 6,
-    };
-  };
-
   const getStaking = async () => {
     const firmaSDK = FirmaSDK.getSDK();
     const address = getAddressInternal();
@@ -397,20 +383,20 @@ function useFirma(isUsedState = true) {
     const delegateListOrigin = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
     const undelegateListOrigin = await firmaSDK.Staking.getTotalUndelegateInfo(address);
     const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
-    const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.delegation.shares - a.delegation.shares);
+    const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.balance.amount - a.balance.amount);
 
     const delegateList = delegateListSort.map((value) => {
       return {
         validatorAddress: value.delegation.validator_address,
         delegatorAddress: value.delegation.delegator_address,
-        amount: convertNumber(value.delegation.shares),
+        amount: convertNumber(value.balance.amount),
         moniker: value.delegation.validator_address,
         avatarURL: '',
       };
     });
 
     const delegationBalanceList = delegateListSort.map((value) => {
-      return value.delegation.shares;
+      return value.balance.amount;
     });
 
     const undelegationBalanceList = undelegateListOrigin.map((value) => {
@@ -470,7 +456,7 @@ function useFirma(isUsedState = true) {
     const targetReward = totalReward.rewards.find((value) => value.validator_address === validatorAddress);
 
     const available = convertToFctNumber(balance);
-    const delegated = convertToFctNumber(targetDelegation ? targetDelegation.delegation.shares : 0);
+    const delegated = convertToFctNumber(targetDelegation ? targetDelegation.balance.amount : 0);
     const undelegate = 0;
     const stakingReward = convertToFctNumber(targetReward ? targetReward.amount : 0);
 
@@ -494,7 +480,7 @@ function useFirma(isUsedState = true) {
       return {
         value: value.delegation.validator_address,
         label: value.delegation.validator_address,
-        amount: value.delegation.shares,
+        amount: value.balance.amount,
       };
     });
 
@@ -512,7 +498,7 @@ function useFirma(isUsedState = true) {
     let parseList = [];
     for (let i = 0; i < delegationList.length; i++) {
       let value = delegationList[i].delegation.validator_address;
-      let amount = delegationList[i].delegation.shares;
+      let amount = delegationList[i].balance.amount;
       let rewards = '0';
 
       if (Math.ceil(convertNumber(amount.split('.')[0])) === 0) {
@@ -589,7 +575,7 @@ function useFirma(isUsedState = true) {
 
         parseList.push({
           validatorAddress,
-          moniker: '',
+          moniker: validatorAddress,
           avatarURL: '',
           balance,
           completionTime,
@@ -738,7 +724,7 @@ function useFirma(isUsedState = true) {
     title: string,
     description: string,
     initialDeposit: number,
-    paramList: Array<any>,
+    paramList: any[],
     estimatedGas: number
   ) => {
     const result = await FirmaSDK.submitParameterChangeProposal(
@@ -756,7 +742,7 @@ function useFirma(isUsedState = true) {
     title: string,
     description: string,
     initialDeposit: number,
-    paramList: Array<any>
+    paramList: any[]
   ) => {
     return await FirmaSDK.getGasEstimationSubmitParameterChangeProposal(title, description, initialDeposit, paramList);
   };
@@ -861,13 +847,13 @@ function useFirma(isUsedState = true) {
       const grantList = grantData.dataList;
 
       return grantList;
-    } catch (e) {
+    } catch (error) {
       return [];
     }
   };
 
   const grantStakeAuthorizationDelegate = async (
-    validatorAddressList: Array<string>,
+    validatorAddressList: string[],
     expirationDate: Date,
     maxFCT: number,
     estimatedGas: number
@@ -883,7 +869,7 @@ function useFirma(isUsedState = true) {
   };
 
   const getGasEstimationGrantStakeAuthorizationDelegate = async (
-    validatorAddressList: Array<string>,
+    validatorAddressList: string[],
     expirationDate: Date,
     maxFCT: number
   ) => {
@@ -923,6 +909,8 @@ function useFirma(isUsedState = true) {
   };
 
   return {
+    initalizeFirma,
+    checkSession,
     getNewMnemonic,
     storeWalletFromMnemonic,
     storeWalletFromPrivateKey,
@@ -936,7 +924,6 @@ function useFirma(isUsedState = true) {
     isCorrectPassword,
     setUserData,
     getVestingAccount,
-    getTokenData,
     getStaking,
     getStakingFromValidator,
     getDelegationListWithReward,

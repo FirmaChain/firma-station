@@ -8,10 +8,11 @@ import { useMediaQuery } from 'react-responsive';
 
 import { rootState } from '../../../redux/reducers';
 import { EXPLORER_URI, FIRMACHAIN_CONFIG } from '../../../config';
-import { IProposalState, tally } from '../hooks';
 import { convertNumber, convertToFctNumber, convertNumberFormat } from '../../../utils/common';
 import { modalActions } from '../../../redux/action';
-import { useAvataURL } from '../../header/hooks';
+import { IProposalDetailState, ITally } from '../../../interfaces/governance';
+import { MultiGauge } from '../../../components/gauge';
+import { getDateTimeFormat } from '../../../utils/dateUtil';
 
 import {
   CardWrapper,
@@ -37,11 +38,9 @@ import {
   Quorum,
   Arrow,
 } from './styles';
-import { MultiGauge } from '../../../components/gauge';
-import { getDateTimeFormat } from '../../../utils/dateUtil';
 
 interface IProps {
-  proposalState: IProposalState;
+  proposalState: IProposalDetailState;
 }
 
 const votingThemeData = [
@@ -73,7 +72,6 @@ const votingThemeData = [
 
 const Row = ({ data, index, style }: any) => {
   const currentVoter = data[index];
-  const { avatarURL, moniker } = useAvataURL(currentVoter.voterAddress);
 
   const getDotColor = (option: string) => {
     return votingThemeData.filter((v) => v.option === option)[0].color;
@@ -87,9 +85,9 @@ const Row = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentVoter.voterAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn>
-          <ProfileImage src={avatarURL} />
+          <ProfileImage src={currentVoter.avatarURL} />
         </ItemColumn>
-        <ItemColumn>{`${moniker}`}</ItemColumn>
+        <ItemColumn>{`${currentVoter.moniker}`}</ItemColumn>
         <ItemColumn>
           <span style={{ color: `${getDotColor(currentVoter.option)}` }}>● </span>
           {getVotingText(currentVoter.option)}
@@ -106,7 +104,7 @@ const VotingCard = ({ proposalState }: IProps) => {
 
   const isSmall = useMediaQuery({ query: '(max-width: 900px)' });
 
-  const getTallyPercent = (proposalState: IProposalState, targetKey: string) => {
+  const getTallyPercent = (proposalState: IProposalDetailState, targetKey: string) => {
     let currentVoting = 0;
     for (let value in proposalState.tally) {
       if (value === 'abstain') continue;
@@ -116,7 +114,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     return proposalState.tally[targetKey] / currentVoting;
   };
 
-  const getTallyValue = (proposalState: IProposalState, targetKey: string) => {
+  const getTallyValue = (proposalState: IProposalDetailState, targetKey: string) => {
     return convertToFctNumber(proposalState.tally[targetKey]);
   };
 
@@ -139,7 +137,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     },
   ];
 
-  const voters = proposalState.voters.filter((v) => {
+  const votes = proposalState.votes.filter((v) => {
     if (currentVotingTab === 0) {
       return v;
     } else {
@@ -151,7 +149,7 @@ const VotingCard = ({ proposalState }: IProps) => {
     return getDateTimeFormat(time);
   };
 
-  const getCurrentVotingPower = (tally: tally, totalVotingPower: number) => {
+  const getCurrentVotingPower = (tally: ITally, totalVotingPower: number) => {
     let currentVoting = 0;
     for (let value in tally) {
       if (value === 'abstain') continue;
@@ -162,11 +160,11 @@ const VotingCard = ({ proposalState }: IProps) => {
   };
 
   const getVotingCountByOption = (option: string) => {
-    if (option === 'ALL') return proposalState.voters.length;
-    else return proposalState.voters.filter((v) => v.option === option).length;
+    if (option === 'ALL') return proposalState.votes.length;
+    else return proposalState.votes.filter((v) => v.option === option).length;
   };
 
-  const getMultiGaugeList = (proposalState: IProposalState) => {
+  const getMultiGaugeList = (proposalState: IProposalDetailState) => {
     let result = [];
     let currentVoting = 0;
     for (let value in proposalState.tally) {
@@ -224,25 +222,29 @@ const VotingCard = ({ proposalState }: IProps) => {
           <VotingLabel>Quorum</VotingLabel>
           <VotingContent bigSize={true}>{convertNumberFormat(proposalState.paramQuorum * 100, 2)}%</VotingContent>
         </VotingDetailItem>
-        <VotingDetailItem>
-          <VotingLabel>Current Turnout</VotingLabel>
-          <VotingContent bigSize={true}>
-            {getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower).toFixed(2)}%
-          </VotingContent>
-        </VotingDetailItem>
-        <VotingGauge>
-          <MultiGauge
-            percent={`${convertNumberFormat(
-              getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower),
-              2
-            )}%`}
-            multiList={getMultiGaugeList(proposalState)}
-          ></MultiGauge>
-          <Quorum percent={(proposalState.paramQuorum * 100).toFixed(2)}>
-            <Arrow>▲</Arrow>
-            Quorum
-          </Quorum>
-        </VotingGauge>
+        {proposalState.totalVotingPower > 0 && (
+          <>
+            <VotingDetailItem>
+              <VotingLabel>Current Turnout</VotingLabel>
+              <VotingContent bigSize={true}>
+                {getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower).toFixed(2)}%
+              </VotingContent>
+            </VotingDetailItem>
+            <VotingGauge>
+              <MultiGauge
+                percent={`${convertNumberFormat(
+                  getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower),
+                  2
+                )}%`}
+                multiList={getMultiGaugeList(proposalState)}
+              ></MultiGauge>
+              <Quorum percent={(proposalState.paramQuorum * 100).toFixed(2)}>
+                <Arrow>▲</Arrow>
+                Quorum
+              </Quorum>
+            </VotingGauge>
+          </>
+        )}
       </VotingDetailWrapper>
       <VotingWrapper>
         {votingData.map((voting, index) => (
@@ -255,22 +257,18 @@ const VotingCard = ({ proposalState }: IProps) => {
             <VotingPercent>
               {votingThemeData[index].type !== 'Abstain' ? `${convertNumberFormat(voting.percent * 100, 2)}%` : 'ㅤ'}
             </VotingPercent>
-            {/* <VotingGauge>
-              <Gauge
-                percent={`${convertNumberFormat(voting.percent * 100,2)}%`}
-                bgColor={votingThemeData[index].color}
-              />
-            </VotingGauge> */}
             <VotingValue>{convertNumberFormat(voting.value, 0)}</VotingValue>
           </VotingData>
         ))}
       </VotingWrapper>
+
       {proposalState.status === 'PROPOSAL_STATUS_VOTING_PERIOD' && (
         <VotingButton active={true} onClick={onClickVote}>
           Vote
         </VotingButton>
       )}
-      {isSmall === false && (
+
+      {isSmall === false && proposalState.votes.length > 0 && (
         <VotingListWrap>
           <VotingTabWrap>
             <VotingTabItem active={currentVotingTab === 0} onClick={() => changeVotingTab(0)}>
@@ -293,7 +291,7 @@ const VotingCard = ({ proposalState }: IProps) => {
           <VotingList>
             <AutoSizer>
               {({ height, width }) => (
-                <List width={width} height={height} itemCount={voters.length} itemSize={50} itemData={voters}>
+                <List width={width} height={height} itemCount={votes.length} itemSize={50} itemData={votes}>
                   {Row}
                 </List>
               )}

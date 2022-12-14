@@ -4,9 +4,9 @@ import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 
 import { EXPLORER_URI } from '../../config';
-import { ITransferHistoryByAddressState, ITokensState } from './hooks';
 import { getDateFormat, getTimeFormat } from '../../utils/dateUtil';
 import { convertNumberFormat } from '../../utils/common';
+import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
 
 import theme from '../../themes';
 import { BlankCard } from '../../components/card';
