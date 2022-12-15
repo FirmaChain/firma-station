@@ -1,7 +1,7 @@
 import { FirmaSDK, FirmaUtil, ValidatorDataType } from '@firmachain/firma-js';
 
 import { IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
-import { DENOM, FIRMACHAIN_CONFIG, SYMBOL } from '../config';
+import { CHAIN_CONFIG } from '../config';
 import { convertNumber, convertNumberFormat } from './common';
 
 export {
@@ -21,7 +21,7 @@ export {
   getProposalFromId,
 };
 
-const firmaSDK = new FirmaSDK(FIRMACHAIN_CONFIG);
+const firmaSDK = new FirmaSDK(CHAIN_CONFIG.FIRMACHAIN_CONFIG);
 
 const getAccAddressFromValOperAddress = (valoperAddress: string): string => {
   return FirmaUtil.getAccAddressFromValOperAddress(valoperAddress);
@@ -42,7 +42,7 @@ const getStakingPool = async (): Promise<{ bondedTokens: number; unbondedTokens:
 
 const getTotalSupply = async (): Promise<number> => {
   try {
-    const amount = await firmaSDK.Bank.getSupply();
+    const amount = await firmaSDK.Bank.getTokenSupply(CHAIN_CONFIG.PARAMS.DENOM);
 
     return convertNumber(FirmaUtil.getFCTStringFromUFCTStr(amount));
   } catch (error) {
@@ -88,7 +88,7 @@ const getSigningInfos = async (): Promise<ISigningInfo[]> => {
 };
 
 const getTokenData = async (denom: string): Promise<{ denom: string; symbol: string; decimal: number }> => {
-  if (denom !== DENOM) {
+  if (denom !== CHAIN_CONFIG.PARAMS.DENOM) {
     const tokenData = await firmaSDK.Token.getTokenData(denom);
 
     return {
@@ -99,8 +99,8 @@ const getTokenData = async (denom: string): Promise<{ denom: string; symbol: str
   }
 
   return {
-    denom: DENOM,
-    symbol: SYMBOL,
+    denom: CHAIN_CONFIG.PARAMS.DENOM,
+    symbol: CHAIN_CONFIG.PARAMS.SYMBOL,
     decimal: 6,
   };
 };

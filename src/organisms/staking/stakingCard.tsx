@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { convertNumberFormat, isValid } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
 import { ITotalStakingState } from '../../interfaces/staking';
-import { SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 
 import theme from '../../themes';
 import { StakingWrap, StakingTextWrap, StakingTitleTypo, StakingContentTypo } from './styles';
@@ -45,7 +45,7 @@ const StakingCard = ({ totalStakingState }: IProps) => {
             )}
           </StakingTitleTypo>
           <StakingContentTypo>
-            {convertNumberFormat(data.value, 3)} {SYMBOL}
+            {convertNumberFormat(data.value, 3)} {CHAIN_CONFIG.PARAMS.SYMBOL}
           </StakingContentTypo>
         </StakingTextWrap>
       ))}

@@ -7,7 +7,7 @@ import {
   PROPOSAL_MESSAGE_TYPE_COMMUNITYPOOLSPEND,
   PROPOSAL_MESSAGE_TYPE_SOFTWAREUPGRADE,
 } from '../../../constants/government';
-import { SYMBOL } from '../../../config';
+import { CHAIN_CONFIG } from '../../../config';
 import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
 import { IProposalDetailState } from '../../../interfaces/governance';
@@ -96,10 +96,9 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
             </ProposalDetailItem>
             <ProposalDetailItem>
               <Label>Amount</Label>
-              <ProposalContent>{`${convertNumberFormat(
-                convertToFctNumber(proposalState.extraData.amount),
-                2
-              )} ${SYMBOL}`}</ProposalContent>
+              <ProposalContent>{`${convertNumberFormat(convertToFctNumber(proposalState.extraData.amount), 2)} ${
+                CHAIN_CONFIG.PARAMS.SYMBOL
+              }`}</ProposalContent>
             </ProposalDetailItem>
           </>
         )}

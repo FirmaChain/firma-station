@@ -3,7 +3,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 
-import { EXPLORER_URI } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 import { getDateFormat, getTimeFormat } from '../../utils/dateUtil';
 import { convertNumberFormat } from '../../utils/common';
 import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
@@ -57,17 +57,17 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   return (
     <ItemWrapper style={style}>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentHistory.from}` }} target={'_blank'}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.from}` }} target={'_blank'}>
           {getAddress(currentHistory.from)}
         </Link>
       </ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentHistory.to}` }} target={'_blank'}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.to}` }} target={'_blank'}>
           {getAddress(currentHistory.to)}
         </Link>
       </ItemColumn>

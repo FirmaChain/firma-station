@@ -7,6 +7,7 @@ import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
 import useFirma from '../../utils/wallet';
 import { convertNumberFormat, convertToFctNumber, getFeesFromGas, getUTCDateFormat } from '../../utils/common';
+import { CHAIN_CONFIG } from '../../config';
 
 import {
   restakeModalWidth,
@@ -43,7 +44,7 @@ const RestakeModal = () => {
   const [validatorAddressList, setValidatorAddressList] = useState([]);
   const [isActiveRestake, setActiveRestake] = useState(false);
   const [frequency, setFrequency] = useState('4 Hours');
-  const [minimumRewards, setMinimumRewards] = useState('10 FCT');
+  const [minimumRewards, setMinimumRewards] = useState(`10 ${CHAIN_CONFIG.PARAMS.SYMBOL}`);
   const [expiryDate, setExpiryDate] = useState<Date>(new Date());
   const [totalDelegated, setTotalDelegated] = useState('0');
   const [totalRewards, setTotalRewards] = useState('0');
@@ -60,9 +61,12 @@ const RestakeModal = () => {
         setExpiryDate(getNextYear());
 
         modalData.frequency && setFrequency(modalData.frequency);
-        modalData.minimumRewards && setMinimumRewards(`${convertToFctNumber(modalData.minimumRewards)} FCT`);
-        modalData.totalDelegated && setTotalDelegated(`${getFCTFormat(modalData.totalDelegated)} FCT`);
-        modalData.totalRewards && setTotalRewards(`${getFCTFormat(modalData.totalRewards)} FCT`);
+        modalData.minimumRewards &&
+          setMinimumRewards(`${convertToFctNumber(modalData.minimumRewards)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`);
+        modalData.totalDelegated &&
+          setTotalDelegated(`${getFCTFormat(modalData.totalDelegated)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`);
+        modalData.totalRewards &&
+          setTotalRewards(`${getFCTFormat(modalData.totalRewards)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`);
       }
     }
   }, [restakeModalState]); // eslint-disable-line react-hooks/exhaustive-deps

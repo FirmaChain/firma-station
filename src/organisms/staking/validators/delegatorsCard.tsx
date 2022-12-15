@@ -5,7 +5,7 @@ import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 
 import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
-import { EXPLORER_URI, SYMBOL } from '../../../config';
+import { CHAIN_CONFIG } from '../../../config';
 import { IDelegationState } from '../../../interfaces/staking';
 
 import {
@@ -31,13 +31,18 @@ const Row = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }} target={'_blank'}>
+    <Link
+      to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }}
+      target={'_blank'}
+    >
       <ItemWrapper style={style}>
         <ItemColumn>
           <ProfileImage2 src={currentDelegator.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${currentDelegator.moniker}`}</ItemColumn>
-        <ItemColumn>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${SYMBOL}`}</ItemColumn>
+        <ItemColumn>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${
+          CHAIN_CONFIG.PARAMS.SYMBOL
+        }`}</ItemColumn>
       </ItemWrapper>
     </Link>
   );
@@ -47,13 +52,18 @@ const RowMobile = ({ data, index, style }: any) => {
   const currentDelegator = data[index];
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }} target={'_blank'}>
+    <Link
+      to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentDelegator.delegatorAddress}` }}
+      target={'_blank'}
+    >
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
           <ProfileImage2 src={data.avatarURL} />
           <DelegatorInfoMobile>
             <div>{`${data.moniker}`}</div>
-            <div>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${SYMBOL}`}</div>
+            <div>{`${convertNumberFormat(convertToFctNumber(currentDelegator.amount), 3)} ${
+              CHAIN_CONFIG.PARAMS.SYMBOL
+            }`}</div>
           </DelegatorInfoMobile>
         </ItemMobileColumn>
       </ItemMobileWrapper>

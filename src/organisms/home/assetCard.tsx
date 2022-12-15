@@ -9,9 +9,9 @@ import theme from '../../themes';
 import { BlankCard } from '../../components/card';
 import { AddressTitleTypo, ListWrapper, HeaderWrapper, HeaderColumn, ItemWrapper, ItemColumn } from './styles';
 import { convertNumberFormat } from '../../utils/common';
-import { SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 
-const Row = ({ data, index, style, tokenDataState }: any) => {
+const Row = ({ data, index, style }: any) => {
   const currentAsset = data[index];
 
   return (
@@ -26,7 +26,7 @@ const AssetCard = () => {
   const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
 
   const assetList = [
-    [`${SYMBOL}`, convertNumberFormat(balance, 3)],
+    [`${CHAIN_CONFIG.PARAMS.SYMBOL}`, convertNumberFormat(balance, 3)],
     ...tokenList.map((data) => {
       let symbol = data.symbol;
       if (data.symbol.length > 10) {

@@ -12,7 +12,7 @@ import {
   DownloadCard,
   DownloadTitle,
 } from './styles';
-import { DOWNLOAD_LINK_LIST } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 
 const DownloadList = () => {
   const openLink = (url: string) => {
@@ -25,19 +25,19 @@ const DownloadList = () => {
         <DownloadCard>
           <DownloadTitle>Desktop App</DownloadTitle>
           <DownloadWrapper>
-            <DownloadItem onClick={() => openLink(DOWNLOAD_LINK_LIST[0])}>
+            <DownloadItem onClick={() => openLink(CHAIN_CONFIG.DOWNLOAD_LINK_LIST[0])}>
               <DownloadItemIcon icon={theme.urls.win} />
               <DownloadItemTypo>Window</DownloadItemTypo>
             </DownloadItem>
-            <DownloadItem onClick={() => openLink(DOWNLOAD_LINK_LIST[1])}>
+            <DownloadItem onClick={() => openLink(CHAIN_CONFIG.DOWNLOAD_LINK_LIST[1])}>
               <DownloadItemIcon icon={theme.urls.linux} />
               <DownloadItemTypo>Linux</DownloadItemTypo>
             </DownloadItem>
-            <DownloadItem onClick={() => openLink(DOWNLOAD_LINK_LIST[2])}>
+            <DownloadItem onClick={() => openLink(CHAIN_CONFIG.DOWNLOAD_LINK_LIST[2])}>
               <DownloadItemIcon icon={theme.urls.mac} />
               <DownloadItemTypo>Mac OS (Intel)</DownloadItemTypo>
             </DownloadItem>
-            <DownloadItem onClick={() => openLink(DOWNLOAD_LINK_LIST[3])}>
+            <DownloadItem onClick={() => openLink(CHAIN_CONFIG.DOWNLOAD_LINK_LIST[3])}>
               <DownloadItemIcon icon={theme.urls.mac} />
               <DownloadItemTypo>Mac OS (M1)</DownloadItemTypo>
             </DownloadItem>
@@ -48,10 +48,10 @@ const DownloadList = () => {
       <DownloadCard>
         <DownloadTitle>Mobile App</DownloadTitle>
         <DownloadWrapper>
-          <DownloadItem onClick={() => openLink(DOWNLOAD_LINK_LIST[4])}>
+          <DownloadItem onClick={() => openLink(CHAIN_CONFIG.DOWNLOAD_LINK_LIST[4])}>
             <DownloadItemIconMobile icon={theme.urls.apple} />
           </DownloadItem>
-          <DownloadItem onClick={() => openLink(DOWNLOAD_LINK_LIST[5])}>
+          <DownloadItem onClick={() => openLink(CHAIN_CONFIG.DOWNLOAD_LINK_LIST[5])}>
             <DownloadItemIconMobile icon={theme.urls.google} />
           </DownloadItem>
         </DownloadWrapper>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
 
-import { EXPLORER_URI, SYMBOL } from '../../../config';
+import { CHAIN_CONFIG } from '../../../config';
 import { IValidator } from '../../../interfaces/staking';
 
 import { convertNumberFormat, copyToClipboard, makeDecimalPoint } from '../../../utils/common';
@@ -90,7 +90,9 @@ const ValidatorCard = ({ targetValidatorData }: IProps) => {
               <AddressWrapper>
                 <AddressInfoLabel>Operator Address</AddressInfoLabel>
                 <AddressInfoValue
-                  onClick={() => window.open(`${EXPLORER_URI}/validators/${targetValidatorData.validatorAddress}`)}
+                  onClick={() =>
+                    window.open(`${CHAIN_CONFIG.EXPLORER_URI}/validators/${targetValidatorData.validatorAddress}`)
+                  }
                 >
                   {targetValidatorData.validatorAddress}
                 </AddressInfoValue>
@@ -99,7 +101,9 @@ const ValidatorCard = ({ targetValidatorData }: IProps) => {
               <AddressWrapper>
                 <AddressInfoLabel>Account Address</AddressInfoLabel>
                 <AddressInfoValue
-                  onClick={() => window.open(`${EXPLORER_URI}/accounts/${targetValidatorData.selfDelegateAddress}`)}
+                  onClick={() =>
+                    window.open(`${CHAIN_CONFIG.EXPLORER_URI}/accounts/${targetValidatorData.selfDelegateAddress}`)
+                  }
                 >
                   {targetValidatorData.selfDelegateAddress}
                 </AddressInfoValue>
@@ -111,10 +115,9 @@ const ValidatorCard = ({ targetValidatorData }: IProps) => {
             <StatusItem>
               <StatusTitle>Voting Power</StatusTitle>
               <StatusContent>{`${convertNumberFormat(targetValidatorData.votingPowerPercent, 2)} %`}</StatusContent>
-              <StatusSubContent>{`${convertNumberFormat(
-                targetValidatorData.votingPower,
-                2
-              )} ${SYMBOL}`}</StatusSubContent>
+              <StatusSubContent>{`${convertNumberFormat(targetValidatorData.votingPower, 2)} ${
+                CHAIN_CONFIG.PARAMS.SYMBOL
+              }`}</StatusSubContent>
             </StatusItem>
             {/* <StatusItem>
               <StatusTitle>Self-delegation</StatusTitle>

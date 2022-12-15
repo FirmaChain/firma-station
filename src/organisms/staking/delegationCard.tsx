@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { Link } from 'react-router-dom';
 import { FixedSizeList as List } from 'react-window';
@@ -9,7 +10,7 @@ import { useSnackbar } from 'notistack';
 import useFirma from '../../utils/wallet';
 import { rootState } from '../../redux/reducers';
 import { modalActions } from '../../redux/action';
-import { ITotalStakingState } from '../../interfaces/staking';
+import { IGrantsDataState, ITotalStakingState } from '../../interfaces/staking';
 import {
   convertNumber,
   convertNumberFormat,
@@ -17,6 +18,7 @@ import {
   convertToFctString,
   getFeesFromGas,
 } from '../../utils/common';
+import { CHAIN_CONFIG } from '../../config';
 import { getDateTimeFormat } from '../../utils/dateUtil';
 
 import {
@@ -34,6 +36,10 @@ import {
   UndelegationItemColumn,
   UndelegationHeaderWrapper,
   UndelegationHeaderColumn,
+  RestakeHeaderWrapper,
+  RestakeHeaderColumn,
+  RestakeItemWrapper,
+  RestakeItemColumn,
   DelegationTab,
   DelegationTabItem,
   TabListItem,
@@ -44,10 +50,12 @@ import {
   ChartCenterTypo,
   ButtonWrapper,
   Button,
+  StatusBox,
 } from './styles';
 
 interface IProps {
   totalStakingState: ITotalStakingState;
+  grantDataState: IGrantsDataState;
 }
 
 const Row = ({ data, index, style, totalStakingState }: any) => {
@@ -135,6 +143,52 @@ const UndelegationRow = ({ data, index, style }: any) => {
   );
 };
 
+const RestakeRow = ({ data, index, style, totalStakingState, grantDataState, latestReward }: any) => {
+  const validatorInfo = data[index];
+
+  const getReward = (validatorAddress: string) => {
+    const reward = totalStakingState.stakingRewardList.filter(
+      (reward: any) => reward.validator_address === validatorAddress
+    );
+
+    if (reward.length > 0) {
+      return convertNumber(convertToFctString(reward[0].amount));
+    } else {
+      return 0;
+    }
+  };
+
+  const getLatestReward = (validatorAddress: string) => {
+    const reward = latestReward.rewardList.filter((reward: any) => reward.validatorAddr === validatorAddress);
+
+    if (reward.length > 0) {
+      return convertNumber(convertToFctString(reward[0].rewards));
+    } else {
+      return 0;
+    }
+  };
+
+  const getMoniker = (moniker: string) => {
+    return moniker.length > 12 ? `${moniker.substring(0, 12)}...` : moniker;
+  };
+
+  return (
+    <RestakeItemWrapper style={style}>
+      <RestakeItemColumn>
+        <Link to={{ pathname: `/staking/validators/${data[index].validatorAddress}` }}>
+          <ProfileImage2 src={validatorInfo.avatarURL} />
+          <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
+        </Link>
+      </RestakeItemColumn>
+      <RestakeItemColumn>≈ {convertNumberFormat(getReward(data[index].validatorAddress), 3)}</RestakeItemColumn>
+      <RestakeItemColumn>≈ {convertNumberFormat(getLatestReward(data[index].validatorAddress), 3)}</RestakeItemColumn>
+      <RestakeItemColumn>
+        <StatusBox status={-1}>Not yet delegated</StatusBox>
+      </RestakeItemColumn>
+    </RestakeItemWrapper>
+  );
+};
+
 const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
   const getMonikerFormat = (moniker: string) => {
     if (moniker.length > 20) return moniker.substr(0, 20) + '...';
@@ -154,14 +208,32 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
   return result;
 };
 
-const DelegationCard = ({ totalStakingState }: IProps) => {
+const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isInit, isLedger, address } = useSelector((state: rootState) => state.wallet);
   const { balance } = useSelector((state: rootState) => state.user);
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
-  const data = GetDelegatePieData(totalStakingState);
+
+  const pieData = GetDelegatePieData(totalStakingState);
 
   const [currentTab, setCurrentTab] = useState(0);
+  const [latestReward, setLatestReward] = useState<{ rewardList: { validatorAddr: string; rewards: number }[] }>({
+    rewardList: [],
+  });
+
+  useEffect(() => {
+    if (isInit && grantDataState.allowValidatorList.length > 0) {
+      axios
+        .get(`${CHAIN_CONFIG.RESTAKE.API}/restake/reward/${address}`)
+        .then(({ data }) => {
+          console.log(data);
+          if (data.length > 0) setLatestReward(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [grantDataState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const withdrawAllValidatorTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     withdrawAllValidator(gas)
@@ -211,6 +283,8 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
       setCurrentTab(index);
     } else if (index === 2 && totalStakingState.undelegationList.length > 0) {
       setCurrentTab(index);
+    } else if (index === 3) {
+      setCurrentTab(index);
     }
   };
 
@@ -220,6 +294,8 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
     }
   };
 
+  const onClickRestake = () => {};
+
   return (
     <FlexWrapper>
       <ChartWrapper>
@@ -228,7 +304,7 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
           <ChartCenterTypo>{convertNumberFormat(totalStakingState.delegated, 3)}</ChartCenterTypo>
         </ChartCenterTypoWrapper>
         <ResponsivePie
-          data={data}
+          data={pieData}
           margin={{ top: 30, right: 20, bottom: 30, left: 20 }}
           innerRadius={0.75}
           padAngle={0.7}
@@ -263,6 +339,9 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
           </DelegationTabItem>
           <DelegationTabItem isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
             Undelegations ({totalStakingState.undelegationList.length})
+          </DelegationTabItem>
+          <DelegationTabItem isActive={currentTab === 3} onClick={() => onCLickChangeTab(3)}>
+            Restake ({totalStakingState.delegateList.length})
           </DelegationTabItem>
         </DelegationTab>
         <AutoSizer>
@@ -325,11 +404,34 @@ const DelegationCard = ({ totalStakingState }: IProps) => {
                   </List>
                 </TabListItem>
               );
+            } else if (currentTab === 3) {
+              return (
+                <TabListItem>
+                  <RestakeHeaderWrapper style={{ width: width - 5 }}>
+                    <RestakeHeaderColumn>Validator</RestakeHeaderColumn>
+                    <RestakeHeaderColumn>Reward</RestakeHeaderColumn>
+                    <RestakeHeaderColumn>Latest Restake</RestakeHeaderColumn>
+                    <RestakeHeaderColumn>Grant Status</RestakeHeaderColumn>
+                  </RestakeHeaderWrapper>
+                  <List
+                    width={width}
+                    height={height - 80}
+                    itemCount={totalStakingState.delegateList.length}
+                    itemSize={45}
+                    itemData={totalStakingState.delegateList}
+                  >
+                    {(props) => RestakeRow({ ...props, totalStakingState, grantDataState, latestReward })}
+                  </List>
+                </TabListItem>
+              );
             }
           }}
         </AutoSizer>
       </DelegationListWrapper>
       <ButtonWrapper>
+        <Button isActive={true} onClick={onClickRestake}>
+          Restake
+        </Button>
         <Button isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
           Withdraw All
         </Button>

@@ -6,7 +6,7 @@ import { convertNumber, convertNumberFormat } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
 
 import theme from '../../themes';
-import { SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 import { BlankCard } from '../../components/card';
 import { AddressTitleTypo, UsdTypo, UserBalanceTypo, PriceTypo } from './styles';
 
@@ -25,12 +25,12 @@ const AccountCard = () => {
 
   return (
     <BlankCard bgColor={theme.colors.mainblue} height='130px' backgroundLogo={true}>
-      <AddressTitleTypo>{SYMBOL} Balance</AddressTitleTypo>
+      <AddressTitleTypo>{CHAIN_CONFIG.PARAMS.SYMBOL} Balance</AddressTitleTypo>
       <UsdTypo>
-        1 {SYMBOL} ($ {Math.round(currentUSDPrice * 1000) / 1000})
+        1 {CHAIN_CONFIG.PARAMS.SYMBOL} ($ {Math.round(currentUSDPrice * 1000) / 1000})
       </UsdTypo>
       <PriceTypo>$ {convertNumberFormat(currentUSDPrice * convertNumber(balance), 2)}</PriceTypo>
-      <UserBalanceTypo>{`${convertNumberFormat(balance, 3)} ${SYMBOL}`}</UserBalanceTypo>
+      <UserBalanceTypo>{`${convertNumberFormat(balance, 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</UserBalanceTypo>
     </BlankCard>
   );
 };

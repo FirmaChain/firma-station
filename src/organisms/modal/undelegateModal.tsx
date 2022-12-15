@@ -15,7 +15,7 @@ import {
 } from '../../utils/common';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_UNDELEGATE, SYMBOL } from '../../config';
+import { CHAIN_CONFIG, GUIDE_LINK_UNDELEGATE } from '../../config';
 
 import {
   undelegateModalWidth,
@@ -154,11 +154,13 @@ const UndelegateModal = () => {
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>
-            {availableAmount} {SYMBOL}
+            {availableAmount} {CHAIN_CONFIG.PARAMS.SYMBOL}
           </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} ${SYMBOL}`}</ModalInput>
+          <ModalInput>{`${convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString())} ${
+            CHAIN_CONFIG.PARAMS.SYMBOL
+          }`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>

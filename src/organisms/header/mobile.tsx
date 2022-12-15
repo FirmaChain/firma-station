@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Hamburger from 'hamburger-react';
 import { Link } from 'react-router-dom';
 
-import { EXPLORER_URI } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 
 import {
   HeaderMobileContainer,
@@ -33,7 +33,7 @@ const menus = [
   {
     name: 'Explorer',
     path: '/explorer',
-    externalLink: EXPLORER_URI,
+    externalLink: CHAIN_CONFIG.EXPLORER_URI,
   },
 ];
 

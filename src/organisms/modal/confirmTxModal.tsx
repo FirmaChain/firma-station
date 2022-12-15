@@ -20,7 +20,7 @@ import {
   InputBoxDefault,
   PasswordWrapper,
 } from './styles';
-import { FIRMACHAIN_CONFIG, SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 
 const ConfirmTxModal = () => {
   const confirmTxModalState = useSelector((state: rootState) => state.modal.confirmTx);
@@ -45,7 +45,7 @@ const ConfirmTxModal = () => {
     if (modalData.data.fees) {
       setFee(convertToFctString(modalData.data.fees.toString()));
     } else {
-      setFee(convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString()));
+      setFee(convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString()));
     }
   }, [modalData]);
 
@@ -85,12 +85,12 @@ const ConfirmTxModal = () => {
           {isValidString(amount) && (
             <ConfirmWrapper>
               <ConfirmLabel>Amount</ConfirmLabel>
-              <ConfirmInput>{`${convertNumberFormat(amount, 6)} ${SYMBOL}`}</ConfirmInput>
+              <ConfirmInput>{`${convertNumberFormat(amount, 6)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ConfirmInput>
             </ConfirmWrapper>
           )}
           <ConfirmWrapper>
             <ConfirmLabel>Fee</ConfirmLabel>
-            <ConfirmInput>{`${convertNumberFormat(fee, 6)} ${SYMBOL}`}</ConfirmInput>
+            <ConfirmInput>{`${convertNumberFormat(fee, 6)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ConfirmInput>
           </ConfirmWrapper>
           {isLedger === false && (
             <PasswordWrapper>

@@ -18,7 +18,7 @@ import {
   DepositMainTitle,
   DepositButton,
 } from './styles';
-import { FIRMACHAIN_CONFIG, SYMBOL } from '../../../config';
+import { CHAIN_CONFIG } from '../../../config';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
 
 interface IProps {
@@ -45,7 +45,7 @@ const DepositCard = ({ proposalState }: IProps) => {
   };
 
   const getAmountFormat = (amount: number) => {
-    return `${convertNumberFormat(convertToFctNumber(amount), 2)} ${SYMBOL}`;
+    return `${convertNumberFormat(convertToFctNumber(amount), 2)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`;
   };
 
   return (
@@ -69,7 +69,7 @@ const DepositCard = ({ proposalState }: IProps) => {
         <DepositButton
           active={true}
           onClick={() => {
-            if (convertNumber(balance) > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+            if (convertNumber(balance) > convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
               modalActions.handleModalData({
                 proposalId: proposalState.proposalId,
               });

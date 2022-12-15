@@ -9,7 +9,7 @@ import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
 
 import { ToggleButton } from '../../components/toggle';
-import { DENOM, FIRMACHAIN_CONFIG, GUIDE_LINK_SEND, SYMBOL } from '../../config';
+import { CHAIN_CONFIG, GUIDE_LINK_SEND } from '../../config';
 
 import {
   sendModalWidth,
@@ -167,8 +167,8 @@ const SendModal = () => {
   };
 
   const getMaxAmount = (): Number => {
-    if (tokenData.symbol === SYMBOL) {
-      const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
+    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
+      const fee = isSafety ? 0.1 : convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
 
       const value = convertNumber(makeDecimalPoint(available - fee, 6));
       return value > 0 ? value : 0;
@@ -178,7 +178,7 @@ const SendModal = () => {
   };
 
   const sendTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
-    if (tokenData.symbol === SYMBOL) {
+    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
       sendFCT(targetAddress, amount, memo, gas)
         .then(() => {
           setUserData();
@@ -204,7 +204,7 @@ const SendModal = () => {
 
     closeModal();
 
-    if (tokenData.symbol === SYMBOL) {
+    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
       getGasEstimationSendFCT(targetAddress, amount, memo)
         .then((gas) => {
           if (isLedger) modalActions.handleModalGasEstimation(false);
@@ -265,7 +265,13 @@ const SendModal = () => {
           <SelectWrapper>
             <Select
               options={[
-                { value: SYMBOL, label: SYMBOL, balance: balance, decimal: 6, denom: DENOM },
+                {
+                  value: CHAIN_CONFIG.PARAMS.SYMBOL,
+                  label: CHAIN_CONFIG.PARAMS.SYMBOL,
+                  balance: balance,
+                  decimal: 6,
+                  denom: CHAIN_CONFIG.PARAMS.DENOM,
+                },
                 ...tokenList.map((value) => {
                   return {
                     value: value.symbol,
@@ -298,21 +304,21 @@ const SendModal = () => {
           </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
+          <ModalInput>{`${convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput style={{ marginBottom: '10px' }}>
             <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
           </ModalInput>
-          {tokenData.symbol && tokenData.symbol === SYMBOL && (
+          {tokenData.symbol && tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL && (
             <ModalToggleWrapper>
               <ToggleButton toggleText='Safety' isActive={isSafety} onClickToggle={onClickToggle} />
               {isSafety && (
                 <ModalTooltipWrapper>
                   <ModalTooltipIcon />
                   <ModalTooltipTypo>
-                    The entire amount is automatically entered except 0.1{SYMBOL}, which will be used as a transaction
-                    fee.
+                    The entire amount is automatically entered except 0.1{CHAIN_CONFIG.PARAMS.SYMBOL}, which will be
+                    used as a transaction fee.
                   </ModalTooltipTypo>
                 </ModalTooltipWrapper>
               )}

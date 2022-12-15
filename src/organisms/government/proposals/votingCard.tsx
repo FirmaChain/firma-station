@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import { useMediaQuery } from 'react-responsive';
 
 import { rootState } from '../../../redux/reducers';
-import { EXPLORER_URI, FIRMACHAIN_CONFIG } from '../../../config';
+import { CHAIN_CONFIG } from '../../../config';
 import { convertNumber, convertToFctNumber, convertNumberFormat } from '../../../utils/common';
 import { modalActions } from '../../../redux/action';
 import { IProposalDetailState, ITally } from '../../../interfaces/governance';
@@ -82,7 +82,7 @@ const Row = ({ data, index, style }: any) => {
   };
 
   return (
-    <Link to={{ pathname: `${EXPLORER_URI}/accounts/${currentVoter.voterAddress}` }} target={'_blank'}>
+    <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentVoter.voterAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn>
           <ProfileImage src={currentVoter.avatarURL} />
@@ -188,7 +188,7 @@ const VotingCard = ({ proposalState }: IProps) => {
   };
 
   const onClickVote = () => {
-    if (convertNumber(balance) >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+    if (convertNumber(balance) >= convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
       modalActions.handleModalData({
         proposalId: proposalState.proposalId,
       });

@@ -13,7 +13,7 @@ import {
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
-import { FIRMACHAIN_CONFIG, SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 
 import {
   depositModalWidth,
@@ -73,7 +73,7 @@ const DepositModal = () => {
 
   const getMaxAmount = () => {
     const value = convertNumber(
-      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee), 6)
+      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee), 6)
     );
     return value > 0 ? value : 0;
   };
@@ -130,11 +130,13 @@ const DepositModal = () => {
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>
-            {balance} {SYMBOL}
+            {balance} {CHAIN_CONFIG.PARAMS.SYMBOL}
           </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} ${SYMBOL}`}</ModalInput>
+          <ModalInput>{`${convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString())} ${
+            CHAIN_CONFIG.PARAMS.SYMBOL
+          }`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput>

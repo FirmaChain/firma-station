@@ -78,3 +78,15 @@ export interface IRedelegationList {
   balance: string;
   completionTime: string;
 }
+
+export interface IGrantsDataState {
+  maxFCT: string;
+  expiration: string;
+  allowValidatorList: IValidatorInfo[];
+}
+
+export interface IValidatorInfo {
+  operatorAddress: string;
+  moniker: string;
+  avatarURL: string;
+}

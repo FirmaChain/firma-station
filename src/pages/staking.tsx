@@ -5,13 +5,14 @@ import { useMediaQuery } from 'react-responsive';
 import { rootState } from '../redux/reducers';
 
 import { StakingCard, ValidatorsCard, DelegationCard } from '../organisms/staking';
-import { useStakingData, useValidators } from '../organisms/staking/hooks';
+import { useGrantData, useStakingData, useValidators } from '../organisms/staking/hooks';
 import { ContentContainer } from '../styles/staking';
 
 const Staking = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
   const { totalStakingState } = useStakingData();
   const { validatorsState } = useValidators();
+  const { grantDataState } = useGrantData();
 
   const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 
@@ -24,7 +25,9 @@ const Staking = () => {
             totalStakingState.redelegationList.length +
             totalStakingState.undelegationList.length >
             0 &&
-            isMobile === false && <DelegationCard totalStakingState={totalStakingState} />}
+            isMobile === false && (
+              <DelegationCard totalStakingState={totalStakingState} grantDataState={grantDataState} />
+            )}
         </>
       )}
 

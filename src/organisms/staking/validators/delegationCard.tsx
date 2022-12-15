@@ -9,7 +9,7 @@ import { modalActions } from '../../../redux/action';
 import { ITargetStakingState } from '../../../interfaces/staking';
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from './styles';
-import { FIRMACHAIN_CONFIG, SYMBOL } from '../../../config';
+import { CHAIN_CONFIG } from '../../../config';
 
 interface IProps {
   targetStakingState: ITargetStakingState;
@@ -24,7 +24,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const delegateAction = () => {
-    if (targetStakingState.available > convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+    if (targetStakingState.available > convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
       modalActions.handleModalData({
         action: 'Delegate',
         data: { targetValidator, available: targetStakingState.available, reward: targetStakingState.stakingReward },
@@ -56,7 +56,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
           }
         }
 
-        if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
+        if (targetStakingState.available >= convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
           modalActions.handleModalData({
             action: 'Redelegate',
             data: { targetValidator, delegationList },
@@ -99,7 +99,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
               return;
             }
 
-            if (targetStakingState.available >= convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee)) {
+            if (targetStakingState.available >= convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
               modalActions.handleModalData({
                 action: 'Undelegate',
                 data: { targetValidator, delegation },
@@ -163,7 +163,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
     <CardWrapper>
       <InnerWrapper>
         <Title>My Delegations</Title>
-        <Content>{`${convertNumberFormat(targetStakingState.delegated, 3)} ${SYMBOL}`}</Content>
+        <Content>{`${convertNumberFormat(targetStakingState.delegated, 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</Content>
         <Buttons>
           <Button onClick={delegateAction} isActive={true}>
             Delegate
@@ -183,7 +183,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
       </InnerWrapper>
       <InnerWrapper>
         <Title>Rewards</Title>
-        <Content>{`${convertNumberFormat(targetStakingState.stakingReward, 3)} ${SYMBOL}`}</Content>
+        <Content>{`${convertNumberFormat(targetStakingState.stakingReward, 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</Content>
         <Buttons>
           <Button
             onClick={() => {

@@ -8,7 +8,7 @@ import { convertNumber, convertToFctNumber, getFeesFromGas, makeDecimalPoint } f
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_NEW_PROPOSAL } from '../../config';
+import { CHAIN_CONFIG, GUIDE_LINK_NEW_PROPOSAL } from '../../config';
 
 import {
   newProposalModalWidth,
@@ -202,7 +202,7 @@ const NewProposalModal = () => {
 
   const getMaxAmount = () => {
     const value = convertNumber(
-      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee), 6)
+      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee), 6)
     );
 
     return value > 0 ? value : 0;

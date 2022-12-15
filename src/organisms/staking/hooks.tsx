@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { rootState } from '../../redux/reducers';
 import useFirma from '../../utils/wallet';
-import { AVERAGE_BLOCK_TIME, BLOCKS_PER_YEAR, COMMUNITY_POOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 import { convertNumber, makeDecimalPoint } from '../../utils/common';
 import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
 import {
@@ -13,6 +13,7 @@ import {
   ITargetStakingState,
   IValidatorsState,
   IValidator,
+  IGrantsDataState,
 } from '../../interfaces/staking';
 import { ISigningInfo, IValidatorData } from '../../interfaces/lcd';
 
@@ -28,11 +29,19 @@ import {
   getSigningInfos,
 } from '../../utils/lcdQuery';
 
-export { useDelegations, useStakingData, useStakingDataFromTarget, useValidators, useValidatorFromTarget };
+export {
+  useDelegations,
+  useStakingData,
+  useStakingDataFromTarget,
+  useGrantData,
+  useValidators,
+  useValidatorFromTarget,
+};
 
 const useDelegations = () => {
-  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { avatarList } = useSelector((state: rootState) => state.avatar);
+  const { isInit } = useSelector((state: rootState) => state.wallet);
+  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
   const [delegateState, setDelegateState] = useState<IDelegationState>({
     self: 0,
@@ -44,38 +53,39 @@ const useDelegations = () => {
     if (targetValidator !== '') {
       const selfDelegateAddress = getAccAddressFromValOperAddress(targetValidator);
 
-      getValidatorDelegationsFromAddress(targetValidator)
-        .then(async (result) => {
-          let self = 0;
-          let totalDelegationAmount = 0;
-          let delegateList: IDelegateInfo[] = [];
+      isInit &&
+        getValidatorDelegationsFromAddress(targetValidator)
+          .then(async (result) => {
+            let self = 0;
+            let totalDelegationAmount = 0;
+            let delegateList: IDelegateInfo[] = [];
 
-          for (const delegate of result) {
-            totalDelegationAmount += delegate.amount;
-            if (delegate.delegatorAddress === selfDelegateAddress) {
-              self = delegate.amount;
+            for (const delegate of result) {
+              totalDelegationAmount += delegate.amount;
+              if (delegate.delegatorAddress === selfDelegateAddress) {
+                self = delegate.amount;
+              }
+
+              const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
+
+              delegateList.push({
+                ...delegate,
+                moniker,
+                avatarURL,
+              });
             }
 
-            const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
+            const selfPercent = (self / totalDelegationAmount) * 100;
 
-            delegateList.push({
-              ...delegate,
-              moniker,
-              avatarURL,
+            setDelegateState({
+              self,
+              selfPercent,
+              delegateList,
             });
-          }
-
-          const selfPercent = (self / totalDelegationAmount) * 100;
-
-          setDelegateState({
-            self,
-            selfPercent,
-            delegateList,
-          });
-        })
-        .catch((error) => {});
+          })
+          .catch(() => {});
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     delegateState,
@@ -83,6 +93,7 @@ const useDelegations = () => {
 };
 
 const useStakingData = () => {
+  const { isInit } = useSelector((state: rootState) => state.wallet);
   const { getStaking } = useFirma();
 
   const [totalStakingState, setTotalStakingState] = useState<ITotalStakingState>({
@@ -97,14 +108,15 @@ const useStakingData = () => {
   });
 
   useEffect(() => {
-    getStaking()
-      .then(async (result: ITotalStakingState | undefined) => {
-        if (result) {
-          setTotalStakingState(result);
-        }
-      })
-      .catch(() => {});
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    isInit &&
+      getStaking()
+        .then(async (result: ITotalStakingState | undefined) => {
+          if (result) {
+            setTotalStakingState(result);
+          }
+        })
+        .catch(() => {});
+  }, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     totalStakingState,
@@ -137,6 +149,29 @@ const useStakingDataFromTarget = () => {
   };
 };
 
+const useGrantData = () => {
+  const { isInit } = useSelector((state: rootState) => state.wallet);
+  const { getStakingGrantDataList } = useFirma();
+
+  const [grantDataState, setGrantDataState] = useState<IGrantsDataState>({
+    maxFCT: '0',
+    expiration: '',
+    allowValidatorList: [],
+  });
+
+  useEffect(() => {
+    getStakingGrantDataList().then((grantData) => {
+      if (grantData) {
+        setGrantDataState(grantData);
+      }
+    });
+  }, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return {
+    grantDataState,
+  };
+};
+
 const useValidators = () => {
   const { avatarList } = useSelector((state: rootState) => state.avatar);
 
@@ -156,7 +191,9 @@ const useValidators = () => {
         ]);
 
         const validatorSigningInfoList = await getSigningInfos();
-        const mintCoinPerDay = (86400 / AVERAGE_BLOCK_TIME) * ((inflation * totalSupply) / BLOCKS_PER_YEAR);
+        const mintCoinPerDay =
+          (86400 / CHAIN_CONFIG.PARAMS.AVERAGE_BLOCK_TIME) *
+          ((inflation * totalSupply) / CHAIN_CONFIG.PARAMS.BLOCKS_PER_YEAR);
         const mintCoinPerYear = mintCoinPerDay * 365;
 
         const parseValidatorList: IValidator[] = validatorList
@@ -174,7 +211,7 @@ const useValidators = () => {
             const rewardPerYear =
               mintCoinPerYear *
               (validator.votingPower / totalVotingPower) *
-              (1 - COMMUNITY_POOL) *
+              (1 - CHAIN_CONFIG.PARAMS.COMMUNITY_POOL) *
               (1 - validator.commission);
             const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
             const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
@@ -253,12 +290,14 @@ const useValidatorFromTarget = () => {
             ? (1 - convertNumber(signingInfo.missed_blocks_counter) / signedBlocksWindow) * 100
             : 0;
 
-          const mintCoinPerDay = (86400 / AVERAGE_BLOCK_TIME) * ((inflation * totalSupply) / BLOCKS_PER_YEAR);
+          const mintCoinPerDay =
+            (86400 / CHAIN_CONFIG.PARAMS.AVERAGE_BLOCK_TIME) *
+            ((inflation * totalSupply) / CHAIN_CONFIG.PARAMS.BLOCKS_PER_YEAR);
           const mintCoinPerYear = mintCoinPerDay * 365;
           const rewardPerYear =
             mintCoinPerYear *
             (validator.votingPower / totalVotingPower) *
-            (1 - COMMUNITY_POOL) *
+            (1 - CHAIN_CONFIG.PARAMS.COMMUNITY_POOL) *
             (1 - validator.commission);
           const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
           const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));

@@ -5,7 +5,7 @@ import { isMobile, isTablet } from 'react-device-detect';
 
 import useFirma from '../../utils/wallet';
 import { copyToClipboard } from '../../utils/common';
-import { FIRMACHAIN_CONFIG } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 import { modalActions } from '../../redux/action';
 import { rootState } from '../../redux/reducers';
 
@@ -130,7 +130,7 @@ function HeaderDesktop() {
       <HeaderLeftWrapper>
         <NetworkButton onClick={onNetwork}>
           <NetworkStatus />
-          <NetworkText>{FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
+          <NetworkText>{CHAIN_CONFIG.FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
         </NetworkButton>
       </HeaderLeftWrapper>
       {(isMobile || isTablet) === false && (

@@ -6,7 +6,7 @@ import { FixedSizeList as List } from 'react-window';
 import { rootState } from '../../redux/reducers';
 
 import theme from '../../themes';
-import { SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 import { BlankCard } from '../../components/card';
 import { AddressTitleTypo, ListWrapper2, HeaderWrapper2, HeaderColumn2, ItemWrapper2, ItemColumn2 } from './styles';
 import { convertNumberFormat } from '../../utils/common';
@@ -26,7 +26,7 @@ const AssetCard = () => {
   const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
 
   const assetList = [
-    [`${SYMBOL}`, convertNumberFormat(balance, 3)],
+    [`${CHAIN_CONFIG.PARAMS.SYMBOL}`, convertNumberFormat(balance, 3)],
     ...tokenList.map((data) => {
       let symbol = data.symbol;
       if (data.symbol.length > 10) {

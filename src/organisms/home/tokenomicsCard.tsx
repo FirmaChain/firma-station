@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
 import { convertNumberFormat } from '../../utils/common';
 import { ITokenomicsState } from '../../interfaces/home';
-import { SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 
 import theme from '../../themes';
 import { BlankCard } from '../../components/card';
@@ -34,7 +34,9 @@ const CustomTooltip = ({ active, payload }: any) => {
     return (
       <CustomTooltipContainer>
         <CustomTooltipTypo>{payload[0].payload.payload.legendKey}</CustomTooltipTypo>
-        <CustomTooltipTypo>{`${convertNumberFormat(payload[0].value, 0)} ${SYMBOL}`}</CustomTooltipTypo>
+        <CustomTooltipTypo>{`${convertNumberFormat(payload[0].value, 0)} ${
+          CHAIN_CONFIG.PARAMS.SYMBOL
+        }`}</CustomTooltipTypo>
       </CustomTooltipContainer>
     );
   }
@@ -122,22 +124,22 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
         <TokenomicsDetailWrapper>
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Total Supply</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${supply} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${supply} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Delegated</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${delegated} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${delegated} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Undelegated</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${undelegated} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${undelegated} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
 
           <TokenomicsDetail>
             <TokenomicsDetailTitle>Undelegate</TokenomicsDetailTitle>
-            <TokenomicsDetailContent>{`${undelegate} ${SYMBOL}`}</TokenomicsDetailContent>
+            <TokenomicsDetailContent>{`${undelegate} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</TokenomicsDetailContent>
           </TokenomicsDetail>
         </TokenomicsDetailWrapper>
       </TokenomicsContainer>

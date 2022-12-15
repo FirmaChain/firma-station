@@ -3,7 +3,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 
-import { EXPLORER_URI } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 import { TRANSACTION_TYPE_MODEL } from '../../constants/transactions';
 import { IHistoryByAddressState } from '../../interfaces/history';
 import { getDateTimeFormat } from '../../utils/dateUtil';
@@ -45,7 +45,7 @@ const Row = ({ data, index, style }: any) => {
       <ItemColumn>{currentHistory.height}</ItemColumn>
       <ItemColumn>{getMessageType(currentHistory.type)}</ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>

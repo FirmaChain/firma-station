@@ -13,7 +13,7 @@ import {
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
-import { FIRMACHAIN_CONFIG, GUIDE_LINK_DELEGATE, SYMBOL } from '../../config';
+import { CHAIN_CONFIG, GUIDE_LINK_DELEGATE } from '../../config';
 
 import { ToggleButton } from '../../components/toggle';
 
@@ -115,7 +115,7 @@ const DelegateModal = () => {
   };
 
   const getMaxAmount = () => {
-    const fee = isSafety ? 0.1 : convertToFctNumber(FIRMACHAIN_CONFIG.defaultFee);
+    const fee = isSafety ? 0.1 : convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
     const value = convertNumber(makeDecimalPoint(modalData.data.available - fee, 6));
 
     return value > 0 ? value + convertNumber(rewardAmount) : 0;
@@ -176,16 +176,18 @@ const DelegateModal = () => {
         <ModalContent>
           <ModalLabel>Available</ModalLabel>
           <ModalInput>
-            {availableAmount} {SYMBOL}
+            {availableAmount} {CHAIN_CONFIG.PARAMS.SYMBOL}
           </ModalInput>
 
           <ModalLabel>Reward </ModalLabel>
           <ModalInput>
-            {rewardAmount} {SYMBOL}
+            {rewardAmount} {CHAIN_CONFIG.PARAMS.SYMBOL}
           </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(FIRMACHAIN_CONFIG.defaultFee.toString())} ${SYMBOL}`}</ModalInput>
+          <ModalInput>{`${convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString())} ${
+            CHAIN_CONFIG.PARAMS.SYMBOL
+          }`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput style={{ marginBottom: '10px' }}>
@@ -201,8 +203,8 @@ const DelegateModal = () => {
               <ModalTooltipWrapper>
                 <ModalTooltipIcon />
                 <ModalTooltipTypo>
-                  The entire amount is automatically entered except 0.1{SYMBOL}, which will be used as a transaction
-                  fee.
+                  The entire amount is automatically entered except 0.1{CHAIN_CONFIG.PARAMS.SYMBOL}, which will be used
+                  as a transaction fee.
                 </ModalTooltipTypo>
               </ModalTooltipWrapper>
             )}

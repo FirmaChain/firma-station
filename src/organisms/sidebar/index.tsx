@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { EXPLORER_URI, HELP_URI } from '../../config';
+import { CHAIN_CONFIG, HELP_URI } from '../../config';
 
 import HomeIcon from '@mui/icons-material/Home';
 import AccountsIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -32,7 +32,7 @@ const menus = [
     name: 'Explorer',
     path: '/explorer',
     icon: ExplorerIcon,
-    externalLink: EXPLORER_URI,
+    externalLink: CHAIN_CONFIG.EXPLORER_URI,
   },
   {
     name: 'Download',

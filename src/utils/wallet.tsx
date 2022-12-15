@@ -5,7 +5,7 @@ import { FirmaUtil, AuthorizationType } from '@firmachain/firma-js';
 import moment from 'moment';
 
 import { Wallet } from './types';
-import { DENOM, RESTAKE_ADDRESS, VESTING_ACCOUNTS } from '../config';
+import { CHAIN_CONFIG } from '../config';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
 import { getAvatarInfo } from './avatar';
 import { rootState } from '../redux/reducers';
@@ -22,7 +22,6 @@ function useFirma() {
   const [isVesting, setVesting] = useState(true);
 
   const initializeFirma = () => {
-    console.log(isInit);
     isInit && setUserData();
   };
 
@@ -222,7 +221,7 @@ function useFirma() {
 
     for (let token of tokenList) {
       try {
-        if (token.denom === DENOM) continue;
+        if (token.denom === CHAIN_CONFIG.PARAMS.DENOM) continue;
 
         let tokenData = {
           decimal: 0,
@@ -319,8 +318,8 @@ function useFirma() {
 
       let isChecked = false;
 
-      if (VESTING_ACCOUNTS.length > 0) {
-        for (let account of VESTING_ACCOUNTS) {
+      if (CHAIN_CONFIG.VESTING_ACCOUNTS.length > 0) {
+        for (let account of CHAIN_CONFIG.VESTING_ACCOUNTS) {
           if (account['@type'] === '/cosmos.vesting.v1beta1.PeriodicVestingAccount') {
             if (account['base_vesting_account']['base_account']['address'] === address) {
               let endTimeAcc = convertNumber(account['start_time']) * 1;
@@ -389,13 +388,13 @@ function useFirma() {
     const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.balance.amount - a.balance.amount);
 
     const delegateList = delegateListSort.map((value) => {
-      const avatar = avatarList.find((avatar) => avatar.operatorAddress === value.delegation.validator_address);
+      const { moniker, avatarURL } = getAvatarInfo(avatarList, value.delegation.validator_address);
       return {
         validatorAddress: value.delegation.validator_address,
         delegatorAddress: value.delegation.delegator_address,
         amount: convertNumber(value.balance.amount),
-        moniker: avatar ? avatar.moniker : value.delegation.validator_address,
-        avatarURL: avatar ? avatar.url : '',
+        moniker,
+        avatarURL,
       };
     });
 
@@ -846,16 +845,31 @@ function useFirma() {
       const firmaSDK = FirmaSDK.getSDK();
       let address = getAddressInternal();
 
-      const grantData = await firmaSDK.Authz.getStakingGrantData(
+      const grantDataRaw = await firmaSDK.Authz.getStakingGrantData(
         address,
-        RESTAKE_ADDRESS,
+        CHAIN_CONFIG.RESTAKE.ADDRESS,
         AuthorizationType.AUTHORIZATION_TYPE_DELEGATE
       );
-      const grantList = grantData.dataList;
+      const grantData = grantDataRaw.dataList[0];
+      const maxFCT = grantData.authorization.max_tokens ? grantData.authorization.max_tokens.amount : '';
+      const expiration = grantData.expiration;
+      const allowValidatorList = grantData.authorization.allow_list.address.map((operatorAddress) => {
+        const { moniker, avatarURL } = getAvatarInfo(avatarList, operatorAddress);
 
-      return grantList;
+        return {
+          operatorAddress,
+          moniker,
+          avatarURL,
+        };
+      });
+
+      return {
+        maxFCT,
+        expiration,
+        allowValidatorList,
+      };
     } catch (error) {
-      return [];
+      return null;
     }
   };
 

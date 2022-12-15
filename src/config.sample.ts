@@ -1,32 +1,78 @@
 import { FirmaConfig } from '@firmachain/firma-js';
 
-export const NETWORK_INFO_LIST = [];
+const CHAIN_CONFIGS = {
+  MAINNET: {
+    FIRMACHAIN_CONFIG: FirmaConfig.MainNetConfig,
+    EXPLORER_URI: 'https://',
+    GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
+    PARAMS: {
+      BLOCKS_PER_YEAR: 0,
+      AVERAGE_BLOCK_TIME: 0,
+      COMMUNITY_POOL: 0,
+      DENOM: '',
+      SYMBOL: '',
+    },
+    IS_DEFAULT_GAS: true,
+    RESATKE: {
+      API: '',
+      WEB: '',
+      ADDRESS: '',
+    },
+    VALIDATOR_IDENTITY_JSON_URI: '',
+    DOWNLOAD_LINK_LIST: ['', '', '', '', '', ''],
+    VESTING_ACCOUNTS: [],
+  },
 
-export const FAUCET_URI = '';
-export const EXPLORER_URI = '';
-export const LCD_REST_URI = '';
-export const HELP_URI = '';
-export const VALIDATOR_IDENTITY_JSON_URI = '';
+  TESTNET: {
+    FIRMACHAIN_CONFIG: FirmaConfig.TestNetConfig,
+    EXPLORER_URI: 'https://',
+    GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
+    PARAMS: {
+      BLOCKS_PER_YEAR: 0,
+      AVERAGE_BLOCK_TIME: 0,
+      COMMUNITY_POOL: 0,
+      DENOM: '',
+      SYMBOL: '',
+    },
+    IS_DEFAULT_GAS: true,
+    RESATKE: {
+      API: '',
+      WEB: '',
+      ADDRESS: '',
+    },
+    VALIDATOR_IDENTITY_JSON_URI: '',
+    DOWNLOAD_LINK_LIST: ['', '', '', '', '', ''],
+    VESTING_ACCOUNTS: [],
+  },
 
-export const GRAPHQL_CONFIG = {
-  URI: 'http://:8080/v1/graphql',
+  DEVNET: {
+    FIRMACHAIN_CONFIG: FirmaConfig.DevNetConfig,
+    EXPLORER_URI: 'https://',
+    GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
+    PARAMS: {
+      BLOCKS_PER_YEAR: 0,
+      AVERAGE_BLOCK_TIME: 0,
+      COMMUNITY_POOL: 0,
+      DENOM: '',
+      SYMBOL: '',
+    },
+    IS_DEFAULT_GAS: true,
+    RESATKE: {
+      API: '',
+      WEB: '',
+      ADDRESS: '',
+    },
+    VALIDATOR_IDENTITY_JSON_URI: '',
+    DOWNLOAD_LINK_LIST: ['', '', '', '', '', ''],
+    VESTING_ACCOUNTS: [],
+  },
 };
 
-export const FIRMACHAIN_CONFIG = FirmaConfig.TestNetConfig;
+export const CHAIN_CONFIG = CHAIN_CONFIGS.MAINNET;
 
-export const BLOCKS_PER_YEAR = 0;
-export const COMMUNITY_POOL = 0;
-export const IS_DEFAULT_GAS = true;
-export const DENOM = 'ufct';
-export const SYMBOL = 'FCT';
+export const NETWORK_INFO_LIST = [];
 
-export const VESTING_ACCOUNTS = [];
-export const RESTAKE_API = 'http://0.0.0.0/restake/info';
-export const RESTAKE_ADDRESS = '';
-export const RESTAKE_PAGE_LINK = '';
-
-export const DOWNLOAD_LINK_LIST = ['win', 'ubuntu', 'mac-intel', 'mac-m1', 'googleplay', 'appstore'];
-
+export const HELP_URI = '';
 export const GUIDE_LINK_LOGIN_WALLET = '';
 export const GUIDE_LINK_NEW_WALLET = '';
 export const GUIDE_LINK_CONFIRM_WALLET = '';

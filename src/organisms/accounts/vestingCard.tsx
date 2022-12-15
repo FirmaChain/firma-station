@@ -16,7 +16,7 @@ import {
   TitleTypo,
   VestingTotal,
 } from './styles';
-import { SYMBOL } from '../../config';
+import { CHAIN_CONFIG } from '../../config';
 import { convertToFctString, convertToFctNumber, convertNumberFormat } from '../../utils/common';
 import { getDateTimeFormat } from '../../utils/dateUtil';
 
@@ -36,7 +36,7 @@ const Row = ({ data, index, style }: any) => {
   };
 
   const getAmount = (amount: string) => {
-    return convertNumberFormat(convertToFctString(amount), 3) + ` ${SYMBOL}`;
+    return convertNumberFormat(convertToFctString(amount), 3) + ` ${CHAIN_CONFIG.PARAMS.SYMBOL}`;
   };
 
   const getStatus = (status: any) => {

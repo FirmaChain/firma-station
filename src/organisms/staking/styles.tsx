@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { getRestakeStatusColor } from '../../utils/common';
 
 export const StakingWrap = styled.div`
   width: calc(100% - 40px);
@@ -348,6 +349,73 @@ export const RedelegationHeaderColumn = styled.div`
   }
 `;
 
+export const RestakeItemWrapper = styled(RowWrapper)`
+  height: 45px;
+  line-height: 45px;
+`;
+
+export const RestakeItemColumn = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: ${({ theme }) => theme.sizes.stakingMedium};
+  &:nth-child(1) {
+    flex: 1;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: right;
+  }
+  &:nth-child(3) {
+    flex: 1;
+    text-align: right;
+    margin-right: 20px;
+  }
+  &:nth-child(4) {
+    width: 180px;
+    text-align: right;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+export const RestakeHeaderWrapper = styled(RowWrapper)`
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #444;
+`;
+
+export const RestakeHeaderColumn = styled.div`
+  color: #ddd;
+  font-size: ${({ theme }) => theme.sizes.stakingLarge};
+  text-align: center;
+  &:nth-child(1) {
+    flex: 1;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  &:nth-child(2) {
+    flex: 1;
+    text-align: right;
+  }
+  &:nth-child(3) {
+    flex: 1;
+    margin-right: 20px;
+    text-align: right;
+  }
+  &:nth-child(4) {
+    width: 180px;
+    margin-right: 15px;
+    text-align: center;
+  }
+`;
+
 export const TabListItem = styled.div``;
 
 export const DelegationTab = styled.div`
@@ -357,10 +425,9 @@ export const DelegationTab = styled.div`
 `;
 
 export const DelegationTabItem = styled.div<{ isActive: boolean }>`
-  width: 13.8rem;
   text-align: center;
-  padding: 10px;
-  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  padding: 12px 14px;
+  font-size: 1.4rem;
   cursor: pointer;
   color: #888;
   ${(props) =>
@@ -439,16 +506,18 @@ export const ButtonWrapper = styled.div`
   top: 20px;
   right: 25px;
   display: flex;
+  gap: 1rem;
 `;
 
 export const Button = styled.div<{ isActive?: boolean }>`
+  width: 90px;
   height: 35px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 7px;
+  padding-right: 7px;
   line-height: 35px;
   color: white;
   text-align: center;
-  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  font-size: 1.4rem;
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
@@ -564,4 +633,15 @@ export const SortArrow = styled.div<{ order?: number; orderBy?: number; index?: 
   background-position: center;
   background-size: contain;
   cursor: pointer;
+`;
+
+export const StatusBox = styled.div<{ status: number }>`
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  background-color: #555;
+  color: ${(props) => `${getRestakeStatusColor(props.status)}`};
+  background-color: ${(props) => `${getRestakeStatusColor(props.status)}30`};
+  padding: 3px 8px 1px 8px;
+  border-radius: 15px;
 `;
