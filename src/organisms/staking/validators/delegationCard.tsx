@@ -4,7 +4,13 @@ import { useSnackbar } from 'notistack';
 
 import useFirma from '../../../utils/wallet';
 import { rootState } from '../../../redux/reducers';
-import { convertNumber, convertNumberFormat, convertToFctNumber, getFeesFromGas } from '../../../utils/common';
+import {
+  convertNumber,
+  convertNumberFormat,
+  convertToFctNumber,
+  getDefaultFee,
+  getFeesFromGas,
+} from '../../../utils/common';
 import { modalActions } from '../../../redux/action';
 import { ITargetStakingState } from '../../../interfaces/staking';
 
@@ -18,12 +24,13 @@ interface IProps {
 const DelegationCard = ({ targetStakingState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw, getUndelegationList } = useFirma();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const delegateAction = () => {
-    if (targetStakingState.available > convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
+    if (targetStakingState.available > convertToFctNumber(getDefaultFee(isLedger))) {
       modalActions.handleModalData({
         action: 'Delegate',
         data: { targetValidator, available: targetStakingState.available, reward: targetStakingState.stakingReward },
@@ -55,7 +62,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
           }
         }
 
-        if (targetStakingState.available >= convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee * 1.5)) {
+        if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger) * 1.5)) {
           modalActions.handleModalData({
             action: 'Redelegate',
             data: { targetValidator, delegationList },
@@ -98,7 +105,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
               return;
             }
 
-            if (targetStakingState.available >= convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
+            if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger))) {
               modalActions.handleModalData({
                 action: 'Undelegate',
                 data: { targetValidator, delegation },

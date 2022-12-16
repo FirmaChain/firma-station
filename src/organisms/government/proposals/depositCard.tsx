@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
 import { rootState } from '../../../redux/reducers';
-import { convertNumber, convertToFctNumber, convertNumberFormat } from '../../../utils/common';
+import { convertNumber, convertToFctNumber, convertNumberFormat, getDefaultFee } from '../../../utils/common';
 import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from '../../../constants/government';
 import { IProposalDetailState } from '../../../interfaces/governance';
 import { modalActions } from '../../../redux/action';
@@ -27,6 +27,7 @@ interface IProps {
 
 const DepositCard = ({ proposalState }: IProps) => {
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const getAddTimeFormat = (startTime: string, second: number) => {
@@ -69,7 +70,7 @@ const DepositCard = ({ proposalState }: IProps) => {
         <DepositButton
           active={true}
           onClick={() => {
-            if (convertNumber(balance) > convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
+            if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger))) {
               modalActions.handleModalData({
                 proposalId: proposalState.proposalId,
               });

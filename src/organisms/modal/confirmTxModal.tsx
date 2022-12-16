@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
 import useFirma from '../../utils/wallet';
-import { convertToFctString, isValidString, convertNumberFormat } from '../../utils/common';
+import { convertToFctString, isValidString, convertNumberFormat, getDefaultFee } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
@@ -45,9 +45,9 @@ const ConfirmTxModal = () => {
     if (modalData.data.fees) {
       setFee(convertToFctString(modalData.data.fees.toString()));
     } else {
-      setFee(convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString()));
+      setFee(convertToFctString(getDefaultFee(isLedger).toString()));
     }
-  }, [modalData]);
+  }, [modalData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeConfirmTxModal = () => {
     modalActions.handleModalConfirmTx(false);

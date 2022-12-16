@@ -31,6 +31,14 @@ export const getFeesFromGas = (estimatedGas: number) => {
   return Math.max(fee, CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
 };
 
+export const getDefaultFee = (isLedger: boolean): number => {
+  return isLedger ? CHAIN_CONFIG.LEDGER_FEE : CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee;
+};
+
+export const getDefaultGas = (isLedger: boolean) => {
+  return isLedger ? CHAIN_CONFIG.LEDGER_GAS : CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+};
+
 export const isValid = (data: any) => {
   if (data === null) return false;
   if (data === undefined) return false;

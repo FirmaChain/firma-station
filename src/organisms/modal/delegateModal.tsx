@@ -7,6 +7,7 @@ import {
   convertNumber,
   convertToFctNumber,
   convertToFctString,
+  getDefaultFee,
   getFeesFromGas,
   makeDecimalPoint,
 } from '../../utils/common';
@@ -38,6 +39,7 @@ const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { delegate, getGasEstimationDelegate, setUserData } = useFirma();
@@ -114,7 +116,7 @@ const DelegateModal = () => {
   };
 
   const getMaxAmount = () => {
-    const fee = isSafety ? 0.1 : convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
+    const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger));
     const value = convertNumber(makeDecimalPoint(modalData.data.available - fee, 6));
 
     return value > 0 ? value + convertNumber(rewardAmount) : 0;
@@ -179,7 +181,7 @@ const DelegateModal = () => {
           </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString())} ${
+          <ModalInput>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
             CHAIN_CONFIG.PARAMS.SYMBOL
           }`}</ModalInput>
 

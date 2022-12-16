@@ -4,11 +4,11 @@ import { useSnackbar } from 'notistack';
 import Select from 'react-select';
 
 import useFirma from '../../utils/wallet';
-import { convertNumber, convertToFctNumber, getFeesFromGas, makeDecimalPoint } from '../../utils/common';
+import { convertNumber, convertToFctNumber, getDefaultFee, getFeesFromGas, makeDecimalPoint } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
-import { CHAIN_CONFIG, GUIDE_LINK_NEW_PROPOSAL } from '../../config';
+import { GUIDE_LINK_NEW_PROPOSAL } from '../../config';
 
 import {
   newProposalModalWidth,
@@ -67,6 +67,7 @@ const NewProposalModal = () => {
   const selectInputRef = useRef<any>();
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
 
   const [proposalType, setProposalType] = useState('');
   const [title, setTitle] = useState('');
@@ -201,7 +202,7 @@ const NewProposalModal = () => {
 
   const getMaxAmount = () => {
     const value = convertNumber(
-      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee), 6)
+      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(getDefaultFee(isLedger)), 6)
     );
 
     return value > 0 ? value : 0;

@@ -29,6 +29,7 @@ import {
   convertNumber,
   convertToFctNumber,
   convertToFctString,
+  getDefaultFee,
   getFeesFromGas,
   makeDecimalPoint,
 } from '../../utils/common';
@@ -67,6 +68,8 @@ const customStyles = {
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
+
   const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress, setUserData } =
     useFirma();
 
@@ -165,7 +168,7 @@ const SendModal = () => {
 
   const getMaxAmount = (): Number => {
     if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
-      const fee = isSafety ? 0.1 : convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
+      const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger));
 
       const value = convertNumber(makeDecimalPoint(available - fee, 6));
       return value > 0 ? value : 0;
@@ -279,7 +282,7 @@ const SendModal = () => {
           </ModalInput>
 
           <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee.toString())} FCT`}</ModalInput>
+          <ModalInput>{`${convertToFctString(getDefaultFee(isLedger).toString())} FCT`}</ModalInput>
 
           <ModalLabel>Amount</ModalLabel>
           <ModalInput style={{ marginBottom: '10px' }}>

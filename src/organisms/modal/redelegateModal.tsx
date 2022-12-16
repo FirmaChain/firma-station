@@ -10,6 +10,7 @@ import {
   convertNumberFormat,
   convertToFctNumber,
   convertToFctString,
+  getDefaultFee,
   getFeesFromGas,
   makeDecimalPoint,
 } from '../../utils/common';
@@ -68,8 +69,9 @@ const customStyles = {
 const RedelegateModal = () => {
   const redelegateModalState = useSelector((state: rootState) => state.modal.redelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
-  const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { enqueueSnackbar } = useSnackbar();
 
   const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma();
 
@@ -208,7 +210,7 @@ const RedelegateModal = () => {
               </ModalInput>
 
               <ModalLabel>Fee estimation</ModalLabel>
-              <ModalInput>{`${convertToFctString((CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee * 1.5).toString())} ${
+              <ModalInput>{`${convertToFctString((getDefaultFee(isLedger) * 1.5).toString())} ${
                 CHAIN_CONFIG.PARAMS.SYMBOL
               }`}</ModalInput>
 

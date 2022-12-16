@@ -3,7 +3,7 @@ import { FirmaWebLedgerWallet, FirmaBridgeLedgerWallet } from '@firmachain/firma
 import TransportHID from '@ledgerhq/hw-transport-webhid';
 
 import { CHAIN_CONFIG } from '../config';
-import { getFeesFromGas, isElectron } from './common';
+import { getDefaultGas, getFeesFromGas, isElectron } from './common';
 
 declare global {
   interface Window {
@@ -92,8 +92,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationSend = async (address: string, amount: number, memo = '') => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const gasEstimation = await firmaSDK.Bank.getGasEstimationSend(wallet, address, amount, { memo });
@@ -126,8 +125,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     decimal: number,
     memo = ''
   ) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const gasEstimation = await firmaSDK.Bank.getGasEstimationSendToken(wallet, address, tokenID, amount, decimal, {
@@ -148,8 +146,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationDelegate = async (validatorAddress: string, amount: number) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.getGasEstimationDelegate(wallet, validatorAddress, amount);
@@ -200,8 +197,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationUndelegate = async (validatorAddress: string, amount: number) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.getGasEstimationUndelegate(wallet, validatorAddress, amount);
@@ -220,8 +216,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationWithdrawAllRewards = async (validatorAddress: string) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Distribution.getGasEstimationWithdrawAllRewards(wallet, validatorAddress);
@@ -263,8 +258,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationVote = async (proposalId: number, votingType: number) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.getGasEstimationVote(wallet, proposalId, votingType);
@@ -283,8 +277,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationDeposit = async (proposalId: number, amount: number) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.getGasEstimationDeposit(wallet, proposalId, amount);
@@ -321,8 +314,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     initialDeposit: number,
     paramList: any[]
   ) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.getGasEstimationSubmitParameterChangeProposal(
@@ -368,8 +360,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     amount: number,
     recipient: string
   ) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.getGasEstimationSubmitCommunityPoolSpendProposal(
@@ -400,8 +391,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationSubmitTextProposal = async (title: string, description: string, initialDeposit: number) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.getGasEstimationSubmitTextProposal(wallet, title, description, initialDeposit);
@@ -441,8 +431,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     upgradeName: string,
     height: number
   ) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.getGasEstimationSubmitSoftwareUpgradeProposalByHeight(
@@ -485,8 +474,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     expirationDate: Date,
     maxFCT: number
   ) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Authz.getGasEstimationGrantStakeAuthorization(
@@ -517,8 +505,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationRevokeStakeAuthorizationDelegate = async () => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
-    if (CHAIN_CONFIG.IS_DEFAULT_GAS) return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+    if (isLedger || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Authz.getGasEstimationRevokeStakeAuthorization(

@@ -4,8 +4,7 @@ import { useSnackbar } from 'notistack';
 
 import { rootState } from '../../redux/reducers';
 import { modalActions } from '../../redux/action';
-import { convertNumber, convertToFctNumber } from '../../utils/common';
-import { CHAIN_CONFIG } from '../../config';
+import { convertNumber, convertToFctNumber, getDefaultFee } from '../../utils/common';
 
 import theme from '../../themes';
 import { BlankCard } from '../../components/card';
@@ -13,6 +12,7 @@ import { TitleTypo, NextButton } from './styles';
 
 const SendCard = () => {
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   return (
@@ -20,7 +20,7 @@ const SendCard = () => {
       <TitleTypo>SEND</TitleTypo>
       <NextButton
         onClick={() => {
-          if (convertNumber(balance) > convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
+          if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger))) {
             modalActions.handleModalSend(true);
           } else {
             enqueueSnackbar('Insufficient funds. Please check your account balance.', {

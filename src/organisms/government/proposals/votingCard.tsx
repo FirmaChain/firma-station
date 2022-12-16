@@ -8,7 +8,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { rootState } from '../../../redux/reducers';
 import { CHAIN_CONFIG } from '../../../config';
-import { convertNumber, convertToFctNumber, convertNumberFormat } from '../../../utils/common';
+import { convertNumber, convertToFctNumber, convertNumberFormat, getDefaultFee } from '../../../utils/common';
 import { modalActions } from '../../../redux/action';
 import { IProposalDetailState, ITally } from '../../../interfaces/governance';
 import { MultiGauge } from '../../../components/gauge';
@@ -100,6 +100,7 @@ const Row = ({ data, index, style }: any) => {
 const VotingCard = ({ proposalState }: IProps) => {
   const [currentVotingTab, setVotingTab] = useState(0);
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const isSmall = useMediaQuery({ query: '(max-width: 900px)' });
@@ -188,7 +189,7 @@ const VotingCard = ({ proposalState }: IProps) => {
   };
 
   const onClickVote = () => {
-    if (convertNumber(balance) >= convertToFctNumber(CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee)) {
+    if (convertNumber(balance) >= convertToFctNumber(getDefaultFee(isLedger))) {
       modalActions.handleModalData({
         proposalId: proposalState.proposalId,
       });
