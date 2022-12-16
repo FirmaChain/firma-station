@@ -30,7 +30,6 @@ const DepositModal = () => {
   const depositModalState = useSelector((state: rootState) => state.modal.deposit);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { deposit, getGasEstimationDeposit, setUserData } = useFirma();
@@ -90,14 +89,10 @@ const DepositModal = () => {
   };
 
   const nextStep = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     closeModal();
 
     getGasEstimationDeposit(modalData.proposalId, convertNumber(amount))
       .then((gas) => {
-        if (isLedger) modalActions.handleModalGasEstimation(false);
-
         if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Deposit',
@@ -119,7 +114,6 @@ const DepositModal = () => {
           variant: 'error',
           autoHideDuration: 5000,
         });
-        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

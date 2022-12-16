@@ -32,6 +32,22 @@ export interface ITotalStakingState {
   undelegationList: IUndelegationList[];
 }
 
+export interface ITotalDelegateState {
+  totalDelegated: string;
+  totalRewards: string;
+  delegateList: Array<IStakeInfo>;
+}
+
+export interface IRestakeState {
+  validatorAddress: string;
+  validatorMoniker: string;
+  validatorAvatar: string;
+  status: number;
+  amount: number;
+  reward: number;
+  latestReward: number;
+}
+
 export interface ITargetStakingState {
   available: number;
   delegated: number;

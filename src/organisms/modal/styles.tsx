@@ -8,10 +8,11 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import HelpIconOrigin from '@mui/icons-material/Help';
+import { getRestakeStatusColor } from '../../utils/common';
 
 export const paperwalletModalWidth = '630px';
 export const qrCodeModalWidth = '500px';
-export const restakeModalWidth = '500px';
+export const restakeModalWidth = '480px';
 export const loginModalWidth = '900px';
 export const exportWalletModalWidth = '900px';
 export const newWalletModalWidth = '650px';
@@ -38,12 +39,11 @@ export const ModalContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px 0;
+  gap: 0;
 `;
 
 export const ModalTitle = styled.div`
   width: 100%;
-  margin-top: 10px;
   height: 40px;
   line-height: 40px;
   display: flex;
@@ -70,9 +70,9 @@ export const ModalSubTitle = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  width: calc(100% - 60px);
+  width: calc(100% - 40px);
   height: 100%;
-  padding: 0 30px;
+  padding: 0 20px;
   font-size: ${({ theme }) => theme.sizes.modalLabel};
 `;
 
@@ -656,7 +656,6 @@ export const ValueContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   font-size: 1.4rem;
   margin-top: 20px;
 `;
@@ -668,13 +667,20 @@ export const ValueItem = styled.div`
 
 export const ValueLabel = styled.div`
   width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
   color: #999;
 `;
 
 export const ValueText = styled.div`
   width: 100%;
+  height: 30px;
   text-align: right;
   color: #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 export const MoreViewContainer = styled.div`
@@ -728,6 +734,98 @@ export const DividerSolid = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid #555;
+`;
+
+export const StatusBox = styled.div<{ status: number }>`
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  background-color: #555;
+  color: ${(props) => `${getRestakeStatusColor(props.status)}`};
+  background-color: ${(props) => `${getRestakeStatusColor(props.status)}30`};
+  padding: 1px 8px 1px 8px;
+  border-radius: 15px;
+  margin-top: -2px;
+`;
+
+export const MoreInformation = styled.div`
+  font-size: 1.4rem;
+  color: #bbb;
+  width: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #292a31;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  gap: 10px;
+`;
+
+export const ModalTooltipBackWrapper = styled.div`
+  width: calc(100% - 30px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: #292a31;
+  border-radius: 4px;
+  padding: 15px 15px;
+  margin-bottom: 10px;
+`;
+
+export const MoreLeftContent = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+export const ArrowIcon = styled.div`
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-align: right;
+`;
+
+export const MoreLabelWrapper = styled.div`
+  width: 100%;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+`;
+
+export const MoreContents = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
+export const MoreContent = styled.div`
+  width: 100%;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const LeftLabel = styled.div`
+  color: #888;
+`;
+
+export const RightValue = styled.div`
+  color: #999;
+`;
+
+export const TimeBox = styled.div`
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  background-color: #545454;
+  color: #ccc;
+  padding: 1px 8px 1px 8px;
+  border-radius: 15px;
+  margin-top: -1px;
 `;
 
 export {

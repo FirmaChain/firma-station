@@ -55,7 +55,6 @@ export const initializeAvatar = (lastUpdated: number) => {
           url: '',
         });
       }
-      avatarActions.handleAvatarList(avatarList);
 
       getAvatarRaw()
         .then((avatarRaw) => {
@@ -74,6 +73,8 @@ export const initializeAvatar = (lastUpdated: number) => {
               avatarActions.handleAvatarList(avatarList);
               avatarActions.handleAvatarLastupdated(lastUpdatedTime);
             }
+          } else {
+            avatarActions.handleAvatarList(avatarList);
           }
         })
         .catch((error) => {
@@ -87,6 +88,8 @@ export const initializeAvatar = (lastUpdated: number) => {
 
 const getAvatarRaw = async (): Promise<{ avatarList: IAvatar[]; lastUpdatedTime: number } | null> => {
   try {
+    if (CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI === '') throw new Error('INVALID');
+
     const response = await axios.get<{ profileInfos: IAvatar[]; lastUpdatedTime: number }>(
       CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI
     );

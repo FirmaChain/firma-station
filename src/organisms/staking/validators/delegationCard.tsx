@@ -18,7 +18,6 @@ interface IProps {
 const DelegationCard = ({ targetStakingState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw, getUndelegationList } = useFirma();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -119,12 +118,8 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
   };
 
   const withdrawAction = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     getGasEstimationWithdraw(targetValidator)
       .then((gas) => {
-        if (isLedger) modalActions.handleModalGasEstimation(false);
-
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Withdraw',
@@ -145,7 +140,6 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
           variant: 'error',
           autoHideDuration: 5000,
         });
-        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

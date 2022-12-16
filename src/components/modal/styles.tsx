@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ModalWrapper = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
-  display: ${(props) => (props.visible ? "block" : "none")};
+  display: ${(props) => (props.visible ? 'block' : 'none')};
   position: fixed;
   top: 0;
   right: 0;
@@ -16,7 +16,7 @@ export const ModalWrapper = styled.div<{ visible: boolean }>`
 
 export const ModalOverlay = styled.div<{ visible: boolean }>`
   box-sizing: border-box;
-  display: ${(props) => (props.visible ? "block" : "none")};
+  display: ${(props) => (props.visible ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -32,13 +32,13 @@ export const ModalInner = styled.div<{ width: string }>`
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
   background-color: #21212f;
   border-radius: 4px;
-  width: ${(props) => (props.width ? props.width : "300px")};
-  max-width: ${(props) => (props.width ? props.width : "300px")};
+  width: ${(props) => (props.width ? props.width : '300px')};
+  max-width: ${(props) => (props.width ? props.width : '300px')};
   height: auto;
   top: 50%;
   transform: translateY(-50%);
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 30px 20px 38px 20px;
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
 
@@ -49,7 +49,7 @@ export const PrevButton = styled.div`
     left: 8px;
     padding: 15px;
     display: inline-block;
-    content: "〈 ";
+    content: '〈 ';
     cursor: pointer;
     font-size: ${({ theme }) => theme.sizes.modalButton};
     font-weight: 900;
@@ -67,6 +67,6 @@ export const CloseButton = styled.div`
   cursor: pointer;
   margin: 20px;
   color: ${({ theme }) => theme.colors.defaultWhite};
-  background-image: url("${({ theme }) => theme.urls.close}");
+  background-image: url('${({ theme }) => theme.urls.close}');
   background-size: contain;
 `;

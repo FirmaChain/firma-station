@@ -14,6 +14,7 @@ export const getTransactionCount = async (): Promise<number> => {
           }
         }
       `,
+      fetchPolicy: 'no-cache',
     });
 
     return data.transactions.aggregate.count;
@@ -42,6 +43,7 @@ export const getProposalQueryFromId = async (proposalId: string): Promise<IPropo
           }
         }
       `,
+      fetchPolicy: 'no-cache',
     });
     return data;
   } catch (error) {
@@ -76,6 +78,7 @@ export const getHistoryByAddress = async (
           }
         }
       `,
+      fetchPolicy: 'no-cache',
       variables: {
         address: `{${address}}`,
         types: `{${type}}`,

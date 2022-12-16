@@ -22,7 +22,6 @@ const VotingModal = () => {
   const votingModalState = useSelector((state: rootState) => state.modal.voting);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const [votingType, setVotingType] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,14 +48,10 @@ const VotingModal = () => {
   };
 
   const nextStep = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     closeModal();
 
     getGasEstimationVote(modalData.proposalId, votingType)
       .then((gas) => {
-        if (isLedger) modalActions.handleModalGasEstimation(false);
-
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Voting',
@@ -78,7 +73,6 @@ const VotingModal = () => {
           variant: 'error',
           autoHideDuration: 5000,
         });
-        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

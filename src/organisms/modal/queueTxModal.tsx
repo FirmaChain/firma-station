@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
-import ScaleLoader from "react-spinners/ScaleLoader";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
+import ScaleLoader from 'react-spinners/ScaleLoader';
 
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
 
 import {
   queueTxModalWidth,
@@ -18,7 +18,7 @@ import {
   QueueIcon,
   QueueTypoOne,
   QueueTypoTwo,
-} from "./styles";
+} from './styles';
 
 const QueueTxModal = () => {
   const queueTxModalState = useSelector((state: rootState) => state.modal.queueTx);
@@ -45,19 +45,21 @@ const QueueTxModal = () => {
   }, [queueTxModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const resolveTx = () => {
-    enqueueSnackbar("Success Transaction", {
-      variant: "success",
-      autoHideDuration: 2000,
+    enqueueSnackbar('Success Transaction', {
+      variant: 'success',
+      autoHideDuration: 1000,
     });
     closeQueueTxModal();
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   const rejectTx = () => {
-    enqueueSnackbar("Failed Transaction", {
-      variant: "error",
-      autoHideDuration: 2000,
+    enqueueSnackbar('Failed Transaction', {
+      variant: 'error',
+      autoHideDuration: 1000,
     });
     closeQueueTxModal();
+    setTimeout(() => window.location.reload(), 1000);
   };
 
   const closeQueueTxModal = () => {
@@ -70,7 +72,7 @@ const QueueTxModal = () => {
         <ModalTitle>BROADCASTING TRANSACTION</ModalTitle>
         <ModalContent>
           <LoadingWrapper>
-            <ScaleLoader loading={true} color={"#3550DE80"} height={"50px"} width={"7px"} />
+            <ScaleLoader loading={true} color={'#3550DE80'} height={'50px'} width={'7px'} />
           </LoadingWrapper>
           <QueueTypoWrapper>
             <QueueTypoOne>It can take up from 5 to 15 seconds for a transaction to be completed.</QueueTypoOne>

@@ -160,11 +160,13 @@ const useGrantData = () => {
   });
 
   useEffect(() => {
-    getStakingGrantDataList().then((grantData) => {
-      if (grantData) {
-        setGrantDataState(grantData);
-      }
-    });
+    if (CHAIN_CONFIG.RESTAKE.ADDRESS) {
+      getStakingGrantDataList().then((grantData) => {
+        if (grantData) {
+          setGrantDataState(grantData);
+        }
+      });
+    }
   }, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {

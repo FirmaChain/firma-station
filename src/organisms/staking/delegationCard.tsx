@@ -10,12 +10,13 @@ import { useSnackbar } from 'notistack';
 import useFirma from '../../utils/wallet';
 import { rootState } from '../../redux/reducers';
 import { modalActions } from '../../redux/action';
-import { IGrantsDataState, ITotalStakingState } from '../../interfaces/staking';
+import { IGrantsDataState, ITotalStakingState, IRestakeState } from '../../interfaces/staking';
 import {
   convertNumber,
   convertNumberFormat,
   convertToFctNumber,
   convertToFctString,
+  getRestakeStatus,
   getFeesFromGas,
 } from '../../utils/common';
 import { CHAIN_CONFIG } from '../../config';
@@ -84,13 +85,13 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
   return (
     <DelegationItemWrapper style={style}>
       <DelegationItemColumn>
-        <Link to={{ pathname: `/staking/validators/${data[index].validatorAddress}` }}>
+        <Link to={{ pathname: `/staking/validators/${validatorInfo.validatorAddress}` }}>
           <ProfileImage2 src={validatorInfo.avatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
         </Link>
       </DelegationItemColumn>
-      <DelegationItemColumn>{convertNumberFormat(getDelegateAmount(data[index].amount), 3)}</DelegationItemColumn>
-      <DelegationItemColumn>≈ {convertNumberFormat(getReward(data[index].validatorAddress), 3)}</DelegationItemColumn>
+      <DelegationItemColumn>{convertNumberFormat(getDelegateAmount(validatorInfo.amount), 3)}</DelegationItemColumn>
+      <DelegationItemColumn>≈ {convertNumberFormat(getReward(validatorInfo.validatorAddress), 3)}</DelegationItemColumn>
     </DelegationItemWrapper>
   );
 };
@@ -143,30 +144,8 @@ const UndelegationRow = ({ data, index, style }: any) => {
   );
 };
 
-const RestakeRow = ({ data, index, style, totalStakingState, grantDataState, latestReward }: any) => {
-  const validatorInfo = data[index];
-
-  const getReward = (validatorAddress: string) => {
-    const reward = totalStakingState.stakingRewardList.filter(
-      (reward: any) => reward.validator_address === validatorAddress
-    );
-
-    if (reward.length > 0) {
-      return convertNumber(convertToFctString(reward[0].amount));
-    } else {
-      return 0;
-    }
-  };
-
-  const getLatestReward = (validatorAddress: string) => {
-    const reward = latestReward.rewardList.filter((reward: any) => reward.validatorAddr === validatorAddress);
-
-    if (reward.length > 0) {
-      return convertNumber(convertToFctString(reward[0].rewards));
-    } else {
-      return 0;
-    }
-  };
+const RestakeRow = ({ data, index, style, totalStakingState }: any) => {
+  const restakeInfo: IRestakeState = data[index];
 
   const getMoniker = (moniker: string) => {
     return moniker.length > 12 ? `${moniker.substring(0, 12)}...` : moniker;
@@ -175,15 +154,15 @@ const RestakeRow = ({ data, index, style, totalStakingState, grantDataState, lat
   return (
     <RestakeItemWrapper style={style}>
       <RestakeItemColumn>
-        <Link to={{ pathname: `/staking/validators/${data[index].validatorAddress}` }}>
-          <ProfileImage2 src={validatorInfo.avatarURL} />
-          <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
+        <Link to={{ pathname: `/staking/validators/${restakeInfo.validatorAddress}` }}>
+          <ProfileImage2 src={restakeInfo.validatorAvatar} />
+          <MonikerTypo>{getMoniker(restakeInfo.validatorMoniker)}</MonikerTypo>
         </Link>
       </RestakeItemColumn>
-      <RestakeItemColumn>≈ {convertNumberFormat(getReward(data[index].validatorAddress), 3)}</RestakeItemColumn>
-      <RestakeItemColumn>≈ {convertNumberFormat(getLatestReward(data[index].validatorAddress), 3)}</RestakeItemColumn>
+      <RestakeItemColumn>≈ {`${convertNumberFormat(restakeInfo.reward, 3)}`}</RestakeItemColumn>
+      <RestakeItemColumn>≈ {`${convertNumberFormat(restakeInfo.latestReward, 3)}`}</RestakeItemColumn>
       <RestakeItemColumn>
-        <StatusBox status={-1}>Not yet delegated</StatusBox>
+        <StatusBox status={restakeInfo.status}>{getRestakeStatus(restakeInfo.status)}</StatusBox>
       </RestakeItemColumn>
     </RestakeItemWrapper>
   );
@@ -210,30 +189,87 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 
 const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { isInit, isLedger, address } = useSelector((state: rootState) => state.wallet);
+  const { isInit, address } = useSelector((state: rootState) => state.wallet);
   const { balance } = useSelector((state: rootState) => state.user);
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
 
   const pieData = GetDelegatePieData(totalStakingState);
 
   const [currentTab, setCurrentTab] = useState(0);
-  const [latestReward, setLatestReward] = useState<{ rewardList: { validatorAddr: string; rewards: number }[] }>({
-    rewardList: [],
-  });
+  const [restakeList, setRestakeList] = useState<IRestakeState[]>([]);
 
   useEffect(() => {
-    if (isInit && grantDataState.allowValidatorList.length > 0) {
+    if (isInit && totalStakingState.delegateList.length > 0) {
       axios
         .get(`${CHAIN_CONFIG.RESTAKE.API}/restake/reward/${address}`)
         .then(({ data }) => {
-          console.log(data);
-          if (data.length > 0) setLatestReward(data);
+          const latestRewardList = data;
+          setRestakeList(getParseRestakeDataList(totalStakingState, grantDataState, latestRewardList));
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          setRestakeList(getParseRestakeDataList(totalStakingState, grantDataState, []));
         });
     }
-  }, [grantDataState]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [totalStakingState, grantDataState]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const getParseRestakeDataList = (
+    totalStakingState: ITotalStakingState,
+    grantsDataState: IGrantsDataState,
+    latestReward: { validatorAddr: string; rewards: number }[]
+  ) => {
+    let result = [];
+    for (let delegate of totalStakingState.delegateList) {
+      let grantTarget = null;
+      for (let grant of grantsDataState.allowValidatorList) {
+        if (delegate.validatorAddress === grant.operatorAddress) {
+          grantTarget = grant;
+          break;
+        }
+      }
+
+      const rewards = totalStakingState.stakingRewardList.find(
+        (stakingReward) => stakingReward.validator_address === delegate.validatorAddress
+      );
+
+      const latestRewards = latestReward.find(
+        (latestReward) => latestReward.validatorAddr === delegate.validatorAddress
+      );
+
+      result.push({
+        validatorAddress: delegate.validatorAddress,
+        validatorMoniker: delegate.moniker,
+        validatorAvatar: delegate.avatarURL,
+        status: grantTarget === null ? 0 : 1,
+        amount: convertToFctNumber(delegate.amount),
+        reward: rewards ? convertToFctNumber(rewards.amount) : 0,
+        latestReward: latestRewards ? convertToFctNumber(latestRewards.rewards) : 0,
+      });
+    }
+
+    for (let grant of grantsDataState.allowValidatorList) {
+      let isDuplicate = false;
+      for (let data of result) {
+        if (data.validatorAddress === grant.operatorAddress) {
+          isDuplicate = true;
+          break;
+        }
+      }
+
+      if (isDuplicate === false) {
+        result.push({
+          validatorAddress: grant.operatorAddress,
+          validatorMoniker: grant.moniker,
+          validatorAvatar: grant.avatarURL,
+          status: 2,
+          amount: 0,
+          reward: 0,
+          latestReward: 0,
+        });
+      }
+    }
+
+    return result;
+  };
 
   const withdrawAllValidatorTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     withdrawAllValidator(gas)
@@ -246,12 +282,8 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
   };
 
   const withdrawAllValidatorAction = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     getGasEstimationWithdrawAllValidator()
       .then((gas) => {
-        if (isLedger) modalActions.handleModalGasEstimation(false);
-
         if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Withdraw',
@@ -272,7 +304,6 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
           variant: 'error',
           autoHideDuration: 5000,
         });
-        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 
@@ -283,7 +314,7 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
       setCurrentTab(index);
     } else if (index === 2 && totalStakingState.undelegationList.length > 0) {
       setCurrentTab(index);
-    } else if (index === 3) {
+    } else if (index === 3 && totalStakingState.delegateList.length > 0) {
       setCurrentTab(index);
     }
   };
@@ -294,7 +325,37 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
     }
   };
 
-  const onClickRestake = () => {};
+  const onClickRestake = () => {
+    if (totalStakingState.delegateList.length > 0 && CHAIN_CONFIG.RESTAKE.API) {
+      axios
+        .get(`${CHAIN_CONFIG.RESTAKE.API}/restake/info`)
+        .then(({ data }) => {
+          const minimumRewards = data.minimumRewards;
+          const nextRoundTime = data.nextRoundDateTime;
+          const round = data.round;
+          const isActiveRestake = grantDataState.allowValidatorList.length > 0;
+          const validatorAddressList = restakeList.map((data: any) => data.validatorAddress);
+          const totalDelegated = totalStakingState.delegateList.reduce((acc: any, obj: any) => acc + obj.amount, 0);
+          const totalRewards = totalStakingState.stakingRewardList.reduce(
+            (acc: any, obj: any) => acc + convertNumber(obj.amount),
+            0
+          );
+
+          modalActions.handleModalData({
+            validatorAddressList,
+            restakeList,
+            isActiveRestake,
+            minimumRewards,
+            round,
+            nextRoundTime,
+            totalDelegated,
+            totalRewards,
+          });
+          modalActions.handleModalRestake(true);
+        })
+        .catch((error) => {});
+    }
+  };
 
   return (
     <FlexWrapper>
@@ -340,9 +401,11 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
           <DelegationTabItem isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
             Undelegations ({totalStakingState.undelegationList.length})
           </DelegationTabItem>
-          <DelegationTabItem isActive={currentTab === 3} onClick={() => onCLickChangeTab(3)}>
-            Restake ({totalStakingState.delegateList.length})
-          </DelegationTabItem>
+          {CHAIN_CONFIG.RESTAKE.API !== '' && (
+            <DelegationTabItem isActive={currentTab === 3} onClick={() => onCLickChangeTab(3)}>
+              Restake ({restakeList.length})
+            </DelegationTabItem>
+          )}
         </DelegationTab>
         <AutoSizer>
           {({ height, width }) => {
@@ -416,11 +479,11 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
                   <List
                     width={width}
                     height={height - 80}
-                    itemCount={totalStakingState.delegateList.length}
+                    itemCount={restakeList.length}
                     itemSize={45}
-                    itemData={totalStakingState.delegateList}
+                    itemData={restakeList}
                   >
-                    {(props) => RestakeRow({ ...props, totalStakingState, grantDataState, latestReward })}
+                    {(props) => RestakeRow({ ...props, totalStakingState })}
                   </List>
                 </TabListItem>
               );
@@ -429,9 +492,12 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
         </AutoSizer>
       </DelegationListWrapper>
       <ButtonWrapper>
-        <Button isActive={true} onClick={onClickRestake}>
-          Restake
-        </Button>
+        {CHAIN_CONFIG.RESTAKE.API !== '' && (
+          <Button isActive={totalStakingState.delegateList.length > 0} onClick={onClickRestake}>
+            Restake
+          </Button>
+        )}
+
         <Button isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
           Withdraw All
         </Button>

@@ -12,6 +12,7 @@ import BuyFirmaIcon from '@mui/icons-material/Payment';
 import ExplorerIcon from '@mui/icons-material/Public';
 import DownloadIcon from '@mui/icons-material/Archive';
 import HelpIcon from '@mui/icons-material/Help';
+import RotateRightIcon from '@mui/icons-material/RotateRight';
 
 import { DrawerStyled, LogoImg, ListStyled, ListItemStyled, ListItemIconStyled, ListItemTextStyled } from './styles';
 
@@ -20,7 +21,19 @@ const menus = [
   { name: 'Accounts', path: '/accounts', icon: AccountsIcon, externalLink: '' },
   { name: 'History', path: '/history', icon: HistoryIcon, externalLink: '' },
   { name: 'Staking', path: '/staking', icon: StakingIcon, externalLink: '' },
+  {
+    name: 'Restake',
+    path: '/restake',
+    icon: RotateRightIcon,
+    externalLink: CHAIN_CONFIG.RESTAKE.WEB,
+  },
   { name: 'Governance', path: '/government', icon: GovernmentIcon, externalLink: '' },
+  {
+    name: 'Download',
+    path: '/download',
+    icon: DownloadIcon,
+    externalLink: '',
+  },
   { name: 'Community', path: '/community', icon: ForumIcon, externalLink: '' },
   {
     name: 'Buy Firma',
@@ -33,12 +46,6 @@ const menus = [
     path: '/explorer',
     icon: ExplorerIcon,
     externalLink: CHAIN_CONFIG.EXPLORER_URI,
-  },
-  {
-    name: 'Download',
-    path: '/download',
-    icon: DownloadIcon,
-    externalLink: '',
   },
   {
     name: 'Help',
@@ -59,6 +66,8 @@ function Sidebar() {
 
       <ListStyled disablePadding={true}>
         {menus.map((menu, index) => {
+          if (menu.name === 'Restake' && CHAIN_CONFIG.RESTAKE.WEB === '') return;
+
           if (menu.externalLink !== '') {
             return (
               <ListItemStyled

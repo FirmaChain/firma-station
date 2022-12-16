@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { getStakingPool, getTotalSupply, getLatestBlock, getInflation } from '../../utils/lcdQuery';
 import { getTransactionCount } from '../../apollo/gqls/query';
@@ -25,14 +25,43 @@ export const useDashboard = () => {
     undelegate: 0,
   });
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   Promise.all([getLatestBlock(), getInflation(), getTotalSupply(), getStakingPool()])
+  //     .then(([latestBlock, inflation, totalSupply, stakingPool]) => {
+  //       setBlockState({
+  //         height: latestBlock,
+  //         transactions: 0,
+  //         inflation: `${convertNumberFormat(inflation * 100, 2)} %`,
+  //       });
+
+  //       setVotingPowerState({
+  //         height: latestBlock,
+  //         votingPower: stakingPool.bondedTokens,
+  //         totalVotingPower: stakingPool.bondedTokens,
+  //       });
+
+  //       setTokenomicsState({
+  //         supply: totalSupply,
+  //         delegated: stakingPool.bondedTokens,
+  //         undelegated: totalSupply - (stakingPool.bondedTokens + stakingPool.unbondedTokens),
+  //         undelegate: stakingPool.unbondedTokens,
+  //       });
+
+  //       getTransactionCount().then((count) => {
+  //         setBlockState((prevState) => ({ ...prevState, transactions: count }));
+  //       });
+  //     })
+  //     .catch((error) => {});
+  // }, []);
+
+  useInterval(() => {
     Promise.all([getLatestBlock(), getInflation(), getTotalSupply(), getStakingPool()])
       .then(([latestBlock, inflation, totalSupply, stakingPool]) => {
-        setBlockState({
+        setBlockState((prevState) => ({
+          ...prevState,
           height: latestBlock,
-          transactions: 0,
           inflation: `${convertNumberFormat(inflation * 100, 2)} %`,
-        });
+        }));
 
         setVotingPowerState({
           height: latestBlock,
@@ -52,11 +81,30 @@ export const useDashboard = () => {
         });
       })
       .catch((error) => {});
-  }, []);
+  }, 5000);
 
   return {
     blockState,
     votingPowerState,
     tokenomicsState,
   };
+};
+
+const useInterval = (callback: () => void, delay: number) => {
+  const savedCallback = useRef<() => void>();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      if (savedCallback.current) savedCallback.current();
+    }
+    if (delay !== null) {
+      tick();
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
 };

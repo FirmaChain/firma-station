@@ -70,7 +70,6 @@ const RedelegateModal = () => {
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
 
   const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma();
 
@@ -156,14 +155,10 @@ const RedelegateModal = () => {
   };
 
   const nextStep = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     closeModal();
 
     getGasEstimationRedelegate(sourceValidator, modalData.data.targetValidator, convertNumber(amount))
       .then((gas) => {
-        if (isLedger) modalActions.handleModalGasEstimation(false);
-
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Redelegate',
@@ -185,7 +180,6 @@ const RedelegateModal = () => {
           variant: 'error',
           autoHideDuration: 5000,
         });
-        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

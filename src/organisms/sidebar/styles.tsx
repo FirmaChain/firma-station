@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import styled from 'styled-components';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
 export const DrawerStyled = styled(Drawer)`
   & .MuiDrawer-paper {
@@ -61,7 +61,7 @@ export const ListItemTextStyled = styled(ListItemText)`
 export const LogoImg = styled.div`
   height: 80px;
   margin: 0 20px;
-  background-image: url("${({ theme }) => theme.urls.fullLogo}");
+  background-image: url('${({ theme }) => theme.urls.fullLogo}');
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;

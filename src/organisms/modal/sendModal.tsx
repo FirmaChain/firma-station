@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Select from 'react-select';
 import { useSelector } from 'react-redux';
-import { useSnackbar } from 'notistack';
 
 import useFirma from '../../utils/wallet';
 import { rootState } from '../../redux/reducers';
@@ -68,10 +67,8 @@ const customStyles = {
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress, setUserData } =
     useFirma();
-  const { enqueueSnackbar } = useSnackbar();
 
   const [available, setAvailable] = useState(0);
   const [tokenData, setTokenData] = useState({
@@ -200,15 +197,11 @@ const SendModal = () => {
   };
 
   const nextStep = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     closeModal();
 
     if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
       getGasEstimationSendFCT(targetAddress, amount, memo)
         .then((gas) => {
-          if (isLedger) modalActions.handleModalGasEstimation(false);
-
           modalActions.handleModalData({
             action: 'Send',
             data: { amount, fees: getFeesFromGas(gas), gas },
@@ -218,20 +211,10 @@ const SendModal = () => {
 
           modalActions.handleModalConfirmTx(true);
         })
-        .catch(() => {
-          if (isLedger) {
-            enqueueSnackbar('Gas estimate failed. Please check your ledger.', {
-              variant: 'error',
-              autoHideDuration: 3000,
-            });
-            modalActions.handleModalGasEstimation(false);
-          }
-        });
+        .catch(() => {});
     } else {
       getGasEstimationsendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo)
         .then((gas) => {
-          if (isLedger) modalActions.handleModalGasEstimation(false);
-
           modalActions.handleModalData({
             action: 'Send',
             data: { amount, fees: getFeesFromGas(gas), gas },
@@ -241,15 +224,7 @@ const SendModal = () => {
 
           modalActions.handleModalConfirmTx(true);
         })
-        .catch(() => {
-          if (isLedger) {
-            enqueueSnackbar('Gas estimate failed. Please check your ledger.', {
-              variant: 'error',
-              autoHideDuration: 3000,
-            });
-            modalActions.handleModalGasEstimation(false);
-          }
-        });
+        .catch(() => {});
     }
   };
 

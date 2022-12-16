@@ -38,7 +38,6 @@ const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { delegate, getGasEstimationDelegate, setUserData } = useFirma();
@@ -133,14 +132,10 @@ const DelegateModal = () => {
   };
 
   const nextStep = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     closeModal();
 
     getGasEstimationDelegate(modalData.data.targetValidator, convertNumber(amount))
       .then((gas) => {
-        if (isLedger) modalActions.handleModalGasEstimation(false);
-
         if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Delegate',
@@ -162,7 +157,6 @@ const DelegateModal = () => {
           variant: 'error',
           autoHideDuration: 5000,
         });
-        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

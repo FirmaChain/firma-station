@@ -37,7 +37,6 @@ const UndelegateModal = () => {
   const undelegateModalState = useSelector((state: rootState) => state.modal.undelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
   const { undelegate, getGasEstimationUndelegate, setUserData } = useFirma();
 
@@ -111,14 +110,10 @@ const UndelegateModal = () => {
   };
 
   const nextStep = () => {
-    if (isLedger) modalActions.handleModalGasEstimation(true);
-
     closeModal();
 
     getGasEstimationUndelegate(modalData.data.targetValidator, convertNumber(amount))
       .then((gas) => {
-        if (isLedger) modalActions.handleModalGasEstimation(false);
-
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Undelegate',
@@ -140,7 +135,6 @@ const UndelegateModal = () => {
           variant: 'error',
           autoHideDuration: 5000,
         });
-        if (isLedger) modalActions.handleModalGasEstimation(false);
       });
   };
 

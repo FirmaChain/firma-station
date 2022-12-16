@@ -67,7 +67,6 @@ const NewProposalModal = () => {
   const selectInputRef = useRef<any>();
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
 
   const [proposalType, setProposalType] = useState('');
   const [title, setTitle] = useState('');
@@ -282,7 +281,6 @@ const NewProposalModal = () => {
     }
 
     closeModal();
-    if (isLedger) modalActions.handleModalGasEstimation(true);
 
     let currentGas: number = 0;
 
@@ -329,8 +327,6 @@ const NewProposalModal = () => {
         autoHideDuration: 5000,
       });
     }
-
-    if (isLedger) modalActions.handleModalGasEstimation(false);
 
     if (currentGas > 0) {
       if (convertNumber(balance) - initialDeposit >= convertToFctNumber(getFeesFromGas(currentGas))) {
