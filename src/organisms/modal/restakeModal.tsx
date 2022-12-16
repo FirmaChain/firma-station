@@ -67,7 +67,9 @@ const RestakeModal = () => {
   const [nextRound, setNextRound] = useState(0);
   const [nextRoundTime, setNextRoundTime] = useState('');
   const [nextRoundTimer, setNextRoundTimer] = useState('00:00:00');
-  const [restakeList, setRestakeList] = useState<IRestakeState[]>([]);
+  const [targetCount, setTargetCount] = useState(0);
+  const [targetTotalReward, setTargetTotalReward] = useState(0);
+  const [totalGrantCount, setTotalGrantCount] = useState(0);
 
   const closeRestakeModal = () => {
     modalActions.handleModalRestake(false);
@@ -80,10 +82,20 @@ const RestakeModal = () => {
       setExpiryDate(getNextYear());
       setStatus(modalData.isActiveRestake ? 1 : 0);
 
-      modalData.restakeList && setRestakeList(modalData.restakeList);
+      if (modalData.restakeList && modalData.minimumRewards) {
+        setMinimumRewards(convertToFctNumber(modalData.minimumRewards));
+
+        const rewardTargetList = modalData.restakeList.filter(
+          (restake: IRestakeState) => restake.reward && restake.reward > modalData.minimumRewards
+        );
+
+        setTargetCount(rewardTargetList.length);
+        setTargetTotalReward(getTotalReward(rewardTargetList));
+        setTotalGrantCount(modalData.restakeList.filter((restake: IRestakeState) => restake.status === 1).length);
+      }
+
       modalData.round && setNextRound(modalData.round + 1);
       modalData.nextRoundTime && setNextRoundTime(modalData.nextRoundTime);
-      modalData.minimumRewards && setMinimumRewards(convertToFctNumber(modalData.minimumRewards));
       modalData.totalDelegated &&
         setTotalDelegated(`${getFCTFormat(modalData.totalDelegated)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`);
       modalData.totalRewards &&
@@ -91,13 +103,14 @@ const RestakeModal = () => {
     }
   }, [restakeModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (restakeList.length > 0) {
-      for (let restake of restakeList) {
-        console.log(restake);
-      }
+  const getTotalReward = (restakes: IRestakeState[]): number => {
+    let totalReward = 0;
+    for (let restake of restakes) {
+      totalReward += restake.reward;
     }
-  }, [restakeList]);
+
+    return totalReward;
+  };
 
   useInterval(() => {
     if (nextRoundTime) {
@@ -257,18 +270,12 @@ const RestakeModal = () => {
                 </MoreContent>
                 <MoreContent>
                   <LeftLabel>Restake Amount</LeftLabel>
-                  <RightValue>
-                    {`${restakeList
-                      .filter((restake) => restake.reward > minimumRewards)
-                      .map((restake) => restake.reward)
-                      .reduce((prev: number, current: number) => prev + current)} FCT`}
-                  </RightValue>
+                  <RightValue>{`${targetTotalReward} FCT`}</RightValue>
                 </MoreContent>
                 <MoreContent>
                   <LeftLabel>Restake Validators</LeftLabel>
                   <RightValue>
-                    {restakeList.filter((restake) => restake.reward > minimumRewards).length}/
-                    {restakeList.filter((restake) => restake.status === 1).length}
+                    {targetCount}/{totalGrantCount}
                   </RightValue>
                 </MoreContent>
               </MoreContents>

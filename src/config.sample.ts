@@ -3,6 +3,8 @@ import { FirmaConfig } from '@firmachain/firma-js';
 const CHAIN_CONFIGS = {
   MAINNET: {
     FIRMACHAIN_CONFIG: FirmaConfig.MainNetConfig,
+    LEDGER_FEE: 30000,
+    LEDGER_GAS: 300000,
     EXPLORER_URI: 'https://',
     GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
     PARAMS: {
@@ -25,6 +27,8 @@ const CHAIN_CONFIGS = {
 
   TESTNET: {
     FIRMACHAIN_CONFIG: FirmaConfig.TestNetConfig,
+    LEDGER_FEE: 30000,
+    LEDGER_GAS: 300000,
     EXPLORER_URI: 'https://',
     GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
     PARAMS: {
@@ -47,6 +51,8 @@ const CHAIN_CONFIGS = {
 
   DEVNET: {
     FIRMACHAIN_CONFIG: FirmaConfig.DevNetConfig,
+    LEDGER_FEE: 30000,
+    LEDGER_GAS: 300000,
     EXPLORER_URI: 'https://',
     GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
     PARAMS: {
