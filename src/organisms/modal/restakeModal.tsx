@@ -197,7 +197,7 @@ const RestakeModal = () => {
       width={restakeModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>RESTAKE</ModalTitle>
+        <ModalTitle style={{ marginBottom: '0' }}>RESTAKE</ModalTitle>
         <ModalContent>
           <ValueContainer>
             <ValueItem>

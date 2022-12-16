@@ -173,7 +173,7 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
     validatorAddressDst: string,
     amount: number
   ) => {
-    if (isLedger) return CHAIN_CONFIG.LEDGER_GAS;
+    if (isLedger) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.getGasEstimationRedelegate(
@@ -237,6 +237,8 @@ const FirmaSDKInternal = ({ isLedger, getDecryptPrivateKey }: any) => {
   };
 
   const getGasEstimationWithdrawAllRewardsFromAllValidator = async () => {
+    if (isLedger) return getDefaultGas(isLedger);
+
     const wallet = await getWallet();
     const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(await wallet.getAddress())).dataList;
     const gasEstimation = await firmaSDK.Distribution.getGasEstimationWithdrawAllRewardsFromAllValidator(
