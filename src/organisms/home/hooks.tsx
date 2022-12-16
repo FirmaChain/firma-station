@@ -25,35 +25,6 @@ export const useDashboard = () => {
     undelegate: 0,
   });
 
-  // useEffect(() => {
-  //   Promise.all([getLatestBlock(), getInflation(), getTotalSupply(), getStakingPool()])
-  //     .then(([latestBlock, inflation, totalSupply, stakingPool]) => {
-  //       setBlockState({
-  //         height: latestBlock,
-  //         transactions: 0,
-  //         inflation: `${convertNumberFormat(inflation * 100, 2)} %`,
-  //       });
-
-  //       setVotingPowerState({
-  //         height: latestBlock,
-  //         votingPower: stakingPool.bondedTokens,
-  //         totalVotingPower: stakingPool.bondedTokens,
-  //       });
-
-  //       setTokenomicsState({
-  //         supply: totalSupply,
-  //         delegated: stakingPool.bondedTokens,
-  //         undelegated: totalSupply - (stakingPool.bondedTokens + stakingPool.unbondedTokens),
-  //         undelegate: stakingPool.unbondedTokens,
-  //       });
-
-  //       getTransactionCount().then((count) => {
-  //         setBlockState((prevState) => ({ ...prevState, transactions: count }));
-  //       });
-  //     })
-  //     .catch((error) => {});
-  // }, []);
-
   useInterval(() => {
     Promise.all([getLatestBlock(), getInflation(), getTotalSupply(), getStakingPool()])
       .then(([latestBlock, inflation, totalSupply, stakingPool]) => {
@@ -80,7 +51,7 @@ export const useDashboard = () => {
           setBlockState((prevState) => ({ ...prevState, transactions: count }));
         });
       })
-      .catch((error) => {});
+      .catch(() => {});
   }, 5000);
 
   return {

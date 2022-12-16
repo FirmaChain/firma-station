@@ -65,41 +65,41 @@ function Sidebar() {
       </Link>
 
       <ListStyled disablePadding={true}>
-        {menus.map((menu, index) => {
-          if (menu.name === 'Restake' && CHAIN_CONFIG.RESTAKE.WEB === '') return;
-
-          if (menu.externalLink !== '') {
-            return (
-              <ListItemStyled
-                key={index}
-                onClick={() => {
-                  window.open(menu.externalLink);
-                }}
-                $isExternalLink={true}
-              >
-                <ListItemIconStyled>
-                  <menu.icon />
-                </ListItemIconStyled>
-                <ListItemTextStyled primary={menu.name} />
-              </ListItemStyled>
-            );
-          } else {
-            return (
-              <ListItemStyled
-                button
-                component={Link}
-                to={menu.path}
-                key={index}
-                $isSelected={'/' + location.pathname.split('/')[1] === menu.path}
-              >
-                <ListItemIconStyled>
-                  <menu.icon />
-                </ListItemIconStyled>
-                <ListItemTextStyled primary={menu.name} />
-              </ListItemStyled>
-            );
-          }
-        })}
+        {menus
+          .filter((menu) => menu.name !== 'Restake' || (menu.name === 'Restake' && CHAIN_CONFIG.RESTAKE.WEB !== ''))
+          .map((menu, index) => {
+            if (menu.externalLink !== '') {
+              return (
+                <ListItemStyled
+                  key={index}
+                  onClick={() => {
+                    window.open(menu.externalLink);
+                  }}
+                  $isExternalLink={true}
+                >
+                  <ListItemIconStyled>
+                    <menu.icon />
+                  </ListItemIconStyled>
+                  <ListItemTextStyled primary={menu.name} />
+                </ListItemStyled>
+              );
+            } else {
+              return (
+                <ListItemStyled
+                  button
+                  component={Link}
+                  to={menu.path}
+                  key={index}
+                  $isSelected={'/' + location.pathname.split('/')[1] === menu.path}
+                >
+                  <ListItemIconStyled>
+                    <menu.icon />
+                  </ListItemIconStyled>
+                  <ListItemTextStyled primary={menu.name} />
+                </ListItemStyled>
+              );
+            }
+          })}
       </ListStyled>
     </DrawerStyled>
   );

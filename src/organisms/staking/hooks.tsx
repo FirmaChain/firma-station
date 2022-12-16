@@ -40,7 +40,6 @@ export {
 
 const useDelegations = () => {
   const { avatarList } = useSelector((state: rootState) => state.avatar);
-  const { isInit } = useSelector((state: rootState) => state.wallet);
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
   const [delegateState, setDelegateState] = useState<IDelegationState>({
@@ -53,39 +52,38 @@ const useDelegations = () => {
     if (targetValidator !== '') {
       const selfDelegateAddress = getAccAddressFromValOperAddress(targetValidator);
 
-      isInit &&
-        getValidatorDelegationsFromAddress(targetValidator)
-          .then(async (result) => {
-            let self = 0;
-            let totalDelegationAmount = 0;
-            let delegateList: IDelegateInfo[] = [];
+      getValidatorDelegationsFromAddress(targetValidator)
+        .then(async (result) => {
+          let self = 0;
+          let totalDelegationAmount = 0;
+          let delegateList: IDelegateInfo[] = [];
 
-            for (const delegate of result) {
-              totalDelegationAmount += delegate.amount;
-              if (delegate.delegatorAddress === selfDelegateAddress) {
-                self = delegate.amount;
-              }
-
-              const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
-
-              delegateList.push({
-                ...delegate,
-                moniker,
-                avatarURL,
-              });
+          for (const delegate of result) {
+            totalDelegationAmount += delegate.amount;
+            if (delegate.delegatorAddress === selfDelegateAddress) {
+              self = delegate.amount;
             }
 
-            const selfPercent = (self / totalDelegationAmount) * 100;
+            const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
 
-            setDelegateState({
-              self,
-              selfPercent,
-              delegateList,
+            delegateList.push({
+              ...delegate,
+              moniker,
+              avatarURL,
             });
-          })
-          .catch(() => {});
+          }
+
+          const selfPercent = (self / totalDelegationAmount) * 100;
+
+          setDelegateState({
+            self,
+            selfPercent,
+            delegateList,
+          });
+        })
+        .catch(() => {});
     }
-  }, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     delegateState,
