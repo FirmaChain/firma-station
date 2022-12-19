@@ -1,106 +1,99 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { CHAIN_CONFIG, HELP_URI } from '../../config';
 
-import HomeIcon from '@mui/icons-material/Home';
-import AccountsIcon from '@mui/icons-material/AccountBalanceWallet';
-import HistoryIcon from '@mui/icons-material/History';
-import StakingIcon from '@mui/icons-material/Inbox';
-import GovernmentIcon from '@mui/icons-material/AccountBalance';
-import ForumIcon from '@mui/icons-material/Forum';
-import BuyFirmaIcon from '@mui/icons-material/Payment';
-import ExplorerIcon from '@mui/icons-material/Public';
-import DownloadIcon from '@mui/icons-material/Archive';
-import HelpIcon from '@mui/icons-material/Help';
-import RotateRightIcon from '@mui/icons-material/RotateRight';
-
-import { DrawerStyled, LogoImg, ListStyled, ListItemStyled, ListItemIconStyled, ListItemTextStyled } from './styles';
-
-const menus = [
-  { name: 'Home', path: '/', icon: HomeIcon, externalLink: '' },
-  { name: 'Accounts', path: '/accounts', icon: AccountsIcon, externalLink: '' },
-  { name: 'History', path: '/history', icon: HistoryIcon, externalLink: '' },
-  { name: 'Staking', path: '/staking', icon: StakingIcon, externalLink: '' },
-  {
-    name: 'Restake',
-    path: '/restake',
-    icon: RotateRightIcon,
-    externalLink: CHAIN_CONFIG.RESTAKE.WEB,
-  },
-  { name: 'Governance', path: '/government', icon: GovernmentIcon, externalLink: '' },
-  {
-    name: 'Download',
-    path: '/download',
-    icon: DownloadIcon,
-    externalLink: '',
-  },
-  { name: 'Community', path: '/community', icon: ForumIcon, externalLink: '' },
-  {
-    name: 'Buy Firma',
-    path: '/market',
-    icon: BuyFirmaIcon,
-    externalLink: 'https://coinmarketcap.com/currencies/firmachain/markets',
-  },
-  {
-    name: 'Explorer',
-    path: '/explorer',
-    icon: ExplorerIcon,
-    externalLink: CHAIN_CONFIG.EXPLORER_URI,
-  },
-  {
-    name: 'Help',
-    path: '/help',
-    icon: HelpIcon,
-    externalLink: HELP_URI,
-  },
-];
+import { mainMenuList, subMenuList, bottomMenuList } from '../../constants/sidebar';
+import {
+  DrawerStyled,
+  LogoImg,
+  MainMenuWrapper,
+  MainMenuList,
+  MainMenuItem,
+  MainMenuIcon,
+  MainMenuLabel,
+  SubMenuWrapper,
+  SubMenuList,
+  SubMenuItem,
+  SubMenuIcon,
+  SubMenuLabel,
+  BottomMenuWrapper,
+  BottomMenuList,
+  BottomMenuItem,
+  BottomMenuLabel,
+  MenuDivider,
+  LinkIcon,
+} from './styles';
 
 function Sidebar() {
   const location = useLocation();
 
+  const linkTo = (e: any, externalLink: string) => {
+    if (externalLink !== '') {
+      e.preventDefault();
+      window.open(externalLink);
+    }
+  };
   return (
     <DrawerStyled variant='permanent' anchor='left'>
       <Link to={{ pathname: `/` }}>
         <LogoImg />
       </Link>
 
-      <ListStyled disablePadding={true}>
-        {menus
-          .filter((menu) => menu.name !== 'Restake' || (menu.name === 'Restake' && CHAIN_CONFIG.RESTAKE.WEB !== ''))
-          .map((menu, index) => {
-            if (menu.externalLink !== '') {
-              return (
-                <ListItemStyled
-                  key={index}
-                  onClick={() => {
-                    window.open(menu.externalLink);
-                  }}
-                  $isExternalLink={true}
-                >
-                  <ListItemIconStyled>
-                    <menu.icon />
-                  </ListItemIconStyled>
-                  <ListItemTextStyled primary={menu.name} />
-                </ListItemStyled>
-              );
-            } else {
-              return (
-                <ListItemStyled
-                  button
-                  component={Link}
-                  to={menu.path}
-                  key={index}
-                  $isSelected={'/' + location.pathname.split('/')[1] === menu.path}
-                >
-                  <ListItemIconStyled>
-                    <menu.icon />
-                  </ListItemIconStyled>
-                  <ListItemTextStyled primary={menu.name} />
-                </ListItemStyled>
-              );
-            }
+      <MainMenuWrapper>
+        <MainMenuList>
+          {mainMenuList.map((menu, index) => {
+            return (
+              <MainMenuItem
+                key={index}
+                selected={'/' + location.pathname.split('/')[1] === menu.path}
+                onClick={(e) => linkTo(e, menu.externalLink)}
+                to={{ pathname: menu.path }}
+              >
+                <MainMenuIcon>
+                  <menu.icon />
+                </MainMenuIcon>
+                <MainMenuLabel>{menu.name}</MainMenuLabel>
+              </MainMenuItem>
+            );
           })}
-      </ListStyled>
+        </MainMenuList>
+      </MainMenuWrapper>
+
+      <MenuDivider>&nbsp;</MenuDivider>
+
+      <SubMenuWrapper>
+        <SubMenuList>
+          {subMenuList.map((menu, index) => {
+            return (
+              <SubMenuItem key={index} onClick={(e) => linkTo(e, menu.externalLink)} to={{ pathname: menu.path }}>
+                <SubMenuIcon>
+                  <menu.icon />
+                </SubMenuIcon>
+                <SubMenuLabel>
+                  {menu.name}
+                  <LinkIcon />
+                </SubMenuLabel>
+              </SubMenuItem>
+            );
+          })}
+        </SubMenuList>
+      </SubMenuWrapper>
+
+      <MenuDivider>&nbsp;</MenuDivider>
+
+      <BottomMenuWrapper>
+        <BottomMenuList>
+          {bottomMenuList.map((menu, index) => {
+            return (
+              <BottomMenuItem key={index} onClick={(e) => linkTo(e, menu.externalLink)} to={{ pathname: menu.path }}>
+                <BottomMenuLabel>
+                  {menu.name}
+                  <LinkIcon />
+                </BottomMenuLabel>
+              </BottomMenuItem>
+            );
+          })}
+        </BottomMenuList>
+      </BottomMenuWrapper>
     </DrawerStyled>
   );
 }
