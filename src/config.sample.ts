@@ -76,6 +76,8 @@ const CHAIN_CONFIGS = {
 
 export const CHAIN_CONFIG = CHAIN_CONFIGS.MAINNET;
 
+export const NOTICE_JSON_URI = '';
+
 export const NETWORK_INFO_LIST = [];
 
 export const HELP_URI = '';

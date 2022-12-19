@@ -115,6 +115,7 @@ const urls = {
   sortDESC: process.env.PUBLIC_URL + '/images/sort_desc.png',
   openArrow: process.env.PUBLIC_URL + '/images/ic_openinnew_24px.svg',
   link: process.env.PUBLIC_URL + '/images/ic_link.png',
+  symbol: process.env.PUBLIC_URL + '/images/img_symbol.png',
 };
 
 const theme = {
