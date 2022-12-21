@@ -25,6 +25,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
   const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw, getUndelegationList } = useFirma();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -81,6 +82,11 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
 
   const getMoniker = (validatorAddress: string) => {
     let moniker = validatorAddress;
+
+    const avatar = avatarList.find((avatar) => avatar.operatorAddress === validatorAddress);
+    if (avatar) {
+      moniker = avatar.moniker;
+    }
 
     return moniker;
   };
