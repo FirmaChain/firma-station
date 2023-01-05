@@ -5,7 +5,7 @@ import { FirmaUtil, AuthorizationType } from '@firmachain/firma-js';
 import moment from 'moment';
 
 import { Wallet } from './types';
-import { CHAIN_CONFIG } from '../config';
+import { CHAIN_CONFIG, SESSION_TIMOUT } from '../config';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
 import { getAvatarInfo } from './avatar';
 import { rootState } from '../redux/reducers';
@@ -22,13 +22,33 @@ function useFirma() {
   const [isVesting, setVesting] = useState(true);
 
   const initializeFirma = () => {
-    isInit && setUserData();
+    if (isInit) {
+      if (isTimeout(timeKey)) {
+        timeout();
+      } else {
+        setUserData();
+      }
+    }
+  };
+
+  const isTimeout = (timeKey: string) => {
+    if (isLedger) return false;
+
+    if (isNaN(new Date(Number(timeKey)).getTime())) {
+      return true;
+    }
+
+    return timeKey === '' || new Date().getTime() - Number(timeKey) > SESSION_TIMOUT;
+  };
+
+  const timeout = () => {
+    walletActions.handleWalletTimeKey(getRandomKey());
+    initWallet(false);
   };
 
   const checkSession = () => {
     if (isLedger === false && isInit === true) {
-      walletActions.handleWalletTimeKey(getRandomKey());
-      initWallet(false);
+      timeout();
       window.location.reload();
     }
   };

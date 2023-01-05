@@ -1,8 +1,9 @@
-import { useIdleTimer } from "react-idle-timer";
+import { useIdleTimer } from 'react-idle-timer';
+import { SESSION_TIMOUT } from '../config';
 
 export const SessionTimer = (onTimeout: any) => {
   useIdleTimer({
-    timeout: 1000 * 60 * 10,
+    timeout: SESSION_TIMOUT,
     onIdle: onTimeout,
     debounce: 500,
   });
