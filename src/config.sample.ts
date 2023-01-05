@@ -80,6 +80,8 @@ export const NOTICE_JSON_URI = '';
 
 export const NETWORK_INFO_LIST = [];
 
+export const SESSION_TIMOUT = 1000 * 60 * 10;
+
 export const HELP_URI = '';
 export const GUIDE_LINK_LOGIN_WALLET = '';
 export const GUIDE_LINK_NEW_WALLET = '';
