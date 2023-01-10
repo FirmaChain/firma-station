@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 import { rootState } from '../../redux/reducers';
@@ -14,39 +14,42 @@ export const useTransferHistoryByAddress = () => {
   const [tokenDataState, setTokenDatas] = useState<ITokensState>({});
   const { address } = useSelector((state: rootState) => state.wallet);
 
-  const updateTokenData = async (data: any) => {
-    for (let message of data.messagesByAddress) {
-      if (message.transaction.success === false) continue;
+  const updateTokenData = useCallback(
+    async (data: any) => {
+      for (let message of data.messagesByAddress) {
+        if (message.transaction.success === false) continue;
 
-      const denom = message.transaction.messages[0].amount[0].denom;
+        const denom = message.transaction.messages[0].amount[0].denom;
 
-      if (Object.keys(tokenDataState).includes(denom) === false) {
-        try {
-          const tokenData = await getTokenData(denom);
+        if (Object.keys(tokenDataState).includes(denom) === false) {
+          try {
+            const tokenData = await getTokenData(denom);
 
-          setTokenDatas((prev) => {
-            let newData = {
-              ...prev,
-            };
+            setTokenDatas((prev) => {
+              let newData = {
+                ...prev,
+              };
 
-            newData[denom] = {
-              denom: tokenData.denom,
-              symbol: tokenData.symbol,
-              decimal: convertNumber(tokenData.decimal),
-            };
+              newData[denom] = {
+                denom: tokenData.denom,
+                symbol: tokenData.symbol,
+                decimal: convertNumber(tokenData.decimal),
+              };
 
-            return {
-              ...newData,
-            };
-          });
-        } catch (error) {
-          continue;
+              return {
+                ...newData,
+              };
+            });
+          } catch (error) {
+            continue;
+          }
         }
       }
-    }
-  };
+    },
+    [tokenDataState]
+  );
 
-  const formatHistoryList = (data: any) => {
+  const formatHistoryList = useCallback((data: any) => {
     return data.messagesByAddress.map((message: any) => {
       return {
         height: message.transaction.height,
@@ -61,7 +64,7 @@ export const useTransferHistoryByAddress = () => {
         success: message.transaction.success,
       };
     });
-  };
+  }, []);
 
   useEffect(() => {
     getHistoryByAddress(address, 'cosmos.bank.v1beta1.MsgSend')

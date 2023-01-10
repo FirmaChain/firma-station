@@ -91,6 +91,7 @@ const sizes = {
 
 const urls = {
   logo: process.env.PUBLIC_URL + '/images/white_logo.svg',
+  loginLogo: process.env.PUBLIC_URL + '/images/ic_login_logo.png',
   bgLogo: process.env.PUBLIC_URL + '/images/bgLogo.png',
   fullLogo: process.env.PUBLIC_URL + '/images/firma_chain_title.svg',
   qr: process.env.PUBLIC_URL + '/images/qr.png',
@@ -116,6 +117,7 @@ const urls = {
   openArrow: process.env.PUBLIC_URL + '/images/ic_openinnew_24px.svg',
   link: process.env.PUBLIC_URL + '/images/ic_link.png',
   symbol: process.env.PUBLIC_URL + '/images/img_symbol.png',
+  lock: process.env.PUBLIC_URL + '/images/ic_lock.png',
 };
 
 const theme = {

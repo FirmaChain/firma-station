@@ -5,12 +5,15 @@ import {
   LoginContainer,
   LoginWrapper,
   LogoImg,
+  LockIcon,
   LoginInputWrapper,
   InputBoxDefault,
   LoginButton,
   LogoutWrap,
   LogoutIconImg,
   LogoutTypo,
+  TitleWrapper,
+  LoginDescription,
 } from './styles';
 import useFirma from '../../utils/wallet';
 
@@ -54,10 +57,16 @@ const LoginCard = () => {
       </LogoutWrap>
 
       <LoginWrapper>
-        <LogoImg />
+        <TitleWrapper>
+          <LogoImg />
+        </TitleWrapper>
         <LoginInputWrapper>
+          <LockIcon />
+          <LoginDescription>
+            {`Your account has been locked to protect your privacy.\nPlease enter your password to unlock.`}
+          </LoginDescription>
           <InputBoxDefault
-            placeholder='PASSWORD'
+            placeholder='Enter Password'
             type='password'
             onKeyDown={onKeyDownPassword}
             value={password}
@@ -65,7 +74,7 @@ const LoginCard = () => {
             autoFocus={true}
           />
           <LoginButton active={password !== ''} onClick={login}>
-            LOGIN
+            Login
           </LoginButton>
         </LoginInputWrapper>
       </LoginWrapper>
