@@ -112,21 +112,27 @@ function useFirma() {
     initWallet(true);
   };
 
-  const storeWalletFromMnemonic = async (password: string, mnemonic: string, newTimeKey: string = '') => {
+  const storeWalletFromMnemonic = async (password: string, mnemonic: string) => {
     const firmaSDK = FirmaSDK.getSDK();
     const walletService = await firmaSDK.Wallet.fromMnemonic(mnemonic);
     const privateKey = walletService.getPrivateKey();
     const address = await walletService.getAddress();
 
-    storeWalletInternal(password, mnemonic, privateKey, address, newTimeKey !== '' ? newTimeKey : timeKey);
+    const timeKey = getRandomKey();
+    walletActions.handleWalletTimeKey(timeKey);
+
+    storeWalletInternal(password, mnemonic, privateKey, address, timeKey);
   };
 
-  const storeWalletFromPrivateKey = async (password: string, privateKey: string, newTimeKey: string = '') => {
+  const storeWalletFromPrivateKey = async (password: string, privateKey: string) => {
     const firmaSDK = FirmaSDK.getSDK();
     const walletService = await firmaSDK.Wallet.fromPrivateKey(privateKey);
     const address = await walletService.getAddress();
 
-    storeWalletInternal(password, '', privateKey, address, newTimeKey !== '' ? newTimeKey : timeKey);
+    const timeKey = getRandomKey();
+    walletActions.handleWalletTimeKey(timeKey);
+
+    storeWalletInternal(password, '', privateKey, address, timeKey);
   };
 
   const connectLedger = async () => {
@@ -171,14 +177,11 @@ function useFirma() {
 
   const loginWallet = async (password: string) => {
     const wallet = restoreWallet(password);
-    const timeKey = getRandomKey();
-
-    walletActions.handleWalletTimeKey(timeKey);
 
     if (wallet.mnemonic !== '') {
-      await storeWalletFromMnemonic(password, wallet.mnemonic, timeKey);
+      await storeWalletFromMnemonic(password, wallet.mnemonic);
     } else {
-      await storeWalletFromPrivateKey(password, wallet.privateKey, timeKey);
+      await storeWalletFromPrivateKey(password, wallet.privateKey);
     }
   };
 

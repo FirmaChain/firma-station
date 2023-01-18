@@ -1,10 +1,11 @@
-import styled from "styled-components";
-import SettingsIcon from "@mui/icons-material/Settings";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
-import QrCodeIcon from "@mui/icons-material/QrCode";
-import LoginIcon from "@mui/icons-material/Login";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import SettingsIcon from '@mui/icons-material/Settings';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LockIcon from '@mui/icons-material/Lock';
+import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.div`
   width: calc(100% - 80px);
@@ -125,7 +126,7 @@ export const ProfileImg = styled.div<{ src?: string }>`
   border-radius: 10px;
   margin-right: 8px;
   margin-top: 1px;
-  background-image: url("${(props) => (props.src ? props.src : props.theme.urls.profile)}");
+  background-image: url('${(props) => (props.src ? props.src : props.theme.urls.profile)}');
   background-size: contain;
   background-color: #bababa;
   background-repeat: no-repeat;
@@ -167,7 +168,7 @@ export const LedgerIconImg = styled.div`
   height: 15px !important;
   float: left;
   cursor: pointer;
-  background: url("${({ theme }) => theme.urls.ledger}");
+  background: url('${({ theme }) => theme.urls.ledger}');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -193,6 +194,17 @@ export const SettingIconImg = styled(SettingsIcon)`
   width: 21px !important;
   height: 21px !important;
   margin-top: 1px;
+  float: left;
+  cursor: pointer;
+  background-size: contain;
+  color: white;
+`;
+
+export const LockIconImg = styled(LockIcon)`
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: 2px;
+  margin-left: 10px;
   float: left;
   cursor: pointer;
   background-size: contain;
@@ -263,7 +275,7 @@ export const HeaderIcon = styled.div`
   width: 20px;
   height: 20px;
   margin-left: 5px;
-  background-image: url("${({ theme }) => theme.urls.logo}");
+  background-image: url('${({ theme }) => theme.urls.logo}');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;

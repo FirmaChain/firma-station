@@ -54,6 +54,7 @@ import {
   BarDiv,
   LedgerIconImg,
   QrIconImg,
+  LockIconImg,
 } from './styles';
 
 function HeaderDesktop() {
@@ -87,7 +88,7 @@ function HeaderDesktop() {
     restake,
   } = useSelector((state: rootState) => state.modal);
 
-  const { showAddressOnDevice } = useFirma();
+  const { showAddressOnDevice, checkSession } = useFirma();
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);
@@ -140,6 +141,8 @@ function HeaderDesktop() {
               <ProfileImg src={''} />
               <AddressTypo onClick={clipboard}>{address}</AddressTypo>
               <BarDiv />
+              <LockIconImg onClick={() => checkSession()} />
+
               {isLedger && <LedgerIconImg onClick={onClickLedger} />}
               <QrIconImg onClick={onClickQR} />
               <CopyIconImg onClick={clipboard} />
