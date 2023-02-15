@@ -108,7 +108,7 @@ export const LoginoutButton = styled.div`
 export const HeaderLeftWrapper = styled.div`
   float: left;
   display: flex;
-  margin: 29px 15px 29px 0;
+  margin: 29px 0 29px 0;
   color: ${({ theme }) => theme.colors.defaultDarkGray};
 `;
 
@@ -239,13 +239,13 @@ export const LoginIconImg = styled(LoginIcon)`
 `;
 
 export const LogoutImg = styled(LogoutIcon)`
-  width: 18px !important;
-  height: 18px !important;
-  margin-right: 5px;
+  width: 19px !important;
+  height: 19px !important;
   margin-top: 2px;
   float: left;
   cursor: pointer;
   background-size: contain;
+  color: white;
 `;
 
 export const HeaderTypo = styled.div`

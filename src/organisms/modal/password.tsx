@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { ModalLabel, ModalInput, InputBoxDefault, InputMessageText } from "./styles";
+import { ModalLabel, ModalInput, InputBoxDefault, InputMessageText, ModalInputWrap } from './styles';
 
 const Password = ({ onChange, onKeyDown }: any) => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const [isInvalidPassword, setInvalidPassword] = useState(false);
   const [isInvalidConfirmPassword, setInvalidConfirmPassword] = useState(false);
@@ -26,7 +26,7 @@ const Password = ({ onChange, onKeyDown }: any) => {
     if (validPassword && validConfirmPassword) {
       onChange && onChange(password);
     } else {
-      onChange && onChange("");
+      onChange && onChange('');
     }
   }, [password, confirmPassword]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -41,30 +41,44 @@ const Password = ({ onChange, onKeyDown }: any) => {
   };
 
   const onKeyDownPassword = (e: any) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       onKeyDown && onKeyDown();
     }
   };
 
   return (
     <>
-      <ModalLabel>Password</ModalLabel>
-      <ModalInput>
-        <InputBoxDefault type="password" value={password} onChange={onChangePassword} isInvalid={isInvalidPassword} />
-        <InputMessageText>{isInvalidPassword && `Your password must be at least 8 characters.`}</InputMessageText>
-      </ModalInput>
-
-      <ModalLabel>Confirm Password</ModalLabel>
-      <ModalInput>
-        <InputBoxDefault
-          type="password"
-          value={confirmPassword}
-          onChange={onChangeConfirmPassword}
-          onKeyDown={onKeyDownPassword}
-          isInvalid={isInvalidConfirmPassword}
-        />
-        <InputMessageText>{isInvalidConfirmPassword && `The password confirmation does not match.`}</InputMessageText>
-      </ModalInput>
+      <ModalInputWrap>
+        <ModalLabel>Password</ModalLabel>
+        <ModalInput>
+          <InputBoxDefault
+            type='password'
+            value={password}
+            onChange={onChangePassword}
+            isInvalid={isInvalidPassword}
+            placeholder='Enter Password'
+          />
+          <InputMessageText isActive={isInvalidPassword}>
+            {isInvalidPassword && `Your password must be at least 8 characters.`}
+          </InputMessageText>
+        </ModalInput>
+      </ModalInputWrap>
+      <ModalInputWrap>
+        <ModalLabel>Confirm Password</ModalLabel>
+        <ModalInput>
+          <InputBoxDefault
+            type='password'
+            value={confirmPassword}
+            onChange={onChangeConfirmPassword}
+            onKeyDown={onKeyDownPassword}
+            isInvalid={isInvalidConfirmPassword}
+            placeholder='Enter Confirm Password'
+          />
+          <InputMessageText isActive={isInvalidConfirmPassword}>
+            {isInvalidConfirmPassword && `The password confirmation does not match.`}
+          </InputMessageText>
+        </ModalInput>
+      </ModalInputWrap>
     </>
   );
 };

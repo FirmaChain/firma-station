@@ -29,6 +29,7 @@ export const LoginWrapper = styled.div`
   align-items: center;
   display: flex;
   border-radius: 4px;
+  box-shadow: 0 0 20px 0 #000;
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
 `;
 
@@ -92,19 +93,34 @@ export const LoginDescription = styled.div`
   margin-bottom: 50px;
 `;
 
-export const LoginButton = styled.div<{ active: boolean }>`
-  width: 100%;
+export const ButtonStyleByStatus = styled.div<{ status: number }>`
+  width: calc(100% - 2px);
   height: 48px;
   line-height: 48px;
-  text-align: center;
-  margin-top: 40px;
-  color: white;
-  background-color: ${({ theme }) => theme.colors.mainblue};
+  font-size: 1.7rem;
+  font-weight: 400;
+  border: 1px solid #ffffff00;
   border-radius: 4px;
-  font-size: 1.8rem;
   cursor: pointer;
-  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+  text-align: center;
+  margin-top: 30px;
+  ${(props) => {
+    switch (props.status) {
+      case 0:
+        return 'background-color:#3550de;color:white;';
+      case 1:
+        return 'background-color:#383745;color:white;';
+      case 2:
+        return 'background-color:#2D2C3A;color:#ffffff50;';
+      case 3:
+        return 'background-color:#ffffff00;color:#b4b4b4;border:1px solid #ffffff60;';
+      default:
+        return 'background-color:#383745;color:white;';
+    }
+  }}
 `;
+
+export const LoginButton = styled(ButtonStyleByStatus)<{ status: number }>``;
 
 export const LogoutIconImg = styled(LogoutIcon)`
   width: 18px !important;

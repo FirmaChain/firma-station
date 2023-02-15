@@ -32,6 +32,10 @@ import {
   ModalTooltipTypo,
   MaxButton,
   HelpIcon,
+  ModalInputRowWrap,
+  ButtonWrapper,
+  CancelButton,
+  ModalValue,
 } from './styles';
 
 import styled from 'styled-components';
@@ -44,25 +48,41 @@ const SelectWrapper = styled.div`
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: '#21212f',
-    border: '1px solid #696974',
+    backgroundColor: '#3d3b48',
+    border: '1px solid #ffffff00 !important',
+    borderRadius: '0',
+    boxShadow: 'none',
   }),
   option: (provided: any) => ({
     ...provided,
-    color: '#3550DE',
+    color: '#ccc',
+    backgroundColor: '#3d3b48',
+    borderRadius: '0',
+    paddingTop: '12px',
+    paddingBottom: '12px',
+    '&:hover': {
+      backgroundColor: '#3d3b48',
+    },
+  }),
+  indicatorSeparator: (provided: any) => ({
+    ...provided,
+    color: '#888',
+    backgroundColor: '#888',
+  }),
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    color: '#888',
   }),
   singleValue: (provided: any) => ({
     ...provided,
     color: 'white',
   }),
-  indicatorSeparator: (provided: any) => ({
+  menuList: (provided: any) => ({
     ...provided,
-    color: '#324ab8aa',
-    backgroundColor: '#324ab8aa',
-  }),
-  dropdownIndicator: (provided: any) => ({
-    ...provided,
-    color: '#324ab8aa',
+    backgroundColor: '#888',
+    borderRadius: '0',
+    margin: '0',
+    padding: '0',
   }),
 };
 
@@ -85,8 +105,10 @@ const RedelegateModal = () => {
   const selectInputRef = useRef<any>();
 
   useEffect(() => {
-    setDelegationList(modalData.data.delegationList);
-    setTargetValidator(modalData.data.targetValidator);
+    if (Object.keys(modalData).length > 0) {
+      setDelegationList(modalData.data.delegationList);
+      setTargetValidator(modalData.data.targetValidator);
+    }
   }, [redelegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeModal = () => {
@@ -137,7 +159,7 @@ const RedelegateModal = () => {
   };
 
   const redelegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
-    redelegate(sourceValidator, modalData.data.targetValidator, convertNumber(amount), gas)
+    redelegate(sourceValidator, targetValidator, convertNumber(amount), gas)
       .then(() => {
         setUserData();
         resolveTx();
@@ -145,6 +167,14 @@ const RedelegateModal = () => {
       .catch(() => {
         rejectTx();
       });
+  };
+
+  const getParamsTx = () => {
+    return {
+      validatorSrcAddress: sourceValidator,
+      validatorDstAddress: targetValidator,
+      amount,
+    };
   };
 
   const onChangeValidator = (e: any) => {
@@ -159,14 +189,16 @@ const RedelegateModal = () => {
   const nextStep = () => {
     closeModal();
 
-    getGasEstimationRedelegate(sourceValidator, modalData.data.targetValidator, convertNumber(amount))
+    getGasEstimationRedelegate(sourceValidator, targetValidator, convertNumber(amount))
       .then((gas) => {
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Redelegate',
+            module: '/staking/redelegate',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalRedelegate,
             txAction: redelegateTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);
@@ -186,10 +218,16 @@ const RedelegateModal = () => {
   };
 
   return (
-    <Modal visible={redelegateModalState} closable={true} onClose={closeModal} width={redelegateModalWidth}>
+    <Modal
+      visible={redelegateModalState}
+      closable={true}
+      visibleClose={false}
+      onClose={closeModal}
+      width={redelegateModalWidth}
+    >
       <ModalContainer>
         <ModalTitle>
-          REDELEGATE
+          Redelegate
           <HelpIcon onClick={() => window.open(GUIDE_LINK_REDELEGATE)} />
         </ModalTitle>
         <ModalContent>
@@ -204,15 +242,19 @@ const RedelegateModal = () => {
           </SelectWrapper>
           {sourceValidator && (
             <>
-              <ModalLabel>Available</ModalLabel>
-              <ModalInput>
-                {convertNumberFormat(sourceAmount, 3)} {CHAIN_CONFIG.PARAMS.SYMBOL}
-              </ModalInput>
+              <ModalInputRowWrap>
+                <ModalLabel>Available</ModalLabel>
+                <ModalValue>
+                  {convertNumberFormat(sourceAmount, 3)} {CHAIN_CONFIG.PARAMS.SYMBOL}
+                </ModalValue>
+              </ModalInputRowWrap>
 
-              <ModalLabel>Fee estimation</ModalLabel>
-              <ModalInput>{`${convertToFctString((getDefaultFee(isLedger) * 1.5).toString())} ${
-                CHAIN_CONFIG.PARAMS.SYMBOL
-              }`}</ModalInput>
+              <ModalInputRowWrap>
+                <ModalLabel>Fee estimation</ModalLabel>
+                <ModalValue>{`${convertToFctString((getDefaultFee(isLedger) * 1.5).toString())} ${
+                  CHAIN_CONFIG.PARAMS.SYMBOL
+                }`}</ModalValue>
+              </ModalInputRowWrap>
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
@@ -239,14 +281,19 @@ const RedelegateModal = () => {
             </ModalTooltipTypo>
           </ModalTooltipWrapper>
 
-          <NextButton
-            onClick={() => {
-              if (isActiveButton) nextStep();
-            }}
-            active={isActiveButton}
-          >
-            Next
-          </NextButton>
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeModal()} status={1}>
+              Cancel
+            </CancelButton>
+            <NextButton
+              onClick={() => {
+                if (isActiveButton) nextStep();
+              }}
+              status={isActiveButton ? 0 : 2}
+            >
+              Next
+            </NextButton>
+          </ButtonWrapper>
         </ModalContent>
       </ModalContainer>
     </Modal>

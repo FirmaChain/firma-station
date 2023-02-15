@@ -147,7 +147,7 @@ const ConfirmWalletModal = () => {
     >
       <ModalContainer>
         <ModalTitle>
-          CONFIRM WALLET
+          Confirm Wallet
           <HelpIcon onClick={() => window.open(GUIDE_LINK_CONFIRM_WALLET)} />
         </ModalTitle>
         <ModalContent>
@@ -172,7 +172,7 @@ const ConfirmWalletModal = () => {
             onClick={() => {
               if (isActiveCreateButton) confirmWallet();
             }}
-            isActive={isActiveCreateButton}
+            status={isActiveCreateButton ? 0 : 2}
           >
             Create
           </CreateButton>

@@ -130,14 +130,22 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
       .catch((e) => {});
   };
 
+  const getParamsTx = () => {
+    return {
+      validatorAddress: targetValidator,
+    };
+  };
+
   const withdrawAction = () => {
     getGasEstimationWithdraw(targetValidator)
       .then((gas) => {
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Withdraw',
+            module: '/distribution/withdraw',
             data: { amount: targetStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
             txAction: withdrawTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);

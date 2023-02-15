@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
-import useFirma from "../../utils/wallet";
-import { copyToClipboard, isValidString } from "../../utils/common";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { GUIDE_LINK_NEW_WALLET } from "../../config";
+import useFirma from '../../utils/wallet';
+import { copyToClipboard, isValidString } from '../../utils/common';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { GUIDE_LINK_NEW_WALLET } from '../../config';
 
-import Password from "./password";
+import Password from './password';
 
 import {
   newWalletModalWidth,
@@ -23,15 +23,16 @@ import {
   CopyIcon,
   NextButton,
   HelpIcon,
-} from "./styles";
+  ModalInputWrap,
+} from './styles';
 
 const NewWalletModal = () => {
   const newWalletModalState = useSelector((state: rootState) => state.modal.newWallet);
   const { enqueueSnackbar } = useSnackbar();
   const { getNewMnemonic } = useFirma();
 
-  const [mnemonic, setMnemonic] = useState("");
-  const [password, setPassword] = useState("");
+  const [mnemonic, setMnemonic] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (newWalletModalState) {
@@ -46,13 +47,13 @@ const NewWalletModal = () => {
   };
 
   const openConfirmModal = () => {
-    if (password !== "") {
+    if (password !== '') {
       closeModal();
       modalActions.handleModalData({ mnemonic, password });
       modalActions.handleModalConfirmWallet(true);
     } else {
-      enqueueSnackbar("Incorrect Password", {
-        variant: "error",
+      enqueueSnackbar('Incorrect Password', {
+        variant: 'error',
         autoHideDuration: 2000,
       });
     }
@@ -68,12 +69,12 @@ const NewWalletModal = () => {
   };
 
   const clipboard = (value: string) => {
-    if (value === "") return;
+    if (value === '') return;
 
     copyToClipboard(value);
 
-    enqueueSnackbar("Copied", {
-      variant: "success",
+    enqueueSnackbar('Copied', {
+      variant: 'success',
       autoHideDuration: 1000,
     });
   };
@@ -96,21 +97,23 @@ const NewWalletModal = () => {
     >
       <ModalContainer>
         <ModalTitle>
-          NEW WALLET
+          Create a Wallet
           <HelpIcon onClick={() => window.open(GUIDE_LINK_NEW_WALLET)} />
         </ModalTitle>
         <ModalContent>
-          <ModalLabel>Mnemonic</ModalLabel>
-          <ModalInput>
-            <CopyIcon onClick={() => clipboard(mnemonic)} />
-            <MnemonicContainter>
-              {mnemonic !== "" && mnemonic.split(" ").map((data, index) => <Mnemonic key={index}>{data}</Mnemonic>)}
-            </MnemonicContainter>
-          </ModalInput>
+          <ModalInputWrap>
+            <ModalLabel>Mnemonic</ModalLabel>
+            <ModalInput>
+              <CopyIcon onClick={() => clipboard(mnemonic)} />
+              <MnemonicContainter>
+                {mnemonic !== '' && mnemonic.split(' ').map((data, index) => <Mnemonic key={index}>{data}</Mnemonic>)}
+              </MnemonicContainter>
+            </ModalInput>
+          </ModalInputWrap>
 
           <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
-          <NextButton onClick={() => openConfirmModal()} active={isValidString(password)}>
+          <NextButton status={isValidString(password) ? 0 : 2} onClick={() => openConfirmModal()}>
             Next
           </NextButton>
         </ModalContent>

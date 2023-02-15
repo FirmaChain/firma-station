@@ -3,6 +3,10 @@ import { CHAIN_CONFIG } from '../config';
 
 export const isElectron = navigator.userAgent.includes('Electron');
 
+export const isExternalConnect = (isLedger: boolean, isMobileApp: boolean) => {
+  return isLedger || isMobileApp;
+};
+
 export const convertNumberFormat = (value: string | number, point: number = 2): string => {
   return convertCurrent(makeDecimalPoint(value, point));
 };

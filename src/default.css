@@ -174,8 +174,8 @@ body > #root > div {
 }
 
 @font-face {
-  src: url("./styles/fonts/ChakraPetch-Medium.ttf") format("truetype");
-  font-family: "Chakra-Medium";
+  src: url("./styles/fonts/Metropolis-SemiBold.woff") format("woff");
+  font-family: "Metropolis-SemiBold";
 }
 
 html {

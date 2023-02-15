@@ -32,6 +32,11 @@ import {
   ModalTooltipTypo,
   MaxButton,
   HelpIcon,
+  ModalInputWrap,
+  ModalInputRowWrap,
+  CancelButton,
+  ButtonWrapper,
+  ModalValue,
 } from './styles';
 
 const UndelegateModal = () => {
@@ -111,6 +116,13 @@ const UndelegateModal = () => {
       });
   };
 
+  const getParamsTx = () => {
+    return {
+      validatorAddress: modalData.data.targetValidator,
+      amount,
+    };
+  };
+
   const nextStep = () => {
     closeModal();
 
@@ -119,9 +131,11 @@ const UndelegateModal = () => {
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Undelegate',
+            module: '/staking/undelegate',
             data: { amount: amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalUndelegate,
             txAction: undelegateTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);
@@ -141,30 +155,42 @@ const UndelegateModal = () => {
   };
 
   return (
-    <Modal visible={undelegateModalState} closable={true} onClose={closeModal} width={undelegateModalWidth}>
+    <Modal
+      visible={undelegateModalState}
+      closable={true}
+      visibleClose={false}
+      onClose={closeModal}
+      width={undelegateModalWidth}
+    >
       <ModalContainer>
         <ModalTitle>
-          UNDELEGATE
+          Undelegate
           <HelpIcon onClick={() => window.open(GUIDE_LINK_UNDELEGATE)} />
         </ModalTitle>
         <ModalContent>
-          <ModalLabel>Available</ModalLabel>
-          <ModalInput>
-            {availableAmount} {CHAIN_CONFIG.PARAMS.SYMBOL}
-          </ModalInput>
+          <ModalInputRowWrap>
+            <ModalLabel>Available</ModalLabel>
+            <ModalValue>
+              {availableAmount} {CHAIN_CONFIG.PARAMS.SYMBOL}
+            </ModalValue>
+          </ModalInputRowWrap>
 
-          <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
-            CHAIN_CONFIG.PARAMS.SYMBOL
-          }`}</ModalInput>
+          <ModalInputRowWrap>
+            <ModalLabel>Fee estimation</ModalLabel>
+            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
+              CHAIN_CONFIG.PARAMS.SYMBOL
+            }`}</ModalValue>
+          </ModalInputRowWrap>
 
-          <ModalLabel>Amount</ModalLabel>
-          <ModalInput>
-            <MaxButton active={true} onClick={onClickMaxAmount}>
-              Max
-            </MaxButton>
-            <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
-          </ModalInput>
+          <ModalInputWrap>
+            <ModalLabel>Amount</ModalLabel>
+            <ModalInput>
+              <MaxButton active={true} onClick={onClickMaxAmount}>
+                Max
+              </MaxButton>
+              <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
+            </ModalInput>
+          </ModalInputWrap>
 
           <ModalTooltipWrapper>
             <ModalTooltipIcon />
@@ -181,14 +207,19 @@ const UndelegateModal = () => {
             </ModalTooltipTypo>
           </ModalTooltipWrapper>
 
-          <NextButton
-            onClick={() => {
-              if (isActiveButton) nextStep();
-            }}
-            active={isActiveButton}
-          >
-            Next
-          </NextButton>
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeModal()} status={1}>
+              Cancel
+            </CancelButton>
+            <NextButton
+              onClick={() => {
+                if (isActiveButton) nextStep();
+              }}
+              status={isActiveButton ? 0 : 2}
+            >
+              Next
+            </NextButton>
+          </ButtonWrapper>
         </ModalContent>
       </ModalContainer>
     </Modal>

@@ -28,6 +28,9 @@ import {
   AddButton,
   DeleteButton,
   HelpIcon,
+  ButtonWrapper,
+  CancelButton,
+  ModalInputWrap,
 } from './styles';
 
 const options = [
@@ -40,25 +43,41 @@ const options = [
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: '#21212f',
-    border: '1px solid #696974',
+    backgroundColor: '#3d3b48',
+    border: '1px solid #ffffff00 !important',
+    borderRadius: '0',
+    boxShadow: 'none',
   }),
   option: (provided: any) => ({
     ...provided,
-    color: '#3550DE',
+    color: '#ccc',
+    backgroundColor: '#3d3b48',
+    borderRadius: '0',
+    paddingTop: '12px',
+    paddingBottom: '12px',
+    '&:hover': {
+      backgroundColor: '#3d3b48',
+    },
+  }),
+  indicatorSeparator: (provided: any) => ({
+    ...provided,
+    color: '#888',
+    backgroundColor: '#888',
+  }),
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    color: '#888',
   }),
   singleValue: (provided: any) => ({
     ...provided,
     color: 'white',
   }),
-  indicatorSeparator: (provided: any) => ({
+  menuList: (provided: any) => ({
     ...provided,
-    color: '#324ab8aa',
-    backgroundColor: '#324ab8aa',
-  }),
-  dropdownIndicator: (provided: any) => ({
-    ...provided,
-    color: '#324ab8aa',
+    backgroundColor: '#888',
+    borderRadius: '0',
+    margin: '0',
+    padding: '0',
   }),
 };
 
@@ -252,6 +271,53 @@ const NewProposalModal = () => {
     setParamList((prevState) => [...prevState.filter((v, i) => i !== index)]);
   };
 
+  const getParamsTx = () => {
+    switch (proposalType) {
+      case 'TEXT_PROPOSAL':
+        return {
+          title,
+          description,
+          initialDepositFCT: initialDeposit,
+        };
+      case 'COMMUNITY_POOL_SPEND_PROPOSAL':
+        return {
+          title,
+          description,
+          initialDepositFCT: initialDeposit,
+          fctAmount: amount,
+          recipient,
+        };
+      case 'PARAMETER_CHANGE_PROPOSAL':
+        return {
+          title,
+          description,
+          initialDepositFCT: initialDeposit,
+          paramList: paramList.filter((value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''),
+        };
+      case 'SOFTWARE_UPGRADE':
+        return {
+          title,
+          description,
+          initialDepositFCT: initialDeposit,
+          upgradeName,
+          upgradeHeight: convertNumber(height),
+        };
+    }
+  };
+
+  const getGovModuleName = () => {
+    switch (proposalType) {
+      case 'TEXT_PROPOSAL':
+        return '/submit/text';
+      case 'COMMUNITY_POOL_SPEND_PROPOSAL':
+        return '/submit/communitypool';
+      case 'PARAMETER_CHANGE_PROPOSAL':
+        return '/submit/paramchange';
+      case 'SOFTWARE_UPGRADE':
+        return '/submit/softwareupgrade';
+    }
+  };
+
   const nextStep = async () => {
     const validParamList = paramList.filter(
       (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
@@ -333,9 +399,11 @@ const NewProposalModal = () => {
       if (convertNumber(balance) - initialDeposit >= convertToFctNumber(getFeesFromGas(currentGas))) {
         modalActions.handleModalData({
           action: 'Proposal',
+          module: `/gov${getGovModuleName()}`,
           data: { fees: getFeesFromGas(currentGas), gas: currentGas },
           prevModalAction: modalActions.handleModalNewProposal,
           txAction: newProposalTx,
+          txParams: getParamsTx,
         });
 
         modalActions.handleModalConfirmTx(true);
@@ -349,38 +417,50 @@ const NewProposalModal = () => {
   };
 
   return (
-    <Modal visible={newProposalState} closable={true} onClose={closeModal} width={newProposalModalWidth}>
+    <Modal
+      visible={newProposalState}
+      closable={true}
+      visibleClose={false}
+      onClose={closeModal}
+      width={newProposalModalWidth}
+    >
       <ModalContainer>
         <ModalTitle>
-          NEW PROPOSAL
+          New Proposal
           <HelpIcon onClick={() => window.open(GUIDE_LINK_NEW_PROPOSAL)} />
         </ModalTitle>
         <ModalContent>
-          <ModalLabel>Type</ModalLabel>
-          <ModalInput>
-            <SelectWrapper>
-              <Select options={options} styles={customStyles} onChange={onChangeType} ref={selectInputRef} />
-            </SelectWrapper>
-          </ModalInput>
+          <ModalInputWrap>
+            <ModalLabel>Type</ModalLabel>
+            <ModalInput>
+              <SelectWrapper>
+                <Select options={options} styles={customStyles} onChange={onChangeType} ref={selectInputRef} />
+              </SelectWrapper>
+            </ModalInput>
+          </ModalInputWrap>
 
-          <ModalLabel>Title</ModalLabel>
-          <ModalInput>
-            <InputBoxDefault type='text' placeholder='' value={title} onChange={onChangeTitle} />
-          </ModalInput>
+          <ModalInputWrap>
+            <ModalLabel>Title</ModalLabel>
+            <ModalInput>
+              <InputBoxDefault type='text' placeholder='Proposal Title' value={title} onChange={onChangeTitle} />
+            </ModalInput>
+          </ModalInputWrap>
 
-          <ModalLabel>Description</ModalLabel>
-          <ModalInput>
-            <TextAreaDefault value={description} onChange={onChangeDescription} />
-          </ModalInput>
-
-          <ModalLabel>Initial Deposit</ModalLabel>
-          <ModalInput>
-            <InputBoxDefault type='number' placeholder='' value={initialDeposit} onChange={onChangeInitialDeposit} />
-          </ModalInput>
-
+          <ModalInputWrap>
+            <ModalLabel>Description</ModalLabel>
+            <ModalInput>
+              <TextAreaDefault value={description} placeholder='Proposal Description' onChange={onChangeDescription} />
+            </ModalInput>
+          </ModalInputWrap>
+          <ModalInputWrap>
+            <ModalLabel>Initial Deposit</ModalLabel>
+            <ModalInput>
+              <InputBoxDefault type='number' placeholder='' value={initialDeposit} onChange={onChangeInitialDeposit} />
+            </ModalInput>
+          </ModalInputWrap>
           {/* Parameter */}
           {proposalType === 'PARAMETER_CHANGE_PROPOSAL' && (
-            <>
+            <ModalInputWrap>
               <ModalLabel>Changes</ModalLabel>
               <ModalInput>
                 <AddButton onClick={() => addParam()}>+</AddButton>
@@ -424,47 +504,68 @@ const NewProposalModal = () => {
                   ))}
                 </ParamTable>
               </ModalInput>
-            </>
+            </ModalInputWrap>
           )}
 
           {/* CommunityPool */}
           {proposalType === 'COMMUNITY_POOL_SPEND_PROPOSAL' && (
             <>
-              <ModalLabel>Recipient</ModalLabel>
-              <ModalInput>
-                <InputBoxDefault type='text' placeholder='' value={recipient} onChange={onChangeRecipient} />
-              </ModalInput>
-
-              <ModalLabel>Amount</ModalLabel>
-              <ModalInput>
-                <InputBoxDefault type='number' placeholder='' value={amount} onChange={onChangeAmount} />
-              </ModalInput>
+              <ModalInputWrap>
+                <ModalLabel>Recipient</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='text'
+                    placeholder='Enter Recipient Address'
+                    value={recipient}
+                    onChange={onChangeRecipient}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Amount</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault type='number' placeholder='' value={amount} onChange={onChangeAmount} />
+                </ModalInput>
+              </ModalInputWrap>
             </>
           )}
 
           {/* CommunityPool */}
           {proposalType === 'SOFTWARE_UPGRADE' && (
             <>
-              <ModalLabel>Upgrade Name</ModalLabel>
-              <ModalInput>
-                <InputBoxDefault type='text' placeholder='v0.1.0' value={upgradeName} onChange={onChangeUpgradeName} />
-              </ModalInput>
-
-              <ModalLabel>Height</ModalLabel>
-              <ModalInput>
-                <InputBoxDefault type='number' placeholder='1' value={height} onChange={onChangeHeight} />
-              </ModalInput>
+              <ModalInputWrap>
+                <ModalLabel>Upgrade Name</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='text'
+                    placeholder='v0.1.0'
+                    value={upgradeName}
+                    onChange={onChangeUpgradeName}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Height</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault type='number' placeholder='1' value={height} onChange={onChangeHeight} />
+                </ModalInput>
+              </ModalInputWrap>
             </>
           )}
 
-          <NextButton
-            onClick={() => {
-              if (proposalType) nextStep();
-            }}
-            active={proposalType !== ''}
-          >
-            Next
-          </NextButton>
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeModal()} status={1}>
+              Cancel
+            </CancelButton>
+            <NextButton
+              onClick={() => {
+                if (proposalType) nextStep();
+              }}
+              status={proposalType !== '' ? 0 : 2}
+            >
+              Next
+            </NextButton>
+          </ButtonWrapper>
         </ModalContent>
       </ModalContainer>
     </Modal>

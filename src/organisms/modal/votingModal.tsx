@@ -16,6 +16,8 @@ import {
   NextButton,
   VotingWrapper,
   VotingItem,
+  ButtonWrapper,
+  CancelButton,
 } from './styles';
 
 const VotingModal = () => {
@@ -34,6 +36,13 @@ const VotingModal = () => {
 
   const resetModal = () => {
     setVotingType(0);
+  };
+
+  const getParamsTx = () => {
+    return {
+      proposalId: convertNumber(modalData.proposalId),
+      option: votingType,
+    };
   };
 
   const votingTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
@@ -55,9 +64,11 @@ const VotingModal = () => {
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Voting',
+            module: '/gov/vote',
             data: { fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalVoting,
             txAction: votingTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);
@@ -77,9 +88,15 @@ const VotingModal = () => {
   };
 
   return (
-    <Modal visible={votingModalState} closable={true} onClose={closeModal} width={votingModalWidth}>
+    <Modal
+      visible={votingModalState}
+      closable={true}
+      visibleClose={false}
+      onClose={closeModal}
+      width={votingModalWidth}
+    >
       <ModalContainer>
-        <ModalTitle>VOTING</ModalTitle>
+        <ModalTitle>Voting</ModalTitle>
         <ModalContent>
           <VotingWrapper>
             <VotingItem active={votingType === 1} onClick={() => setVotingType(1)}>
@@ -95,14 +112,19 @@ const VotingModal = () => {
               Abstain
             </VotingItem>
           </VotingWrapper>
-          <NextButton
-            onClick={() => {
-              if (votingType) nextStep();
-            }}
-            active={votingType !== 0}
-          >
-            Vote
-          </NextButton>
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeModal()} status={1}>
+              Cancel
+            </CancelButton>
+            <NextButton
+              onClick={() => {
+                if (votingType) nextStep();
+              }}
+              status={votingType !== 0 ? 0 : 2}
+            >
+              Vote
+            </NextButton>
+          </ButtonWrapper>
         </ModalContent>
       </ModalContainer>
     </Modal>

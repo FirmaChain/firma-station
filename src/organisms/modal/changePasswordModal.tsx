@@ -7,7 +7,7 @@ import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
 
 import {
-  exportPrivatekeyModalWidth,
+  changePasswordModalWidth,
   ModalContainer,
   ModalTitle,
   ModalContent,
@@ -15,6 +15,9 @@ import {
   ExportPasswordWrapper,
   InputBoxDefault,
   ChangeButton,
+  ButtonWrapper,
+  CancelButton,
+  ModalInputWrap,
 } from './styles';
 
 const ChangePasswordModal = () => {
@@ -39,29 +42,35 @@ const ChangePasswordModal = () => {
   return (
     <Modal
       visible={changePasswordModalState}
-      maskClosable={true}
       closable={true}
+      visibleClose={false}
       onClose={closeModal}
-      width={exportPrivatekeyModalWidth}
+      width={changePasswordModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>CHANGE PASSWORD</ModalTitle>
+        <ModalTitle>Change Password</ModalTitle>
         <ModalContent>
-          <ModalLabel>Current Password</ModalLabel>
-          <ExportPasswordWrapper style={{ marginBottom: '50px' }}>
-            <InputBoxDefault
-              ref={inputRef}
-              placeholder='********'
-              type='password'
-              value={password}
-              onChange={onChangePassword}
-              autoFocus={true}
-            />
-          </ExportPasswordWrapper>
-
+          <ModalInputWrap>
+            <ModalLabel>Current Password</ModalLabel>
+            <ExportPasswordWrapper>
+              <InputBoxDefault
+                ref={inputRef}
+                placeholder='Enter Current Password'
+                type='password'
+                value={password}
+                onChange={onChangePassword}
+                autoFocus={true}
+              />
+            </ExportPasswordWrapper>
+          </ModalInputWrap>
           <Password onChange={onChangeNewPassword} onKeyDown={onKeyDownPassword} />
 
-          <ChangeButton active={true}>Change</ChangeButton>
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeModal()} status={1}>
+              Cancel
+            </CancelButton>
+            <ChangeButton status={0}>Change</ChangeButton>
+          </ButtonWrapper>
         </ModalContent>
       </ModalContainer>
     </Modal>

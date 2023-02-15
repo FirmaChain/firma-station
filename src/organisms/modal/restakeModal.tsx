@@ -21,10 +21,6 @@ import {
   ModalContainer,
   ModalTitle,
   ModalContent,
-  ValueContainer,
-  ValueItem,
-  ValueLabel,
-  ValueText,
   ButtonWrapper,
   RestakeButton,
   Divider,
@@ -42,6 +38,11 @@ import {
   RightValue,
   ArrowIcon,
   TimeBox,
+  ModalInputRowWrap,
+  ModalLabel,
+  ModalInput,
+  CancelButton,
+  ModalValue,
 } from './styles';
 
 const RestakeModal = () => {
@@ -205,46 +206,41 @@ const RestakeModal = () => {
     <Modal
       visible={restakeModalState}
       closable={true}
-      maskClosable={true}
+      visibleClose={false}
       onClose={closeRestakeModal}
       width={restakeModalWidth}
     >
       <ModalContainer>
-        <ModalTitle style={{ marginBottom: '0' }}>RESTAKE</ModalTitle>
+        <ModalTitle>Restake</ModalTitle>
         <ModalContent>
-          <ValueContainer>
-            <ValueItem>
-              <ValueLabel>Total Delegated</ValueLabel>
-              <ValueText>{totalDelegated}</ValueText>
-            </ValueItem>
-            <ValueItem>
-              <ValueLabel>Total Rewards</ValueLabel>
-              <ValueText>{totalRewards}</ValueText>
-            </ValueItem>
-          </ValueContainer>
+          <ModalInputRowWrap>
+            <ModalLabel>Total Delegated</ModalLabel>
+            <ModalValue>{totalDelegated}</ModalValue>
+          </ModalInputRowWrap>
+          <ModalInputRowWrap>
+            <ModalLabel>Total Rewards</ModalLabel>
+            <ModalValue>{totalRewards}</ModalValue>
+          </ModalInputRowWrap>
           <DividerSolid />
-          <ValueContainer>
-            <ValueItem>
-              <ValueLabel>Restake Status</ValueLabel>
-              <ValueText>
-                <StatusBox status={status}>{getRestakeStatus(status)}</StatusBox>
-              </ValueText>
-            </ValueItem>
-            {isActiveRestake && (
-              <>
-                <ValueItem>
-                  <ValueLabel>Expiry Date</ValueLabel>
-                  <ValueText>{getUTCDateFormat(expiryDate)}</ValueText>
-                </ValueItem>
-                <ValueItem>
-                  <ValueLabel>Minimum Reward</ValueLabel>
-                  <ValueText>{`${minimumRewards} ${CHAIN_CONFIG.PARAMS.SYMBOL}`} (per validator)</ValueText>
-                </ValueItem>
-              </>
-            )}
-          </ValueContainer>
+          <ModalInputRowWrap>
+            <ModalLabel>Restake Status</ModalLabel>
+            <ModalInput style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+              <StatusBox status={status}>{getRestakeStatus(status)}</StatusBox>
+            </ModalInput>
+          </ModalInputRowWrap>
+          {isActiveRestake && (
+            <>
+              <ModalInputRowWrap>
+                <ModalLabel>Expiry Date</ModalLabel>
+                <ModalValue>{getUTCDateFormat(expiryDate)}</ModalValue>
+              </ModalInputRowWrap>
+              <ModalInputRowWrap>
+                <ModalLabel>Restake Status</ModalLabel>
+                <ModalValue>{`${minimumRewards} ${CHAIN_CONFIG.PARAMS.SYMBOL}`} (per validator)</ModalValue>
+              </ModalInputRowWrap>
+            </>
+          )}
           <Divider />
-
           <MoreInformation>
             <MoreLabelWrapper onClick={() => window.open(CHAIN_CONFIG.RESTAKE.WEB)}>
               {isActiveRestake ? (
@@ -292,19 +288,21 @@ const RestakeModal = () => {
               If you delegate to a new validator after activating restake, you must update restake
             </ModalTooltipTypo>
           </ModalTooltipWrapper>
-
-          <ButtonWrapper style={{ marginTop: '40px' }}>
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeRestakeModal()} status={1}>
+              Cancel
+            </CancelButton>
             {isActiveRestake ? (
               <>
-                <RestakeButton onClick={onClickDisable} active={false}>
+                <RestakeButton onClick={onClickDisable} status={1}>
                   Disable
                 </RestakeButton>
-                <RestakeButton onClick={onClickEnable} active={true}>
+                <RestakeButton onClick={onClickEnable} status={0}>
                   Update
                 </RestakeButton>
               </>
             ) : (
-              <RestakeButton onClick={onClickEnable} active={true}>
+              <RestakeButton onClick={onClickEnable} status={0}>
                 Enable
               </RestakeButton>
             )}

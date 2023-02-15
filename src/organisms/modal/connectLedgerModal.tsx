@@ -7,16 +7,7 @@ import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
 import { GUIDE_LINK_CONNECT_TO_LEDGER } from '../../config';
 
-import {
-  connectLedgerModalWidth,
-  ModalContainer,
-  ModalTitle,
-  ModalContent,
-  ModalLabel,
-  ModalInput,
-  NextButton,
-  HelpIcon,
-} from './styles';
+import { connectLedgerModalWidth, ModalContainer, ModalTitle, ModalContent, NextButton, HelpIcon } from './styles';
 
 const ConnectLedgerModal = () => {
   const connectLedgerModalState = useSelector((state: rootState) => state.modal.connectLedger);
@@ -56,13 +47,11 @@ const ConnectLedgerModal = () => {
     >
       <ModalContainer>
         <ModalTitle>
-          CONNECT TO LEDGER
+          Connect to Ledger
           <HelpIcon onClick={() => window.open(GUIDE_LINK_CONNECT_TO_LEDGER)} />
         </ModalTitle>
         <ModalContent>
-          <ModalLabel></ModalLabel>
-          <ModalInput></ModalInput>
-          <NextButton active={true} onClick={() => onClickConnectLedger()}>
+          <NextButton status={0} onClick={() => onClickConnectLedger()}>
             Connect
           </NextButton>
         </ModalContent>

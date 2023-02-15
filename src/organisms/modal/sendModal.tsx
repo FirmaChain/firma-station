@@ -24,6 +24,11 @@ import {
   ModalTooltipIcon,
   ModalTooltipTypo,
   HelpIcon,
+  ModalInputWrap,
+  ModalInputRowWrap,
+  ButtonWrapper,
+  CancelButton,
+  ModalValue,
 } from './styles';
 import {
   convertNumber,
@@ -44,24 +49,41 @@ const SelectWrapper = styled.div`
 const customStyles = {
   control: (provided: any) => ({
     ...provided,
-    backgroundColor: '#21212f',
-    border: '1px solid #696974',
+    backgroundColor: '#3d3b48',
+    border: '1px solid #ffffff00 !important',
+    borderRadius: '0',
+    boxShadow: 'none',
   }),
   option: (provided: any) => ({
     ...provided,
+    color: '#ccc',
+    backgroundColor: '#3d3b48',
+    borderRadius: '0',
+    paddingTop: '12px',
+    paddingBottom: '12px',
+    '&:hover': {
+      backgroundColor: '#3d3b48',
+    },
+  }),
+  indicatorSeparator: (provided: any) => ({
+    ...provided,
+    color: '#888',
+    backgroundColor: '#888',
+  }),
+  dropdownIndicator: (provided: any) => ({
+    ...provided,
+    color: '#888',
   }),
   singleValue: (provided: any) => ({
     ...provided,
     color: 'white',
   }),
-  indicatorSeparator: (provided: any) => ({
+  menuList: (provided: any) => ({
     ...provided,
-    color: '#324ab8aa',
-    backgroundColor: '#324ab8aa',
-  }),
-  dropdownIndicator: (provided: any) => ({
-    ...provided,
-    color: '#324ab8aa',
+    backgroundColor: '#888',
+    borderRadius: '0',
+    margin: '0',
+    padding: '0',
   }),
 };
 
@@ -103,6 +125,12 @@ const SendModal = () => {
   useEffect(() => {
     onChangeAmount({ target: { value: amount } });
   }, [isSafety]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setAvailable(convertNumber(balance));
+    setTokenData({ symbol: CHAIN_CONFIG.PARAMS.SYMBOL, decimal: 6, denom: CHAIN_CONFIG.PARAMS.DENOM });
+    setSafety(convertNumber(balance) > 0.1);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
@@ -199,6 +227,24 @@ const SendModal = () => {
     }
   };
 
+  const getParamsTx = () => {
+    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
+      return {
+        address: targetAddress,
+        amount,
+        memo,
+      };
+    } else {
+      return {
+        address: targetAddress,
+        amount,
+        denom: tokenData.denom,
+        decimal: tokenData.decimal,
+        memo,
+      };
+    }
+  };
+
   const nextStep = () => {
     closeModal();
 
@@ -207,9 +253,11 @@ const SendModal = () => {
         .then((gas) => {
           modalActions.handleModalData({
             action: 'Send',
+            module: '/bank/send',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalSend,
             txAction: sendTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);
@@ -220,9 +268,11 @@ const SendModal = () => {
         .then((gas) => {
           modalActions.handleModalData({
             action: 'Send',
+            module: '/bank/sendToken',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalSend,
             txAction: sendTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);
@@ -232,62 +282,84 @@ const SendModal = () => {
   };
 
   return (
-    <Modal visible={sendModalState} closable={true} onClose={closeModal} width={sendModalWidth}>
+    <Modal visible={sendModalState} closable={true} visibleClose={false} onClose={closeModal} width={sendModalWidth}>
       <ModalContainer>
         <ModalTitle>
-          SEND
+          Send
           <HelpIcon onClick={() => window.open(GUIDE_LINK_SEND)} />
         </ModalTitle>
         <ModalContent>
-          <ModalLabel>Symbol</ModalLabel>
-          <SelectWrapper>
-            <Select
-              options={[
-                {
+          <ModalInputWrap>
+            <ModalLabel>Send To</ModalLabel>
+            <ModalInput>
+              <InputBoxDefault
+                type='text'
+                placeholder='Wallet Address'
+                value={targetAddress}
+                onChange={onChangeTargetAddress}
+              />
+            </ModalInput>
+          </ModalInputWrap>
+
+          <ModalInputWrap>
+            <ModalLabel>Symbol</ModalLabel>
+            <SelectWrapper>
+              <Select
+                options={[
+                  {
+                    value: CHAIN_CONFIG.PARAMS.SYMBOL,
+                    label: CHAIN_CONFIG.PARAMS.SYMBOL,
+                    balance: balance,
+                    decimal: 6,
+                    denom: CHAIN_CONFIG.PARAMS.DENOM,
+                  },
+                  ...tokenList.map((value) => {
+                    return {
+                      value: value.symbol,
+                      label: value.symbol,
+                      balance: value.balance.toString(),
+                      decimal: value.decimal,
+                      denom: value.denom,
+                    };
+                  }),
+                ]}
+                styles={customStyles}
+                onChange={onChangeSymbol}
+                defaultValue={{
                   value: CHAIN_CONFIG.PARAMS.SYMBOL,
-                  label: CHAIN_CONFIG.PARAMS.SYMBOL,
                   balance: balance,
                   decimal: 6,
                   denom: CHAIN_CONFIG.PARAMS.DENOM,
-                },
-                ...tokenList.map((value) => {
-                  return {
-                    value: value.symbol,
-                    label: value.symbol,
-                    balance: value.balance,
-                    decimal: value.decimal,
-                    denom: value.denom,
-                  };
-                }),
-              ]}
-              styles={customStyles}
-              onChange={onChangeSymbol}
-              ref={selectInputRef}
-            />
-          </SelectWrapper>
+                  label: CHAIN_CONFIG.PARAMS.SYMBOL,
+                }}
+                ref={selectInputRef}
+              />
+            </SelectWrapper>
+          </ModalInputWrap>
 
-          <ModalLabel>Send To</ModalLabel>
-          <ModalInput>
-            <InputBoxDefault
-              type='text'
-              placeholder='Wallet Address'
-              value={targetAddress}
-              onChange={onChangeTargetAddress}
-            />
-          </ModalInput>
+          {tokenData && tokenData.symbol && (
+            <>
+              <ModalInputRowWrap>
+                <ModalLabel>Available</ModalLabel>
+                <ModalValue>
+                  {available} {tokenData.symbol}
+                </ModalValue>
+              </ModalInputRowWrap>
 
-          <ModalLabel>Available</ModalLabel>
-          <ModalInput>
-            {available} {tokenData.symbol}
-          </ModalInput>
+              <ModalInputRowWrap>
+                <ModalLabel>Fee estimation</ModalLabel>
+                <ModalValue>{`${convertToFctString(getDefaultFee(isLedger).toString())} FCT`}</ModalValue>
+              </ModalInputRowWrap>
+            </>
+          )}
 
-          <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(getDefaultFee(isLedger).toString())} FCT`}</ModalInput>
+          <ModalInputWrap>
+            <ModalLabel>Amount</ModalLabel>
+            <ModalInput style={{ marginBottom: '10px' }}>
+              <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
+            </ModalInput>
+          </ModalInputWrap>
 
-          <ModalLabel>Amount</ModalLabel>
-          <ModalInput style={{ marginBottom: '10px' }}>
-            <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
-          </ModalInput>
           {tokenData.symbol && tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL && (
             <ModalToggleWrapper>
               <ToggleButton toggleText='Safety' isActive={isSafety} onClickToggle={onClickToggle} />
@@ -303,18 +375,25 @@ const SendModal = () => {
             </ModalToggleWrapper>
           )}
 
-          <ModalLabel>Memo (optional)</ModalLabel>
-          <ModalInput>
-            <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
-          </ModalInput>
-          <NextButton
-            onClick={() => {
-              if (isActiveButton) nextStep();
-            }}
-            active={isActiveButton}
-          >
-            Next
-          </NextButton>
+          <ModalInputWrap>
+            <ModalLabel>Memo (optional)</ModalLabel>
+            <ModalInput>
+              <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
+            </ModalInput>
+          </ModalInputWrap>
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeModal()} status={1}>
+              Cancel
+            </CancelButton>
+            <NextButton
+              onClick={() => {
+                if (isActiveButton) nextStep();
+              }}
+              status={isActiveButton ? 0 : 2}
+            >
+              Next
+            </NextButton>
+          </ButtonWrapper>
         </ModalContent>
       </ModalContainer>
     </Modal>

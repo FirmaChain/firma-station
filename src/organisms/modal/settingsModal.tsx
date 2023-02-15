@@ -1,38 +1,34 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import useFirma from "../../utils/wallet";
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { GUIDE_LINK_WALLET_SETTING } from "../../config";
+import useFirma from '../../utils/wallet';
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { GUIDE_LINK_WALLET_SETTING } from '../../config';
 
 import {
-  exportWalletModalWidth,
+  settingModalWidth,
   ModalContainer,
   ModalTitle,
-  MenuListWrap,
-  MenuItemWrap,
-  MenuTitleTypo,
-  MenuIconImg,
-  ImportPrivateKeyIcon,
-  LogoutIcon,
-  PictureAsPdfIcon,
   HelpIcon,
-} from "./styles";
+  DividerOR,
+  DividerORTypo,
+  DividerORLine,
+  SettingMenuListWrap,
+  SettingMenuItem,
+  SettingMenuButton,
+  DisconnectButton,
+} from './styles';
 
 const ExportWalletModal = () => {
   const exportWalletModalState = useSelector((state: rootState) => state.modal.settings);
-  const { enqueueSnackbar } = useSnackbar();
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { resetWallet } = useFirma();
 
   const menuList = [
-    { name: "Download\npaper wallet", icon: PictureAsPdfIcon, modalAction: modalActions.handleModalPaperwallet },
-    { name: "Export\nmnemonic", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportMnemonic },
-    { name: "Export\nprivate key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalExportPrivatekey },
-    { name: "Disconnect\nyour wallet", icon: LogoutIcon, modalAction: resetWallet },
+    { name: 'Download\nPaper Wallet', modalAction: modalActions.handleModalPaperwallet },
+    { name: 'Export\nMnemonic', modalAction: modalActions.handleModalExportMnemonic },
+    { name: 'Export\nPrivate key', modalAction: modalActions.handleModalExportPrivatekey },
   ];
 
   const closeExportWalletModal = () => {
@@ -45,43 +41,35 @@ const ExportWalletModal = () => {
   };
 
   return (
-    <Modal
-      visible={exportWalletModalState}
-      closable={true}
-      maskClosable={true}
-      onClose={closeExportWalletModal}
-      width={exportWalletModalWidth}
-    >
+    <Modal visible={exportWalletModalState} closable={true} onClose={closeExportWalletModal} width={settingModalWidth}>
       <ModalContainer>
         <ModalTitle>
-          WALLET SETTING
+          Wallet Setting
           <HelpIcon onClick={() => window.open(GUIDE_LINK_WALLET_SETTING)} />
         </ModalTitle>
-        <MenuListWrap>
+
+        <SettingMenuListWrap>
           {menuList.map((menu, index) => {
             return (
-              <MenuItemWrap
-                key={index}
-                disabled={isLedger && index !== 3}
-                onClick={() => {
-                  if (isLedger && index !== 3) {
-                    enqueueSnackbar("It's not available on Ledger", {
-                      variant: "error",
-                      autoHideDuration: 2000,
-                    });
-                  } else {
-                    openSubModal(menu.modalAction);
-                  }
-                }}
-              >
-                <MenuIconImg>
-                  <menu.icon />
-                </MenuIconImg>
-                <MenuTitleTypo>{menu.name}</MenuTitleTypo>
-              </MenuItemWrap>
+              <SettingMenuItem key={index} onClick={() => openSubModal(menu.modalAction)}>
+                <SettingMenuButton status={1}>{menu.name}</SettingMenuButton>
+              </SettingMenuItem>
             );
           })}
-        </MenuListWrap>
+        </SettingMenuListWrap>
+        <DividerOR>
+          <DividerORLine />
+          <DividerORTypo>OR</DividerORTypo>
+        </DividerOR>
+        <DisconnectButton
+          status={3}
+          onClick={() => {
+            resetWallet();
+            closeExportWalletModal();
+          }}
+        >
+          Disconnect your Wallet
+        </DisconnectButton>
       </ModalContainer>
     </Modal>
   );

@@ -5,8 +5,8 @@ import { FooterContainer, FooterTypo } from './styles';
 const Footer = () => {
   return (
     <FooterContainer>
-      <FooterTypo>Copyright ⓒ 2022 FirmaChain</FooterTypo>
-      <FooterTypo>v1.0.6</FooterTypo>
+      <FooterTypo>Copyright ⓒ 2023 FIRMACHAIN</FooterTypo>
+      <FooterTypo>v1.1.0</FooterTypo>
     </FooterContainer>
   );
 };

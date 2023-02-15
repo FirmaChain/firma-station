@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import { isMobile, isTablet } from 'react-device-detect';
 
 import useFirma from '../../utils/wallet';
-import { copyToClipboard } from '../../utils/common';
+import { copyToClipboard, isExternalConnect } from '../../utils/common';
 import { CHAIN_CONFIG } from '../../config';
 import { modalActions } from '../../redux/action';
 import { rootState } from '../../redux/reducers';
@@ -12,17 +12,16 @@ import { rootState } from '../../redux/reducers';
 import {
   PaperwalletModal,
   QRCodeModal,
-  NetworksModal,
   LoginModal,
   SettingsModal,
   NewWalletModal,
   ConfirmWalletModal,
-  RecoverMnemonicModal,
-  ImportPrivatekeyModal,
+  RecoverModal,
   ExportPrivatekeyModal,
   ExportMnemonicModal,
   ChangePasswordModal,
   ConnectLedgerModal,
+  ConnectAppModal,
   DelegateModal,
   RedelegateModal,
   UndelegateModal,
@@ -32,9 +31,9 @@ import {
   SendModal,
   ConfirmTxModal,
   QueueTxModal,
-  ResultTxModal,
   GasEstimationModal,
   RestakeModal,
+  DisconnectModal,
 } from '../modal';
 
 import {
@@ -55,25 +54,26 @@ import {
   LedgerIconImg,
   QrIconImg,
   LockIconImg,
+  LogoutImg,
 } from './styles';
 
 function HeaderDesktop() {
   const { enqueueSnackbar } = useSnackbar();
-  const { isInit, isLedger, address } = useSelector((state: rootState) => state.wallet);
+  const { isInit, isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
   const {
     paperwallet,
     qrcode,
-    network,
     login,
     settings,
+    disconnect,
     newWallet,
     confirmWallet,
     recoverMnemonic,
-    importPrivatekey,
     exportPrivatekey,
     exportMnemonic,
     changePassword,
     connectLedger,
+    connectApp,
     delegate,
     redelegate,
     undelegate,
@@ -83,7 +83,6 @@ function HeaderDesktop() {
     send,
     confirmTx,
     queueTx,
-    resultTx,
     gasEstimation,
     restake,
   } = useSelector((state: rootState) => state.modal);
@@ -92,10 +91,6 @@ function HeaderDesktop() {
 
   const onLogin = () => {
     modalActions.handleModalLogin(true);
-  };
-
-  const onNetwork = () => {
-    // modalActions.handleModalNetwork(true);
   };
 
   const clipboard = () => {
@@ -109,6 +104,10 @@ function HeaderDesktop() {
 
   const onSettings = () => {
     modalActions.handleModalSettings(true);
+  };
+
+  const onDisconnect = () => {
+    modalActions.handleModalDisconnect(true);
   };
 
   const onClickLedger = () => {
@@ -129,7 +128,7 @@ function HeaderDesktop() {
   return (
     <HeaderContainer>
       <HeaderLeftWrapper>
-        <NetworkButton onClick={onNetwork}>
+        <NetworkButton>
           <NetworkStatus />
           <NetworkText>{CHAIN_CONFIG.FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
         </NetworkButton>
@@ -141,12 +140,15 @@ function HeaderDesktop() {
               <ProfileImg src={''} />
               <AddressTypo onClick={clipboard}>{address}</AddressTypo>
               <BarDiv />
-              <LockIconImg onClick={() => checkSession()} />
-
+              {!isExternalConnect(isLedger, isMobileApp) && <LockIconImg onClick={() => checkSession()} />}
               {isLedger && <LedgerIconImg onClick={onClickLedger} />}
               <QrIconImg onClick={onClickQR} />
               <CopyIconImg onClick={clipboard} />
-              <SettingIconImg onClick={onSettings} />
+              {isExternalConnect(isLedger, isMobileApp) ? (
+                <LogoutImg onClick={onDisconnect} />
+              ) : (
+                <SettingIconImg onClick={onSettings} />
+              )}
             </HeaderLeftWrapper>
           )}
           {isInit === false && (
@@ -160,17 +162,17 @@ function HeaderDesktop() {
 
       {paperwallet && <PaperwalletModal />}
       {qrcode && <QRCodeModal />}
-      {network && <NetworksModal />}
       {login && <LoginModal />}
       {settings && <SettingsModal />}
       {newWallet && <NewWalletModal />}
       {confirmWallet && <ConfirmWalletModal />}
-      {recoverMnemonic && <RecoverMnemonicModal />}
-      {importPrivatekey && <ImportPrivatekeyModal />}
+      {recoverMnemonic && <RecoverModal />}
       {exportPrivatekey && <ExportPrivatekeyModal />}
       {exportMnemonic && <ExportMnemonicModal />}
       {changePassword && <ChangePasswordModal />}
       {connectLedger && <ConnectLedgerModal />}
+      {connectApp && <ConnectAppModal />}
+      {disconnect && <DisconnectModal />}
       {delegate && <DelegateModal />}
       {redelegate && <RedelegateModal />}
       {undelegate && <UndelegateModal />}
@@ -180,7 +182,6 @@ function HeaderDesktop() {
       {send && <SendModal />}
       {confirmTx && <ConfirmTxModal />}
       {queueTx && <QueueTxModal />}
-      {resultTx && <ResultTxModal />}
       {gasEstimation && <GasEstimationModal />}
       {restake && <RestakeModal />}
     </HeaderContainer>

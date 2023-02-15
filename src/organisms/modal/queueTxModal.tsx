@@ -15,9 +15,10 @@ import {
   LoadingWrapper,
   QueueTypoWrapper,
   AfterTypo,
-  QueueIcon,
   QueueTypoOne,
-  QueueTypoTwo,
+  ModalTooltipWrapper,
+  ModalTooltipIcon,
+  ModalTooltipTypo,
 } from './styles';
 
 const QueueTxModal = () => {
@@ -29,9 +30,10 @@ const QueueTxModal = () => {
 
   useEffect(() => {
     if (queueTxModalState) {
-      const gas = modalData.data.gas ? modalData.data.gas : 0;
-
-      modalData.txAction(resolveTx, rejectTx, gas);
+      if (Object.keys(modalData).length > 0) {
+        const gas = modalData.data.gas ? modalData.data.gas : 0;
+        modalData.txAction(resolveTx, rejectTx, gas);
+      }
     }
 
     const timer = setTimeout(() => {
@@ -67,9 +69,15 @@ const QueueTxModal = () => {
   };
 
   return (
-    <Modal visible={queueTxModalState} closable={true} onClose={closeQueueTxModal} width={queueTxModalWidth}>
+    <Modal
+      visible={queueTxModalState}
+      closable={true}
+      visibleClose={false}
+      onClose={closeQueueTxModal}
+      width={queueTxModalWidth}
+    >
       <ModalContainer>
-        <ModalTitle>BROADCASTING TRANSACTION</ModalTitle>
+        <ModalTitle>Broadcasting Transaction</ModalTitle>
         <ModalContent>
           <LoadingWrapper>
             <ScaleLoader loading={true} color={'#3550DE80'} height={'50px'} width={'7px'} />
@@ -77,10 +85,12 @@ const QueueTxModal = () => {
           <QueueTypoWrapper>
             <QueueTypoOne>It can take up from 5 to 15 seconds for a transaction to be completed.</QueueTypoOne>
             <AfterTypo isActive={depend}>
-              <QueueIcon />
-              <QueueTypoTwo>
-                Depending on the condition of the network, it can take up to more than 15 seconds.
-              </QueueTypoTwo>
+              <ModalTooltipWrapper>
+                <ModalTooltipIcon />
+                <ModalTooltipTypo>
+                  Depending on the condition of the network, it can take up to more than 15 seconds.
+                </ModalTooltipTypo>
+              </ModalTooltipWrapper>
             </AfterTypo>
           </QueueTypoWrapper>
         </ModalContent>

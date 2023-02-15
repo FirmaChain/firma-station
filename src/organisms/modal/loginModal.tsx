@@ -1,30 +1,34 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
-import { GUIDE_LINK_LOGIN_WALLET } from "../../config";
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
+import { GUIDE_LINK_LOGIN_WALLET } from '../../config';
 
 import {
   loginModalWidth,
   ModalTitle,
-  MenuListWrap,
-  MenuItemWrap,
-  MenuTitleTypo,
-  MenuIconImg,
-  NewWalletIcon,
-  RecoverMnemonicIcon,
-  ImportPrivateKeyIcon,
-  ConnectLedgerIcon,
   HelpIcon,
-} from "./styles";
+  MobileAppWrapper,
+  MobileAppButton,
+  MobileAppButtonIcon,
+  MobileAppButtonTypo,
+  DividerOR,
+  DividerORTypo,
+  DividerORLine,
+  LoginMenuListWrap,
+  LoginMenuItem,
+  LoginMenuButton,
+  ContactUsWrapper,
+  ContactUsLeftTypo,
+  ContactUsRightTypo,
+} from './styles';
 
 const menuList = [
-  { name: "New\nWallet", icon: NewWalletIcon, modalAction: modalActions.handleModalNewWallet },
-  { name: "Recover from Mnemonic", icon: RecoverMnemonicIcon, modalAction: modalActions.handleModalRecoverMnemonic },
-  { name: "Import\nPrivate Key", icon: ImportPrivateKeyIcon, modalAction: modalActions.handleModalImportPrivatekey },
-  { name: "Connect to Ledger", icon: ConnectLedgerIcon, modalAction: modalActions.handleModalConnectLedger },
+  { name: 'Create a Wallet', modalAction: modalActions.handleModalNewWallet },
+  { name: 'Recover Wallet', modalAction: modalActions.handleModalRecoverMnemonic },
+  { name: 'Connect to Ledger', modalAction: modalActions.handleModalConnectLedger },
 ];
 
 const LoginModal = () => {
@@ -42,26 +46,38 @@ const LoginModal = () => {
   return (
     <Modal visible={loginModalState} closable={true} onClose={closeLoginModal} width={loginModalWidth}>
       <ModalTitle>
-        LOGIN WALLET
+        Login Wallet
         <HelpIcon onClick={() => window.open(GUIDE_LINK_LOGIN_WALLET)} />
       </ModalTitle>
-      <MenuListWrap>
+      <MobileAppWrapper>
+        <MobileAppButton onClick={() => openSubModal(modalActions.handleModalConnectApp)}>
+          <MobileAppButtonIcon />
+          <MobileAppButtonTypo>Connect to Mobile</MobileAppButtonTypo>
+        </MobileAppButton>
+      </MobileAppWrapper>
+      <DividerOR>
+        <DividerORLine />
+        <DividerORTypo>OR</DividerORTypo>
+      </DividerOR>
+      <LoginMenuListWrap>
         {menuList.map((menu, index) => {
           return (
-            <MenuItemWrap
-              key={index}
-              onClick={() => {
-                openSubModal(menu.modalAction);
-              }}
-            >
-              <MenuIconImg>
-                <menu.icon />
-              </MenuIconImg>
-              <MenuTitleTypo>{menu.name}</MenuTitleTypo>
-            </MenuItemWrap>
+            <LoginMenuItem key={index} onClick={() => openSubModal(menu.modalAction)}>
+              <LoginMenuButton status={1}>{menu.name}</LoginMenuButton>
+            </LoginMenuItem>
           );
         })}
-      </MenuListWrap>
+      </LoginMenuListWrap>
+      <ContactUsWrapper>
+        <ContactUsLeftTypo>Can't connect to wallet?</ContactUsLeftTypo>
+        <ContactUsRightTypo
+          onClick={() => {
+            window.location.href = 'mailto:contact@firmachain.org';
+          }}
+        >
+          Contact us
+        </ContactUsRightTypo>
+      </ContactUsWrapper>
     </Modal>
   );
 };

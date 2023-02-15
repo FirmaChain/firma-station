@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
@@ -21,23 +21,36 @@ import {
   MnemonicTextArea,
   RecoverButton,
   HelpIcon,
+  PrivatekeyTextArea,
+  RecoverTypeWrap,
+  RecoverTypeList,
+  RecoverTypeItem,
+  ModalInputWrap,
 } from './styles';
 
-const RecoverMnemonicModal = () => {
+const RecoverModal = () => {
   const recoverMnemonicModalState = useSelector((state: rootState) => state.modal.recoverMnemonic);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { storeWalletFromMnemonic } = useFirma();
+  const { storeWalletFromMnemonic, storeWalletFromPrivateKey } = useFirma();
 
+  const [recoverType, setRecoverType] = useState(0);
   const [isActiveRecoverButton, activeRecoverButton] = useState(false);
-  const [inputWords, setInputWords] = useState('');
+  const [inputWord, setInputWord] = useState('');
   const [password, setPassword] = useState('');
 
-  const inputRef = useRef<HTMLTextAreaElement>();
+  const inputRefMnemonic = useRef<HTMLTextAreaElement>();
+  const inputRefPrivateKey = useRef<HTMLTextAreaElement>();
+
+  useEffect(() => {
+    activeRecoverButton(false);
+    setInputWord('');
+    setPassword('');
+  }, [recoverType]);
 
   const recoverWallet = () => {
     if (isValidString(password)) {
-      storeWalletFromMnemonic(password, inputWords)
+      storeWallet()
         .then(() => {
           enqueueSnackbar('Success Recovered Your Wallet', {
             variant: 'success',
@@ -60,6 +73,14 @@ const RecoverMnemonicModal = () => {
     }
   };
 
+  const storeWallet = async () => {
+    if (recoverType === 1) {
+      return storeWalletFromPrivateKey(password, inputWord);
+    } else {
+      return storeWalletFromMnemonic(password, inputWord);
+    }
+  };
+
   const cancelWallet = () => {
     closeModal();
   };
@@ -70,10 +91,10 @@ const RecoverMnemonicModal = () => {
   };
 
   const closeModal = () => {
-    if (inputRef.current) inputRef.current.value = '';
+    if (inputRefMnemonic.current) inputRefMnemonic.current.value = '';
 
     activeRecoverButton(false);
-    setInputWords('');
+    setInputWord('');
     modalActions.handleModalRecoverMnemonic(false);
   };
 
@@ -83,11 +104,11 @@ const RecoverMnemonicModal = () => {
       return;
     }
 
-    e.target.value = e.target.value.replace(/[^A-Za-z\s]/gi, '');
+    e.target.value = e.target.value.replace(recoverType === 0 ? /[^A-Za-z\s]/gi : /[^A-Za-z0-9]/gi, '');
 
     const checkValue = e.target.value.replace(/ +/g, ' ').replace(/^\s+|\s+$/g, '');
-    activeRecoverButton(checkValue.split(' ').length === 24);
-    setInputWords(checkValue);
+    activeRecoverButton(recoverType === 0 ? checkValue.split(' ').length === 24 : checkValue.length === 66);
+    setInputWord(checkValue);
   };
 
   const onChangePassword = (password: string) => {
@@ -108,19 +129,35 @@ const RecoverMnemonicModal = () => {
     >
       <ModalContainer>
         <ModalTitle>
-          RECOVER FROM MNEMONIC
+          Recover Wallet
           <HelpIcon onClick={() => window.open(GUIDE_LINK_RECOVER_FROM_MNEMONIC)} />
         </ModalTitle>
         <ModalContent>
-          <ModalLabel>Mnemonic</ModalLabel>
-          <ModalInput>
-            <MnemonicTextArea onChange={checkWords} ref={inputRef} />
-          </ModalInput>
+          <RecoverTypeWrap>
+            <RecoverTypeList>
+              <RecoverTypeItem isActive={recoverType === 0} onClick={() => setRecoverType(0)}>
+                Mnemonic
+              </RecoverTypeItem>
+              <RecoverTypeItem isActive={recoverType === 1} onClick={() => setRecoverType(1)}>
+                Private Key
+              </RecoverTypeItem>
+            </RecoverTypeList>
+          </RecoverTypeWrap>
+          <ModalInputWrap>
+            <ModalLabel>{recoverType === 0 ? 'Mnemonic' : 'Private Key'}</ModalLabel>
+            <ModalInput>
+              {recoverType === 0 ? (
+                <MnemonicTextArea onChange={checkWords} ref={inputRefMnemonic} placeholder='Enter Mnemonic' />
+              ) : (
+                <PrivatekeyTextArea onChange={checkWords} ref={inputRefPrivateKey} placeholder='Enter Private Key' />
+              )}
+            </ModalInput>
+          </ModalInputWrap>
 
           <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <RecoverButton
-            active={isActiveRecoverButton}
+            status={isActiveRecoverButton ? 0 : 2}
             onClick={() => {
               if (isActiveRecoverButton) recoverWallet();
             }}
@@ -133,4 +170,4 @@ const RecoverMnemonicModal = () => {
   );
 };
 
-export default React.memo(RecoverMnemonicModal);
+export default React.memo(RecoverModal);

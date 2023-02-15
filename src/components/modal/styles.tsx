@@ -38,7 +38,7 @@ export const ModalInner = styled.div<{ width: string }>`
   top: 50%;
   transform: translateY(-50%);
   margin: 0 auto;
-  padding: 30px 20px 38px 20px;
+  padding: 34px 24px;
   color: ${({ theme }) => theme.colors.defaultWhite};
 `;
 

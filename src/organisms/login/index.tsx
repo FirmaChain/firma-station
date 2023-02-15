@@ -73,7 +73,7 @@ const LoginCard = () => {
             onChange={onChangePassword}
             autoFocus={true}
           />
-          <LoginButton active={password.length >= 8} onClick={login}>
+          <LoginButton status={password.length >= 8 ? 0 : 2} onClick={login}>
             Login
           </LoginButton>
         </LoginInputWrapper>

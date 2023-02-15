@@ -4,17 +4,16 @@ import {
   HANDLE_MODAL_DATA,
   HANDLE_MODAL_PAPERWALLET,
   HANDLE_MODAL_QRCODE,
-  HANDLE_MODAL_NETWORK,
   HANDLE_MODAL_LOGIN,
   HANDLE_MODAL_SETTINGS,
   HANDLE_MODAL_NEWWALLET,
   HANDLE_MODAL_CONFIRMWALLET,
   HANDLE_MODAL_RECOVERMNEMONIC,
-  HANDLE_MODAL_IMPORTPRIVATEKEY,
   HANDLE_MODAL_EXPORTPRIVATEKEY,
   HANDLE_MODAL_EXPORTMNEMONIC,
   HANDLE_MODAL_CHANGEPASSWORD,
   HANDLE_MODAL_CONNECTLEDGER,
+  HANDLE_MODAL_CONNECTAPP,
   HANDLE_MODAL_DELEGATE,
   HANDLE_MODAL_REDELEGATE,
   HANDLE_MODAL_UNDELEGATE,
@@ -24,26 +23,26 @@ import {
   HANDLE_MODAL_SEND,
   HANDLE_MODAL_CONFIRMTX,
   HANDLE_MODAL_QUEUETX,
-  HANDLE_MODAL_RESULTTX,
   HANDLE_MODAL_GASESTIMATION,
   HANDLE_MODAL_RESTAKE,
+  HANDLE_MODAL_DISCONNECT,
 } from '../types';
 
 export interface IModalState {
   data: any;
   paperwallet: boolean;
   qrcode: boolean;
-  network: boolean;
   login: boolean;
   settings: boolean;
+  disconnect: boolean;
   newWallet: boolean;
   confirmWallet: boolean;
   recoverMnemonic: boolean;
-  importPrivatekey: boolean;
   exportPrivatekey: boolean;
   exportMnemonic: boolean;
   changePassword: boolean;
   connectLedger: boolean;
+  connectApp: boolean;
   delegate: boolean;
   redelegate: boolean;
   undelegate: boolean;
@@ -53,7 +52,6 @@ export interface IModalState {
   send: boolean;
   confirmTx: boolean;
   queueTx: boolean;
-  resultTx: boolean;
   gasEstimation: boolean;
   restake: boolean;
 }
@@ -62,17 +60,17 @@ const initialState: IModalState = {
   data: {},
   paperwallet: false,
   qrcode: false,
-  network: false,
   login: false,
   settings: false,
+  disconnect: false,
   newWallet: false,
   confirmWallet: false,
   recoverMnemonic: false,
-  importPrivatekey: false,
   exportPrivatekey: false,
   exportMnemonic: false,
   changePassword: false,
   connectLedger: false,
+  connectApp: false,
   delegate: false,
   redelegate: false,
   undelegate: false,
@@ -82,7 +80,6 @@ const initialState: IModalState = {
   send: false,
   confirmTx: false,
   queueTx: false,
-  resultTx: false,
   gasEstimation: false,
   restake: false,
 };
@@ -102,9 +99,6 @@ export default createReducer(initialState, {
   [HANDLE_MODAL_QRCODE]: (state: IModalState, { isVisible }) => {
     state.qrcode = isVisible;
   },
-  [HANDLE_MODAL_NETWORK]: (state: IModalState, { isVisible }) => {
-    state.network = isVisible;
-  },
   [HANDLE_MODAL_LOGIN]: (state: IModalState, { isVisible }) => {
     state.login = isVisible;
   },
@@ -120,9 +114,6 @@ export default createReducer(initialState, {
   [HANDLE_MODAL_RECOVERMNEMONIC]: (state: IModalState, { isVisible }) => {
     state.recoverMnemonic = isVisible;
   },
-  [HANDLE_MODAL_IMPORTPRIVATEKEY]: (state: IModalState, { isVisible }) => {
-    state.importPrivatekey = isVisible;
-  },
   [HANDLE_MODAL_EXPORTPRIVATEKEY]: (state: IModalState, { isVisible }) => {
     state.exportPrivatekey = isVisible;
   },
@@ -134,6 +125,12 @@ export default createReducer(initialState, {
   },
   [HANDLE_MODAL_CONNECTLEDGER]: (state: IModalState, { isVisible }) => {
     state.connectLedger = isVisible;
+  },
+  [HANDLE_MODAL_CONNECTAPP]: (state: IModalState, { isVisible }) => {
+    state.connectApp = isVisible;
+  },
+  [HANDLE_MODAL_DISCONNECT]: (state: IModalState, { isVisible }) => {
+    state.disconnect = isVisible;
   },
   [HANDLE_MODAL_DELEGATE]: (state: IModalState, { isVisible }) => {
     state.delegate = isVisible;
@@ -161,9 +158,6 @@ export default createReducer(initialState, {
   },
   [HANDLE_MODAL_QUEUETX]: (state: IModalState, { isVisible }) => {
     state.queueTx = isVisible;
-  },
-  [HANDLE_MODAL_RESULTTX]: (state: IModalState, { isVisible }) => {
-    state.resultTx = isVisible;
   },
   [HANDLE_MODAL_GASESTIMATION]: (state: IModalState, { isVisible }) => {
     state.gasEstimation = isVisible;

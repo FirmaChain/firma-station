@@ -8,13 +8,24 @@ interface IProps {
   onClose: () => void;
   prev?: () => void;
   closable: boolean;
+  visibleClose?: boolean;
+  maskClosable?: boolean;
+
   visible: boolean;
   width: string;
-  maskClosable?: boolean;
   children?: React.ReactNode;
 }
 
-const Modal = ({ onClose, closable, visible, prev, width, maskClosable = false, children }: IProps) => {
+const Modal = ({
+  onClose,
+  closable,
+  visible,
+  prev,
+  width,
+  visibleClose = true,
+  maskClosable = false,
+  children,
+}: IProps) => {
   const close = () => {
     if (onClose) {
       onClose();
@@ -44,7 +55,7 @@ const Modal = ({ onClose, closable, visible, prev, width, maskClosable = false, 
       <ModalWrapper tabIndex={-1} visible={visible} onClick={onMaskClick}>
         <ModalInner tabIndex={0} width={width}>
           {prev && <PrevButton onClick={prev} />}
-          {closable && <CloseButton onClick={close} />}
+          {closable && visibleClose && <CloseButton onClick={close} />}
           {children}
         </ModalInner>
       </ModalWrapper>

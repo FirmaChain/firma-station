@@ -281,14 +281,22 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
       });
   };
 
+  const getParamsTx = () => {
+    return {
+      validatorAddressList: totalStakingState.delegateList.map((delegate) => delegate.validatorAddress),
+    };
+  };
+
   const withdrawAllValidatorAction = () => {
     getGasEstimationWithdrawAllValidator()
       .then((gas) => {
         if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Withdraw',
+            module: '/distribution/withdrawall',
             data: { amount: totalStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
             txAction: withdrawAllValidatorTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);

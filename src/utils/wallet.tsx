@@ -17,7 +17,7 @@ import { ITargetStakingState, ITotalStakingState } from '../interfaces/staking';
 
 function useFirma() {
   const { enqueueSnackbar } = useSnackbar();
-  const { address, timeKey, isInit, isLedger } = useSelector((state: rootState) => state.wallet);
+  const { address, timeKey, isInit, isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { avatarList } = useSelector((state: rootState) => state.avatar);
   const [isVesting, setVesting] = useState(true);
 
@@ -32,8 +32,6 @@ function useFirma() {
   };
 
   const isTimeout = (timeKey: string) => {
-    if (isLedger) return false;
-
     if (isNaN(new Date(Number(timeKey)).getTime())) {
       return true;
     }
@@ -42,12 +40,16 @@ function useFirma() {
   };
 
   const timeout = () => {
-    walletActions.handleWalletTimeKey(getRandomKey());
-    initWallet(false);
+    if (isLedger || isMobileApp) {
+      resetWallet();
+    } else {
+      walletActions.handleWalletTimeKey(getRandomKey());
+      initWallet(false);
+    }
   };
 
   const checkSession = () => {
-    if (isLedger === false && isInit === true) {
+    if (isInit === true) {
       timeout();
       window.location.reload();
     }
@@ -81,7 +83,7 @@ function useFirma() {
     else return '';
   };
 
-  const FirmaSDK = FirmaSDKInternal({ isLedger, getDecryptPrivateKey });
+  const FirmaSDK = FirmaSDKInternal({ isLedger, isMobileApp, getDecryptPrivateKey });
 
   const getNewMnemonic = async (): Promise<string> => {
     const firmaSDK = FirmaSDK.getSDK();
@@ -154,6 +156,23 @@ function useFirma() {
     }
   };
 
+  const connectWalletApp = async (address: string) => {
+    try {
+      if (isValidString(address)) {
+        walletActions.handleWalletAddress(address);
+        walletActions.handleWalletApp(true);
+        initWallet(true);
+      } else {
+        enqueueSnackbar('Failed connect wallet app', {
+          variant: 'error',
+          autoHideDuration: 5000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const isValidWallet = () => {
     if (isInvalidWallet()) return true;
     if (isLedger) return true;
@@ -194,6 +213,7 @@ function useFirma() {
 
     walletActions.handleWalletAddress('');
     walletActions.handleWalletLedger(false);
+    walletActions.handleWalletApp(false);
     walletActions.handleWalletTimeKey(getRandomKey());
 
     userActions.handleUserNFTList([]);
@@ -962,6 +982,7 @@ function useFirma() {
     loginWallet,
     initWallet,
     connectLedger,
+    connectWalletApp,
     showAddressOnDevice,
     getDecryptPrivateKey,
     getDecryptMnemonic,

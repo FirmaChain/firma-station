@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
@@ -25,6 +25,11 @@ import {
   ModalInput,
   NextButton,
   InputBoxDefault,
+  ButtonWrapper,
+  CancelButton,
+  ModalInputRowWrap,
+  ModalInputWrap,
+  ModalValue,
 } from './styles';
 
 const DepositModal = () => {
@@ -37,7 +42,12 @@ const DepositModal = () => {
   const { deposit, getGasEstimationDeposit, setUserData } = useFirma();
 
   const [amount, setAmount] = useState('');
+  const [proposalId, setProposalId] = useState(-1);
   const [isActiveButton, setActiveButton] = useState(false);
+
+  useEffect(() => {
+    setProposalId(modalData.proposalId);
+  }, [depositModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const closeModal = () => {
     resetModal();
@@ -80,7 +90,7 @@ const DepositModal = () => {
   };
 
   const depositTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
-    deposit(modalData.proposalId, convertNumber(amount), gas)
+    deposit(proposalId, convertNumber(amount), gas)
       .then(() => {
         setUserData();
         resolveTx();
@@ -90,17 +100,26 @@ const DepositModal = () => {
       });
   };
 
+  const getParamsTx = () => {
+    return {
+      proposalId,
+      amount,
+    };
+  };
+
   const nextStep = () => {
     closeModal();
 
-    getGasEstimationDeposit(modalData.proposalId, convertNumber(amount))
+    getGasEstimationDeposit(proposalId, convertNumber(amount))
       .then((gas) => {
         if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Deposit',
+            module: '/gov/deposit',
             data: { amount, fees: getFeesFromGas(gas), gas },
             prevModalAction: modalActions.handleModalDeposit,
             txAction: depositTx,
+            txParams: getParamsTx,
           });
 
           modalActions.handleModalConfirmTx(true);
@@ -120,32 +139,50 @@ const DepositModal = () => {
   };
 
   return (
-    <Modal visible={depositModalState} closable={true} onClose={closeModal} width={depositModalWidth}>
+    <Modal
+      visible={depositModalState}
+      closable={true}
+      visibleClose={false}
+      onClose={closeModal}
+      width={depositModalWidth}
+    >
       <ModalContainer>
-        <ModalTitle>DEPOSIT</ModalTitle>
+        <ModalTitle>Deposit</ModalTitle>
         <ModalContent>
-          <ModalLabel>Available</ModalLabel>
-          <ModalInput>
-            {balance} {CHAIN_CONFIG.PARAMS.SYMBOL}
-          </ModalInput>
+          <ModalInputRowWrap>
+            <ModalLabel>Available</ModalLabel>
+            <ModalValue>
+              {balance} {CHAIN_CONFIG.PARAMS.SYMBOL}
+            </ModalValue>
+          </ModalInputRowWrap>
 
-          <ModalLabel>Fee estimation</ModalLabel>
-          <ModalInput>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
-            CHAIN_CONFIG.PARAMS.SYMBOL
-          }`}</ModalInput>
+          <ModalInputRowWrap>
+            <ModalLabel>Fee estimation</ModalLabel>
+            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
+              CHAIN_CONFIG.PARAMS.SYMBOL
+            }`}</ModalValue>
+          </ModalInputRowWrap>
 
-          <ModalLabel>Amount</ModalLabel>
-          <ModalInput>
-            <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
-          </ModalInput>
-          <NextButton
-            onClick={() => {
-              if (isActiveButton) nextStep();
-            }}
-            active={isActiveButton}
-          >
-            Next
-          </NextButton>
+          <ModalInputWrap>
+            <ModalLabel>Amount</ModalLabel>
+            <ModalInput>
+              <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
+            </ModalInput>
+          </ModalInputWrap>
+
+          <ButtonWrapper>
+            <CancelButton onClick={() => closeModal()} status={1}>
+              Cancel
+            </CancelButton>
+            <NextButton
+              onClick={() => {
+                if (isActiveButton) nextStep();
+              }}
+              status={isActiveButton ? 0 : 2}
+            >
+              Next
+            </NextButton>
+          </ButtonWrapper>
         </ModalContent>
       </ModalContainer>
     </Modal>

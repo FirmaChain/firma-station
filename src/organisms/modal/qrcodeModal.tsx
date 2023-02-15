@@ -1,12 +1,22 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import QRCode from "qrcode.react";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { QRCode } from 'react-qrcode-logo';
 
-import { rootState } from "../../redux/reducers";
-import { Modal } from "../../components/modal";
-import { modalActions } from "../../redux/action";
+import { rootState } from '../../redux/reducers';
+import { Modal } from '../../components/modal';
+import { modalActions } from '../../redux/action';
 
-import { qrCodeModalWidth, ModalContainer, ModalTitle, QRContent, QRCodeWrap, AddressTypo } from "./styles";
+import {
+  qrCodeModalWidth,
+  ModalContainer,
+  ModalTitle,
+  QRContent,
+  QRCodeWrap,
+  AddressTypo,
+  ButtonWrapper,
+  CancelButton,
+} from './styles';
+import theme from '../../themes';
 
 const QRCodeModal = () => {
   const qrCodeModalState = useSelector((state: rootState) => state.modal.qrcode);
@@ -20,18 +30,24 @@ const QRCodeModal = () => {
     <Modal
       visible={qrCodeModalState}
       closable={true}
-      maskClosable={true}
+      visibleClose={false}
       onClose={closeQRCodeModal}
       width={qrCodeModalWidth}
     >
       <ModalContainer>
-        <ModalTitle>YOUR WALLET ADDRESS</ModalTitle>
+        <ModalTitle>Your Wallet Address</ModalTitle>
         <QRContent>
           <QRCodeWrap>
-            <QRCode value={address}></QRCode>
+            <QRCode value={address} quietZone={0} logoImage={theme.urls.qrIcon} logoWidth={40} logoHeight={40}></QRCode>
           </QRCodeWrap>
           <AddressTypo>{address}</AddressTypo>
         </QRContent>
+
+        <ButtonWrapper>
+          <CancelButton onClick={() => closeQRCodeModal()} status={1}>
+            Cancel
+          </CancelButton>
+        </ButtonWrapper>
       </ModalContainer>
     </Modal>
   );
