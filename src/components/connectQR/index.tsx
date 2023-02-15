@@ -46,10 +46,6 @@ interface IProps {
 }
 
 const ConnectQR = ({ qrSize, qrcode, expireDate, isActive, setTimerText, onExpired, onTick }: IProps) => {
-  // useEffect(() => {
-  //   if (isActive) expired();
-  // }, [isActive]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const tick = () => {
     onTick();
   };
@@ -60,7 +56,6 @@ const ConnectQR = ({ qrSize, qrcode, expireDate, isActive, setTimerText, onExpir
 
   useInterval(
     () => {
-      console.log('INTERVAL', isActive);
       if (expireDate === null) return;
       if (isActive === false) return;
 

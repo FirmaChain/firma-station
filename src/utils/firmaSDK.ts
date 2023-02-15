@@ -471,7 +471,12 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger);
 
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitCancelSoftwareUpgradeProposal(wallet, title, description, initialDeposit);
+    const result = await firmaSDK.Gov.getGasEstimationSubmitCancelSoftwareUpgradeProposal(
+      wallet,
+      title,
+      description,
+      initialDeposit
+    );
 
     return result;
   };

@@ -38,6 +38,7 @@ const options = [
   { value: 'COMMUNITY_POOL_SPEND_PROPOSAL', label: 'CommunityPoolSpend' },
   { value: 'PARAMETER_CHANGE_PROPOSAL', label: 'ParameterChange' },
   { value: 'SOFTWARE_UPGRADE', label: 'SoftwareUpgrade' },
+  { value: 'CANCEL_SOFTWARE_UPGRADE', label: 'CancelSoftwareUpgrade' },
 ];
 
 const customStyles = {
@@ -103,6 +104,8 @@ const NewProposalModal = () => {
     submitCommunityPoolSpendProposal,
     submitTextProposal,
     submitSoftwareUpgrade,
+    submitCancelSoftwareUpgrade,
+    getGasEstimationSubmitCancelSoftwareUpgrade,
     getGasEstimationSubmitParameterChangeProposal,
     getGasEstimationSubmitCommunityPoolSpendProposal,
     getGasEstimationSubmitSoftwareUpgrade,
@@ -166,6 +169,16 @@ const NewProposalModal = () => {
         break;
       case 'SOFTWARE_UPGRADE':
         submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height), gas)
+          .then(() => {
+            setUserData();
+            resolveTx();
+          })
+          .catch(() => {
+            rejectTx();
+          });
+        break;
+      case 'CANCEL_SOFTWARE_UPGRADE':
+        submitCancelSoftwareUpgrade(title, description, initialDeposit, gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -302,6 +315,12 @@ const NewProposalModal = () => {
           upgradeName,
           upgradeHeight: convertNumber(height),
         };
+      case 'CANCEL_SOFTWARE_UPGRADE':
+        return {
+          title,
+          description,
+          initialDepositFCT: initialDeposit,
+        };
     }
   };
 
@@ -315,6 +334,8 @@ const NewProposalModal = () => {
         return '/submit/paramchange';
       case 'SOFTWARE_UPGRADE':
         return '/submit/softwareupgrade';
+      case 'CANCEL_SOFTWARE_UPGRADE':
+        return '/submit/cancelsoftwareupgrade';
     }
   };
 
@@ -384,6 +405,9 @@ const NewProposalModal = () => {
             upgradeName,
             convertNumber(height)
           );
+          break;
+        case 'CANCEL_SOFTWARE_UPGRADE':
+          currentGas = await getGasEstimationSubmitCancelSoftwareUpgrade(title, description, initialDeposit);
           break;
         default:
           break;

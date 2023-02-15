@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
+import { AuthorizationType } from '@firmachain/firma-js';
 
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
@@ -152,6 +153,22 @@ const RestakeModal = () => {
       });
   };
 
+  const getGrantParamsTx = () => {
+    return {
+      grantee: CHAIN_CONFIG.RESTAKE.ADDRESS,
+      type: AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
+      validatorAddressList,
+      maxTokens: '0',
+      expirationDate: expiryDate,
+    };
+  };
+
+  const getRevokeParamsTx = () => {
+    return {
+      grantee: CHAIN_CONFIG.RESTAKE.ADDRESS,
+    };
+  };
+
   const revokeStakeAuthorizationDelegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     revokeStakeAuthorizationDelegate(gas)
       .then(() => {
@@ -167,8 +184,10 @@ const RestakeModal = () => {
       .then((gas) => {
         modalActions.handleModalData({
           action: 'Grant restake',
+          module: '/authz/stake/grant',
           data: { fees: getFeesFromGas(gas), gas },
           txAction: grantStakeAuthorizationDelegateTx,
+          txParams: getGrantParamsTx,
         });
 
         closeRestakeModal();
@@ -187,8 +206,10 @@ const RestakeModal = () => {
       .then((gas) => {
         modalActions.handleModalData({
           action: 'Revoke restake',
+          module: '/authz/stake/revoke',
           data: { fees: getFeesFromGas(gas), gas },
           txAction: revokeStakeAuthorizationDelegateTx,
+          txParams: getRevokeParamsTx,
         });
 
         closeRestakeModal();

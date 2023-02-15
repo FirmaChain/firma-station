@@ -17,7 +17,6 @@ const useAPI = () => {
   ): Promise<{ requestKey: string; qrcode: string; expire: Date } | null> => {
     try {
       const requestData = await generateRequest(module, body);
-      console.log(requestData);
       return requestData;
     } catch (error) {
       return null;

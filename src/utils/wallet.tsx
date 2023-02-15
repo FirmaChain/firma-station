@@ -883,6 +883,25 @@ function useFirma() {
     );
   };
 
+  const submitCancelSoftwareUpgrade = async (
+    title: string,
+    description: string,
+    initialDeposit: number,
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.submitCancelSoftwareUpgradeProposal(title, description, initialDeposit, estimatedGas);
+
+    checkVlidateResult(result);
+  };
+
+  const getGasEstimationSubmitCancelSoftwareUpgrade = async (
+    title: string,
+    description: string,
+    initialDeposit: number
+  ) => {
+    return await FirmaSDK.getGasEstimationSubmitCancelSoftwareUpgradeProposal(title, description, initialDeposit);
+  };
+
   const getStakingGrantDataList = async () => {
     try {
       const firmaSDK = FirmaSDK.getSDK();
@@ -1007,6 +1026,7 @@ function useFirma() {
     submitCommunityPoolSpendProposal,
     submitTextProposal,
     submitSoftwareUpgrade,
+    submitCancelSoftwareUpgrade,
     deposit,
     vote,
     grantStakeAuthorizationDelegate,
@@ -1025,6 +1045,7 @@ function useFirma() {
     getGasEstimationSubmitCommunityPoolSpendProposal,
     getGasEstimationSubmitTextProposal,
     getGasEstimationSubmitSoftwareUpgrade,
+    getGasEstimationSubmitCancelSoftwareUpgrade,
     getGasEstimationGrantStakeAuthorizationDelegate,
     getGasEstimationRevokeStakeAuthorizationDelegate,
     isValidWallet,
