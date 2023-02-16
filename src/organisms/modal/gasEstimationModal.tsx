@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import ScaleLoader from 'react-spinners/ScaleLoader';
+import GridLoader from 'react-spinners/GridLoader';
 
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
@@ -26,7 +26,7 @@ const GasEstimationModal = () => {
         <ModalTitle>Estimating the gas</ModalTitle>
         <ModalContent>
           <LoadingWrapper>
-            <ScaleLoader loading={true} color={'#3550DE80'} height={'50px'} width={'7px'} />
+            <GridLoader loading={true} color={'#3550DE80'} />
           </LoadingWrapper>
           <ModalTypo>To estimate your gas fee we need your ledger signature</ModalTypo>
         </ModalContent>

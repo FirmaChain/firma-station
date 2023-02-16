@@ -7,29 +7,28 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import HelpIconOrigin from '@mui/icons-material/Help';
 import { getRestakeStatusColor } from '../../utils/common';
 
-export const loginModalWidth = '544px';
+export const confirmTxModalWidth = '500px';
+export const loginModalWidth = '500px';
 export const newWalletModalWidth = '600px';
-export const recoverMnemonicModalWidth = '544px';
-export const connectLedgerModalWidth = '544px';
-export const confirmTxModalWidth = '480px';
-export const changePasswordModalWidth = '544px';
-export const delegateModalWidth = '544px';
-export const exportMnemonicModalWidth = '544px';
-export const exportPrivatekeyModalWidth = '544px';
-export const newProposalModalWidth = '544px';
+export const recoverMnemonicModalWidth = '500px';
+export const connectLedgerModalWidth = '500px';
+export const changePasswordModalWidth = '500px';
+export const delegateModalWidth = '500px';
+export const exportMnemonicModalWidth = '500px';
+export const exportPrivatekeyModalWidth = '500px';
+export const newProposalModalWidth = '500px';
 export const paperwalletModalWidth = '600px';
-export const qrCodeModalWidth = '400px';
+export const qrCodeModalWidth = '500px';
 export const queueTxModalWidth = '500px';
-export const redelegateModalWidth = '544px';
-export const depositModalWidth = '544px';
-export const undelegateModalWidth = '544px';
-export const confirmWalletModalWidth = '544px';
+export const redelegateModalWidth = '500px';
+export const depositModalWidth = '500px';
+export const undelegateModalWidth = '500px';
+export const confirmWalletModalWidth = '500px';
 export const gasEstimationModalWidth = '500px';
-export const sendModalWidth = '544px';
-export const votingModalWidth = '544px';
-export const restakeModalWidth = '544px';
-
-export const disconnectModalWidth = '480px';
+export const sendModalWidth = '500px';
+export const votingModalWidth = '500px';
+export const restakeModalWidth = '500px';
+export const disconnectModalWidth = '500px';
 export const settingModalWidth = '500px';
 
 export const ModalContainer = styled.div`
@@ -83,8 +82,8 @@ export const ModalContent = styled.div`
 
 export const ButtonStyleByStatus = styled.div<{ status: number }>`
   width: calc(100% - 2px);
-  height: 48px;
-  line-height: 48px;
+  height: 46px;
+  line-height: 46px;
   font-size: 1.7rem;
   font-weight: 400;
   border: 1px solid #ffffff00;
@@ -169,6 +168,9 @@ export const ModalTooltipWrapper = styled.div`
   align-items: flex-start;
   justify-content: center;
   margin-top: 10px;
+  background-color: #ffc54216;
+  padding: 10px;
+  border-radius: 4px;
 `;
 
 export const ModalTooltipTypo = styled.div`
@@ -267,6 +269,9 @@ export const ConfirmInput = styled.div<{ point?: boolean }>`
   width: 100%;
   text-align: right;
   position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   font-size: ${({ theme }) => theme.sizes.modal14};
   color: #b4b4b4;
   & > span {
@@ -483,7 +488,7 @@ export const SelectMnemonic = styled.div`
 
 export const LoadingWrapper = styled.div`
   width: 100%;
-  margin: 20px 0;
+  margin: 0 0 30px 0;
   display: flex;
   justify-content: center;
 `;
@@ -614,6 +619,7 @@ export const QueueTypoWrapper = styled.div`
 
 export const QueueTypoOne = styled.div`
   text-align: center;
+  white-space: pre;
   line-height: 20px;
   font-size: ${({ theme }) => theme.sizes.modal14};
   color: #999;
@@ -640,18 +646,18 @@ export const AfterTypo = styled.div<{ isActive: boolean }>`
 `;
 
 export const MaxButton = styled.div<{ active: boolean }>`
-  width: 50px;
-  height: 20px;
-  line-height: 19px;
+  width: 46px;
+  height: 22px;
+  line-height: 22px;
   text-align: center;
+  border-radius: 4px;
   position: absolute;
   font-size: 1.3rem;
-  top: 11px;
+  top: -27px;
   right: 0;
   cursor: pointer;
-  color: #ddd;
-  border-left: 1px solid #888;
-  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+  color: white;
+  ${(props) => (props.active ? `background-color: #3550de;color:#white` : `background-color: #444;color:#777`)}
 `;
 
 export const HelpIcon = styled(HelpIconOrigin)`
@@ -1053,6 +1059,7 @@ export const DisconnectIconWrap = styled.div`
 export const DisconnectIcon = styled.div`
   width: 90px;
   height: 90px;
+  margin-left: 24px;
   background-image: url('${({ theme }) => theme.urls.disconnect}');
   background-size: contain;
   background-position: center;
@@ -1076,6 +1083,7 @@ export const DisconnectTitle = styled.div`
 export const DisconnectDescription = styled.div`
   width: 100%;
   height: 20px;
+  font-weight: 400;
   line-height: 20px;
   display: flex;
   align-items: center;
@@ -1083,6 +1091,7 @@ export const DisconnectDescription = styled.div`
   color: #b4b4b4;
   text-align: center;
   white-space: pre;
+  margin-bottom: 20px;
 `;
 
 export const ExportQRContainer = styled.div`
@@ -1177,6 +1186,17 @@ export const StepDivider = styled.div`
   font-size: 1.4rem;
   opacity: 0.5;
   margin: 0 14px;
+`;
+
+export const ModalTooltipIcon2 = styled.div`
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+  background: url('${({ theme }) => theme.urls.tooltip}');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: grayscale(100);
 `;
 
 export { ImportPrivateKeyIcon, QrCodeIcon, LogoutIcon, PictureAsPdfIcon };

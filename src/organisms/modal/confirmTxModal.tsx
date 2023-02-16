@@ -32,6 +32,7 @@ import {
   ConfirmContainer,
   ModalInputWrap,
   QRGuide,
+  ModalTooltipIcon2,
 } from './styles';
 import RequestQR from '../requestQR';
 
@@ -136,7 +137,10 @@ const ConfirmTxModal = () => {
               <ConfirmLabel>Fee</ConfirmLabel>
               <ConfirmInput>
                 {isMobileApp ? (
-                  <span style={{ color: '#888' }}>It will be shown on the app.</span>
+                  <>
+                    <ModalTooltipIcon2 />
+                    <span style={{ color: '#888' }}>It will be shown on the app.</span>
+                  </>
                 ) : (
                   <>
                     {convertNumberFormat(fee, 6)}

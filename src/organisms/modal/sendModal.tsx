@@ -80,7 +80,7 @@ const customStyles = {
   }),
   menuList: (provided: any) => ({
     ...provided,
-    backgroundColor: '#888',
+    backgroundColor: '#3d3b48',
     borderRadius: '0',
     margin: '0',
     padding: '0',
@@ -90,7 +90,7 @@ const customStyles = {
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
 
   const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress, setUserData } =
     useFirma();
@@ -375,12 +375,15 @@ const SendModal = () => {
             </ModalToggleWrapper>
           )}
 
-          <ModalInputWrap>
-            <ModalLabel>Memo (optional)</ModalLabel>
-            <ModalInput>
-              <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
-            </ModalInput>
-          </ModalInputWrap>
+          {isMobileApp === false && (
+            <ModalInputWrap>
+              <ModalLabel>Memo (optional)</ModalLabel>
+              <ModalInput>
+                <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
+              </ModalInput>
+            </ModalInputWrap>
+          )}
+
           <ButtonWrapper>
             <CancelButton onClick={() => closeModal()} status={1}>
               Cancel

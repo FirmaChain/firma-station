@@ -79,7 +79,7 @@ const customStyles = {
   }),
   menuList: (provided: any) => ({
     ...provided,
-    backgroundColor: '#888',
+    backgroundColor: '#3d3b48',
     borderRadius: '0',
     margin: '0',
     padding: '0',

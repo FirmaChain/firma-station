@@ -70,7 +70,7 @@ const sizes = {
   proposalTitle: '2.0rem',
   proposalCardSize1: '2.0rem',
   proposalCardSize2: '1.6rem',
-  modalTitle: '2.6rem',
+  modalTitle: '2.4rem',
   modalButton: '2.2rem',
   modalLabel: '1.6rem',
   modal14: '1.4rem',

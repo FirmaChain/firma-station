@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import ScaleLoader from 'react-spinners/ScaleLoader';
+import GridLoader from 'react-spinners/GridLoader';
 
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
@@ -80,7 +80,7 @@ const QueueTxModal = () => {
         <ModalTitle>Broadcasting Transaction</ModalTitle>
         <ModalContent>
           <LoadingWrapper>
-            <ScaleLoader loading={true} color={'#3550DE80'} height={'50px'} width={'7px'} />
+            <GridLoader loading={true} color={'#3550DE80'} size={20} margin={4} />
           </LoadingWrapper>
           <QueueTypoWrapper>
             <QueueTypoOne>It can take up from 5 to 15 seconds for a transaction to be completed.</QueueTypoOne>

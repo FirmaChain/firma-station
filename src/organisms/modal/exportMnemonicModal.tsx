@@ -143,7 +143,7 @@ const ExportMnemonicModal = () => {
               </ExportQRContainer>
               <ButtonWrapper>
                 <CancelButton onClick={() => closeModal()} status={1}>
-                  OK
+                  Close
                 </CancelButton>
               </ButtonWrapper>
             </>

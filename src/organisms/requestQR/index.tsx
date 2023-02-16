@@ -55,7 +55,7 @@ const RequestQR = ({ module, onSuccess, onFailed, params = {}, signer = '' }: IP
       if (requestData.status === 1) {
         setActiveQR(false);
         onSuccess(requestData);
-      } else if (requestData.status < 0) {
+      } else if (requestData.status === -2) {
         setActiveQR(false);
         onFailed(requestData);
       }
@@ -74,7 +74,7 @@ const RequestQR = ({ module, onSuccess, onFailed, params = {}, signer = '' }: IP
         }}
         onExpired={() => {
           setActiveQR(false);
-          requestQR();
+          refreshRequestQR();
         }}
         onTick={() => {
           onTickCheckRequest();
