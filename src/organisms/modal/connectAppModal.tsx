@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 import useFirma from '../../utils/wallet';
 import RequestQR from '../../organisms/requestQR';
@@ -27,6 +28,7 @@ import {
 
 const ConnectAppModal = () => {
   const connectAppModalState = useSelector((state: rootState) => state.modal.connectApp);
+  const { enqueueSnackbar } = useSnackbar();
   const { connectWalletApp } = useFirma();
 
   const closeConnectAppModal = () => {
@@ -63,8 +65,18 @@ const ConnectAppModal = () => {
               onSuccess={(requestData: any) => {
                 connectWalletApp(requestData.signer);
                 closeConnectAppModal();
+                enqueueSnackbar('Successfully connected to wallet.', {
+                  variant: 'success',
+                  autoHideDuration: 2000,
+                });
               }}
-              onFailed={() => {}}
+              onFailed={() => {
+                closeConnectAppModal();
+                enqueueSnackbar('failed connect to wallet.', {
+                  variant: 'error',
+                  autoHideDuration: 2000,
+                });
+              }}
             />
           </QRContainer>
           <GuideContainer>
