@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -9,6 +10,7 @@ import { getAvatarInfoFromAcc } from '../../utils/avatar';
 import { IProposalsState, IProposalDetailState } from '../../interfaces/governance';
 import { IProposalData } from '../../interfaces/lcd';
 import { IProposalQueryData } from '../../interfaces/gql';
+import { CHAIN_CONFIG } from '../../config';
 
 export const useGovernmentData = () => {
   const [proposalsState, setProposalsState] = useState<IProposalsState>({
@@ -17,11 +19,32 @@ export const useGovernmentData = () => {
 
   useEffect(() => {
     getProposalList()
-      .then((proposalList) => {
-        setProposalsState({
-          proposals: proposalList.map(({ proposalId, proposalType, status, title, description }) => {
+      .then(async (proposalList) => {
+        let proposals: any[] = [];
+
+        try {
+          if (CHAIN_CONFIG.PROPOSAL_JSON !== '') {
+            const response = await axios.get(`${CHAIN_CONFIG.PROPOSAL_JSON}?t=${new Date().getTime()}`);
+            const { ignoreProposalIdList } = response.data;
+
+            proposals = proposalList
+              .filter(({ proposalId }) => {
+                return ignoreProposalIdList.includes(Number(proposalId)) === false;
+              })
+              .map(({ proposalId, proposalType, status, title, description }) => {
+                return { proposalId, proposalType, status, title, description };
+              });
+          } else {
+            throw new Error('INVALID CONFIG');
+          }
+        } catch (error) {
+          proposals = proposalList.map(({ proposalId, proposalType, status, title, description }) => {
             return { proposalId, proposalType, status, title, description };
-          }),
+          });
+        }
+
+        setProposalsState({
+          proposals,
         });
       })
       .catch(() => {});

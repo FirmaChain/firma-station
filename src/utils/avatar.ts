@@ -91,7 +91,7 @@ const getAvatarRaw = async (): Promise<{ avatarList: IAvatar[]; lastUpdatedTime:
     if (CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI === '') throw new Error('INVALID');
 
     const response = await axios.get<{ profileInfos: IAvatar[]; lastUpdatedTime: number }>(
-      CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI
+      `${CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI}?t=${new Date().getTime()}`
     );
 
     return {

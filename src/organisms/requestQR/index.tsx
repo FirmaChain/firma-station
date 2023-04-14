@@ -28,6 +28,7 @@ const RequestQR = ({ module, onSuccess, onFailed, params = {}, signer = '' }: IP
     generateRequestQR(module, { ...params, signer })
       .then((result) => {
         if (result !== null) {
+          console.log(result.qrcode);
           setRequestKey(result.requestKey);
           setQrcode(result.qrcode);
           setExpireDate(result.expire);
