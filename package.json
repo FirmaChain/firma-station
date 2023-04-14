@@ -72,7 +72,11 @@
   },
   "scripts": {
     "start": "react-app-env --env-file=.env start",
-    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build"
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "deploy-testnet": "aws s3 sync ./build s3://deploy-firmastation/testnet --profile=firmachain-deploy --delete",
+    "invalidate-testnet": "aws cloudfront create-invalidation --profile=firmachain-deploy --distribution-id E3490CTTE7409I --paths '/*'",
+    "deploy-mainnet": "aws s3 sync ./build s3://deploy-firmastation/mainnet --profile=firmachain-deploy --delete",
+    "invalidate-mainnet": "aws cloudfront create-invalidation --profile=firmachain-deploy --distribution-id E2R5SO7C9I4TON --paths '/*'"
   },
   "eslintConfig": {
     "extends": [
