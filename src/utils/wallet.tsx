@@ -144,6 +144,7 @@ function useFirma() {
       if (isValidString(address)) {
         walletActions.handleWalletAddress(address);
         walletActions.handleWalletLedger(true);
+        walletActions.handleWalletTimeKey(getRandomKey());
         initWallet(true);
       } else {
         enqueueSnackbar('Failed connect ledger', {
@@ -161,6 +162,7 @@ function useFirma() {
       if (isValidString(address)) {
         walletActions.handleWalletAddress(address);
         walletActions.handleWalletApp(true);
+        walletActions.handleWalletTimeKey(getRandomKey());
         initWallet(true);
       } else {
         enqueueSnackbar('Failed connect wallet app', {
