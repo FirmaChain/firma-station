@@ -189,7 +189,7 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 
 const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { isInit, address } = useSelector((state: rootState) => state.wallet);
+  const { isInit, address, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { balance } = useSelector((state: rootState) => state.user);
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
 
@@ -328,7 +328,15 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
   };
 
   const onClickWithdrawAll = () => {
-    if (totalStakingState.stakingReward > 0) {
+    if (isMobileApp && totalStakingState.delegateList.length > 3) {
+      enqueueSnackbar(
+        'Withdraw can only be up to 3 validators using the mobile station. Please try mobile station app.',
+        {
+          variant: 'error',
+          autoHideDuration: 4000,
+        }
+      );
+    } else if (totalStakingState.stakingReward > 0) {
       withdrawAllValidatorAction();
     }
   };
