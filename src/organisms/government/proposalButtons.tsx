@@ -12,7 +12,7 @@ import { CHAIN_CONFIG } from '../../config';
 
 const ProposalButtons = () => {
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, address } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const isInvalidProposalAddress = async () => {
@@ -42,7 +42,7 @@ const ProposalButtons = () => {
             return;
           }
 
-          if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger))) {
+          if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
             modalActions.handleModalNewProposal(true);
           } else {
             enqueueSnackbar('Insufficient funds. Please check your account balance.', {

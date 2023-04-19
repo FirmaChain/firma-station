@@ -27,7 +27,7 @@ interface IProps {
 
 const DepositCard = ({ proposalState }: IProps) => {
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const getAddTimeFormat = (startTime: string, second: number) => {
@@ -70,7 +70,7 @@ const DepositCard = ({ proposalState }: IProps) => {
         <DepositButton
           active={true}
           onClick={() => {
-            if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger))) {
+            if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
               modalActions.handleModalData({
                 proposalId: proposalState.proposalId,
               });

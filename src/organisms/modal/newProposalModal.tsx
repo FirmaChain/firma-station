@@ -87,7 +87,7 @@ const NewProposalModal = () => {
   const selectInputRef = useRef<any>();
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
 
   const [proposalType, setProposalType] = useState('');
   const [title, setTitle] = useState('');
@@ -234,7 +234,7 @@ const NewProposalModal = () => {
 
   const getMaxAmount = () => {
     const value = convertNumber(
-      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(getDefaultFee(isLedger)), 6)
+      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(getDefaultFee(isLedger, isMobileApp)), 6)
     );
 
     return value > 0 ? value : 0;

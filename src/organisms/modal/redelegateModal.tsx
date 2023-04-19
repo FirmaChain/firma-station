@@ -90,7 +90,7 @@ const RedelegateModal = () => {
   const redelegateModalState = useSelector((state: rootState) => state.modal.redelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma();
@@ -251,7 +251,7 @@ const RedelegateModal = () => {
 
               <ModalInputRowWrap>
                 <ModalLabel>Fee estimation</ModalLabel>
-                <ModalValue>{`${convertToFctString((getDefaultFee(isLedger) * 1.5).toString())} ${
+                <ModalValue>{`${convertToFctString((getDefaultFee(isLedger, isMobileApp) + 5000).toString())} ${
                   CHAIN_CONFIG.PARAMS.SYMBOL
                 }`}</ModalValue>
               </ModalInputRowWrap>

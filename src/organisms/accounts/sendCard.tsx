@@ -12,7 +12,7 @@ import { TitleTypo, NextButton } from './styles';
 
 const SendCard = () => {
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   return (
@@ -20,7 +20,7 @@ const SendCard = () => {
       <TitleTypo>SEND</TitleTypo>
       <NextButton
         onClick={() => {
-          if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger))) {
+          if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
             modalActions.handleModalSend(true);
           } else {
             enqueueSnackbar('Insufficient funds. Please check your account balance.', {

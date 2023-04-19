@@ -24,14 +24,14 @@ interface IProps {
 const DelegationCard = ({ targetStakingState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { avatarList } = useSelector((state: rootState) => state.avatar);
   const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw, getUndelegationList } = useFirma();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const delegateAction = () => {
-    if (targetStakingState.available > convertToFctNumber(getDefaultFee(isLedger))) {
+    if (targetStakingState.available > convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
       modalActions.handleModalData({
         action: 'Delegate',
         data: { targetValidator, available: targetStakingState.available, reward: targetStakingState.stakingReward },
@@ -63,7 +63,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
           }
         }
 
-        if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger) * 1.5)) {
+        if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger, isMobileApp) + 5000)) {
           modalActions.handleModalData({
             action: 'Redelegate',
             data: { targetValidator, delegationList },
@@ -111,7 +111,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
               return;
             }
 
-            if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger))) {
+            if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
               modalActions.handleModalData({
                 action: 'Undelegate',
                 data: { targetValidator, delegation },

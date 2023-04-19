@@ -44,7 +44,7 @@ const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { delegate, getGasEstimationDelegate, setUserData } = useFirma();
@@ -124,7 +124,7 @@ const DelegateModal = () => {
   };
 
   const getMaxAmount = () => {
-    const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger));
+    const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger, isMobileApp));
     const value = convertNumber(makeDecimalPoint(convertNumber(availableAmount) - fee, 6));
 
     return value > 0 ? value + convertNumber(rewardAmount) : 0;
@@ -207,7 +207,7 @@ const DelegateModal = () => {
           </ModalInputRowWrap>
           <ModalInputRowWrap>
             <ModalLabel>Fee estimation</ModalLabel>
-            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
+            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} ${
               CHAIN_CONFIG.PARAMS.SYMBOL
             }`}</ModalValue>
           </ModalInputRowWrap>

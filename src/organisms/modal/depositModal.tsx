@@ -36,7 +36,7 @@ const DepositModal = () => {
   const depositModalState = useSelector((state: rootState) => state.modal.deposit);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { deposit, getGasEstimationDeposit, setUserData } = useFirma();
@@ -84,7 +84,7 @@ const DepositModal = () => {
 
   const getMaxAmount = () => {
     const value = convertNumber(
-      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(getDefaultFee(isLedger)), 6)
+      makeDecimalPoint(convertNumber(balance) - convertToFctNumber(getDefaultFee(isLedger, isMobileApp)), 6)
     );
     return value > 0 ? value : 0;
   };
@@ -158,7 +158,7 @@ const DepositModal = () => {
 
           <ModalInputRowWrap>
             <ModalLabel>Fee estimation</ModalLabel>
-            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
+            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} ${
               CHAIN_CONFIG.PARAMS.SYMBOL
             }`}</ModalValue>
           </ModalInputRowWrap>

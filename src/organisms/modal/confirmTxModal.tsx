@@ -32,7 +32,6 @@ import {
   ConfirmContainer,
   ModalInputWrap,
   QRGuide,
-  ModalTooltipIcon2,
 } from './styles';
 import RequestQR from '../requestQR';
 
@@ -59,7 +58,7 @@ const ConfirmTxModal = () => {
       if (modalData.data.fees) {
         setFee(convertToFctString(modalData.data.fees.toString()));
       } else {
-        setFee(convertToFctString(getDefaultFee(isLedger).toString()));
+        setFee(convertToFctString(getDefaultFee(isLedger, isMobileApp).toString()));
       }
     }
   }, [modalData]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -136,17 +135,8 @@ const ConfirmTxModal = () => {
             <ConfirmWrapper>
               <ConfirmLabel>Fee</ConfirmLabel>
               <ConfirmInput>
-                {isMobileApp ? (
-                  <>
-                    <ModalTooltipIcon2 />
-                    <span style={{ color: '#888' }}>It will be shown on the app.</span>
-                  </>
-                ) : (
-                  <>
-                    {convertNumberFormat(fee, 6)}
-                    <span> {CHAIN_CONFIG.PARAMS.SYMBOL}</span>
-                  </>
-                )}
+                {convertNumberFormat(fee, 6)}
+                <span> {CHAIN_CONFIG.PARAMS.SYMBOL}</span>
               </ConfirmInput>
             </ConfirmWrapper>
           </ConfirmContainer>

@@ -196,7 +196,7 @@ const SendModal = () => {
 
   const getMaxAmount = (): Number => {
     if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
-      const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger));
+      const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger, isMobileApp));
 
       const value = convertNumber(makeDecimalPoint(available - fee, 6));
       return value > 0 ? value : 0;
@@ -348,7 +348,7 @@ const SendModal = () => {
 
               <ModalInputRowWrap>
                 <ModalLabel>Fee estimation</ModalLabel>
-                <ModalValue>{`${convertToFctString(getDefaultFee(isLedger).toString())} FCT`}</ModalValue>
+                <ModalValue>{`${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} FCT`}</ModalValue>
               </ModalInputRowWrap>
             </>
           )}

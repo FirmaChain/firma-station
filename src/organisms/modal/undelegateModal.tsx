@@ -43,7 +43,7 @@ const UndelegateModal = () => {
   const undelegateModalState = useSelector((state: rootState) => state.modal.undelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
   const { undelegate, getGasEstimationUndelegate, setUserData } = useFirma();
 
@@ -177,7 +177,7 @@ const UndelegateModal = () => {
 
           <ModalInputRowWrap>
             <ModalLabel>Fee estimation</ModalLabel>
-            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger).toString())} ${
+            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} ${
               CHAIN_CONFIG.PARAMS.SYMBOL
             }`}</ModalValue>
           </ModalInputRowWrap>
