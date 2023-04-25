@@ -260,19 +260,23 @@ export const ConfirmWrapper = styled.div`
 `;
 
 export const ConfirmLabel = styled.div`
-  width: 100%;
+  width: 10rem;
+  flex-shrink: 0;
+
   font-size: ${({ theme }) => theme.sizes.modal16};
   color: #b4b4b4;
 `;
 
 export const ConfirmInput = styled.div<{ point?: boolean }>`
   width: 100%;
+  flex-grow: 1;
+
   text-align: right;
   position: relative;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  font-size: ${({ theme }) => theme.sizes.modal14};
+  font-size: ${({ theme }) => theme.sizes.modal13};
   color: #b4b4b4;
   & > span {
     font-size: ${({ theme }) => theme.sizes.modal14};

@@ -73,6 +73,7 @@ const sizes = {
   modalTitle: '2.4rem',
   modalButton: '2.2rem',
   modalLabel: '1.6rem',
+  modal13: '1.3rem',
   modal14: '1.4rem',
   modal15: '1.45rem',
   modal16: '1.6rem',

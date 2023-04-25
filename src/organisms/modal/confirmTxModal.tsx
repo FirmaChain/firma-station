@@ -3,13 +3,7 @@ import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
 import useFirma from '../../utils/wallet';
-import {
-  convertToFctString,
-  isValidString,
-  convertNumberFormat,
-  getDefaultFee,
-  isExternalConnect,
-} from '../../utils/common';
+import { convertToFctString, isValidString, convertNumberFormat, getDefaultFee } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
@@ -47,6 +41,8 @@ const ConfirmTxModal = () => {
   const [actionName, setActionName] = useState('');
   const [amount, setAmount] = useState('');
   const [fee, setFee] = useState('0.02');
+  const [memo, setMemo] = useState('');
+  const [targetAddress, setTargetAddress] = useState('');
   const [isActive, setActive] = useState(false);
   const inputRef = useRef(null);
 
@@ -54,6 +50,9 @@ const ConfirmTxModal = () => {
     if (Object.keys(modalData).length > 0) {
       setActionName(modalData.action);
       setAmount(modalData.data.amount);
+
+      modalData.data.memo && setMemo(modalData.data.memo);
+      modalData.data.targetAddress && setTargetAddress(modalData.data.targetAddress);
 
       if (modalData.data.fees) {
         setFee(convertToFctString(modalData.data.fees.toString()));
@@ -69,7 +68,7 @@ const ConfirmTxModal = () => {
 
   const queueTx = () => {
     if (isActive || isLedger) {
-      if (isCorrectPassword(password)) {
+      if (isCorrectPassword(password) || isLedger) {
         closeConfirmTxModal();
         modalActions.handleModalQueueTx(true);
       } else {
@@ -123,24 +122,37 @@ const ConfirmTxModal = () => {
         <ModalTitle>Confirm</ModalTitle>
         <ModalContent>
           <ConfirmContainer>
+            {targetAddress && (
+              <ConfirmWrapper>
+                <ConfirmLabel>To</ConfirmLabel>
+                <ConfirmInput>{targetAddress}</ConfirmInput>
+              </ConfirmWrapper>
+            )}
+
             {isValidString(amount) && (
               <ConfirmWrapper>
                 <ConfirmLabel>Amount</ConfirmLabel>
                 <ConfirmInput point={true}>
                   {`${convertNumberFormat(amount, 6)}`}
-                  <span> {CHAIN_CONFIG.PARAMS.SYMBOL}</span>
+                  <span>&nbsp;{CHAIN_CONFIG.PARAMS.SYMBOL}</span>
                 </ConfirmInput>
               </ConfirmWrapper>
             )}
+
             <ConfirmWrapper>
               <ConfirmLabel>Fee</ConfirmLabel>
               <ConfirmInput>
                 {convertNumberFormat(fee, 6)}
-                <span> {CHAIN_CONFIG.PARAMS.SYMBOL}</span>
+                <span>&nbsp;{CHAIN_CONFIG.PARAMS.SYMBOL}</span>
               </ConfirmInput>
             </ConfirmWrapper>
+
+            <ConfirmWrapper>
+              <ConfirmLabel>Memo</ConfirmLabel>
+              <ConfirmInput>{memo.length > 40 ? memo.substring(0, 40) + '...' : memo}</ConfirmInput>
+            </ConfirmWrapper>
           </ConfirmContainer>
-          {isExternalConnect(isLedger, isMobileApp) && Object.keys(modalData).length > 0 ? (
+          {isMobileApp && Object.keys(modalData).length > 0 ? (
             <>
               <QRGuide>{'Please scan the QR code with\nyour mobile Firma Station for transaction.'}</QRGuide>
               <RequestQR
@@ -152,20 +164,22 @@ const ConfirmTxModal = () => {
               ></RequestQR>
             </>
           ) : (
-            <PasswordWrapper>
-              <ModalInputWrap>
-                <ModalLabel>Password</ModalLabel>
-                <InputBoxDefault
-                  ref={inputRef}
-                  placeholder='Enter Password'
-                  type='password'
-                  value={password}
-                  onChange={onChangePassword}
-                  onKeyDown={onKeyDownPassword}
-                  autoFocus={true}
-                />
-              </ModalInputWrap>
-            </PasswordWrapper>
+            isLedger === false && (
+              <PasswordWrapper>
+                <ModalInputWrap>
+                  <ModalLabel>Password</ModalLabel>
+                  <InputBoxDefault
+                    ref={inputRef}
+                    placeholder='Enter Password'
+                    type='password'
+                    value={password}
+                    onChange={onChangePassword}
+                    onKeyDown={onKeyDownPassword}
+                    autoFocus={true}
+                  />
+                </ModalInputWrap>
+              </PasswordWrapper>
+            )
           )}
 
           <ButtonWrapper>

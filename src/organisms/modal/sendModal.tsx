@@ -194,7 +194,7 @@ const SendModal = () => {
     );
   };
 
-  const getMaxAmount = (): Number => {
+  const getMaxAmount = (): number => {
     if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
       const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger, isMobileApp));
 
@@ -254,7 +254,7 @@ const SendModal = () => {
           modalActions.handleModalData({
             action: 'Send',
             module: '/bank/send',
-            data: { amount, fees: getFeesFromGas(gas), gas },
+            data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress },
             prevModalAction: modalActions.handleModalSend,
             txAction: sendTx,
             txParams: getParamsTx,
@@ -269,7 +269,7 @@ const SendModal = () => {
           modalActions.handleModalData({
             action: 'Send',
             module: '/bank/sendToken',
-            data: { amount, fees: getFeesFromGas(gas), gas },
+            data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress },
             prevModalAction: modalActions.handleModalSend,
             txAction: sendTx,
             txParams: getParamsTx,
@@ -375,14 +375,12 @@ const SendModal = () => {
             </ModalToggleWrapper>
           )}
 
-          {isMobileApp === false && (
-            <ModalInputWrap>
-              <ModalLabel>Memo (optional)</ModalLabel>
-              <ModalInput>
-                <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
-              </ModalInput>
-            </ModalInputWrap>
-          )}
+          <ModalInputWrap>
+            <ModalLabel>Memo (optional)</ModalLabel>
+            <ModalInput>
+              <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
+            </ModalInput>
+          </ModalInputWrap>
 
           <ButtonWrapper>
             <CancelButton onClick={() => closeModal()} status={1}>

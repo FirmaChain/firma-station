@@ -191,6 +191,7 @@ const RedelegateModal = () => {
 
     getGasEstimationRedelegate(sourceValidator, targetValidator, convertNumber(amount))
       .then((gas) => {
+        if (isLedger || isMobileApp) gas += 50000;
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
           modalActions.handleModalData({
             action: 'Redelegate',
