@@ -38,7 +38,7 @@
     "@types/react-window": "^1.8.5",
     "@types/styled-components": "^5.1.15",
     "apollo-boost": "^0.4.9",
-    "axios": "^0.24.0",
+    "axios": "^1.6.5",
     "crypto-js": "^4.1.1",
     "graphql": "^15.7.1",
     "hamburger-react": "^2.4.1",
