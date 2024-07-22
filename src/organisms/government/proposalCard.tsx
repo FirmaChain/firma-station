@@ -102,7 +102,7 @@ const ProposalCard = ({ proposalsState }: IProps) => {
         </SmallList>
       ) : (
         <AutoSizer>
-          {({ height, width }) => (
+          {({ height, width }: any) => (
             <List
               width={width}
               height={height}

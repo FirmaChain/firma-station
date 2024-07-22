@@ -424,7 +424,7 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
           )}
         </DelegationTab>
         <AutoSizer>
-          {({ height, width }) => {
+          {({ height, width }: any) => {
             if (currentTab === 0) {
               return (
                 <TabListItem>

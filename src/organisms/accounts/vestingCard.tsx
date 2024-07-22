@@ -72,7 +72,7 @@ const VestingCard = ({ vestingState }: IProps) => {
       <VestingTotal>{getVestingTotal()}</VestingTotal>
       <ListWrapper>
         <AutoSizer>
-          {({ height, width }) => (
+          {({ height, width }: any) => (
             <>
               <HeaderWrapper3 style={{ width }}>
                 <HeaderColumn3>No</HeaderColumn3>

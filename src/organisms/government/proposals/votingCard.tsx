@@ -291,7 +291,7 @@ const VotingCard = ({ proposalState }: IProps) => {
 
           <VotingList>
             <AutoSizer>
-              {({ height, width }) => (
+              {({ height, width }: any) => (
                 <List width={width} height={height} itemCount={votes.length} itemSize={50} itemData={votes}>
                   {Row}
                 </List>

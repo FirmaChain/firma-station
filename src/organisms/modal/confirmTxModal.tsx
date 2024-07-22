@@ -186,7 +186,7 @@ const ConfirmTxModal = () => {
             <CancelButton onClick={() => closeConfirmTxModal()} status={1}>
               Cancel
             </CancelButton>
-            {isMobileApp === false && (
+            {(isMobileApp === false || isMobileApp === undefined) && (
               <NextButton onClick={() => queueTx()} status={isActive || isLedger ? 0 : 2}>
                 {isLedger ? `Sign Ledger` : actionName}
               </NextButton>

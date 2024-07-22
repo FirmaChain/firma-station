@@ -85,7 +85,7 @@ const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState }: 
       <TitleTypo>Send History</TitleTypo>
       <ListWrapper>
         <AutoSizer>
-          {({ height, width }) => (
+          {({ height, width }: any) => (
             <>
               <HeaderWrapper style={{ width }}>
                 <HeaderColumn>Hash</HeaderColumn>

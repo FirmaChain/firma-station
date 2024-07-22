@@ -3,6 +3,7 @@ import { FirmaSDK, FirmaUtil, ValidatorDataType } from '@firmachain/firma-js';
 import { IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
 import { CHAIN_CONFIG } from '../config';
 import { convertNumber, convertNumberFormat } from './common';
+import { StakingValidatorStatus } from '@firmachain/firma-js/dist/sdk/FirmaStakingService';
 
 export {
   getLatestBlock,
@@ -124,7 +125,20 @@ const getValidatorDelegationsFromAddress = async (
 };
 
 const getValidatorList = async (): Promise<IValidatorData[]> => {
-  const validatorDataList = (await firmaSDK.Staking.getValidatorList()).dataList;
+  const firstValidatorList = await firmaSDK.Staking.getValidatorList();
+
+  let dataList: ValidatorDataType[] = firstValidatorList.dataList;
+  let nextKey: string = firstValidatorList.pagination.next_key;
+
+  while (nextKey !== null) {
+    const nextValidatorList = await firmaSDK.Staking.getValidatorList(StakingValidatorStatus.ALL, nextKey);
+    const nextDataList = nextValidatorList.dataList;
+    nextKey = nextValidatorList.pagination.next_key;
+
+    dataList.push(...nextDataList);
+  }
+
+  const validatorDataList = dataList;
   const totalVotingPower = await getTotalVotingPower();
 
   let validatorList: IValidatorData[] = [];

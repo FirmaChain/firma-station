@@ -60,7 +60,7 @@ const HistoryCard = ({ historyByAddressState }: IProps) => {
   return (
     <ListWrapper>
       <AutoSizer>
-        {({ height, width }) => (
+        {({ height, width }: any) => (
           <>
             <HeaderWrapper style={{ width }}>
               <HeaderColumn>Block</HeaderColumn>

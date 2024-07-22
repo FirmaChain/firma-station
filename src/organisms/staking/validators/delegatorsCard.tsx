@@ -79,7 +79,7 @@ const DelegatorsCard = ({ delegateState }: IProps) => {
       {delegateState && (
         <DelegatorList>
           <AutoSizer>
-            {({ height, width }) => (
+            {({ height, width }: any) => (
               <>
                 {isMobile ? (
                   <>

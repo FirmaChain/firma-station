@@ -44,7 +44,7 @@ const AssetCard = () => {
       <AddressTitleTypo>Assets</AddressTitleTypo>
       <ListWrapper2>
         <AutoSizer>
-          {({ height, width }) => (
+          {({ height, width }: any) => (
             <>
               <HeaderWrapper2 style={{ width }}>
                 <HeaderColumn2>Name</HeaderColumn2>
