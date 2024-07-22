@@ -18,11 +18,16 @@ const Row = ({ data, index, style }: any) => {
   const currentHistory = data[index];
 
   const getMessageType = (type: string) => {
-    return (
-      <HistoryTypeBox baseColor={TRANSACTION_TYPE_MODEL[type].tagTheme}>
-        {TRANSACTION_TYPE_MODEL[type].tagDisplay}
-      </HistoryTypeBox>
-    );
+    let targetTheme = TRANSACTION_TYPE_MODEL['Unknown'];
+    try {
+      if (TRANSACTION_TYPE_MODEL[type]) {
+        targetTheme = TRANSACTION_TYPE_MODEL[type];
+      } else {
+        console.log(type);
+      }
+    } catch (e) {}
+
+    return <HistoryTypeBox baseColor={targetTheme.tagTheme}>{targetTheme.tagDisplay}</HistoryTypeBox>;
   };
 
   const getHash = (hash: string) => {

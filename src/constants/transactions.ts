@@ -91,9 +91,19 @@ const LABELS: IKeyValue = {
   txTokenMintLabel: 'Token Mint',
   txTokenBurnLabel: 'Token Burn',
   txTokenUpdateURILabel: 'Token Update',
+  txCosmwasmStoreCodeLabel: 'CosmWasm StoreCode',
+  txCosmwasmInstantiateContractLabel: 'CosmWasm InstantiateContract',
+  txCosmwasmExecuteContractLabel: 'CosmWasm ExecuteContract',
+  txCosmwasmMigrateContractLabel: 'CosmWasm MigrateContract',
+  txCosmwasmUpdateAdminLabel: 'CosmWasm UpdateAdmin',
+  txCosmwasmClearAdminLabel: 'CosmWasm ClearAdmin',
 };
 
 export const TRANSACTION_TYPE_MODEL: IKeyValue = {
+  Unknown: {
+    tagTheme: TYPE_COLORS['one'],
+    tagDisplay: LABELS['txUnknownLabel'],
+  },
   // ========================
   // staking
   // ========================
@@ -351,5 +361,30 @@ export const TRANSACTION_TYPE_MODEL: IKeyValue = {
   '/cosmos.authz.v1beta1.MsgExec': {
     tagTheme: TYPE_COLORS['three'],
     tagDisplay: LABELS['txAuthzExecLabel'],
+  },
+
+  '/cosmwasm.wasm.v1.MsgStoreCode': {
+    tagTheme: TYPE_COLORS['nine'],
+    tagDisplay: LABELS['txCosmwasmStoreCodeLabel'],
+  },
+  '/cosmwasm.wasm.v1.MsgInstantiateContract': {
+    tagTheme: TYPE_COLORS['nine'],
+    tagDisplay: LABELS['txCosmwasmInstantiateContractLabel'],
+  },
+  '/cosmwasm.wasm.v1.MsgExecuteContract': {
+    tagTheme: TYPE_COLORS['nine'],
+    tagDisplay: LABELS['txCosmwasmExecuteContractLabel'],
+  },
+  '/cosmwasm.wasm.v1.MsgMigrateContract': {
+    tagTheme: TYPE_COLORS['nine'],
+    tagDisplay: LABELS['txCosmwasmMigrateContractLabel'],
+  },
+  '/cosmwasm.wasm.v1.MsgUpdateAdmin': {
+    tagTheme: TYPE_COLORS['nine'],
+    tagDisplay: LABELS['txCosmwasmUpdateAdminLabel'],
+  },
+  '/cosmwasm.wasm.v1.MsgClearAdmin': {
+    tagTheme: TYPE_COLORS['nine'],
+    tagDisplay: LABELS['txCosmwasmClearAdminLabel'],
   },
 };
