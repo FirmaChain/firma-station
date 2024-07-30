@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 
-import { CHAIN_CONFIG } from '../../config';
+import { CHAIN_CONFIG, OSMOSIS_EXPLORER } from '../../config';
 import { getDateFormat, getTimeFormat } from '../../utils/dateUtil';
 import { convertNumberFormat } from '../../utils/common';
 import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
@@ -54,6 +54,22 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
     else return memo;
   };
 
+  const fromURL = useMemo(() => {
+    if (currentHistory.from.includes('osmo')) {
+      return `${OSMOSIS_EXPLORER}/address/${currentHistory.from}`;
+    } else {
+      return `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.from}`;
+    }
+  }, [currentHistory]);
+
+  const toURL = useMemo(() => {
+    if (currentHistory.to.includes('osmo')) {
+      return `${OSMOSIS_EXPLORER}/address/${currentHistory.to}`;
+    } else {
+      return `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.to}`;
+    }
+  }, [currentHistory]);
+
   return (
     <ItemWrapper style={style}>
       <ItemColumn>
@@ -62,12 +78,12 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
         </Link>
       </ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.from}` }} target={'_blank'}>
+        <Link to={{ pathname: fromURL }} target={'_blank'}>
           {getAddress(currentHistory.from)}
         </Link>
       </ItemColumn>
       <ItemColumn>
-        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.to}` }} target={'_blank'}>
+        <Link to={{ pathname: toURL }} target={'_blank'}>
           {getAddress(currentHistory.to)}
         </Link>
       </ItemColumn>

@@ -22,8 +22,6 @@ const Row = ({ data, index, style }: any) => {
     try {
       if (TRANSACTION_TYPE_MODEL[type]) {
         targetTheme = TRANSACTION_TYPE_MODEL[type];
-      } else {
-        console.log(type);
       }
     } catch (e) {}
 

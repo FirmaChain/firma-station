@@ -5,7 +5,7 @@ import { FirmaUtil, AuthorizationType } from '@firmachain/firma-js';
 import moment from 'moment';
 
 import { Wallet } from './types';
-import { CHAIN_CONFIG, SESSION_TIMOUT } from '../config';
+import { CHAIN_CONFIG, IBC_CONFIG, SESSION_TIMOUT } from '../config';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
 import { getAvatarInfo } from './avatar';
 import { rootState } from '../redux/reducers';
@@ -273,16 +273,28 @@ function useFirma() {
           symbol: token.denom,
         };
 
-        if (token.denom.includes('ibc') === false) {
-          tokenData = await firmaSDK.Token.getTokenData(token.denom);
-        }
+        try {
+          if (token.denom.includes('ibc') === true) {
+            const targetIBCCoin = IBC_CONFIG[tokenData.symbol];
 
-        tokenDataList.push({
-          denom: token.denom,
-          balance: convertToTokenString(token.amount, tokenData.decimal),
-          symbol: tokenData.symbol,
-          decimal: tokenData.decimal,
-        });
+            if (targetIBCCoin) {
+              tokenData.symbol = targetIBCCoin.symbol;
+              tokenData.decimal = targetIBCCoin.decimal;
+            }
+          } else {
+            tokenData = await firmaSDK.Token.getTokenData(token.denom);
+            tokenData.symbol = tokenData.symbol.toUpperCase();
+          }
+
+          tokenDataList.push({
+            denom: token.denom,
+            balance: convertToTokenString(token.amount, tokenData.decimal),
+            symbol: tokenData.symbol,
+            decimal: tokenData.decimal,
+          });
+        } catch (e) {
+          console.error(e);
+        }
       } catch (error) {
         continue;
       }
@@ -662,7 +674,7 @@ function useFirma() {
   const sendFCT = async (address: string, amount: string, memo = '', estimatedGas: number) => {
     const result = await FirmaSDK.send(address, convertNumber(amount), memo, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationSendFCT = async (address: string, amount: string, memo = '') => {
@@ -679,10 +691,10 @@ function useFirma() {
   ) => {
     const result = await FirmaSDK.sendToken(address, tokenID, convertNumber(amount), decimal, memo, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
-  const getGasEstimationsendToken = async (
+  const getGasEstimationSendToken = async (
     address: string,
     amount: string,
     tokenID: string,
@@ -692,10 +704,33 @@ function useFirma() {
     return await FirmaSDK.getGasEstimationSendToken(address, tokenID, convertNumber(amount), decimal, memo);
   };
 
+  const sendIBC = async (
+    address: string,
+    amount: string,
+    denom: string,
+    decimal: number,
+    memo = '',
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.sendIBC(address, convertNumber(amount), denom, decimal, memo, estimatedGas);
+
+    checkValidateResult(result);
+  };
+
+  const getGasEstimationsendIBC = async (
+    address: string,
+    amount: string,
+    denom: string,
+    decimal: number,
+    memo = ''
+  ) => {
+    return await FirmaSDK.getGasEstimationSendIBC(address, convertNumber(amount), denom, decimal, memo);
+  };
+
   const delegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
     const result = await FirmaSDK.delegate(validatorAddress, amount, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationDelegate = async (validatorAddress: string, amount: number) => {
@@ -710,7 +745,7 @@ function useFirma() {
   ) => {
     const result = await FirmaSDK.redelegate(validatorAddressSrc, validatorAddressDst, amount, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationRedelegate = async (
@@ -724,7 +759,7 @@ function useFirma() {
   const undelegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
     const result = await FirmaSDK.undelegate(validatorAddress, amount, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationUndelegate = async (validatorAddress: string, amount: number) => {
@@ -734,7 +769,7 @@ function useFirma() {
   const withdraw = async (validatorAddress: string, estimatedGas: number) => {
     const result = await FirmaSDK.withdrawAllRewards(validatorAddress, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationWithdraw = async (validatorAddress: string) => {
@@ -744,7 +779,7 @@ function useFirma() {
   const withdrawAllValidator = async (estimatedGas: number) => {
     const result = await FirmaSDK.withdrawAllRewardsFromAllValidator(estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationWithdrawAllValidator = async () => {
@@ -754,7 +789,7 @@ function useFirma() {
   const vote = async (proposalId: number, votingType: number, estimatedGas: number) => {
     const result = await FirmaSDK.vote(proposalId, votingType, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationVote = async (proposalId: number, votingType: number) => {
@@ -764,7 +799,7 @@ function useFirma() {
   const deposit = async (proposalId: number, amount: number, estimatedGas: number) => {
     const result = await FirmaSDK.deposit(proposalId, amount, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationDeposit = async (proposalId: number, amount: number) => {
@@ -786,7 +821,7 @@ function useFirma() {
       estimatedGas
     );
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationSubmitParameterChangeProposal = async (
@@ -815,7 +850,7 @@ function useFirma() {
       estimatedGas
     );
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationSubmitCommunityPoolSpendProposal = async (
@@ -842,7 +877,7 @@ function useFirma() {
   ) => {
     const result = await FirmaSDK.submitTextProposal(title, description, initialDeposit, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationSubmitTextProposal = async (title: string, description: string, initialDeposit: number) => {
@@ -866,7 +901,7 @@ function useFirma() {
       estimatedGas
     );
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationSubmitSoftwareUpgrade = async (
@@ -893,7 +928,7 @@ function useFirma() {
   ) => {
     const result = await FirmaSDK.submitCancelSoftwareUpgradeProposal(title, description, initialDeposit, estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationSubmitCancelSoftwareUpgrade = async (
@@ -950,7 +985,7 @@ function useFirma() {
       estimatedGas
     );
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationGrantStakeAuthorizationDelegate = async (
@@ -964,14 +999,14 @@ function useFirma() {
   const revokeStakeAuthorizationDelegate = async (estimatedGas: number) => {
     const result = await FirmaSDK.revokeStakeAuthorizationDelegate(estimatedGas);
 
-    checkVlidateResult(result);
+    checkValidateResult(result);
   };
 
   const getGasEstimationRevokeStakeAuthorizationDelegate = async () => {
     return await FirmaSDK.getGasEstimationRevokeStakeAuthorizationDelegate();
   };
 
-  const checkVlidateResult = (result: any) => {
+  const checkValidateResult = (result: any) => {
     if (result.code === undefined) {
       console.log(result);
       enqueueSnackbar(JSON.stringify(result), {
@@ -1019,6 +1054,7 @@ function useFirma() {
     getUndelegationList,
     sendFCT,
     sendToken,
+    sendIBC,
     delegate,
     redelegate,
     undelegate,
@@ -1035,7 +1071,8 @@ function useFirma() {
     revokeStakeAuthorizationDelegate,
     getStakingGrantDataList,
     getGasEstimationSendFCT,
-    getGasEstimationsendToken,
+    getGasEstimationSendToken,
+    getGasEstimationsendIBC,
     getGasEstimationDelegate,
     getGasEstimationRedelegate,
     getGasEstimationUndelegate,

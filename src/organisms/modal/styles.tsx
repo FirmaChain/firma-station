@@ -1204,3 +1204,52 @@ export const ModalTooltipIcon2 = styled.div`
 `;
 
 export { ImportPrivateKeyIcon, QrCodeIcon, LogoutIcon, PictureAsPdfIcon };
+
+export const IBCWrapper = styled.div`
+  width: 100%;
+  margin: 0 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const SendTypeList = styled.div`
+  width: calc(100% - 10px);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3d3b48;
+  gap: 10px;
+`;
+
+export const SendTypeItem = styled.div<{ $active: boolean }>`
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  background-color: ${({ theme, $active }) => ($active ? theme.colors.mainblue : 'none')};
+  border-radius: 5px;
+`;
+
+export const IBCIcon = styled.div`
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+  background: url('${({ theme }) => theme.urls.ibc}');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
+export const InvalidTypo = styled.div`
+  color: #ffc542;
+  font-size: ${({ theme }) => theme.sizes.modal14};
+  font-weight: 600;
+  margin-top: 10px;
+  margin-left: 5px;
+`;

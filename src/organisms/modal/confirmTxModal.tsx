@@ -40,6 +40,7 @@ const ConfirmTxModal = () => {
   const [password, setPassword] = useState('');
   const [actionName, setActionName] = useState('');
   const [amount, setAmount] = useState('');
+  const [amountSymbol, setAmountSymbol] = useState('');
   const [fee, setFee] = useState('0.02');
   const [memo, setMemo] = useState('');
   const [targetAddress, setTargetAddress] = useState('');
@@ -53,6 +54,8 @@ const ConfirmTxModal = () => {
 
       modalData.data.memo && setMemo(modalData.data.memo);
       modalData.data.targetAddress && setTargetAddress(modalData.data.targetAddress);
+
+      setAmountSymbol(modalData.data.symbol ? modalData.data.symbol : CHAIN_CONFIG.PARAMS.SYMBOL);
 
       if (modalData.data.fees) {
         setFee(convertToFctString(modalData.data.fees.toString()));
@@ -134,7 +137,7 @@ const ConfirmTxModal = () => {
                 <ConfirmLabel>Amount</ConfirmLabel>
                 <ConfirmInput point={true}>
                   {`${convertNumberFormat(amount, 6)}`}
-                  <span>&nbsp;{CHAIN_CONFIG.PARAMS.SYMBOL}</span>
+                  <span>&nbsp;{amountSymbol}</span>
                 </ConfirmInput>
               </ConfirmWrapper>
             )}

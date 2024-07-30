@@ -15,6 +15,7 @@ const CHAIN_CONFIGS = {
       SYMBOL: '',
     },
     IS_DEFAULT_GAS: true,
+    ENABLE_IBC: true,
     RESATKE: {
       API: '',
       WEB: '',
@@ -63,6 +64,7 @@ const CHAIN_CONFIGS = {
       SYMBOL: '',
     },
     IS_DEFAULT_GAS: true,
+    ENABLE_IBC: false,
     RESATKE: {
       API: '',
       WEB: '',
@@ -75,6 +77,8 @@ const CHAIN_CONFIGS = {
 };
 
 export const CHAIN_CONFIG = CHAIN_CONFIGS.MAINNET;
+
+export const OSMOSIS_EXPLORER = 'https://www.mintscan.io/osmosis';
 
 export const NOTICE_JSON_URI = '';
 

@@ -70,8 +70,12 @@ export const convertNumber = (value: string | number | undefined) => {
   return Number(value);
 };
 
-export const convertToTokenString = (amount: string, decimal: number) => {
+export const convertToTokenString = (amount: string | number, decimal: number) => {
   return FirmaUtil.getTokenStringFromUToken(convertNumber(amount), convertNumber(decimal));
+};
+
+export const convertToUTokenStringFromToken = (amount: string | number, decimal: number) => {
+  return FirmaUtil.getUTokenStringFromToken(convertNumber(amount), convertNumber(decimal));
 };
 
 export const convertToTokenNumber = (amount: number | string, decimal: string) => {

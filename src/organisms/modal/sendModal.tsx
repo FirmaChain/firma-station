@@ -29,6 +29,12 @@ import {
   ButtonWrapper,
   CancelButton,
   ModalValue,
+  IBCWrapper,
+  SendTypeList,
+  SendTypeItem,
+  IBCIcon,
+  MaxButton,
+  InvalidTypo,
 } from './styles';
 import {
   convertNumber,
@@ -92,8 +98,16 @@ const SendModal = () => {
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
   const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
 
-  const { sendFCT, sendToken, getGasEstimationSendFCT, getGasEstimationsendToken, isValidAddress, setUserData } =
-    useFirma();
+  const {
+    sendFCT,
+    sendToken,
+    sendIBC,
+    getGasEstimationSendFCT,
+    getGasEstimationSendToken,
+    getGasEstimationsendIBC,
+    isValidAddress,
+    setUserData,
+  } = useFirma();
 
   const [available, setAvailable] = useState(0);
   const [tokenData, setTokenData] = useState({
@@ -106,6 +120,8 @@ const SendModal = () => {
   const [memo, setMemo] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
   const [isSafety, setSafety] = useState(true);
+  const [isNotIBC, setIsNotIBC] = useState(false);
+  const [sendTokenType, setSendTokenType] = useState('send');
 
   const selectInputRef = useRef<any>();
 
@@ -131,6 +147,18 @@ const SendModal = () => {
     setTokenData({ symbol: CHAIN_CONFIG.PARAMS.SYMBOL, decimal: 6, denom: CHAIN_CONFIG.PARAMS.DENOM });
     setSafety(convertNumber(balance) > 0.1);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (sendTokenType === 'ibc') {
+      if (targetAddress.startsWith('firma')) {
+        setIsNotIBC(true);
+      } else {
+        setIsNotIBC(false);
+      }
+    } else {
+      setIsNotIBC(false);
+    }
+  }, [targetAddress, sendTokenType]);
 
   const onChangeAmount = (e: any) => {
     const { value } = e.target;
@@ -174,6 +202,7 @@ const SendModal = () => {
     setAvailable(balance);
     setTokenData({ symbol: value, decimal: decimal, denom: denom });
     setSafety(balance > 0.1);
+    setAmount('');
   };
 
   const onClickToggle = () => {
@@ -194,6 +223,13 @@ const SendModal = () => {
     );
   };
 
+  const onClickMaxAmount = () => {
+    if (getMaxAmount() > 0) {
+      const amount = getMaxAmount().toString();
+      setAmount(amount);
+    }
+  };
+
   const getMaxAmount = (): number => {
     if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
       const fee = isSafety ? 0.1 : convertToFctNumber(getDefaultFee(isLedger, isMobileApp));
@@ -206,7 +242,7 @@ const SendModal = () => {
   };
 
   const sendTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
-    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
+    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL && sendTokenType === 'send') {
       sendFCT(targetAddress, amount, memo, gas)
         .then(() => {
           setUserData();
@@ -216,14 +252,25 @@ const SendModal = () => {
           rejectTx();
         });
     } else {
-      sendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo, gas)
-        .then(() => {
-          setUserData();
-          resolveTx();
-        })
-        .catch(() => {
-          rejectTx();
-        });
+      if (sendTokenType === 'ibc') {
+        sendIBC(targetAddress, amount, tokenData.denom, tokenData.decimal, memo, gas)
+          .then(() => {
+            setUserData();
+            resolveTx();
+          })
+          .catch(() => {
+            rejectTx();
+          });
+      } else {
+        sendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo, gas)
+          .then(() => {
+            setUserData();
+            resolveTx();
+          })
+          .catch(() => {
+            rejectTx();
+          });
+      }
     }
   };
 
@@ -248,7 +295,7 @@ const SendModal = () => {
   const nextStep = () => {
     closeModal();
 
-    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL) {
+    if (tokenData.symbol === CHAIN_CONFIG.PARAMS.SYMBOL && sendTokenType === 'send') {
       getGasEstimationSendFCT(targetAddress, amount, memo)
         .then((gas) => {
           modalActions.handleModalData({
@@ -264,20 +311,39 @@ const SendModal = () => {
         })
         .catch(() => {});
     } else {
-      getGasEstimationsendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo)
-        .then((gas) => {
-          modalActions.handleModalData({
-            action: 'Send',
-            module: '/bank/sendToken',
-            data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress },
-            prevModalAction: modalActions.handleModalSend,
-            txAction: sendTx,
-            txParams: getParamsTx,
-          });
+      if (sendTokenType === 'ibc') {
+        getGasEstimationsendIBC(targetAddress, amount, tokenData.denom, tokenData.decimal, memo)
+          .then((gas) => {
+            modalActions.handleModalData({
+              action: 'Send',
+              module: '/ibc/transfer',
+              data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress, symbol: tokenData.symbol },
+              prevModalAction: modalActions.handleModalSend,
+              txAction: sendTx,
+              txParams: getParamsTx,
+            });
 
-          modalActions.handleModalConfirmTx(true);
-        })
-        .catch(() => {});
+            modalActions.handleModalConfirmTx(true);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else {
+        getGasEstimationSendToken(targetAddress, amount, tokenData.denom, tokenData.decimal, memo)
+          .then((gas) => {
+            modalActions.handleModalData({
+              action: 'Send',
+              module: '/bank/sendToken',
+              data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress, symbol: tokenData.symbol },
+              prevModalAction: modalActions.handleModalSend,
+              txAction: sendTx,
+              txParams: getParamsTx,
+            });
+
+            modalActions.handleModalConfirmTx(true);
+          })
+          .catch(() => {});
+      }
     }
   };
 
@@ -299,6 +365,7 @@ const SendModal = () => {
                 onChange={onChangeTargetAddress}
               />
             </ModalInput>
+            {isNotIBC && <InvalidTypo>IBC sends can only be sent to addresses starting with "osmo1...".</InvalidTypo>}
           </ModalInputWrap>
 
           <ModalInputWrap>
@@ -336,6 +403,19 @@ const SendModal = () => {
               />
             </SelectWrapper>
           </ModalInputWrap>
+          {CHAIN_CONFIG.ENABLE_IBC && (
+            <IBCWrapper>
+              <SendTypeList>
+                <SendTypeItem $active={sendTokenType === 'send'} onClick={() => setSendTokenType('send')}>
+                  Send
+                </SendTypeItem>
+                <SendTypeItem $active={sendTokenType === 'ibc'} onClick={() => setSendTokenType('ibc')}>
+                  <IBCIcon />
+                  IBC Send
+                </SendTypeItem>
+              </SendTypeList>
+            </IBCWrapper>
+          )}
 
           {tokenData && tokenData.symbol && (
             <>
@@ -356,6 +436,9 @@ const SendModal = () => {
           <ModalInputWrap>
             <ModalLabel>Amount</ModalLabel>
             <ModalInput style={{ marginBottom: '10px' }}>
+              <MaxButton active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
+                Max
+              </MaxButton>
               <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
             </ModalInput>
           </ModalInputWrap>

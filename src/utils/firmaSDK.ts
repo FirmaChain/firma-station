@@ -2,8 +2,9 @@ import { FirmaSDK, AuthorizationType } from '@firmachain/firma-js';
 import { FirmaWebLedgerWallet, FirmaBridgeLedgerWallet } from '@firmachain/firma-js-ledger';
 import TransportHID from '@ledgerhq/hw-transport-webhid';
 
-import { CHAIN_CONFIG } from '../config';
-import { getDefaultGas, getFeesFromGas, isElectron, isExternalConnect } from './common';
+import { CHAIN_CONFIG, IBC_CONFIG } from '../config';
+import { convertToUTokenStringFromToken, getDefaultGas, getFeesFromGas, isElectron, isExternalConnect } from './common';
+import Long from 'long';
 
 declare global {
   interface Window {
@@ -135,6 +136,117 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     });
 
     return gasEstimation;
+  };
+
+  const sendIBC = async (
+    address: string,
+    amount: number,
+    denom: string,
+    decimal: number,
+    memo = '',
+    estimatedGas: number
+  ) => {
+    const wallet = await getWallet();
+
+    let port = '';
+    let channel = '';
+
+    if (denom === 'ufct') {
+      port = 'transfer';
+      channel = 'channel-1';
+    } else {
+      const ibcConfig = IBC_CONFIG[denom];
+      port = ibcConfig.port;
+      channel = ibcConfig.channel;
+    }
+
+    const convertAmount = convertToUTokenStringFromToken(amount, decimal);
+    const clientState = await firmaSDK.Ibc.getClientState(channel, port);
+    const timeStamp = (Date.now() + 600000).toString() + '000000';
+    const timeoutTimeStamp = Long.fromString(timeStamp, true);
+    const height = {
+      revisionHeight: Long.fromString(
+        clientState.identified_client_state.client_state.latest_height.revision_height,
+        true
+      ).add(Long.fromNumber(1000)),
+      revisionNumber: Long.fromString(
+        clientState.identified_client_state.client_state.latest_height.revision_number,
+        true
+      ),
+    };
+
+    const result = await firmaSDK.Ibc.transfer(
+      wallet,
+      port,
+      channel,
+      denom,
+      convertAmount,
+      address,
+      height,
+      timeoutTimeStamp,
+      { memo, gas: estimatedGas, fee: getFees(estimatedGas) }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationSendIBC = async (
+    address: string,
+    amount: number,
+    denom: string,
+    decimal: number,
+    memo = ''
+  ) => {
+    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
+      return getDefaultGas(isLedger, isMobileApp);
+
+    const wallet = await getWallet();
+
+    let port = '';
+    let channel = '';
+
+    if (denom === 'ufct') {
+      port = 'transfer';
+      channel = 'channel-1';
+    } else {
+      const ibcConfig = IBC_CONFIG[denom];
+      port = ibcConfig.port;
+      channel = ibcConfig.channel;
+    }
+
+    const convertAmount = convertToUTokenStringFromToken(amount, decimal);
+    const clientState = await firmaSDK.Ibc.getClientState(channel, port);
+    const timeStamp = (Date.now() + 600000).toString() + '000000';
+    const timeoutTimeStamp = Long.fromString(timeStamp, true);
+    const height = {
+      revisionHeight: Long.fromString(
+        clientState.identified_client_state.client_state.latest_height.revision_height,
+        true
+      ).add(Long.fromNumber(1000)),
+      revisionNumber: Long.fromString(
+        clientState.identified_client_state.client_state.latest_height.revision_number,
+        true
+      ),
+    };
+
+    try {
+      const gasEstimation = await firmaSDK.Ibc.getGasEstimationTransfer(
+        wallet,
+        port,
+        channel,
+        denom,
+        convertAmount,
+        address,
+        height,
+        timeoutTimeStamp,
+        { memo }
+      );
+
+      return gasEstimation;
+    } catch (e) {
+      console.error(e);
+    }
+    return 0;
   };
 
   const delegate = async (validatorAddress: string, amount: number, estimatedGas: number) => {
@@ -573,6 +685,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     getWallet,
     send,
     sendToken,
+    sendIBC,
     delegate,
     redelegate,
     undelegate,
@@ -590,6 +703,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
     getGasEstimationSend,
     getGasEstimationSendToken,
+    getGasEstimationSendIBC,
     getGasEstimationDelegate,
     getGasEstimationRedelegate,
     getGasEstimationUndelegate,

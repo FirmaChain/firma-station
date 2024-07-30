@@ -1,7 +1,22 @@
-import CryptoJS from "crypto-js";
+import CryptoJS from 'crypto-js';
+import { COMMON_KEY } from '../config';
 
 const keySize = 256;
 const iterations = 100;
+
+export const encryptData = (originalMessage: string): string => {
+  try {
+    const cipher = CryptoJS.AES.encrypt(originalMessage, CryptoJS.enc.Utf8.parse(COMMON_KEY), {
+      iv: CryptoJS.enc.Utf8.parse(''),
+      padding: CryptoJS.pad.Pkcs7,
+      mode: CryptoJS.mode.CBC,
+    });
+
+    return cipher.toString();
+  } catch (error) {
+    return '';
+  }
+};
 
 export const encrypt = (originalMessage: string, pass: string): string => {
   try {
@@ -22,7 +37,7 @@ export const encrypt = (originalMessage: string, pass: string): string => {
 
     return salt.toString() + iv.toString() + encrypted.toString();
   } catch (error) {
-    return "";
+    return '';
   }
 };
 
@@ -45,6 +60,6 @@ export const decrypt = (encryptMessage: string, pass: string): string => {
 
     return decrypted;
   } catch (error) {
-    return "";
+    return '';
   }
 };

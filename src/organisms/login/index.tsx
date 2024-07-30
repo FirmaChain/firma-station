@@ -38,8 +38,9 @@ const LoginCard = () => {
     if (password === '') return;
 
     loginWallet(password)
-      .then(() => {
-        setUserData();
+      .then(async () => {
+        await setUserData();
+        window.location.reload();
       })
       .catch(() => {
         enqueueSnackbar('Invalid Password', {

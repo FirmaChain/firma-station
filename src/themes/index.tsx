@@ -127,6 +127,7 @@ const urls = {
   mobileLoginStep2: process.env.PUBLIC_URL + '/images/ic_step_mobile_login2.png',
   mobileLoginStep3: process.env.PUBLIC_URL + '/images/ic_step_mobile_login3.png',
   disconnect: process.env.PUBLIC_URL + '/images/ic_disconnect.png',
+  ibc: process.env.PUBLIC_URL + '/images/ic_ibc.png',
 };
 
 const theme = {
