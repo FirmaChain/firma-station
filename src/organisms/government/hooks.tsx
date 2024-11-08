@@ -62,18 +62,22 @@ export const useProposalData = (proposalId: string) => {
 
   const formatProposalQueryData = (data: IProposalQueryData | null) => {
     if (data) {
-      const depositors = data.proposal[0].proposal_deposits;
-      const totalVotingPower = data.proposal[0].staking_pool_snapshot.bonded_tokens;
-      const votes = data.proposal[0].proposal_votes.map((vote: any) => {
-        const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, vote.voter_address);
+      const proposal = data.proposal[0];
 
-        return {
-          option: vote.option,
-          voterAddress: vote.voter_address,
-          moniker,
-          avatarURL,
-        };
-      });
+      const depositors = proposal?.proposal_deposits;
+      const totalVotingPower = proposal?.staking_pool_snapshot?.bonded_tokens;
+      const votes = proposal
+        ? proposal.proposal_votes.map((vote: any) => {
+            const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, vote.voter_address);
+
+            return {
+              option: vote.option,
+              voterAddress: vote.voter_address,
+              moniker,
+              avatarURL,
+            };
+          })
+        : [];
 
       return {
         depositors,

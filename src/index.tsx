@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { SnackbarProvider } from 'notistack';
 import { persistStore } from 'redux-persist';
@@ -10,7 +10,9 @@ import './apollo';
 
 const persistor = persistStore(store);
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+root.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <SnackbarProvider
@@ -24,6 +26,5 @@ ReactDOM.render(
         <App />
       </SnackbarProvider>
     </PersistGate>
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 );

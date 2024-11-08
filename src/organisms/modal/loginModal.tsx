@@ -72,7 +72,7 @@ const LoginModal = () => {
         <ContactUsLeftTypo>Can't connect to wallet?</ContactUsLeftTypo>
         <ContactUsRightTypo
           onClick={() => {
-            window.location.href = 'mailto:contact@firmachain.org';
+            window.location.href = 'mailto:info@firmachain.org';
           }}
         >
           Contact us

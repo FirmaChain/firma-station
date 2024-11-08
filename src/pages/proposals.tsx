@@ -15,7 +15,7 @@ const Proposals = () => {
         <>
           <ProposalDetailCard proposalState={proposalState} />
           <VotingCard proposalState={proposalState} />
-          {proposalState.depositors.length > 0 && <DepositCard proposalState={proposalState} />}
+          {proposalState.depositors?.length > 0 && <DepositCard proposalState={proposalState} />}
         </>
       )}
     </ContentContainer>
