@@ -85,6 +85,7 @@ video {
   font: inherit;
   vertical-align: baseline;
 }
+
 article,
 aside,
 details,
@@ -98,10 +99,12 @@ nav,
 section {
   display: block;
 }
+
 body {
   width: 100vw;
   line-height: 1;
 }
+
 ol,
 ul {
   list-style: none;
@@ -111,10 +114,12 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
 blockquote,
 q {
   quotes: none;
 }
+
 blockquote:before,
 blockquote:after,
 q:before,
@@ -122,6 +127,7 @@ q:after {
   content: "";
   content: none;
 }
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
@@ -139,6 +145,7 @@ a {
   text-decoration: none;
   outline: none;
 }
+
 a:hover,
 a:active {
   text-decoration: none;
@@ -169,7 +176,7 @@ body {
   min-height: 100vh;
 }
 
-body > #root > div {
+body>#root>div {
   min-height: 100vh;
 }
 
@@ -180,4 +187,14 @@ body > #root > div {
 
 html {
   font-size: 62.5%;
+}
+
+.clamp-single-line {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
+
+  white-space: unset !important;
 }

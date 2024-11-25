@@ -52,7 +52,7 @@ const Row = ({ data, index, style }: any) => {
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>
-      <ItemColumn>{getMemo(currentHistory.memo)}</ItemColumn>
+      <ItemColumn className="clamp-single-line">{getMemo(currentHistory.memo)}</ItemColumn>
       <ItemColumn>{getResult(currentHistory.success)}</ItemColumn>
       <ItemColumn>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
     </ItemWrapper>

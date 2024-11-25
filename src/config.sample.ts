@@ -16,7 +16,7 @@ const CHAIN_CONFIGS = {
     },
     IS_DEFAULT_GAS: true,
     ENABLE_IBC: true,
-    RESATKE: {
+    RESTAKE: {
       API: '',
       WEB: '',
       ADDRESS: '',
@@ -40,7 +40,7 @@ const CHAIN_CONFIGS = {
       SYMBOL: '',
     },
     IS_DEFAULT_GAS: true,
-    RESATKE: {
+    RESTAKE: {
       API: '',
       WEB: '',
       ADDRESS: '',
@@ -65,7 +65,7 @@ const CHAIN_CONFIGS = {
     },
     IS_DEFAULT_GAS: true,
     ENABLE_IBC: false,
-    RESATKE: {
+    RESTAKE: {
       API: '',
       WEB: '',
       ADDRESS: '',
