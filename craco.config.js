@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const packageJson = require('./package.json');
 
 function configureWebpack(webpackConfig, { env, paths }) {
   // fallbacks
@@ -18,6 +19,10 @@ function configureWebpack(webpackConfig, { env, paths }) {
     new webpack.ProvidePlugin({
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer'],
+    }),
+    // Set verion info from package.json
+    new webpack.DefinePlugin({
+      'process.env.APP_VERSION': JSON.stringify(packageJson.version),
     }),
   ]);
 
