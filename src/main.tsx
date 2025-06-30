@@ -1,79 +1,30 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { SnackbarProvider } from 'notistack';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import Routes from './routes';
-import useFirma from './utils/wallet';
-import { rootState } from './redux/reducers';
+import App from './App';
+import store from './redux/store';
+import './apollo';
 
-import Sidebar from './organisms/sidebar';
-import Header from './organisms/header';
-import Footer from './organisms/footer';
-import LoginCard from './organisms/login';
-import Notice from './organisms/notice';
-import Contact from './organisms/contact';
+const persistor = persistStore(store);
 
-import { RightContainer, MainContainer } from './styles/common';
-import { getNotice, getContactAddressList } from './utils/externalData';
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-const Main = () => {
-  const { address } = useSelector((state: rootState) => state.wallet);
-  const { isValidWallet } = useFirma();
-
-  const [maintenance, setMaintenance] = useState<{
-    isShow: boolean;
-    title: string;
-    content: string;
-    link: string;
-  } | null>(null);
-
-  const [contactAddressList, setContactAddressList] = useState<string[] | null>(null);
-
-  const [isNotice, setNotice] = useState(false);
-  const [isContact, setContact] = useState(false);
-  const [isLogin, setLogin] = useState(false);
-  const [isLoaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    getNotice()
-      .then((maintenance) => setMaintenance(maintenance))
-      .catch(() => {});
-  }, [address]);
-
-  useEffect(() => {
-    getContactAddressList()
-      .then((contactAddressList) => setContactAddressList(contactAddressList))
-      .catch(() => {});
-  }, [address]);
-
-  useEffect(() => {
-    setLoaded(maintenance !== null && contactAddressList !== null);
-    setNotice(maintenance !== null && maintenance.isShow);
-    setContact(contactAddressList !== null && contactAddressList.includes(address));
-    setLogin(isValidWallet() === false);
-  }, [maintenance, contactAddressList]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const render = () => {
-    if (!isLoaded) return <MainContainer />;
-    if (isNotice) return <Notice maintenance={maintenance} />;
-    if (isContact) return <Contact />;
-
-    if (isLogin) {
-      return <LoginCard />;
-    } else {
-      return (
-        <MainContainer>
-          <Sidebar />
-          <RightContainer>
-            <Header />
-            <Routes />
-            <Footer />
-          </RightContainer>
-        </MainContainer>
-      );
-    }
-  };
-
-  return render();
-};
-
-export default Main;
+root.render(
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <SnackbarProvider
+        maxSnack={3}
+        style={{ fontSize: '1.2rem' }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+      >
+        <App />
+      </SnackbarProvider>
+    </PersistGate>
+  </Provider>
+);

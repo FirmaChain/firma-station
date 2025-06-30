@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <FooterTypo>ⓒ FIRMACHAIN Pte. Ltd. All Right Reserved. </FooterTypo>
-      {process.env.APP_VERSION && <FooterTypo>v{process.env.APP_VERSION}</FooterTypo>}
+      {import.meta.env.VITE_APP_VERSION && <FooterTypo>v{import.meta.env.VITE_APP_VERSION}</FooterTypo>}
     </FooterContainer>
   );
 };

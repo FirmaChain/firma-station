@@ -9,7 +9,7 @@ import { rootState } from './redux/reducers';
 import { SessionTimer } from './utils/sessionTimer';
 import { initializeAvatar } from './utils/avatar';
 
-import Main from './main';
+import AppLayout from './AppLayout';
 import theme from './themes';
 import './default.css';
 
@@ -26,7 +26,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <Main />
+        <AppLayout />
       </ThemeProvider>
     </BrowserRouter>
   );

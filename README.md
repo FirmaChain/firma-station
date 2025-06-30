@@ -27,9 +27,10 @@ This app can also be used for TestNet and using Faucet, you can test various sce
 
 ### 1. Install and Run
 
-```javascript
+```bash
+nvm use
 npm install
-npm run start
+npm run dev
 ```
 
 </br>
