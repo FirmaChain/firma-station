@@ -164,16 +164,14 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const convertAmount = convertToUTokenStringFromToken(amount, decimal);
     const clientState = await firmaSDK.Ibc.getClientState(channel, port);
     const timeStamp = (Date.now() + 600000).toString() + '000000';
-    const timeoutTimeStamp = Long.fromString(timeStamp, true);
+    const timeoutTimeStamp = BigInt(timeStamp); // Long.fromString(timeStamp, true)
     const height = {
-      revisionHeight: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_height,
-        true
-      ).add(Long.fromNumber(1000)),
-      revisionNumber: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_number,
-        true
-      ),
+      revisionHeight:
+        BigInt(clientState.identified_client_state.client_state.latest_height.revision_height) + BigInt(1000),
+      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_height, true)
+      //     .add(Long.fromNumber(1000))
+      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number),
+      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_number, true)
     };
 
     const result = await firmaSDK.Ibc.transfer(
@@ -218,16 +216,14 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const convertAmount = convertToUTokenStringFromToken(amount, decimal);
     const clientState = await firmaSDK.Ibc.getClientState(channel, port);
     const timeStamp = (Date.now() + 600000).toString() + '000000';
-    const timeoutTimeStamp = Long.fromString(timeStamp, true);
+    const timeoutTimeStamp = BigInt(timeStamp); // Long.fromString(timeStamp, true)
     const height = {
-      revisionHeight: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_height,
-        true
-      ).add(Long.fromNumber(1000)),
-      revisionNumber: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_number,
-        true
-      ),
+      revisionHeight:
+        BigInt(clientState.identified_client_state.client_state.latest_height.revision_height) + BigInt(1000),
+      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_height, true)
+      //     .add(Long.fromNumber(1000))
+      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number),
+      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_number, true)
     };
 
     try {
