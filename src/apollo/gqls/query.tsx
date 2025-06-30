@@ -7,7 +7,7 @@ export const getTransactionCount = async (): Promise<number> => {
     const { data } = await client.query({
       query: gql`
         query {
-          transactions: transaction_aggregate {
+          transaction_aggregate {
             aggregate {
               count
             }
@@ -17,7 +17,7 @@ export const getTransactionCount = async (): Promise<number> => {
       fetchPolicy: 'no-cache',
     });
 
-    return data.transactions.aggregate.count;
+    return data.transaction_aggregate.aggregate.count;
   } catch (error) {
     return 0;
   }
