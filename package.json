@@ -74,6 +74,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "start": "vite preview --port 3001",
     "deploy-testnet": "aws s3 sync ./build s3://deploy-firmastation/testnet --profile=firmachain-deploy --delete",
     "invalidate-testnet": "aws cloudfront create-invalidation --profile=firmachain-deploy --distribution-id E3490CTTE7409I --paths '/*'",
     "deploy-mainnet": "aws s3 sync ./build s3://deploy-firmastation/mainnet --profile=firmachain-deploy --delete",
