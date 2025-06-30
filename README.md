@@ -29,8 +29,8 @@ This app can also be used for TestNet and using Faucet, you can test various sce
 
 ```bash
 nvm use
-npm install
-npm run dev
+yarn install
+yarn run dev
 ```
 
 </br>
