@@ -43,7 +43,7 @@ const getStakingPool = async (): Promise<{ bondedTokens: number; unbondedTokens:
 
 const getTotalSupply = async (): Promise<number> => {
   try {
-    const amount = await firmaSDK.Bank.getTokenSupply(`by_denom?denom=${CHAIN_CONFIG.PARAMS.DENOM}`);
+    const amount = await firmaSDK.Bank.getTokenSupply(CHAIN_CONFIG.PARAMS.DENOM);
     return convertNumber(FirmaUtil.getFCTStringFromUFCTStr(amount));
   } catch (error) {
     return 0;
