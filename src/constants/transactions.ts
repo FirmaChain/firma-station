@@ -41,6 +41,7 @@ const LABELS: IKeyValue = {
   txDepositLabel: 'Deposit',
   txVoteLabel: 'Vote',
   txSubmitProposalLabel: 'Submit Proposal',
+  txCancelProposalLabel: 'Cancel Proposal',
   txUnjailLabel: 'Unjail',
   txUnknownLabel: 'Unknown',
   txWithdrawCommissionLabel: 'Withdraw Commission',
@@ -185,6 +186,10 @@ export const TRANSACTION_TYPE_MODEL: IKeyValue = {
   '/cosmos.gov.v1beta1.MsgSubmitProposal': {
     tagTheme: TYPE_COLORS['seven'],
     tagDisplay: LABELS['txSubmitProposalLabel'],
+  },
+  '/cosmos.gov.v1.MsgCancelProposal': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txCancelProposalLabel'],
   },
   // ========================
   // ibc client
