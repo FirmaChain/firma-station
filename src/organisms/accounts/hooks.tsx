@@ -110,7 +110,7 @@ export const useTransferHistoryByAddress = () => {
   }, []);
 
   useEffect(() => {
-    getHistoryByAddress(address, 'cosmos.bank.v1beta1.MsgSend,ibc.applications.transfer.v1.MsgTransfer')
+    getHistoryByAddress(address, '/cosmos.bank.v1beta1.MsgSend,/ibc.applications.transfer.v1.MsgTransfer')
       .then(async (data) => {
         await updateTokenData(data);
 
