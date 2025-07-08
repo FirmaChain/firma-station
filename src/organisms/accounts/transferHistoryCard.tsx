@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
@@ -15,6 +15,9 @@ import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, Titl
 interface IProps {
   transferHistoryByAddressState: ITransferHistoryByAddressState;
   tokenDataState: ITokensState;
+  isLoading: boolean;
+  hasMore: boolean;
+  loadMoreData: () => Promise<void>;
 }
 
 const Row = ({ data, index, style, tokenDataState }: any) => {
@@ -95,7 +98,52 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   );
 };
 
-const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState }: IProps) => {
+const LoadingRow = ({ style }: any) => {
+  return (
+    <ItemWrapper style={style}>
+      <ItemColumn style={{ textAlign: 'center', color: theme.colors.defaultGray2, width: '100%' }}>
+        Loading more...
+      </ItemColumn>
+    </ItemWrapper>
+  );
+};
+
+const TransferHistoryCard = ({
+  transferHistoryByAddressState,
+  tokenDataState,
+  isLoading,
+  hasMore,
+  loadMoreData
+}: IProps) => {
+  const handleItemsRendered = useCallback(
+    ({ visibleStopIndex }: { visibleStopIndex: number }) => {
+      const totalItems = transferHistoryByAddressState.historyList.length;
+      // Block runing load more if the list length is less than 50
+      if (totalItems < 10) return;
+      // Load more when reached last 5 items
+      if (visibleStopIndex >= totalItems - 5 && hasMore && !isLoading) {
+        loadMoreData();
+      }
+    },
+    [transferHistoryByAddressState.historyList.length, hasMore, isLoading, loadMoreData]
+  );
+
+  const itemCount = transferHistoryByAddressState.historyList.length + (hasMore ? 1 : 0);
+
+  const ItemRenderer = useCallback(
+    (props: any) => {
+      const { index } = props;
+      const isLoadingItem = index === transferHistoryByAddressState.historyList.length;
+
+      if (isLoadingItem) {
+        return <LoadingRow {...props} />;
+      }
+
+      return Row({ ...props, tokenDataState });
+    },
+    [transferHistoryByAddressState.historyList.length, tokenDataState]
+  );
+
   return (
     <BlankCard bgColor={theme.colors.backgroundSideBar}>
       <TitleTypo>Send History</TitleTypo>
@@ -115,11 +163,12 @@ const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState }: 
               <List
                 width={width}
                 height={height - 90}
-                itemCount={transferHistoryByAddressState.historyList.length}
+                itemCount={itemCount}
                 itemSize={50}
                 itemData={transferHistoryByAddressState.historyList}
+                onItemsRendered={handleItemsRendered}
               >
-                {(props) => Row({ ...props, tokenDataState })}
+                {ItemRenderer}
               </List>
             </>
           )}

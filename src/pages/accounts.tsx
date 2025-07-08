@@ -1,23 +1,24 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { rootState } from "../redux/reducers";
-import { useTransferHistoryByAddress } from "../organisms/accounts/hooks";
+import { rootState } from '../redux/reducers';
+import { useTransferHistoryByAddress } from '../organisms/accounts/hooks';
 
-import { AccountCard, AssetCard, SendCard, TransferHistoryCard, VestingCard } from "../organisms/accounts";
+import { AccountCard, AssetCard, SendCard, TransferHistoryCard, VestingCard } from '../organisms/accounts';
 import {
   ContentContainer,
   CardWrap,
   LeftCardWrap,
   RightCardWrap,
   RightCardTopWrap,
-  RightCardBottomWrap,
-} from "../styles/accounts";
+  RightCardBottomWrap
+} from '../styles/accounts';
 
 const Accounts = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
   const { vesting } = useSelector((state: rootState) => state.user);
-  const { transferHistoryByAddressState, tokenDataState } = useTransferHistoryByAddress();
+  const { transferHistoryByAddressState, tokenDataState, isLoading, hasMore, loadMoreData } =
+    useTransferHistoryByAddress();
 
   return (
     <ContentContainer>
@@ -38,6 +39,9 @@ const Accounts = () => {
               <TransferHistoryCard
                 transferHistoryByAddressState={transferHistoryByAddressState}
                 tokenDataState={tokenDataState}
+                isLoading={isLoading}
+                hasMore={hasMore}
+                loadMoreData={loadMoreData}
               />
             )}
           </RightCardBottomWrap>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
@@ -12,10 +12,24 @@ import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, Hist
 
 interface IProps {
   historyByAddressState: IHistoryByAddressState;
+  loadMore: () => void;
 }
 
 const Row = ({ data, index, style }: any) => {
-  const currentHistory = data[index];
+  const { historyList, loading } = data;
+
+  // Show loading status
+  if (index === historyList.length) {
+    return (
+      <ItemWrapper style={style}>
+        <ItemColumn style={{ textAlign: 'center', gridColumn: '1 / -1' }}>
+          {loading ? 'Loading more...' : ''}
+        </ItemColumn>
+      </ItemWrapper>
+    );
+  }
+
+  const currentHistory = historyList[index];
 
   const getMessageType = (type: string) => {
     let targetTheme = TRANSACTION_TYPE_MODEL['Unknown'];
@@ -39,6 +53,7 @@ const Row = ({ data, index, style }: any) => {
   const getTimestamp = (timestamp: string) => {
     return getDateTimeFormat(timestamp);
   };
+
   const getMemo = (memo: string) => {
     return memo.length > 0 ? memo : '-';
   };
@@ -59,7 +74,28 @@ const Row = ({ data, index, style }: any) => {
   );
 };
 
-const HistoryCard = ({ historyByAddressState }: IProps) => {
+const HistoryCard = ({ historyByAddressState, loadMore }: IProps) => {
+  const handleItemsRendered = useCallback(
+    ({ visibleStopIndex }: { visibleStopIndex: number }) => {
+      // Get next page if scrolled near by the last item
+      const { historyList, hasMore, loading } = historyByAddressState;
+
+      if (
+        hasMore &&
+        !loading &&
+        visibleStopIndex >= historyList.length - 5 // Load more if one of the last 5 item is loaded
+      ) {
+        loadMore();
+      }
+    },
+    [historyByAddressState, loadMore]
+  );
+
+  // Show Loading indicator with '+1' when loading status is true
+  const itemCount = historyByAddressState.loading
+    ? historyByAddressState.historyList.length + 1
+    : historyByAddressState.historyList.length;
+
   return (
     <ListWrapper>
       <AutoSizer>
@@ -76,9 +112,10 @@ const HistoryCard = ({ historyByAddressState }: IProps) => {
             <List
               width={width}
               height={height - 50}
-              itemCount={historyByAddressState.historyList.length}
+              itemCount={itemCount}
               itemSize={50}
-              itemData={historyByAddressState.historyList}
+              itemData={historyByAddressState}
+              onItemsRendered={handleItemsRendered}
             >
               {Row}
             </List>
