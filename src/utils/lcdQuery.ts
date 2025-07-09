@@ -226,7 +226,8 @@ const getProposalList = async (): Promise<IProposalData[]> => {
     const firstMsg = proposal.messages[0] as any;
     const firmsMsgContent = firstMsg?.content || null;
 
-    const proposalType = firmsMsgContent ? firmsMsgContent['@type'] : ''; //? Need to check.
+    //? Remove 'Msg' from the start
+    const proposalType = (firmsMsgContent ? firmsMsgContent['@type'] : firstMsg['@type'] || '').replace('Msg', ''); //? Need to check
 
     const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
     const extraData = formatExtraData(proposal.messages); // Replaced from proposal.content
@@ -301,10 +302,13 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
   const firstMsg = proposal.messages[0] as any;
   const firmsMsgContent = firstMsg?.content || null;
 
-  const proposalType = firmsMsgContent ? firmsMsgContent['@type'] : ''; //? Need to check
+  const proposalType = firmsMsgContent ? firmsMsgContent['@type'] : firstMsg['@type'] || ''; //? Need to check
 
   const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
-  const extraData = formatExtraData(firmsMsgContent || {}); // Replaced from proposal.content
+
+  // Proposal before before v0.5.0 has extraData in firstMsg / after v0.5.0 has extraData in firmsMsgContent
+  // So just merge them into one object to reduct complexity
+  const extraData = formatExtraData({ ...firstMsg, ...firmsMsgContent }); // Replaced from proposal.content
 
   const votingStartTime = _proposal.voting_start_time; // Replaced from proposal.voting_start_time
   const votingEndTime = _proposal.voting_end_time; // Replaced from proposal.voting_end_time
