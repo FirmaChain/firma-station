@@ -104,7 +104,7 @@ const NewProposalModal = () => {
   const [proposalId, setProposalId] = useState('');
 
   // Staking Parameters
-  const [stakingUnbondingTime, setStakingUnbondingTime] = useState('1814400s'); // 21 days default
+  const [stakingUnbondingTime, setStakingUnbondingTime] = useState('1814400'); // 21 days default
   const [stakingMaxValidators, setStakingMaxValidators] = useState(100);
   const [stakingMaxEntries, setStakingMaxEntries] = useState(7);
   const [stakingHistoricalEntries, setStakingHistoricalEntries] = useState(10000);
@@ -113,15 +113,15 @@ const NewProposalModal = () => {
 
   // Gov Parameters  
   const [govMinDeposit, setGovMinDeposit] = useState('5000000000');
-  const [govMaxDepositPeriod, setGovMaxDepositPeriod] = useState('172800s'); // 2 days
-  const [govVotingPeriod, setGovVotingPeriod] = useState('172800s'); // 2 days
+  const [govMaxDepositPeriod, setGovMaxDepositPeriod] = useState('172800'); // 2 days
+  const [govVotingPeriod, setGovVotingPeriod] = useState('172800'); // 2 days
   const [govQuorum, setGovQuorum] = useState('0.334000000000000000');
   const [govThreshold, setGovThreshold] = useState('0.500000000000000000');
   const [govVetoThreshold, setGovVetoThreshold] = useState('0.334000000000000000');
   const [govMinInitialDepositRatio, setGovMinInitialDepositRatio] = useState('0.100000000000000000');
   const [govProposalCancelRatio, setGovProposalCancelRatio] = useState('0.500000000000000000');
   const [govProposalCancelDest, setGovProposalCancelDest] = useState('');
-  const [govExpeditedVotingPeriod, setGovExpeditedVotingPeriod] = useState('86400s'); // 1 day
+  const [govExpeditedVotingPeriod, setGovExpeditedVotingPeriod] = useState('86400'); // 1 day
   const [govExpeditedThreshold, setGovExpeditedThreshold] = useState('0.667000000000000000');
   const [govExpeditedMinDeposit, setGovExpeditedMinDeposit] = useState('10000000000');
   const [govBurnVoteQuorum, setGovBurnVoteQuorum] = useState(false);
@@ -170,7 +170,7 @@ const NewProposalModal = () => {
     setProposalId('');
     
     // Reset Staking Parameters to defaults
-    setStakingUnbondingTime('1814400s');
+    setStakingUnbondingTime('1814400');
     setStakingMaxValidators(100);
     setStakingMaxEntries(7);
     setStakingHistoricalEntries(10000);
@@ -179,15 +179,15 @@ const NewProposalModal = () => {
 
     // Reset Gov Parameters to defaults
     setGovMinDeposit('5000000000');
-    setGovMaxDepositPeriod('172800s');
-    setGovVotingPeriod('172800s');
+    setGovMaxDepositPeriod('172800');
+    setGovVotingPeriod('172800');
     setGovQuorum('0.334000000000000000');
     setGovThreshold('0.500000000000000000');
     setGovVetoThreshold('0.334000000000000000');
     setGovMinInitialDepositRatio('0.100000000000000000');
     setGovProposalCancelRatio('0.500000000000000000');
     setGovProposalCancelDest('');
-    setGovExpeditedVotingPeriod('86400s');
+    setGovExpeditedVotingPeriod('86400');
     setGovExpeditedThreshold('0.667000000000000000');
     setGovExpeditedMinDeposit('10000000000');
     setGovBurnVoteQuorum(false);
@@ -250,7 +250,7 @@ const NewProposalModal = () => {
         };
 
         const stakingParams = {
-          unbondingTime: { seconds: BigInt(stakingUnbondingTime.replace('s', '')), nanos: 0 },
+          unbondingTime: { seconds: BigInt(stakingUnbondingTime), nanos: 0 },
           maxValidators: stakingMaxValidators,
           maxEntries: stakingMaxEntries,
           historicalEntries: stakingHistoricalEntries,
@@ -270,15 +270,15 @@ const NewProposalModal = () => {
       case 'GOV_PARAMS_UPDATE_PROPOSAL':
         const govParams = {
           minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
-          maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod.replace('s', '')), nanos: 0 },
-          votingPeriod: { seconds: BigInt(govVotingPeriod.replace('s', '')), nanos: 0 },
+          maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod), nanos: 0 },
+          votingPeriod: { seconds: BigInt(govVotingPeriod), nanos: 0 },
           quorum: govQuorum,
           threshold: govThreshold,
           vetoThreshold: govVetoThreshold,
           minInitialDepositRatio: govMinInitialDepositRatio,
           proposalCancelRatio: govProposalCancelRatio,
           proposalCancelDest: govProposalCancelDest,
-          expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod.replace('s', '')), nanos: 0 },
+          expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod), nanos: 0 },
           expeditedThreshold: govExpeditedThreshold,
           expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
           burnVoteQuorum: govBurnVoteQuorum,
@@ -468,7 +468,7 @@ const NewProposalModal = () => {
           summary: description,
           initialDepositFCT: initialDeposit,
           stakingParams: {
-            unbondingTime: { seconds: BigInt(stakingUnbondingTime.replace('s', '')), nanos: 0 },
+            unbondingTime: { seconds: BigInt(stakingUnbondingTime), nanos: 0 },
             maxValidators: stakingMaxValidators,
             maxEntries: stakingMaxEntries,
             historicalEntries: stakingHistoricalEntries,
@@ -484,15 +484,15 @@ const NewProposalModal = () => {
           initialDepositFCT: initialDeposit,
           govParams: {
             minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
-            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod.replace('s', '')), nanos: 0 },
-            votingPeriod: { seconds: BigInt(govVotingPeriod.replace('s', '')), nanos: 0 },
+            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod), nanos: 0 },
+            votingPeriod: { seconds: BigInt(govVotingPeriod), nanos: 0 },
             quorum: govQuorum,
             threshold: govThreshold,
             vetoThreshold: govVetoThreshold,
             minInitialDepositRatio: govMinInitialDepositRatio,
             proposalCancelRatio: govProposalCancelRatio,
             proposalCancelDest: govProposalCancelDest,
-            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod.replace('s', '')), nanos: 0 },
+            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod), nanos: 0 },
             expeditedThreshold: govExpeditedThreshold,
             expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
             burnVoteQuorum: govBurnVoteQuorum,
@@ -640,7 +640,7 @@ const NewProposalModal = () => {
           };
 
           const stakingParamsEstimate = {
-            unbondingTime: { seconds: BigInt(stakingUnbondingTime.replace('s', '')), nanos: 0 },
+            unbondingTime: { seconds: BigInt(stakingUnbondingTime), nanos: 0 },
             maxValidators: stakingMaxValidators,
             maxEntries: stakingMaxEntries,
             historicalEntries: stakingHistoricalEntries,
@@ -659,15 +659,15 @@ const NewProposalModal = () => {
         case 'GOV_PARAMS_UPDATE_PROPOSAL':
           const govParamsEstimate = {
             minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
-            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod.replace('s', '')), nanos: 0 },
-            votingPeriod: { seconds: BigInt(govVotingPeriod.replace('s', '')), nanos: 0 },
+            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod), nanos: 0 },
+            votingPeriod: { seconds: BigInt(govVotingPeriod), nanos: 0 },
             quorum: govQuorum,
             threshold: govThreshold,
             vetoThreshold: govVetoThreshold,
             minInitialDepositRatio: govMinInitialDepositRatio,
             proposalCancelRatio: govProposalCancelRatio,
             proposalCancelDest: govProposalCancelDest,
-            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod.replace('s', '')), nanos: 0 },
+            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod), nanos: 0 },
             expeditedThreshold: govExpeditedThreshold,
             expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
             burnVoteQuorum: govBurnVoteQuorum,
@@ -887,8 +887,8 @@ const NewProposalModal = () => {
                 <ModalLabel>Unbonding Time (seconds)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='text'
-                    placeholder='1814400s'
+                    type='number'
+                    placeholder='1814400'
                     value={stakingUnbondingTime}
                     onChange={(e) => setStakingUnbondingTime(e.target.value)}
                   />
@@ -1020,8 +1020,8 @@ const NewProposalModal = () => {
                   <ModalLabel>Max Deposit Period (seconds)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='172800s'
+                      type='number'
+                      placeholder='172800'
                       value={govMaxDepositPeriod}
                       onChange={(e) => setGovMaxDepositPeriod(e.target.value)}
                     />
@@ -1031,8 +1031,8 @@ const NewProposalModal = () => {
                   <ModalLabel>Voting Period (seconds)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='172800s'
+                      type='number'
+                      placeholder='172800'
                       value={govVotingPeriod}
                       onChange={(e) => setGovVotingPeriod(e.target.value)}
                     />
@@ -1042,7 +1042,7 @@ const NewProposalModal = () => {
                   <ModalLabel>Quorum (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
+                      type='number'
                       placeholder='0.334000000000000000'
                       value={govQuorum}
                       onChange={(e) => setGovQuorum(e.target.value)}
@@ -1108,8 +1108,8 @@ const NewProposalModal = () => {
                   <ModalLabel>Expedited Voting Period (seconds)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='86400s'
+                      type='number'
+                      placeholder='86400'
                       value={govExpeditedVotingPeriod}
                       onChange={(e) => setGovExpeditedVotingPeriod(e.target.value)}
                     />
