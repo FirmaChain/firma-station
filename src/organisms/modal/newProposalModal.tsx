@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import Select from 'react-select';
@@ -9,6 +9,9 @@ import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
 import { GUIDE_LINK_NEW_PROPOSAL } from '../../config';
+
+import { Params as GovParams } from '@kintsugi-tech/cosmjs-types/cosmos/gov/v1/gov';
+import { Params as StakingParams } from '@kintsugi-tech/cosmjs-types/cosmos/staking/v1beta1/staking';
 
 import {
   newProposalModalWidth,
@@ -30,19 +33,19 @@ import {
   HelpIcon,
   ButtonWrapper,
   CancelButton,
-  ModalInputWrap,
+  ModalInputWrap
 } from './styles';
 
-  const options = [
-    { value: 'TEXT_PROPOSAL', label: 'Text' },
-    { value: 'COMMUNITY_POOL_SPEND_PROPOSAL', label: 'CommunityPoolSpend' },
-    // { value: 'PARAMETER_CHANGE_PROPOSAL', label: 'ParameterChange' },
-    { value: 'STAKING_PARAMS_UPDATE_PROPOSAL', label: 'StakingParamsUpdate' },
-    { value: 'GOV_PARAMS_UPDATE_PROPOSAL', label: 'GovParamsUpdate' },
-    { value: 'SOFTWARE_UPGRADE', label: 'SoftwareUpgrade' },
-    // { value: 'CANCEL_SOFTWARE_UPGRADE', label: 'CancelSoftwareUpgrade' },
-    { value: 'CANCEL_PROPOSAL', label: 'CancelProposal' },
-  ];
+const options = [
+  { value: 'TEXT_PROPOSAL', label: 'Text' },
+  { value: 'COMMUNITY_POOL_SPEND_PROPOSAL', label: 'CommunityPoolSpend' },
+  // { value: 'PARAMETER_CHANGE_PROPOSAL', label: 'ParameterChange' },
+  { value: 'STAKING_PARAMS_UPDATE_PROPOSAL', label: 'StakingParamsUpdate' },
+  { value: 'GOV_PARAMS_UPDATE_PROPOSAL', label: 'GovParamsUpdate' },
+  { value: 'SOFTWARE_UPGRADE', label: 'SoftwareUpgrade' }
+  // { value: 'CANCEL_SOFTWARE_UPGRADE', label: 'CancelSoftwareUpgrade' },
+  // { value: 'CANCEL_PROPOSAL', label: 'CancelProposal' }
+];
 
 const customStyles = {
   control: (provided: any) => ({
@@ -50,7 +53,7 @@ const customStyles = {
     backgroundColor: '#3d3b48',
     border: '1px solid #ffffff00 !important',
     borderRadius: '0',
-    boxShadow: 'none',
+    boxShadow: 'none'
   }),
   option: (provided: any) => ({
     ...provided,
@@ -60,30 +63,33 @@ const customStyles = {
     paddingTop: '12px',
     paddingBottom: '12px',
     '&:hover': {
-      backgroundColor: '#3d3b48',
-    },
+      backgroundColor: '#3d3b48'
+    }
   }),
   indicatorSeparator: (provided: any) => ({
     ...provided,
     color: '#888',
-    backgroundColor: '#888',
+    backgroundColor: '#888'
   }),
   dropdownIndicator: (provided: any) => ({
     ...provided,
-    color: '#888',
+    color: '#888'
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    color: 'white',
+    color: 'white'
   }),
   menuList: (provided: any) => ({
     ...provided,
     backgroundColor: '#3d3b48',
     borderRadius: '0',
     margin: '0',
-    padding: '0',
-  }),
+    padding: '0'
+  })
 };
+
+// Parameter object type definition
+type ProposalParams = Partial<GovParams & StakingParams>;
 
 const NewProposalModal = () => {
   const newProposalState = useSelector((state: rootState) => state.modal.newProposal);
@@ -103,33 +109,11 @@ const NewProposalModal = () => {
   const [paramList, setParamList] = useState<any[]>([]);
   const [proposalId, setProposalId] = useState('');
 
-  // Staking Parameters
-  const [stakingUnbondingTime, setStakingUnbondingTime] = useState('1814400'); // 21 days default
-  const [stakingMaxValidators, setStakingMaxValidators] = useState(100);
-  const [stakingMaxEntries, setStakingMaxEntries] = useState(7);
-  const [stakingHistoricalEntries, setStakingHistoricalEntries] = useState(10000);
-  const [stakingBondDenom, setStakingBondDenom] = useState('ufct');
-  const [stakingMinCommissionRate, setStakingMinCommissionRate] = useState('0.05');
-
-  // Gov Parameters  
-  const [govMinDeposit, setGovMinDeposit] = useState('5000000000');
-  const [govMaxDepositPeriod, setGovMaxDepositPeriod] = useState('172800'); // 2 days
-  const [govVotingPeriod, setGovVotingPeriod] = useState('172800'); // 2 days
-  const [govQuorum, setGovQuorum] = useState('0.334000000000000000');
-  const [govThreshold, setGovThreshold] = useState('0.500000000000000000');
-  const [govVetoThreshold, setGovVetoThreshold] = useState('0.334000000000000000');
-  const [govMinInitialDepositRatio, setGovMinInitialDepositRatio] = useState('0.100000000000000000');
-  const [govProposalCancelRatio, setGovProposalCancelRatio] = useState('0.500000000000000000');
-  const [govProposalCancelDest, setGovProposalCancelDest] = useState('');
-  const [govExpeditedVotingPeriod, setGovExpeditedVotingPeriod] = useState('86400'); // 1 day
-  const [govExpeditedThreshold, setGovExpeditedThreshold] = useState('0.667000000000000000');
-  const [govExpeditedMinDeposit, setGovExpeditedMinDeposit] = useState('10000000000');
-  const [govBurnVoteQuorum, setGovBurnVoteQuorum] = useState(false);
-  const [govBurnProposalDepositPrevote, setGovBurnProposalDepositPrevote] = useState(false);
-  const [govBurnVoteVeto, setGovBurnVoteVeto] = useState(true);
-  const [govMinDepositRatio, setGovMinDepositRatio] = useState('0.010000000000000000');
+  // Unified parameter object
+  const [paramObj, setParamObj] = useState<ProposalParams>({});
 
   const {
+    FirmaSDK,
     submitParameterChangeProposal,
     submitCommunityPoolSpendProposal,
     submitTextProposal,
@@ -137,7 +121,7 @@ const NewProposalModal = () => {
     submitCancelSoftwareUpgrade,
     submitStakingParamsUpdateProposal,
     submitGovParamsUpdateProposal,
-    cancelProposal,
+    // cancelProposal,
     getGasEstimationSubmitCancelSoftwareUpgrade,
     getGasEstimationSubmitParameterChangeProposal,
     getGasEstimationSubmitCommunityPoolSpendProposal,
@@ -145,9 +129,14 @@ const NewProposalModal = () => {
     getGasEstimationSubmitTextProposal,
     getGasEstimationSubmitStakingParamsUpdateProposal,
     getGasEstimationSubmitGovParamsUpdateProposal,
-    getGasEstimationCancelProposal,
-    setUserData,
+    // getGasEstimationCancelProposal,
+    setUserData
   } = useFirma();
+
+  // Parameter update function
+  const updateParam = (key: string, value: any) => {
+    setParamObj((prev) => ({ ...prev, [key]: value }));
+  };
 
   const closeModal = () => {
     resetModal();
@@ -165,35 +154,10 @@ const NewProposalModal = () => {
     setDescription('');
     setInitialDeposit(0);
     setRecipient('');
-        setAmount(0);
+    setAmount(0);
     setParamList([]);
     setProposalId('');
-    
-    // Reset Staking Parameters to defaults
-    setStakingUnbondingTime('1814400');
-    setStakingMaxValidators(100);
-    setStakingMaxEntries(7);
-    setStakingHistoricalEntries(10000);
-    setStakingBondDenom('ufct');
-    setStakingMinCommissionRate('0.05');
-
-    // Reset Gov Parameters to defaults
-    setGovMinDeposit('5000000000');
-    setGovMaxDepositPeriod('172800');
-    setGovVotingPeriod('172800');
-    setGovQuorum('0.334000000000000000');
-    setGovThreshold('0.500000000000000000');
-    setGovVetoThreshold('0.334000000000000000');
-    setGovMinInitialDepositRatio('0.100000000000000000');
-    setGovProposalCancelRatio('0.500000000000000000');
-    setGovProposalCancelDest('');
-    setGovExpeditedVotingPeriod('86400');
-    setGovExpeditedThreshold('0.667000000000000000');
-    setGovExpeditedMinDeposit('10000000000');
-    setGovBurnVoteQuorum(false);
-    setGovBurnProposalDepositPrevote(false);
-    setGovBurnVoteVeto(true);
-    setGovMinDepositRatio('0.010000000000000000');
+    setParamObj({});
   };
 
   const newProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
@@ -218,18 +182,18 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
-      case 'PARAMETER_CHANGE_PROPOSAL':
-        const validParamList = paramList.filter(
-          (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
-        );
-        submitParameterChangeProposal(title, description, initialDeposit, validParamList, gas)
-          .then(() => {
-            resolveTx();
-          })
-          .catch(() => {
-            rejectTx();
-          });
-        break;
+      // case 'PARAMETER_CHANGE_PROPOSAL':
+      //   const validParamList = paramList.filter(
+      //     (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
+      //   );
+      //   submitParameterChangeProposal(title, description, initialDeposit, validParamList, gas)
+      //     .then(() => {
+      //       resolveTx();
+      //     })
+      //     .catch(() => {
+      //       rejectTx();
+      //     });
+      //   break;
       case 'STAKING_PARAMS_UPDATE_PROPOSAL':
         // Convert commission rate to proper decimal format for Cosmos SDK
         const processCommissionRate = (rate: string): string => {
@@ -250,12 +214,15 @@ const NewProposalModal = () => {
         };
 
         const stakingParams = {
-          unbondingTime: { seconds: BigInt(stakingUnbondingTime), nanos: 0 },
-          maxValidators: stakingMaxValidators,
-          maxEntries: stakingMaxEntries,
-          historicalEntries: stakingHistoricalEntries,
-          bondDenom: stakingBondDenom,
-          minCommissionRate: processCommissionRate(stakingMinCommissionRate)
+          unbondingTime: {
+            seconds: BigInt(paramObj.unbondingTime?.seconds || '0'),
+            nanos: paramObj.unbondingTime?.nanos || 0
+          },
+          maxValidators: paramObj.maxValidators,
+          maxEntries: paramObj.maxEntries,
+          historicalEntries: paramObj.historicalEntries,
+          bondDenom: paramObj.bondDenom,
+          minCommissionRate: processCommissionRate(paramObj.minCommissionRate || '')
         };
         const stakingMetadata = '';
         submitStakingParamsUpdateProposal(title, description, initialDeposit, stakingParams, stakingMetadata, gas)
@@ -269,22 +236,31 @@ const NewProposalModal = () => {
         break;
       case 'GOV_PARAMS_UPDATE_PROPOSAL':
         const govParams = {
-          minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
-          maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod), nanos: 0 },
-          votingPeriod: { seconds: BigInt(govVotingPeriod), nanos: 0 },
-          quorum: govQuorum,
-          threshold: govThreshold,
-          vetoThreshold: govVetoThreshold,
-          minInitialDepositRatio: govMinInitialDepositRatio,
-          proposalCancelRatio: govProposalCancelRatio,
-          proposalCancelDest: govProposalCancelDest,
-          expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod), nanos: 0 },
-          expeditedThreshold: govExpeditedThreshold,
-          expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
-          burnVoteQuorum: govBurnVoteQuorum,
-          burnProposalDepositPrevote: govBurnProposalDepositPrevote,
-          burnVoteVeto: govBurnVoteVeto,
-          minDepositRatio: govMinDepositRatio
+          minDeposit: paramObj.minDeposit,
+          maxDepositPeriod: {
+            seconds: BigInt(paramObj.maxDepositPeriod?.seconds || '0'),
+            nanos: paramObj.maxDepositPeriod?.nanos || 0
+          },
+          votingPeriod: {
+            seconds: BigInt(paramObj.votingPeriod?.seconds || '0'),
+            nanos: paramObj.votingPeriod?.nanos || 0
+          },
+          quorum: paramObj.quorum,
+          threshold: paramObj.threshold,
+          vetoThreshold: paramObj.vetoThreshold,
+          minInitialDepositRatio: paramObj.minInitialDepositRatio,
+          proposalCancelRatio: paramObj.proposalCancelRatio,
+          proposalCancelDest: paramObj.proposalCancelDest,
+          expeditedVotingPeriod: {
+            seconds: BigInt(paramObj.expeditedVotingPeriod?.seconds || '0'),
+            nanos: paramObj.expeditedVotingPeriod?.nanos || 0
+          },
+          expeditedThreshold: paramObj.expeditedThreshold,
+          expeditedMinDeposit: paramObj.expeditedMinDeposit,
+          burnVoteQuorum: paramObj.burnVoteQuorum,
+          burnProposalDepositPrevote: paramObj.burnProposalDepositPrevote,
+          burnVoteVeto: paramObj.burnVoteVeto,
+          minDepositRatio: paramObj.minDepositRatio
         };
         const govMetadata = '';
         submitGovParamsUpdateProposal(title, description, initialDeposit, govParams, govMetadata, gas)
@@ -316,16 +292,16 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
-      case 'CANCEL_PROPOSAL':
-        cancelProposal(proposalId, gas)
-          .then(() => {
-            setUserData();
-            resolveTx();
-          })
-          .catch(() => {
-            rejectTx();
-          });
-        break;
+      // case 'CANCEL_PROPOSAL':
+      //   cancelProposal(proposalId, gas)
+      //     .then(() => {
+      //       setUserData();
+      //       resolveTx();
+      //     })
+      //     .catch(() => {
+      //       rejectTx();
+      //     });
+      //   break;
       default:
         break;
     }
@@ -401,17 +377,17 @@ const NewProposalModal = () => {
 
   const onChangeSubspace = (e: any, index: number) => {
     setParamList((prevState) => [
-      ...prevState.map((item, i) => (i === index ? { ...item, subspace: e.target.value } : item)),
+      ...prevState.map((item, i) => (i === index ? { ...item, subspace: e.target.value } : item))
     ]);
   };
   const onChangeKey = (e: any, index: number) => {
     setParamList((prevState) => [
-      ...prevState.map((item, i) => (i === index ? { ...item, key: e.target.value } : item)),
+      ...prevState.map((item, i) => (i === index ? { ...item, key: e.target.value } : item))
     ]);
   };
   const onChangeValue = (e: any, index: number) => {
     setParamList((prevState) => [
-      ...prevState.map((item, i) => (i === index ? { ...item, value: e.target.value } : item)),
+      ...prevState.map((item, i) => (i === index ? { ...item, value: e.target.value } : item))
     ]);
   };
 
@@ -429,7 +405,7 @@ const NewProposalModal = () => {
         return {
           title,
           description,
-          initialDepositFCT: initialDeposit,
+          initialDepositFCT: initialDeposit
         };
       case 'COMMUNITY_POOL_SPEND_PROPOSAL':
         return {
@@ -437,15 +413,15 @@ const NewProposalModal = () => {
           description,
           initialDepositFCT: initialDeposit,
           fctAmount: amount,
-          recipient,
+          recipient
         };
-      case 'PARAMETER_CHANGE_PROPOSAL':
-        return {
-          title,
-          description,
-          initialDepositFCT: initialDeposit,
-          paramList: paramList.filter((value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''),
-        };
+      // case 'PARAMETER_CHANGE_PROPOSAL':
+      //   return {
+      //     title,
+      //     description,
+      //     initialDepositFCT: initialDeposit,
+      //     paramList: paramList.filter((value: any) => value.subspace !== '' && value.key !== '' && value.value !== '')
+      //   };
       case 'STAKING_PARAMS_UPDATE_PROPOSAL':
         // Commission rate conversion for getParamsTx
         const processCommissionRateParams = (rate: string): string => {
@@ -468,14 +444,17 @@ const NewProposalModal = () => {
           summary: description,
           initialDepositFCT: initialDeposit,
           stakingParams: {
-            unbondingTime: { seconds: BigInt(stakingUnbondingTime), nanos: 0 },
-            maxValidators: stakingMaxValidators,
-            maxEntries: stakingMaxEntries,
-            historicalEntries: stakingHistoricalEntries,
-            bondDenom: stakingBondDenom,
-            minCommissionRate: processCommissionRateParams(stakingMinCommissionRate)
+            unbondingTime: {
+              seconds: BigInt(paramObj.unbondingTime?.seconds || '0'),
+              nanos: paramObj.unbondingTime?.nanos || 0
+            },
+            maxValidators: paramObj.maxValidators,
+            maxEntries: paramObj.maxEntries,
+            historicalEntries: paramObj.historicalEntries,
+            bondDenom: paramObj.bondDenom,
+            minCommissionRate: processCommissionRateParams(paramObj.minCommissionRate || '')
           },
-          metadata: '',
+          metadata: ''
         };
       case 'GOV_PARAMS_UPDATE_PROPOSAL':
         return {
@@ -483,24 +462,33 @@ const NewProposalModal = () => {
           summary: description,
           initialDepositFCT: initialDeposit,
           govParams: {
-            minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
-            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod), nanos: 0 },
-            votingPeriod: { seconds: BigInt(govVotingPeriod), nanos: 0 },
-            quorum: govQuorum,
-            threshold: govThreshold,
-            vetoThreshold: govVetoThreshold,
-            minInitialDepositRatio: govMinInitialDepositRatio,
-            proposalCancelRatio: govProposalCancelRatio,
-            proposalCancelDest: govProposalCancelDest,
-            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod), nanos: 0 },
-            expeditedThreshold: govExpeditedThreshold,
-            expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
-            burnVoteQuorum: govBurnVoteQuorum,
-            burnProposalDepositPrevote: govBurnProposalDepositPrevote,
-            burnVoteVeto: govBurnVoteVeto,
-            minDepositRatio: govMinDepositRatio
+            minDeposit: paramObj.minDeposit,
+            maxDepositPeriod: {
+              seconds: BigInt(paramObj.maxDepositPeriod?.seconds || '0'),
+              nanos: paramObj.maxDepositPeriod?.nanos || 0
+            },
+            votingPeriod: {
+              seconds: BigInt(paramObj.votingPeriod?.seconds || '0'),
+              nanos: paramObj.votingPeriod?.nanos || 0
+            },
+            quorum: paramObj.quorum,
+            threshold: paramObj.threshold,
+            vetoThreshold: paramObj.vetoThreshold,
+            minInitialDepositRatio: paramObj.minInitialDepositRatio,
+            proposalCancelRatio: paramObj.proposalCancelRatio,
+            proposalCancelDest: paramObj.proposalCancelDest,
+            expeditedVotingPeriod: {
+              seconds: BigInt(paramObj.expeditedVotingPeriod?.seconds || '0'),
+              nanos: paramObj.expeditedVotingPeriod?.nanos || 0
+            },
+            expeditedThreshold: paramObj.expeditedThreshold,
+            expeditedMinDeposit: paramObj.expeditedMinDeposit,
+            burnVoteQuorum: paramObj.burnVoteQuorum,
+            burnProposalDepositPrevote: paramObj.burnProposalDepositPrevote,
+            burnVoteVeto: paramObj.burnVoteVeto,
+            minDepositRatio: paramObj.minDepositRatio
           },
-          metadata: '',
+          metadata: ''
         };
       case 'SOFTWARE_UPGRADE':
         return {
@@ -508,26 +496,26 @@ const NewProposalModal = () => {
           description,
           initialDepositFCT: initialDeposit,
           upgradeName,
-          upgradeHeight: height,
+          upgradeHeight: height
         };
       case 'CANCEL_SOFTWARE_UPGRADE':
         return {
           title,
           description,
-          initialDepositFCT: initialDeposit,
+          initialDepositFCT: initialDeposit
         };
-      case 'CANCEL_PROPOSAL':
-        return {
-          title,
-          description,
-          initialDepositFCT: initialDeposit,
-          proposalId: parseInt(proposalId),
-        };
+      // case 'CANCEL_PROPOSAL':
+      //   return {
+      //     title,
+      //     description,
+      //     initialDepositFCT: initialDeposit,
+      //     proposalId: parseInt(proposalId)
+      //   };
       default:
         return {
           title,
           description,
-          initialDepositFCT: initialDeposit,
+          initialDepositFCT: initialDeposit
         };
     }
   };
@@ -538,8 +526,8 @@ const NewProposalModal = () => {
         return '/submit/text';
       case 'COMMUNITY_POOL_SPEND_PROPOSAL':
         return '/submit/communitypool';
-      case 'PARAMETER_CHANGE_PROPOSAL':
-        return '/submit/paramchange';
+      // case 'PARAMETER_CHANGE_PROPOSAL':
+      //   return '/submit/paramchange';
       case 'STAKING_PARAMS_UPDATE_PROPOSAL':
         return '/submit/stakingparamsupdate';
       case 'GOV_PARAMS_UPDATE_PROPOSAL':
@@ -548,8 +536,8 @@ const NewProposalModal = () => {
         return '/submit/softwareupgrade';
       case 'CANCEL_SOFTWARE_UPGRADE':
         return '/submit/cancelsoftwareupgrade';
-      case 'CANCEL_PROPOSAL':
-        return '/submit/cancelproposal';
+      // case 'CANCEL_PROPOSAL':
+      //   return '/submit/cancelproposal';
       default:
         return '';
     }
@@ -563,31 +551,50 @@ const NewProposalModal = () => {
     const isCommonInvalid = title === '' || description === '' || initialDeposit === 0;
     const isCommunityPoolInvalid =
       proposalType === 'COMMUNITY_POOL_SPEND_PROPOSAL' && (recipient === '' || amount === 0);
-    const isParameterChangeInvalid = proposalType === 'PARAMETER_CHANGE_PROPOSAL' && validParamList.length === 0;
-    const isStakingParamsInvalid = proposalType === 'STAKING_PARAMS_UPDATE_PROPOSAL' &&
-      (stakingUnbondingTime === '' || stakingMaxValidators <= 0 || stakingMaxEntries <= 0 ||
-        stakingHistoricalEntries < 0 || stakingBondDenom === '' ||
-        stakingMinCommissionRate === '' ||
-        (stakingMinCommissionRate !== '' && (parseFloat(stakingMinCommissionRate) < 0 || parseFloat(stakingMinCommissionRate) > 1)));
-    const isGovParamsInvalid = proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL' &&
-      (govMinDeposit === '' || govMaxDepositPeriod === '' || govVotingPeriod === '' ||
-        govQuorum === '' || govThreshold === '' || govVetoThreshold === '');
+    // const isParameterChangeInvalid = proposalType === 'PARAMETER_CHANGE_PROPOSAL' && validParamList.length === 0;
+    const isStakingParamsInvalid =
+      proposalType === 'STAKING_PARAMS_UPDATE_PROPOSAL' &&
+      (paramObj.unbondingTime?.seconds === undefined ||
+        paramObj.maxValidators === undefined ||
+        paramObj.maxEntries === undefined ||
+        paramObj.historicalEntries === undefined ||
+        paramObj.bondDenom === undefined ||
+        paramObj.minCommissionRate === undefined ||
+        (paramObj.minCommissionRate !== undefined &&
+          (parseFloat(paramObj.minCommissionRate) < 0 || parseFloat(paramObj.minCommissionRate) > 1)));
+    const isGovParamsInvalid =
+      proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL' &&
+      (paramObj.minDeposit === undefined ||
+        paramObj.maxDepositPeriod?.seconds === undefined ||
+        paramObj.votingPeriod?.seconds === undefined ||
+        paramObj.quorum === undefined ||
+        paramObj.threshold === undefined ||
+        paramObj.vetoThreshold === undefined);
     const isSoftwareUpgradeInvalid = proposalType === 'SOFTWARE_UPGRADE' && (upgradeName === '' || height <= 0);
-    const isCancelProposalInvalid = proposalType === 'CANCEL_PROPOSAL' && (proposalId === '' || isNaN(parseInt(proposalId)));
+    // const isCancelProposalInvalid =
+    //   proposalType === 'CANCEL_PROPOSAL' && (proposalId === '' || isNaN(parseInt(proposalId)));
 
     if (initialDeposit === 0) {
       enqueueSnackbar('Insufficient funds. Please check your account balance.', {
         variant: 'error',
-        autoHideDuration: 2000,
+        autoHideDuration: 2000
       });
 
       return;
     }
 
-    if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid || isStakingParamsInvalid || isGovParamsInvalid || isSoftwareUpgradeInvalid || isCancelProposalInvalid) {
+    if (
+      isCommonInvalid ||
+      isCommunityPoolInvalid ||
+      // isParameterChangeInvalid ||
+      isStakingParamsInvalid ||
+      isGovParamsInvalid ||
+      isSoftwareUpgradeInvalid
+      // || isCancelProposalInvalid
+    ) {
       enqueueSnackbar('Invalid Parameters', {
         variant: 'error',
-        autoHideDuration: 2000,
+        autoHideDuration: 2000
       });
 
       return;
@@ -611,17 +618,17 @@ const NewProposalModal = () => {
             recipient
           );
           break;
-        case 'PARAMETER_CHANGE_PROPOSAL':
-          const validParamList = paramList.filter(
-            (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
-          );
-          currentGas = await getGasEstimationSubmitParameterChangeProposal(
-            title,
-            description,
-            initialDeposit,
-            validParamList
-          );
-          break;
+        // case 'PARAMETER_CHANGE_PROPOSAL':
+        //   const validParamList = paramList.filter(
+        //     (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
+        //   );
+        //   currentGas = await getGasEstimationSubmitParameterChangeProposal(
+        //     title,
+        //     description,
+        //     initialDeposit,
+        //     validParamList
+        //   );
+        //   break;
         case 'STAKING_PARAMS_UPDATE_PROPOSAL':
           // Commission rate conversion helper
           const processCommissionRateEstimate = (rate: string): string => {
@@ -640,12 +647,15 @@ const NewProposalModal = () => {
           };
 
           const stakingParamsEstimate = {
-            unbondingTime: { seconds: BigInt(stakingUnbondingTime), nanos: 0 },
-            maxValidators: stakingMaxValidators,
-            maxEntries: stakingMaxEntries,
-            historicalEntries: stakingHistoricalEntries,
-            bondDenom: stakingBondDenom,
-            minCommissionRate: processCommissionRateEstimate(stakingMinCommissionRate)
+            unbondingTime: {
+              seconds: BigInt(paramObj.unbondingTime?.seconds || '0'),
+              nanos: paramObj.unbondingTime?.nanos || 0
+            },
+            maxValidators: paramObj.maxValidators,
+            maxEntries: paramObj.maxEntries,
+            historicalEntries: paramObj.historicalEntries,
+            bondDenom: paramObj.bondDenom,
+            minCommissionRate: processCommissionRateEstimate(paramObj.minCommissionRate || '')
           };
           const stakingMetadataEstimate = '';
           currentGas = await getGasEstimationSubmitStakingParamsUpdateProposal(
@@ -658,22 +668,31 @@ const NewProposalModal = () => {
           break;
         case 'GOV_PARAMS_UPDATE_PROPOSAL':
           const govParamsEstimate = {
-            minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
-            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod), nanos: 0 },
-            votingPeriod: { seconds: BigInt(govVotingPeriod), nanos: 0 },
-            quorum: govQuorum,
-            threshold: govThreshold,
-            vetoThreshold: govVetoThreshold,
-            minInitialDepositRatio: govMinInitialDepositRatio,
-            proposalCancelRatio: govProposalCancelRatio,
-            proposalCancelDest: govProposalCancelDest,
-            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod), nanos: 0 },
-            expeditedThreshold: govExpeditedThreshold,
-            expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
-            burnVoteQuorum: govBurnVoteQuorum,
-            burnProposalDepositPrevote: govBurnProposalDepositPrevote,
-            burnVoteVeto: govBurnVoteVeto,
-            minDepositRatio: govMinDepositRatio
+            minDeposit: paramObj.minDeposit,
+            maxDepositPeriod: {
+              seconds: BigInt(paramObj.maxDepositPeriod?.seconds || '0'),
+              nanos: paramObj.maxDepositPeriod?.nanos || 0
+            },
+            votingPeriod: {
+              seconds: BigInt(paramObj.votingPeriod?.seconds || '0'),
+              nanos: paramObj.votingPeriod?.nanos || 0
+            },
+            quorum: paramObj.quorum,
+            threshold: paramObj.threshold,
+            vetoThreshold: paramObj.vetoThreshold,
+            minInitialDepositRatio: paramObj.minInitialDepositRatio,
+            proposalCancelRatio: paramObj.proposalCancelRatio,
+            proposalCancelDest: paramObj.proposalCancelDest,
+            expeditedVotingPeriod: {
+              seconds: BigInt(paramObj.expeditedVotingPeriod?.seconds || '0'),
+              nanos: paramObj.expeditedVotingPeriod?.nanos || 0
+            },
+            expeditedThreshold: paramObj.expeditedThreshold,
+            expeditedMinDeposit: paramObj.expeditedMinDeposit,
+            burnVoteQuorum: paramObj.burnVoteQuorum,
+            burnProposalDepositPrevote: paramObj.burnProposalDepositPrevote,
+            burnVoteVeto: paramObj.burnVoteVeto,
+            minDepositRatio: paramObj.minDepositRatio
           };
           const govMetadataEstimate = '';
           currentGas = await getGasEstimationSubmitGovParamsUpdateProposal(
@@ -696,16 +715,16 @@ const NewProposalModal = () => {
         case 'CANCEL_SOFTWARE_UPGRADE':
           currentGas = await getGasEstimationSubmitCancelSoftwareUpgrade(title, description, initialDeposit);
           break;
-        case 'CANCEL_PROPOSAL':
-          currentGas = await getGasEstimationCancelProposal(proposalId);
-          break;
+        // case 'CANCEL_PROPOSAL':
+        //   currentGas = await getGasEstimationCancelProposal(proposalId);
+        //   break;
         default:
           break;
       }
     } catch (error) {
       enqueueSnackbar(error + '', {
         variant: 'error',
-        autoHideDuration: 5000,
+        autoHideDuration: 5000
       });
     }
 
@@ -717,18 +736,47 @@ const NewProposalModal = () => {
           data: { fees: getFeesFromGas(currentGas), gas: currentGas },
           prevModalAction: modalActions.handleModalNewProposal,
           txAction: newProposalTx,
-          txParams: getParamsTx,
+          txParams: getParamsTx
         });
 
         modalActions.handleModalConfirmTx(true);
       } else {
         enqueueSnackbar('Insufficient funds. Please check your account balance.', {
           variant: 'error',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
       }
     }
   };
+
+  const getDefaultParams = async () => {
+    if (!['STAKING_PARAMS_UPDATE_PROPOSAL', 'GOV_PARAMS_UPDATE_PROPOSAL'].includes(proposalType)) {
+      setParamObj({});
+      return;
+    }
+
+    try {
+      if (proposalType === 'STAKING_PARAMS_UPDATE_PROPOSAL') {
+        const params = await FirmaSDK.getSDK().Staking.getParamsAsStakingParams();
+        setParamObj(params);
+      }
+
+      if (proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL') {
+        const params = await FirmaSDK.getSDK().Gov.getParamAsGovParams();
+        setParamObj(params);
+      }
+    } catch (error) {
+      console.error('Failed to fetch default params:', error);
+      enqueueSnackbar('Failed to fetch default parameters', {
+        variant: 'error',
+        autoHideDuration: 2000
+      });
+    }
+  };
+
+  useEffect(() => {
+    getDefaultParams();
+  }, [proposalType]);
 
   return (
     <Modal
@@ -756,27 +804,35 @@ const NewProposalModal = () => {
           <ModalInputWrap>
             <ModalLabel>Title</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type='text' placeholder='Proposal Title' value={title} onChange={onChangeTitle} />
+              <InputBoxDefault type="text" placeholder="Proposal Title" value={title} onChange={onChangeTitle} />
             </ModalInput>
           </ModalInputWrap>
 
           <ModalInputWrap>
             <ModalLabel>Description</ModalLabel>
             <ModalInput>
-              <TextAreaDefault value={description} placeholder='Proposal Description' onChange={onChangeDescription} />
+              <TextAreaDefault value={description} placeholder="Proposal Description" onChange={onChangeDescription} />
             </ModalInput>
           </ModalInputWrap>
           <ModalInputWrap>
             <ModalLabel>Initial Deposit</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type='number' placeholder='' value={initialDeposit} onChange={onChangeInitialDeposit} />
+              <InputBoxDefault type="number" placeholder="" value={initialDeposit} onChange={onChangeInitialDeposit} />
             </ModalInput>
           </ModalInputWrap>
           {/* Parameter Change - Deprecated */}
-          {proposalType === 'PARAMETER_CHANGE_PROPOSAL' && (
+          {/* {proposalType === 'PARAMETER_CHANGE_PROPOSAL' && (
             <ModalInputWrap>
               <ModalLabel style={{ color: '#ff6b6b' }}>⚠️ Deprecated Feature</ModalLabel>
-              <div style={{ padding: '15px', background: '#2a2a2a', border: '1px solid #ff6b6b', borderRadius: '4px', marginBottom: '15px' }}>
+              <div
+                style={{
+                  padding: '15px',
+                  background: '#2a2a2a',
+                  border: '1px solid #ff6b6b',
+                  borderRadius: '4px',
+                  marginBottom: '15px'
+                }}
+              >
                 <p style={{ color: '#ff6b6b', marginBottom: '10px', fontSize: '14px' }}>
                   <strong>Parameter Change Proposal is deprecated in v0.5</strong>
                 </p>
@@ -784,8 +840,12 @@ const NewProposalModal = () => {
                   Please use specific parameter update proposals instead:
                 </p>
                 <ul style={{ color: '#ccc', fontSize: '12px', paddingLeft: '20px', margin: '0' }}>
-                  <li>• <strong>Staking Parameters:</strong> Use "StakingParamsUpdate" proposal</li>
-                  <li>• <strong>Governance Parameters:</strong> Use "GovParamsUpdate" proposal</li>
+                  <li>
+                    • <strong>Staking Parameters:</strong> Use "StakingParamsUpdate" proposal
+                  </li>
+                  <li>
+                    • <strong>Governance Parameters:</strong> Use "GovParamsUpdate" proposal
+                  </li>
                 </ul>
               </div>
               <ModalLabel>Changes (Legacy)</ModalLabel>
@@ -802,24 +862,24 @@ const NewProposalModal = () => {
                     <ParamBody key={index}>
                       <Param>
                         <InputBoxDefault
-                          type='text'
-                          placeholder=''
+                          type="text"
+                          placeholder=""
                           value={param.subspace}
                           onChange={(e) => onChangeSubspace(e, index)}
                         />
                       </Param>
                       <Param>
                         <InputBoxDefault
-                          type='text'
-                          placeholder=''
+                          type="text"
+                          placeholder=""
                           value={param.key}
                           onChange={(e) => onChangeKey(e, index)}
                         />
                       </Param>
                       <Param>
                         <InputBoxDefault
-                          type='text'
-                          placeholder=''
+                          type="text"
+                          placeholder=""
                           value={param.value}
                           onChange={(e) => onChangeValue(e, index)}
                         />
@@ -832,7 +892,7 @@ const NewProposalModal = () => {
                 </ParamTable>
               </ModalInput>
             </ModalInputWrap>
-          )}
+          )} */}
 
           {/* CommunityPool */}
           {proposalType === 'COMMUNITY_POOL_SPEND_PROPOSAL' && (
@@ -841,8 +901,8 @@ const NewProposalModal = () => {
                 <ModalLabel>Recipient</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='text'
-                    placeholder='Enter Recipient Address'
+                    type="text"
+                    placeholder="Enter Recipient Address"
                     value={recipient}
                     onChange={onChangeRecipient}
                   />
@@ -851,7 +911,7 @@ const NewProposalModal = () => {
               <ModalInputWrap>
                 <ModalLabel>Amount</ModalLabel>
                 <ModalInput>
-                  <InputBoxDefault type='number' placeholder='' value={amount} onChange={onChangeAmount} />
+                  <InputBoxDefault type="number" placeholder="" value={amount} onChange={onChangeAmount} />
                 </ModalInput>
               </ModalInputWrap>
             </>
@@ -864,8 +924,8 @@ const NewProposalModal = () => {
                 <ModalLabel>Upgrade Name</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='text'
-                    placeholder='v0.1.0'
+                    type="text"
+                    placeholder="v0.1.0"
                     value={upgradeName}
                     onChange={onChangeUpgradeName}
                   />
@@ -874,7 +934,7 @@ const NewProposalModal = () => {
               <ModalInputWrap>
                 <ModalLabel>Height</ModalLabel>
                 <ModalInput>
-                  <InputBoxDefault type='number' placeholder='1' value={height} onChange={onChangeHeight} />
+                  <InputBoxDefault type="number" placeholder="1" value={height} onChange={onChangeHeight} />
                 </ModalInput>
               </ModalInputWrap>
             </>
@@ -882,15 +942,20 @@ const NewProposalModal = () => {
 
           {/* Staking Parameters */}
           {proposalType === 'STAKING_PARAMS_UPDATE_PROPOSAL' && (
-            <>
+            <div style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '10px' }}>
               <ModalInputWrap>
                 <ModalLabel>Unbonding Time (seconds)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='number'
-                    placeholder='1814400'
-                    value={stakingUnbondingTime}
-                    onChange={(e) => setStakingUnbondingTime(e.target.value)}
+                    type="number"
+                    placeholder="1814400"
+                    value={paramObj.unbondingTime?.seconds ? String(paramObj.unbondingTime.seconds) : ''}
+                    onChange={(e) =>
+                      updateParam('unbondingTime', {
+                        seconds: BigInt(e.target.value),
+                        nanos: paramObj.unbondingTime?.nanos || 0
+                      })
+                    }
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -898,10 +963,10 @@ const NewProposalModal = () => {
                 <ModalLabel>Max Validators</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='number'
-                    placeholder='100'
-                    value={stakingMaxValidators}
-                    onChange={(e) => setStakingMaxValidators(Number(e.target.value))}
+                    type="number"
+                    placeholder="100"
+                    value={paramObj.maxValidators || ''}
+                    onChange={(e) => updateParam('maxValidators', Number(e.target.value))}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -909,10 +974,10 @@ const NewProposalModal = () => {
                 <ModalLabel>Max Entries</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='number'
-                    placeholder='7'
-                    value={stakingMaxEntries}
-                    onChange={(e) => setStakingMaxEntries(Number(e.target.value))}
+                    type="number"
+                    placeholder="7"
+                    value={paramObj.maxEntries || ''}
+                    onChange={(e) => updateParam('maxEntries', Number(e.target.value))}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -920,10 +985,10 @@ const NewProposalModal = () => {
                 <ModalLabel>Historical Entries</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='number'
-                    placeholder='10000'
-                    value={stakingHistoricalEntries}
-                    onChange={(e) => setStakingHistoricalEntries(Number(e.target.value))}
+                    type="number"
+                    placeholder="10000"
+                    value={paramObj.historicalEntries || ''}
+                    onChange={(e) => updateParam('historicalEntries', Number(e.target.value))}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -931,10 +996,10 @@ const NewProposalModal = () => {
                 <ModalLabel>Bond Denom</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='text'
-                    placeholder='ufct'
-                    value={stakingBondDenom}
-                    onChange={(e) => setStakingBondDenom(e.target.value)}
+                    type="text"
+                    placeholder="ufct"
+                    value={paramObj.bondDenom || ''}
+                    onChange={(e) => updateParam('bondDenom', e.target.value)}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -942,23 +1007,31 @@ const NewProposalModal = () => {
                 <ModalLabel>Min Commission Rate (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='text'
-                    placeholder='0.05'
-                    value={stakingMinCommissionRate}
-                    onChange={(e) => setStakingMinCommissionRate(e.target.value)}
+                    type="text"
+                    placeholder="0.05"
+                    value={paramObj.minCommissionRate || ''}
+                    onChange={(e) => updateParam('minCommissionRate', e.target.value)}
                   />
                   <div style={{ fontSize: '11px', color: '#888', marginTop: '5px' }}>
                     Enter as decimal (e.g., 0.05 for 5%). Range: 0.0 to 1.0
                   </div>
                 </ModalInput>
               </ModalInputWrap>
-            </>
+            </div>
           )}
 
           {/* Cancel Software Upgrade */}
           {proposalType === 'CANCEL_SOFTWARE_UPGRADE' && (
             <ModalInputWrap>
-              <div style={{ padding: '15px', background: '#2a2a2a', border: '1px solid #4a90e2', borderRadius: '4px', marginBottom: '15px' }}>
+              <div
+                style={{
+                  padding: '15px',
+                  background: '#2a2a2a',
+                  border: '1px solid #4a90e2',
+                  borderRadius: '4px',
+                  marginBottom: '15px'
+                }}
+              >
                 <p style={{ color: '#4a90e2', marginBottom: '10px', fontSize: '14px' }}>
                   <strong>Cancel Software Upgrade Proposal</strong>
                 </p>
@@ -971,16 +1044,24 @@ const NewProposalModal = () => {
           )}
 
           {/* Cancel Proposal */}
-          {proposalType === 'CANCEL_PROPOSAL' && (
+          {/* {proposalType === 'CANCEL_PROPOSAL' && (
             <>
               <ModalInputWrap>
-                <div style={{ padding: '15px', background: '#2a2a2a', border: '1px solid #ff6b6b', borderRadius: '4px', marginBottom: '15px' }}>
+                <div
+                  style={{
+                    padding: '15px',
+                    background: '#2a2a2a',
+                    border: '1px solid #ff6b6b',
+                    borderRadius: '4px',
+                    marginBottom: '15px'
+                  }}
+                >
                   <p style={{ color: '#ff6b6b', marginBottom: '10px', fontSize: '14px' }}>
                     <strong>Cancel Proposal</strong>
                   </p>
                   <p style={{ color: '#ccc', fontSize: '12px', margin: '0' }}>
-                    This will cancel an existing proposal that is still in the deposit or voting period.
-                    Only the proposer can cancel their own proposal.
+                    This will cancel an existing proposal that is still in the deposit or voting period. Only the
+                    proposer can cancel their own proposal.
                   </p>
                 </div>
               </ModalInputWrap>
@@ -988,8 +1069,8 @@ const NewProposalModal = () => {
                 <ModalLabel>Proposal ID</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type='number'
-                    placeholder='Enter proposal ID to cancel'
+                    type="number"
+                    placeholder="Enter proposal ID to cancel"
                     value={proposalId}
                     onChange={(e) => setProposalId(e.target.value)}
                   />
@@ -999,7 +1080,7 @@ const NewProposalModal = () => {
                 </ModalInput>
               </ModalInputWrap>
             </>
-          )}
+          )} */}
 
           {/* Governance Parameters */}
           {proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL' && (
@@ -1009,10 +1090,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Min Deposit (ufct)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='5000000000'
-                      value={govMinDeposit}
-                      onChange={(e) => setGovMinDeposit(e.target.value)}
+                      type="text"
+                      placeholder="5000000000"
+                      value={paramObj.minDeposit?.[0]?.amount || ''}
+                      onChange={(e) => updateParam('minDeposit', [{ denom: 'ufct', amount: e.target.value }])}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1020,10 +1101,15 @@ const NewProposalModal = () => {
                   <ModalLabel>Max Deposit Period (seconds)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='number'
-                      placeholder='172800'
-                      value={govMaxDepositPeriod}
-                      onChange={(e) => setGovMaxDepositPeriod(e.target.value)}
+                      type="number"
+                      placeholder="172800"
+                      value={paramObj.maxDepositPeriod?.seconds ? String(paramObj.maxDepositPeriod.seconds) : ''}
+                      onChange={(e) =>
+                        updateParam('maxDepositPeriod', {
+                          seconds: BigInt(e.target.value),
+                          nanos: paramObj.maxDepositPeriod?.nanos || 0
+                        })
+                      }
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1031,10 +1117,15 @@ const NewProposalModal = () => {
                   <ModalLabel>Voting Period (seconds)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='number'
-                      placeholder='172800'
-                      value={govVotingPeriod}
-                      onChange={(e) => setGovVotingPeriod(e.target.value)}
+                      type="number"
+                      placeholder="172800"
+                      value={paramObj.votingPeriod?.seconds ? String(paramObj.votingPeriod.seconds) : ''}
+                      onChange={(e) =>
+                        updateParam('votingPeriod', {
+                          seconds: BigInt(e.target.value),
+                          nanos: paramObj.votingPeriod?.nanos || 0
+                        })
+                      }
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1042,10 +1133,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Quorum (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='number'
-                      placeholder='0.334000000000000000'
-                      value={govQuorum}
-                      onChange={(e) => setGovQuorum(e.target.value)}
+                      type="number"
+                      placeholder="0.334000000000000000"
+                      value={paramObj.quorum || ''}
+                      onChange={(e) => updateParam('quorum', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1053,10 +1144,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Threshold (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='0.500000000000000000'
-                      value={govThreshold}
-                      onChange={(e) => setGovThreshold(e.target.value)}
+                      type="text"
+                      placeholder="0.500000000000000000"
+                      value={paramObj.threshold || ''}
+                      onChange={(e) => updateParam('threshold', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1064,10 +1155,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Veto Threshold (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='0.334000000000000000'
-                      value={govVetoThreshold}
-                      onChange={(e) => setGovVetoThreshold(e.target.value)}
+                      type="text"
+                      placeholder="0.334000000000000000"
+                      value={paramObj.vetoThreshold || ''}
+                      onChange={(e) => updateParam('vetoThreshold', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1075,10 +1166,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Min Initial Deposit Ratio (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='0.100000000000000000'
-                      value={govMinInitialDepositRatio}
-                      onChange={(e) => setGovMinInitialDepositRatio(e.target.value)}
+                      type="text"
+                      placeholder="0.100000000000000000"
+                      value={paramObj.minInitialDepositRatio || ''}
+                      onChange={(e) => updateParam('minInitialDepositRatio', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1086,10 +1177,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Proposal Cancel Ratio (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='0.500000000000000000'
-                      value={govProposalCancelRatio}
-                      onChange={(e) => setGovProposalCancelRatio(e.target.value)}
+                      type="text"
+                      placeholder="0.500000000000000000"
+                      value={paramObj.proposalCancelRatio || ''}
+                      onChange={(e) => updateParam('proposalCancelRatio', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1097,10 +1188,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Proposal Cancel Destination (optional)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='community pool or address'
-                      value={govProposalCancelDest}
-                      onChange={(e) => setGovProposalCancelDest(e.target.value)}
+                      type="text"
+                      placeholder="community pool or address"
+                      value={paramObj.proposalCancelDest || ''}
+                      onChange={(e) => updateParam('proposalCancelDest', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1108,10 +1199,17 @@ const NewProposalModal = () => {
                   <ModalLabel>Expedited Voting Period (seconds)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='number'
-                      placeholder='86400'
-                      value={govExpeditedVotingPeriod}
-                      onChange={(e) => setGovExpeditedVotingPeriod(e.target.value)}
+                      type="number"
+                      placeholder="86400"
+                      value={
+                        paramObj.expeditedVotingPeriod?.seconds ? String(paramObj.expeditedVotingPeriod.seconds) : ''
+                      }
+                      onChange={(e) =>
+                        updateParam('expeditedVotingPeriod', {
+                          seconds: BigInt(e.target.value),
+                          nanos: paramObj.expeditedVotingPeriod?.nanos || 0
+                        })
+                      }
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1119,10 +1217,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Expedited Threshold (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='0.667000000000000000'
-                      value={govExpeditedThreshold}
-                      onChange={(e) => setGovExpeditedThreshold(e.target.value)}
+                      type="text"
+                      placeholder="0.667000000000000000"
+                      value={paramObj.expeditedThreshold || ''}
+                      onChange={(e) => updateParam('expeditedThreshold', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1130,10 +1228,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Expedited Min Deposit (ufct)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='10000000000'
-                      value={govExpeditedMinDeposit}
-                      onChange={(e) => setGovExpeditedMinDeposit(e.target.value)}
+                      type="text"
+                      placeholder="10000000000"
+                      value={paramObj.expeditedMinDeposit?.[0]?.amount || ''}
+                      onChange={(e) => updateParam('expeditedMinDeposit', [{ denom: 'ufct', amount: e.target.value }])}
                     />
                   </ModalInput>
                 </ModalInputWrap>
@@ -1143,8 +1241,8 @@ const NewProposalModal = () => {
                     <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
                       <input
                         type="checkbox"
-                        checked={govBurnVoteQuorum}
-                        onChange={(e) => setGovBurnVoteQuorum(e.target.checked)}
+                        checked={paramObj.burnVoteQuorum || false}
+                        onChange={(e) => updateParam('burnVoteQuorum', e.target.checked)}
                         style={{ marginRight: '8px' }}
                       />
                       Burn deposits when proposal doesn't meet quorum
@@ -1157,8 +1255,8 @@ const NewProposalModal = () => {
                     <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
                       <input
                         type="checkbox"
-                        checked={govBurnProposalDepositPrevote}
-                        onChange={(e) => setGovBurnProposalDepositPrevote(e.target.checked)}
+                        checked={paramObj.burnProposalDepositPrevote || false}
+                        onChange={(e) => updateParam('burnProposalDepositPrevote', e.target.checked)}
                         style={{ marginRight: '8px' }}
                       />
                       Burn deposits if proposal fails in prevote phase
@@ -1171,8 +1269,8 @@ const NewProposalModal = () => {
                     <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
                       <input
                         type="checkbox"
-                        checked={govBurnVoteVeto}
-                        onChange={(e) => setGovBurnVoteVeto(e.target.checked)}
+                        checked={paramObj.burnVoteVeto !== false}
+                        onChange={(e) => updateParam('burnVoteVeto', e.target.checked)}
                         style={{ marginRight: '8px' }}
                       />
                       Burn deposits when proposal is vetoed
@@ -1183,10 +1281,10 @@ const NewProposalModal = () => {
                   <ModalLabel>Min Deposit Ratio (decimal)</ModalLabel>
                   <ModalInput>
                     <InputBoxDefault
-                      type='text'
-                      placeholder='0.010000000000000000'
-                      value={govMinDepositRatio}
-                      onChange={(e) => setGovMinDepositRatio(e.target.value)}
+                      type="text"
+                      placeholder="0.010000000000000000"
+                      value={paramObj.minDepositRatio || ''}
+                      onChange={(e) => updateParam('minDepositRatio', e.target.value)}
                     />
                   </ModalInput>
                 </ModalInputWrap>

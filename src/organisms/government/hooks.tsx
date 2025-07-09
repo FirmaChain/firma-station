@@ -14,7 +14,7 @@ import { CHAIN_CONFIG } from '../../config';
 
 export const useGovernmentData = () => {
   const [proposalsState, setProposalsState] = useState<IProposalsState>({
-    proposals: [],
+    proposals: []
   });
 
   useEffect(() => {
@@ -44,14 +44,14 @@ export const useGovernmentData = () => {
         }
 
         setProposalsState({
-          proposals,
+          proposals
         });
       })
       .catch(() => {});
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
-    proposalsState,
+    proposalsState
   };
 };
 
@@ -74,7 +74,7 @@ export const useProposalData = (proposalId: string) => {
               option: vote.option,
               voterAddress: vote.voter_address,
               moniker,
-              avatarURL,
+              avatarURL
             };
           })
         : [];
@@ -82,7 +82,7 @@ export const useProposalData = (proposalId: string) => {
       return {
         depositors,
         totalVotingPower,
-        votes,
+        votes
       };
     }
   };
@@ -101,6 +101,7 @@ export const useProposalData = (proposalId: string) => {
       const periodDeposit = proposalData.periodDeposit;
       const extraData = proposalData.extraData;
       const tally = proposalData.tally;
+      const proposer = proposalData.proposer;
 
       setProposalState({
         proposalId,
@@ -119,6 +120,7 @@ export const useProposalData = (proposalId: string) => {
         totalVotingPower: 0,
         votes: [],
         depositors: [],
+        proposer
       });
 
       getProposalQueryFromId(proposalId).then((proposalQueryData) => {
@@ -129,6 +131,6 @@ export const useProposalData = (proposalId: string) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
-    proposalState,
+    proposalState
   };
 };

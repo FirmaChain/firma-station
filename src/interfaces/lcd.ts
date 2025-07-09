@@ -35,6 +35,7 @@ export interface IProposalData {
   paramMinDepositAmount: number;
   periodDeposit: number;
   extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | null;
+  proposer: string;
   tally: {
     yes: number;
     no: number;

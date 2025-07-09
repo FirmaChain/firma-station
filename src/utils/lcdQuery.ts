@@ -238,6 +238,8 @@ const getProposalList = async (): Promise<IProposalData[]> => {
     const paramMinDepositAmount = convertNumber(proposalParams.minDeposit[0].amount); // Replaced from proposalParams.deposit_params.min_deposit[0].amount
     const periodDeposit = convertNumber(proposalParams.maxDepositPeriod?.seconds.toString()); // Replaced from proposalParams.deposit_params.max_deposit_period
 
+    const proposer = proposal.proposer;
+
     result.push({
       proposalId,
       status,
@@ -251,6 +253,7 @@ const getProposalList = async (): Promise<IProposalData[]> => {
       paramQuorum,
       paramMinDepositAmount,
       periodDeposit,
+      proposer,
       tally: {
         yes: 0,
         no: 0,
@@ -316,6 +319,8 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
   const paramMinDepositAmount = convertNumber(proposalParams.minDeposit[0].amount); // Replaced from proposalParams.deposit_params.min_deposit[0].amount
   const periodDeposit = convertNumber(proposalParams.maxDepositPeriod?.seconds.toString()); // Replaced from proposalParams.deposit_params.max_deposit_period
 
+  const proposer = proposal.proposer;
+
   const tally = {
     yes: convertNumber(tallyRaw.yes),
     no: convertNumber(tallyRaw.no),
@@ -336,6 +341,7 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
     paramQuorum,
     paramMinDepositAmount,
     periodDeposit,
-    tally
+    tally,
+    proposer
   };
 };

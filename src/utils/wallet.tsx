@@ -102,7 +102,7 @@ function useFirma() {
     const wallet: Wallet = {
       mnemonic,
       privateKey,
-      address,
+      address
     };
     getVestingAccount();
 
@@ -149,7 +149,7 @@ function useFirma() {
       } else {
         enqueueSnackbar('Failed connect ledger', {
           variant: 'error',
-          autoHideDuration: 5000,
+          autoHideDuration: 5000
         });
       }
     } catch (error) {
@@ -167,7 +167,7 @@ function useFirma() {
       } else {
         enqueueSnackbar('Failed connect wallet app', {
           variant: 'error',
-          autoHideDuration: 5000,
+          autoHideDuration: 5000
         });
       }
     } catch (error) {
@@ -245,7 +245,7 @@ function useFirma() {
     const paperWallet = new FirmaPaperWallet({
       address,
       privateKey,
-      mnemonic,
+      mnemonic
     });
 
     let base64URI = null;
@@ -270,7 +270,7 @@ function useFirma() {
 
         let tokenData = {
           decimal: 0,
-          symbol: token.denom,
+          symbol: token.denom
         };
 
         try {
@@ -290,7 +290,7 @@ function useFirma() {
             denom: token.denom,
             balance: convertToTokenString(token.amount, tokenData.decimal),
             symbol: tokenData.symbol,
-            decimal: tokenData.decimal,
+            decimal: tokenData.decimal
           });
         } catch (e) {
           console.error(e);
@@ -398,7 +398,7 @@ function useFirma() {
                   return {
                     endTime: endTimeAcc,
                     amount: value.amount[0].amount * 1,
-                    status,
+                    status
                   };
                 });
 
@@ -409,7 +409,7 @@ function useFirma() {
                 userActions.handleUserVesting({
                   totalVesting,
                   expiredVesting,
-                  vestingPeriod,
+                  vestingPeriod
                 });
 
                 isChecked = true;
@@ -424,7 +424,7 @@ function useFirma() {
         userActions.handleUserVesting({
           totalVesting: 0,
           expiredVesting: 0,
-          vestingPeriod: [],
+          vestingPeriod: []
         });
 
         setVesting(false);
@@ -451,7 +451,7 @@ function useFirma() {
         delegatorAddress: value.delegation.delegator_address,
         amount: convertNumber(value.balance.amount),
         moniker,
-        avatarURL,
+        avatarURL
       };
     });
 
@@ -498,7 +498,7 @@ function useFirma() {
       stakingRewardList,
       delegateList,
       redelegationList,
-      undelegationList,
+      undelegationList
     };
 
     return result;
@@ -524,7 +524,7 @@ function useFirma() {
       available,
       delegated,
       undelegate,
-      stakingReward,
+      stakingReward
     };
 
     return result;
@@ -540,7 +540,7 @@ function useFirma() {
       return {
         value: value.delegation.validator_address,
         label: value.delegation.validator_address,
-        amount: value.balance.amount,
+        amount: value.balance.amount
       };
     });
 
@@ -577,7 +577,7 @@ function useFirma() {
       parseList.push({
         value,
         amount,
-        rewards,
+        rewards
       });
     }
 
@@ -609,7 +609,7 @@ function useFirma() {
           dstMoniker: dstAvatar.moniker,
           dstAvatarURL: dstAvatar.avatarURL,
           balance,
-          completionTime,
+          completionTime
         });
       }
     }
@@ -641,7 +641,7 @@ function useFirma() {
           moniker: avatar.moniker,
           avatarURL: avatar.avatarURL,
           balance,
-          completionTime,
+          completionTime
         });
       }
     }
@@ -664,7 +664,7 @@ function useFirma() {
       .map((value) => {
         return {
           value: value.delegation.validator_address,
-          amount: value.balance.amount,
+          amount: value.balance.amount
         };
       });
 
@@ -892,15 +892,15 @@ function useFirma() {
     height: number,
     estimatedGas: number
   ) => {
-      const result = await FirmaSDK.submitSoftwareUpgradeProposalByHeight(
-        title,
-        description,
-        initialDeposit,
-        upgradeName,
-        height,
-        estimatedGas
-      );
-   
+    const result = await FirmaSDK.submitSoftwareUpgradeProposalByHeight(
+      title,
+      description,
+      initialDeposit,
+      upgradeName,
+      height,
+      estimatedGas
+    );
+
     checkValidateResult(result);
   };
 
@@ -1039,14 +1039,14 @@ function useFirma() {
         return {
           operatorAddress,
           moniker,
-          avatarURL,
+          avatarURL
         };
       });
 
       return {
         maxFCT,
         expiration,
-        allowValidatorList,
+        allowValidatorList
       };
     } catch (error) {
       return null;
@@ -1092,14 +1092,14 @@ function useFirma() {
       console.log(result);
       enqueueSnackbar(JSON.stringify(result), {
         variant: 'error',
-        autoHideDuration: 5000,
+        autoHideDuration: 5000
       });
       throw new Error('INVALID TX');
     } else if (result.code !== 0) {
       console.log(result);
       enqueueSnackbar(JSON.stringify(result), {
         variant: 'error',
-        autoHideDuration: 5000,
+        autoHideDuration: 5000
       });
       throw new Error('FAILED TX');
     }
@@ -1110,6 +1110,7 @@ function useFirma() {
   };
 
   return {
+    FirmaSDK,
     initializeFirma,
     checkSession,
     getNewMnemonic,
@@ -1176,7 +1177,7 @@ function useFirma() {
     getGasEstimationRevokeStakeAuthorizationDelegate,
     isValidWallet,
     isValidAddress,
-    downloadPaperWallet,
+    downloadPaperWallet
   };
 }
 
