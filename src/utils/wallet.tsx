@@ -892,15 +892,15 @@ function useFirma() {
     height: number,
     estimatedGas: number
   ) => {
-    const result = await FirmaSDK.submitSoftwareUpgradeProposalByHeight(
-      title,
-      description,
-      initialDeposit,
-      upgradeName,
-      height,
-      estimatedGas
-    );
-
+      const result = await FirmaSDK.submitSoftwareUpgradeProposalByHeight(
+        title,
+        description,
+        initialDeposit,
+        upgradeName,
+        height,
+        estimatedGas
+      );
+   
     checkValidateResult(result);
   };
 
@@ -937,6 +937,87 @@ function useFirma() {
     initialDeposit: number
   ) => {
     return await FirmaSDK.getGasEstimationSubmitCancelSoftwareUpgradeProposal(title, description, initialDeposit);
+  };
+
+  const submitStakingParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = '',
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.submitStakingParamsUpdateProposal(
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata,
+      estimatedGas
+    );
+
+    checkValidateResult(result);
+  };
+
+  const getGasEstimationSubmitStakingParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = ''
+  ) => {
+    return await FirmaSDK.getGasEstimationSubmitStakingParamsUpdateProposal(
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata
+    );
+  };
+
+  const submitGovParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = '',
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.submitGovParamsUpdateProposal(
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata,
+      estimatedGas
+    );
+
+    checkValidateResult(result);
+  };
+
+  const getGasEstimationSubmitGovParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = ''
+  ) => {
+    return await FirmaSDK.getGasEstimationSubmitGovParamsUpdateProposal(
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata
+    );
+  };
+
+  const cancelProposal = async (proposalId: string, estimatedGas: number) => {
+    const result = await FirmaSDK.cancelProposal(proposalId, estimatedGas);
+    checkValidateResult(result);
+  };
+
+  const getGasEstimationCancelProposal = async (proposalId: string) => {
+    return await FirmaSDK.getGasEstimationCancelProposal(proposalId);
   };
 
   const getStakingGrantDataList = async () => {
@@ -1065,6 +1146,9 @@ function useFirma() {
     submitTextProposal,
     submitSoftwareUpgrade,
     submitCancelSoftwareUpgrade,
+    submitStakingParamsUpdateProposal,
+    submitGovParamsUpdateProposal,
+    cancelProposal,
     deposit,
     vote,
     grantStakeAuthorizationDelegate,
@@ -1085,6 +1169,9 @@ function useFirma() {
     getGasEstimationSubmitTextProposal,
     getGasEstimationSubmitSoftwareUpgrade,
     getGasEstimationSubmitCancelSoftwareUpgrade,
+    getGasEstimationSubmitStakingParamsUpdateProposal,
+    getGasEstimationSubmitGovParamsUpdateProposal,
+    getGasEstimationCancelProposal,
     getGasEstimationGrantStakeAuthorizationDelegate,
     getGasEstimationRevokeStakeAuthorizationDelegate,
     isValidWallet,

@@ -410,20 +410,8 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     paramList: any[],
     estimatedGas: number
   ) => {
-    const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitParameterChangeProposal(
-      wallet,
-      title,
-      description,
-      initialDeposit,
-      paramList,
-      {
-        gas: estimatedGas,
-        fee: getFees(estimatedGas),
-      }
-    );
-
-    return result;
+    // This function is deprecated in v0.5, use specific param update functions instead
+    throw new Error('Parameter change proposal is deprecated. Use submitStakingParamsUpdateProposal or submitGovParamsUpdateProposal instead.');
   };
 
   const getGasEstimationSubmitParameterChangeProposal = async (
@@ -432,24 +420,13 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     initialDeposit: number,
     paramList: any[]
   ) => {
-    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
-      return getDefaultGas(isLedger, isMobileApp);
-
-    const wallet = await getWallet();
-    const result = await firmaSDK.Gov.getGasEstimationSubmitParameterChangeProposal(
-      wallet,
-      title,
-      description,
-      initialDeposit,
-      paramList
-    );
-
-    return result;
+    // This function is deprecated in v0.5, use specific param update functions instead
+    throw new Error('Parameter change proposal is deprecated. Use getGasEstimationSubmitStakingParamsUpdateProposal or getGasEstimationSubmitGovParamsUpdateProposal instead.');
   };
 
   const submitCommunityPoolSpendProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     amount: number,
     recipient: string,
@@ -459,10 +436,11 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Gov.submitCommunityPoolSpendProposal(
       wallet,
       title,
-      description,
+      summary,
       initialDeposit,
       amount,
       recipient,
+      '',
       {
         gas: estimatedGas,
         fee: getFees(estimatedGas),
@@ -474,7 +452,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const getGasEstimationSubmitCommunityPoolSpendProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     amount: number,
     recipient: string
@@ -486,7 +464,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Gov.getGasEstimationSubmitCommunityPoolSpendProposal(
       wallet,
       title,
-      description,
+      summary,
       initialDeposit,
       amount,
       recipient
@@ -522,20 +500,30 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const submitSoftwareUpgradeProposalByHeight = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     upgradeName: string,
     height: number,
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitSoftwareUpgradeProposalByHeight(
+    const plan = {
+      name: upgradeName,
+      time: {
+        seconds: BigInt(0),
+        nanos: 0
+      },
+      height: BigInt(height),
+      info: ''
+    };
+    
+    const result = await firmaSDK.Gov.submitSoftwareUpgradeProposal(
       wallet,
       title,
-      description,
+      summary,
       initialDeposit,
-      upgradeName,
-      height,
+      plan,
+      '',
       {
         gas: estimatedGas,
         fee: getFees(estimatedGas),
@@ -547,7 +535,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const getGasEstimationSubmitSoftwareUpgradeProposalByHeight = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     upgradeName: string,
     height: number
@@ -556,13 +544,22 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       return getDefaultGas(isLedger, isMobileApp);
 
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.getGasEstimationSubmitSoftwareUpgradeProposalByHeight(
+    const plan = {
+      name: upgradeName,
+      time: {
+        seconds: BigInt(0),
+        nanos: 0
+      },
+      height: BigInt(height),
+      info: ''
+    };
+
+    const result = await firmaSDK.Gov.getGasEstimationSubmitSoftwareUpgradeProposal(
       wallet,
       title,
-      description,
+      summary,
       initialDeposit,
-      upgradeName,
-      height
+      plan
     );
 
     return result;
@@ -570,34 +567,163 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const submitCancelSoftwareUpgradeProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitCancelSoftwareUpgradeProposal(wallet, title, description, initialDeposit, {
-      gas: estimatedGas,
-      fee: getFees(estimatedGas),
-    });
+    
+    // Create a CancelSoftwareUpgrade message
+    const cancelUpgradeMessage = {
+      typeUrl: "/cosmos.upgrade.v1beta1.MsgCancelUpgrade",
+      value: new Uint8Array([]) // Empty value for cancel upgrade
+    };
+
+    const result = await firmaSDK.Gov.submitGenericProposal(
+      wallet,
+      title,
+      summary,
+      [{ denom: CHAIN_CONFIG.FIRMACHAIN_CONFIG.denom, amount: (initialDeposit * 1000000).toString() }],
+      '', // metadata
+      [cancelUpgradeMessage],
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
 
     return result;
   };
 
   const getGasEstimationSubmitCancelSoftwareUpgradeProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number
   ) => {
     if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
       return getDefaultGas(isLedger, isMobileApp);
 
+    // For now, return a reasonable gas estimate for cancel upgrade proposals
+    // This can be refined based on actual testing
+    return 200000;
+  };
+
+  const submitStakingParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = '',
+    estimatedGas: number
+  ) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.getGasEstimationSubmitCancelSoftwareUpgradeProposal(
+    const result = await firmaSDK.Gov.submitStakingParamsUpdateProposal(
       wallet,
       title,
-      description,
-      initialDeposit
+      summary,
+      initialDeposit,
+      params,
+      metadata,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
     );
+
+    return result;
+  };
+
+  const getGasEstimationSubmitStakingParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = ''
+  ) => {
+    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
+      return getDefaultGas(isLedger, isMobileApp);
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitStakingParamsUpdateProposal(
+      wallet,
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata
+    );
+
+    return result;
+  };
+
+  const submitGovParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = '',
+    estimatedGas: number
+  ) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.submitGovParamsUpdateProposal(
+      wallet,
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationSubmitGovParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = ''
+  ) => {
+    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
+      return getDefaultGas(isLedger, isMobileApp);
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitGovParamsUpdateProposal(
+      wallet,
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata
+    );
+
+    return result;
+  };
+
+  const cancelProposal = async (proposalId: string, estimatedGas: number) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.cancelProposal(
+      wallet,
+      parseInt(proposalId),
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationCancelProposal = async (proposalId: string) => {
+    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
+      return getDefaultGas(isLedger, isMobileApp);
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationCancelProposal(wallet, parseInt(proposalId));
 
     return result;
   };
@@ -695,6 +821,9 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     submitTextProposal,
     submitSoftwareUpgradeProposalByHeight,
     submitCancelSoftwareUpgradeProposal,
+    submitStakingParamsUpdateProposal,
+    submitGovParamsUpdateProposal,
+    cancelProposal,
     grantStakeAuthorizationDelegate,
     revokeStakeAuthorizationDelegate,
 
@@ -713,6 +842,9 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     getGasEstimationSubmitTextProposal,
     getGasEstimationSubmitSoftwareUpgradeProposalByHeight,
     getGasEstimationSubmitCancelSoftwareUpgradeProposal,
+    getGasEstimationSubmitStakingParamsUpdateProposal,
+    getGasEstimationSubmitGovParamsUpdateProposal,
+    getGasEstimationCancelProposal,
     getGasEstimationGrantStakeAuthorizationDelegate,
     getGasEstimationRevokeStakeAuthorizationDelegate,
   };

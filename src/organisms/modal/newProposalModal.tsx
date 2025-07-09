@@ -33,13 +33,16 @@ import {
   ModalInputWrap,
 } from './styles';
 
-const options = [
-  { value: 'TEXT_PROPOSAL', label: 'Text' },
-  { value: 'COMMUNITY_POOL_SPEND_PROPOSAL', label: 'CommunityPoolSpend' },
-  { value: 'PARAMETER_CHANGE_PROPOSAL', label: 'ParameterChange' },
-  { value: 'SOFTWARE_UPGRADE', label: 'SoftwareUpgrade' },
-  { value: 'CANCEL_SOFTWARE_UPGRADE', label: 'CancelSoftwareUpgrade' },
-];
+  const options = [
+    { value: 'TEXT_PROPOSAL', label: 'Text' },
+    { value: 'COMMUNITY_POOL_SPEND_PROPOSAL', label: 'CommunityPoolSpend' },
+    // { value: 'PARAMETER_CHANGE_PROPOSAL', label: 'ParameterChange' },
+    { value: 'STAKING_PARAMS_UPDATE_PROPOSAL', label: 'StakingParamsUpdate' },
+    { value: 'GOV_PARAMS_UPDATE_PROPOSAL', label: 'GovParamsUpdate' },
+    { value: 'SOFTWARE_UPGRADE', label: 'SoftwareUpgrade' },
+    // { value: 'CANCEL_SOFTWARE_UPGRADE', label: 'CancelSoftwareUpgrade' },
+    { value: 'CANCEL_PROPOSAL', label: 'CancelProposal' },
+  ];
 
 const customStyles = {
   control: (provided: any) => ({
@@ -84,7 +87,7 @@ const customStyles = {
 
 const NewProposalModal = () => {
   const newProposalState = useSelector((state: rootState) => state.modal.newProposal);
-  const selectInputRef = useRef<any>();
+  const selectInputRef = useRef<any>(null);
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
@@ -98,6 +101,33 @@ const NewProposalModal = () => {
   const [upgradeName, setUpgradeName] = useState('');
   const [height, setHeight] = useState(1);
   const [paramList, setParamList] = useState<any[]>([]);
+  const [proposalId, setProposalId] = useState('');
+
+  // Staking Parameters
+  const [stakingUnbondingTime, setStakingUnbondingTime] = useState('1814400s'); // 21 days default
+  const [stakingMaxValidators, setStakingMaxValidators] = useState(100);
+  const [stakingMaxEntries, setStakingMaxEntries] = useState(7);
+  const [stakingHistoricalEntries, setStakingHistoricalEntries] = useState(10000);
+  const [stakingBondDenom, setStakingBondDenom] = useState('ufct');
+  const [stakingMinCommissionRate, setStakingMinCommissionRate] = useState('0.05');
+
+  // Gov Parameters  
+  const [govMinDeposit, setGovMinDeposit] = useState('5000000000');
+  const [govMaxDepositPeriod, setGovMaxDepositPeriod] = useState('172800s'); // 2 days
+  const [govVotingPeriod, setGovVotingPeriod] = useState('172800s'); // 2 days
+  const [govQuorum, setGovQuorum] = useState('0.334000000000000000');
+  const [govThreshold, setGovThreshold] = useState('0.500000000000000000');
+  const [govVetoThreshold, setGovVetoThreshold] = useState('0.334000000000000000');
+  const [govMinInitialDepositRatio, setGovMinInitialDepositRatio] = useState('0.100000000000000000');
+  const [govProposalCancelRatio, setGovProposalCancelRatio] = useState('0.500000000000000000');
+  const [govProposalCancelDest, setGovProposalCancelDest] = useState('');
+  const [govExpeditedVotingPeriod, setGovExpeditedVotingPeriod] = useState('86400s'); // 1 day
+  const [govExpeditedThreshold, setGovExpeditedThreshold] = useState('0.667000000000000000');
+  const [govExpeditedMinDeposit, setGovExpeditedMinDeposit] = useState('10000000000');
+  const [govBurnVoteQuorum, setGovBurnVoteQuorum] = useState(false);
+  const [govBurnProposalDepositPrevote, setGovBurnProposalDepositPrevote] = useState(false);
+  const [govBurnVoteVeto, setGovBurnVoteVeto] = useState(true);
+  const [govMinDepositRatio, setGovMinDepositRatio] = useState('0.010000000000000000');
 
   const {
     submitParameterChangeProposal,
@@ -105,11 +135,17 @@ const NewProposalModal = () => {
     submitTextProposal,
     submitSoftwareUpgrade,
     submitCancelSoftwareUpgrade,
+    submitStakingParamsUpdateProposal,
+    submitGovParamsUpdateProposal,
+    cancelProposal,
     getGasEstimationSubmitCancelSoftwareUpgrade,
     getGasEstimationSubmitParameterChangeProposal,
     getGasEstimationSubmitCommunityPoolSpendProposal,
     getGasEstimationSubmitSoftwareUpgrade,
     getGasEstimationSubmitTextProposal,
+    getGasEstimationSubmitStakingParamsUpdateProposal,
+    getGasEstimationSubmitGovParamsUpdateProposal,
+    getGasEstimationCancelProposal,
     setUserData,
   } = useFirma();
 
@@ -129,8 +165,35 @@ const NewProposalModal = () => {
     setDescription('');
     setInitialDeposit(0);
     setRecipient('');
-    setAmount(0);
+        setAmount(0);
     setParamList([]);
+    setProposalId('');
+    
+    // Reset Staking Parameters to defaults
+    setStakingUnbondingTime('1814400s');
+    setStakingMaxValidators(100);
+    setStakingMaxEntries(7);
+    setStakingHistoricalEntries(10000);
+    setStakingBondDenom('ufct');
+    setStakingMinCommissionRate('0.05');
+
+    // Reset Gov Parameters to defaults
+    setGovMinDeposit('5000000000');
+    setGovMaxDepositPeriod('172800s');
+    setGovVotingPeriod('172800s');
+    setGovQuorum('0.334000000000000000');
+    setGovThreshold('0.500000000000000000');
+    setGovVetoThreshold('0.334000000000000000');
+    setGovMinInitialDepositRatio('0.100000000000000000');
+    setGovProposalCancelRatio('0.500000000000000000');
+    setGovProposalCancelDest('');
+    setGovExpeditedVotingPeriod('86400s');
+    setGovExpeditedThreshold('0.667000000000000000');
+    setGovExpeditedMinDeposit('10000000000');
+    setGovBurnVoteQuorum(false);
+    setGovBurnProposalDepositPrevote(false);
+    setGovBurnVoteVeto(true);
+    setGovMinDepositRatio('0.010000000000000000');
   };
 
   const newProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
@@ -167,8 +230,74 @@ const NewProposalModal = () => {
             rejectTx();
           });
         break;
+      case 'STAKING_PARAMS_UPDATE_PROPOSAL':
+        // Convert commission rate to proper decimal format for Cosmos SDK
+        const processCommissionRate = (rate: string): string => {
+          if (!rate || rate.trim() === '') return '';
+          try {
+            const rateNum = parseFloat(rate);
+            if (isNaN(rateNum) || rateNum < 0 || rateNum > 1) {
+              throw new Error(`Invalid commission rate: ${rate}. Must be between 0 and 1`);
+            }
+            if (rateNum === 0) return '0';
+            // Convert to 18-decimal precision integer string (multiply by 10^18)
+            const atomics = Math.floor(rateNum * Math.pow(10, 18)).toString();
+            return atomics;
+          } catch (error) {
+            console.error('Commission rate conversion error:', error);
+            throw error;
+          }
+        };
+
+        const stakingParams = {
+          unbondingTime: { seconds: BigInt(stakingUnbondingTime.replace('s', '')), nanos: 0 },
+          maxValidators: stakingMaxValidators,
+          maxEntries: stakingMaxEntries,
+          historicalEntries: stakingHistoricalEntries,
+          bondDenom: stakingBondDenom,
+          minCommissionRate: processCommissionRate(stakingMinCommissionRate)
+        };
+        const stakingMetadata = '';
+        submitStakingParamsUpdateProposal(title, description, initialDeposit, stakingParams, stakingMetadata, gas)
+          .then(() => {
+            setUserData();
+            resolveTx();
+          })
+          .catch(() => {
+            rejectTx();
+          });
+        break;
+      case 'GOV_PARAMS_UPDATE_PROPOSAL':
+        const govParams = {
+          minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
+          maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod.replace('s', '')), nanos: 0 },
+          votingPeriod: { seconds: BigInt(govVotingPeriod.replace('s', '')), nanos: 0 },
+          quorum: govQuorum,
+          threshold: govThreshold,
+          vetoThreshold: govVetoThreshold,
+          minInitialDepositRatio: govMinInitialDepositRatio,
+          proposalCancelRatio: govProposalCancelRatio,
+          proposalCancelDest: govProposalCancelDest,
+          expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod.replace('s', '')), nanos: 0 },
+          expeditedThreshold: govExpeditedThreshold,
+          expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
+          burnVoteQuorum: govBurnVoteQuorum,
+          burnProposalDepositPrevote: govBurnProposalDepositPrevote,
+          burnVoteVeto: govBurnVoteVeto,
+          minDepositRatio: govMinDepositRatio
+        };
+        const govMetadata = '';
+        submitGovParamsUpdateProposal(title, description, initialDeposit, govParams, govMetadata, gas)
+          .then(() => {
+            setUserData();
+            resolveTx();
+          })
+          .catch(() => {
+            rejectTx();
+          });
+        break;
       case 'SOFTWARE_UPGRADE':
-        submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, convertNumber(height), gas)
+        submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, height, gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -179,6 +308,16 @@ const NewProposalModal = () => {
         break;
       case 'CANCEL_SOFTWARE_UPGRADE':
         submitCancelSoftwareUpgrade(title, description, initialDeposit, gas)
+          .then(() => {
+            setUserData();
+            resolveTx();
+          })
+          .catch(() => {
+            rejectTx();
+          });
+        break;
+      case 'CANCEL_PROPOSAL':
+        cancelProposal(proposalId, gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -307,15 +446,84 @@ const NewProposalModal = () => {
           initialDepositFCT: initialDeposit,
           paramList: paramList.filter((value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''),
         };
+      case 'STAKING_PARAMS_UPDATE_PROPOSAL':
+        // Commission rate conversion for getParamsTx
+        const processCommissionRateParams = (rate: string): string => {
+          if (!rate || rate.trim() === '') return '';
+          try {
+            const rateNum = parseFloat(rate);
+            if (isNaN(rateNum) || rateNum < 0 || rateNum > 1) {
+              throw new Error(`Invalid commission rate: ${rate}. Must be between 0 and 1`);
+            }
+            if (rateNum === 0) return '0';
+            return Math.floor(rateNum * Math.pow(10, 18)).toString();
+          } catch (error) {
+            console.error('Commission rate conversion error:', error);
+            throw error;
+          }
+        };
+
+        return {
+          title,
+          summary: description,
+          initialDepositFCT: initialDeposit,
+          stakingParams: {
+            unbondingTime: { seconds: BigInt(stakingUnbondingTime.replace('s', '')), nanos: 0 },
+            maxValidators: stakingMaxValidators,
+            maxEntries: stakingMaxEntries,
+            historicalEntries: stakingHistoricalEntries,
+            bondDenom: stakingBondDenom,
+            minCommissionRate: processCommissionRateParams(stakingMinCommissionRate)
+          },
+          metadata: '',
+        };
+      case 'GOV_PARAMS_UPDATE_PROPOSAL':
+        return {
+          title,
+          summary: description,
+          initialDepositFCT: initialDeposit,
+          govParams: {
+            minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
+            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod.replace('s', '')), nanos: 0 },
+            votingPeriod: { seconds: BigInt(govVotingPeriod.replace('s', '')), nanos: 0 },
+            quorum: govQuorum,
+            threshold: govThreshold,
+            vetoThreshold: govVetoThreshold,
+            minInitialDepositRatio: govMinInitialDepositRatio,
+            proposalCancelRatio: govProposalCancelRatio,
+            proposalCancelDest: govProposalCancelDest,
+            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod.replace('s', '')), nanos: 0 },
+            expeditedThreshold: govExpeditedThreshold,
+            expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
+            burnVoteQuorum: govBurnVoteQuorum,
+            burnProposalDepositPrevote: govBurnProposalDepositPrevote,
+            burnVoteVeto: govBurnVoteVeto,
+            minDepositRatio: govMinDepositRatio
+          },
+          metadata: '',
+        };
       case 'SOFTWARE_UPGRADE':
         return {
           title,
           description,
           initialDepositFCT: initialDeposit,
           upgradeName,
-          upgradeHeight: convertNumber(height),
+          upgradeHeight: height,
         };
       case 'CANCEL_SOFTWARE_UPGRADE':
+        return {
+          title,
+          description,
+          initialDepositFCT: initialDeposit,
+        };
+      case 'CANCEL_PROPOSAL':
+        return {
+          title,
+          description,
+          initialDepositFCT: initialDeposit,
+          proposalId: parseInt(proposalId),
+        };
+      default:
         return {
           title,
           description,
@@ -332,10 +540,18 @@ const NewProposalModal = () => {
         return '/submit/communitypool';
       case 'PARAMETER_CHANGE_PROPOSAL':
         return '/submit/paramchange';
+      case 'STAKING_PARAMS_UPDATE_PROPOSAL':
+        return '/submit/stakingparamsupdate';
+      case 'GOV_PARAMS_UPDATE_PROPOSAL':
+        return '/submit/govparamsupdate';
       case 'SOFTWARE_UPGRADE':
         return '/submit/softwareupgrade';
       case 'CANCEL_SOFTWARE_UPGRADE':
         return '/submit/cancelsoftwareupgrade';
+      case 'CANCEL_PROPOSAL':
+        return '/submit/cancelproposal';
+      default:
+        return '';
     }
   };
 
@@ -348,7 +564,16 @@ const NewProposalModal = () => {
     const isCommunityPoolInvalid =
       proposalType === 'COMMUNITY_POOL_SPEND_PROPOSAL' && (recipient === '' || amount === 0);
     const isParameterChangeInvalid = proposalType === 'PARAMETER_CHANGE_PROPOSAL' && validParamList.length === 0;
+    const isStakingParamsInvalid = proposalType === 'STAKING_PARAMS_UPDATE_PROPOSAL' &&
+      (stakingUnbondingTime === '' || stakingMaxValidators <= 0 || stakingMaxEntries <= 0 ||
+        stakingHistoricalEntries < 0 || stakingBondDenom === '' ||
+        stakingMinCommissionRate === '' ||
+        (stakingMinCommissionRate !== '' && (parseFloat(stakingMinCommissionRate) < 0 || parseFloat(stakingMinCommissionRate) > 1)));
+    const isGovParamsInvalid = proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL' &&
+      (govMinDeposit === '' || govMaxDepositPeriod === '' || govVotingPeriod === '' ||
+        govQuorum === '' || govThreshold === '' || govVetoThreshold === '');
     const isSoftwareUpgradeInvalid = proposalType === 'SOFTWARE_UPGRADE' && (upgradeName === '' || height <= 0);
+    const isCancelProposalInvalid = proposalType === 'CANCEL_PROPOSAL' && (proposalId === '' || isNaN(parseInt(proposalId)));
 
     if (initialDeposit === 0) {
       enqueueSnackbar('Insufficient funds. Please check your account balance.', {
@@ -359,7 +584,7 @@ const NewProposalModal = () => {
       return;
     }
 
-    if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid || isSoftwareUpgradeInvalid) {
+    if (isCommonInvalid || isCommunityPoolInvalid || isParameterChangeInvalid || isStakingParamsInvalid || isGovParamsInvalid || isSoftwareUpgradeInvalid || isCancelProposalInvalid) {
       enqueueSnackbar('Invalid Parameters', {
         variant: 'error',
         autoHideDuration: 2000,
@@ -397,17 +622,82 @@ const NewProposalModal = () => {
             validParamList
           );
           break;
+        case 'STAKING_PARAMS_UPDATE_PROPOSAL':
+          // Commission rate conversion helper
+          const processCommissionRateEstimate = (rate: string): string => {
+            if (!rate || rate.trim() === '') return '';
+            try {
+              const rateNum = parseFloat(rate);
+              if (isNaN(rateNum) || rateNum < 0 || rateNum > 1) {
+                throw new Error(`Invalid commission rate: ${rate}. Must be between 0 and 1`);
+              }
+              if (rateNum === 0) return '0';
+              return Math.floor(rateNum * Math.pow(10, 18)).toString();
+            } catch (error) {
+              console.error('Commission rate conversion error:', error);
+              throw error;
+            }
+          };
+
+          const stakingParamsEstimate = {
+            unbondingTime: { seconds: BigInt(stakingUnbondingTime.replace('s', '')), nanos: 0 },
+            maxValidators: stakingMaxValidators,
+            maxEntries: stakingMaxEntries,
+            historicalEntries: stakingHistoricalEntries,
+            bondDenom: stakingBondDenom,
+            minCommissionRate: processCommissionRateEstimate(stakingMinCommissionRate)
+          };
+          const stakingMetadataEstimate = '';
+          currentGas = await getGasEstimationSubmitStakingParamsUpdateProposal(
+            title,
+            description,
+            initialDeposit,
+            stakingParamsEstimate,
+            stakingMetadataEstimate
+          );
+          break;
+        case 'GOV_PARAMS_UPDATE_PROPOSAL':
+          const govParamsEstimate = {
+            minDeposit: [{ denom: 'ufct', amount: govMinDeposit }],
+            maxDepositPeriod: { seconds: BigInt(govMaxDepositPeriod.replace('s', '')), nanos: 0 },
+            votingPeriod: { seconds: BigInt(govVotingPeriod.replace('s', '')), nanos: 0 },
+            quorum: govQuorum,
+            threshold: govThreshold,
+            vetoThreshold: govVetoThreshold,
+            minInitialDepositRatio: govMinInitialDepositRatio,
+            proposalCancelRatio: govProposalCancelRatio,
+            proposalCancelDest: govProposalCancelDest,
+            expeditedVotingPeriod: { seconds: BigInt(govExpeditedVotingPeriod.replace('s', '')), nanos: 0 },
+            expeditedThreshold: govExpeditedThreshold,
+            expeditedMinDeposit: [{ denom: 'ufct', amount: govExpeditedMinDeposit }],
+            burnVoteQuorum: govBurnVoteQuorum,
+            burnProposalDepositPrevote: govBurnProposalDepositPrevote,
+            burnVoteVeto: govBurnVoteVeto,
+            minDepositRatio: govMinDepositRatio
+          };
+          const govMetadataEstimate = '';
+          currentGas = await getGasEstimationSubmitGovParamsUpdateProposal(
+            title,
+            description,
+            initialDeposit,
+            govParamsEstimate,
+            govMetadataEstimate
+          );
+          break;
         case 'SOFTWARE_UPGRADE':
           currentGas = await getGasEstimationSubmitSoftwareUpgrade(
             title,
             description,
             initialDeposit,
             upgradeName,
-            convertNumber(height)
+            height
           );
           break;
         case 'CANCEL_SOFTWARE_UPGRADE':
           currentGas = await getGasEstimationSubmitCancelSoftwareUpgrade(title, description, initialDeposit);
+          break;
+        case 'CANCEL_PROPOSAL':
+          currentGas = await getGasEstimationCancelProposal(proposalId);
           break;
         default:
           break;
@@ -482,10 +772,23 @@ const NewProposalModal = () => {
               <InputBoxDefault type='number' placeholder='' value={initialDeposit} onChange={onChangeInitialDeposit} />
             </ModalInput>
           </ModalInputWrap>
-          {/* Parameter */}
+          {/* Parameter Change - Deprecated */}
           {proposalType === 'PARAMETER_CHANGE_PROPOSAL' && (
             <ModalInputWrap>
-              <ModalLabel>Changes</ModalLabel>
+              <ModalLabel style={{ color: '#ff6b6b' }}>⚠️ Deprecated Feature</ModalLabel>
+              <div style={{ padding: '15px', background: '#2a2a2a', border: '1px solid #ff6b6b', borderRadius: '4px', marginBottom: '15px' }}>
+                <p style={{ color: '#ff6b6b', marginBottom: '10px', fontSize: '14px' }}>
+                  <strong>Parameter Change Proposal is deprecated in v0.5</strong>
+                </p>
+                <p style={{ color: '#ccc', fontSize: '12px', marginBottom: '10px' }}>
+                  Please use specific parameter update proposals instead:
+                </p>
+                <ul style={{ color: '#ccc', fontSize: '12px', paddingLeft: '20px', margin: '0' }}>
+                  <li>• <strong>Staking Parameters:</strong> Use "StakingParamsUpdate" proposal</li>
+                  <li>• <strong>Governance Parameters:</strong> Use "GovParamsUpdate" proposal</li>
+                </ul>
+              </div>
+              <ModalLabel>Changes (Legacy)</ModalLabel>
               <ModalInput>
                 <AddButton onClick={() => addParam()}>+</AddButton>
                 <ParamTable>
@@ -554,7 +857,7 @@ const NewProposalModal = () => {
             </>
           )}
 
-          {/* CommunityPool */}
+          {/* Software Upgrade */}
           {proposalType === 'SOFTWARE_UPGRADE' && (
             <>
               <ModalInputWrap>
@@ -574,6 +877,320 @@ const NewProposalModal = () => {
                   <InputBoxDefault type='number' placeholder='1' value={height} onChange={onChangeHeight} />
                 </ModalInput>
               </ModalInputWrap>
+            </>
+          )}
+
+          {/* Staking Parameters */}
+          {proposalType === 'STAKING_PARAMS_UPDATE_PROPOSAL' && (
+            <>
+              <ModalInputWrap>
+                <ModalLabel>Unbonding Time (seconds)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='text'
+                    placeholder='1814400s'
+                    value={stakingUnbondingTime}
+                    onChange={(e) => setStakingUnbondingTime(e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Max Validators</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='number'
+                    placeholder='100'
+                    value={stakingMaxValidators}
+                    onChange={(e) => setStakingMaxValidators(Number(e.target.value))}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Max Entries</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='number'
+                    placeholder='7'
+                    value={stakingMaxEntries}
+                    onChange={(e) => setStakingMaxEntries(Number(e.target.value))}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Historical Entries</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='number'
+                    placeholder='10000'
+                    value={stakingHistoricalEntries}
+                    onChange={(e) => setStakingHistoricalEntries(Number(e.target.value))}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Bond Denom</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='text'
+                    placeholder='ufct'
+                    value={stakingBondDenom}
+                    onChange={(e) => setStakingBondDenom(e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Min Commission Rate (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='text'
+                    placeholder='0.05'
+                    value={stakingMinCommissionRate}
+                    onChange={(e) => setStakingMinCommissionRate(e.target.value)}
+                  />
+                  <div style={{ fontSize: '11px', color: '#888', marginTop: '5px' }}>
+                    Enter as decimal (e.g., 0.05 for 5%). Range: 0.0 to 1.0
+                  </div>
+                </ModalInput>
+              </ModalInputWrap>
+            </>
+          )}
+
+          {/* Cancel Software Upgrade */}
+          {proposalType === 'CANCEL_SOFTWARE_UPGRADE' && (
+            <ModalInputWrap>
+              <div style={{ padding: '15px', background: '#2a2a2a', border: '1px solid #4a90e2', borderRadius: '4px', marginBottom: '15px' }}>
+                <p style={{ color: '#4a90e2', marginBottom: '10px', fontSize: '14px' }}>
+                  <strong>Cancel Software Upgrade Proposal</strong>
+                </p>
+                <p style={{ color: '#ccc', fontSize: '12px', margin: '0' }}>
+                  This proposal will cancel any pending software upgrade that has been scheduled but not yet executed.
+                  Use this when you need to halt a previously approved upgrade proposal.
+                </p>
+              </div>
+            </ModalInputWrap>
+          )}
+
+          {/* Cancel Proposal */}
+          {proposalType === 'CANCEL_PROPOSAL' && (
+            <>
+              <ModalInputWrap>
+                <div style={{ padding: '15px', background: '#2a2a2a', border: '1px solid #ff6b6b', borderRadius: '4px', marginBottom: '15px' }}>
+                  <p style={{ color: '#ff6b6b', marginBottom: '10px', fontSize: '14px' }}>
+                    <strong>Cancel Proposal</strong>
+                  </p>
+                  <p style={{ color: '#ccc', fontSize: '12px', margin: '0' }}>
+                    This will cancel an existing proposal that is still in the deposit or voting period.
+                    Only the proposer can cancel their own proposal.
+                  </p>
+                </div>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Proposal ID</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type='number'
+                    placeholder='Enter proposal ID to cancel'
+                    value={proposalId}
+                    onChange={(e) => setProposalId(e.target.value)}
+                  />
+                  <div style={{ fontSize: '11px', color: '#888', marginTop: '5px' }}>
+                    Enter the ID of the proposal you want to cancel
+                  </div>
+                </ModalInput>
+              </ModalInputWrap>
+            </>
+          )}
+
+          {/* Governance Parameters */}
+          {proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL' && (
+            <>
+              <div style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '10px' }}>
+                <ModalInputWrap>
+                  <ModalLabel>Min Deposit (ufct)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='5000000000'
+                      value={govMinDeposit}
+                      onChange={(e) => setGovMinDeposit(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Max Deposit Period (seconds)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='172800s'
+                      value={govMaxDepositPeriod}
+                      onChange={(e) => setGovMaxDepositPeriod(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Voting Period (seconds)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='172800s'
+                      value={govVotingPeriod}
+                      onChange={(e) => setGovVotingPeriod(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Quorum (decimal)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='0.334000000000000000'
+                      value={govQuorum}
+                      onChange={(e) => setGovQuorum(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Threshold (decimal)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='0.500000000000000000'
+                      value={govThreshold}
+                      onChange={(e) => setGovThreshold(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Veto Threshold (decimal)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='0.334000000000000000'
+                      value={govVetoThreshold}
+                      onChange={(e) => setGovVetoThreshold(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Min Initial Deposit Ratio (decimal)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='0.100000000000000000'
+                      value={govMinInitialDepositRatio}
+                      onChange={(e) => setGovMinInitialDepositRatio(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Proposal Cancel Ratio (decimal)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='0.500000000000000000'
+                      value={govProposalCancelRatio}
+                      onChange={(e) => setGovProposalCancelRatio(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Proposal Cancel Destination (optional)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='community pool or address'
+                      value={govProposalCancelDest}
+                      onChange={(e) => setGovProposalCancelDest(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Expedited Voting Period (seconds)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='86400s'
+                      value={govExpeditedVotingPeriod}
+                      onChange={(e) => setGovExpeditedVotingPeriod(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Expedited Threshold (decimal)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='0.667000000000000000'
+                      value={govExpeditedThreshold}
+                      onChange={(e) => setGovExpeditedThreshold(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Expedited Min Deposit (ufct)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='10000000000'
+                      value={govExpeditedMinDeposit}
+                      onChange={(e) => setGovExpeditedMinDeposit(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Burn Vote Quorum</ModalLabel>
+                  <ModalInput>
+                    <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
+                      <input
+                        type="checkbox"
+                        checked={govBurnVoteQuorum}
+                        onChange={(e) => setGovBurnVoteQuorum(e.target.checked)}
+                        style={{ marginRight: '8px' }}
+                      />
+                      Burn deposits when proposal doesn't meet quorum
+                    </label>
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Burn Proposal Deposit Prevote</ModalLabel>
+                  <ModalInput>
+                    <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
+                      <input
+                        type="checkbox"
+                        checked={govBurnProposalDepositPrevote}
+                        onChange={(e) => setGovBurnProposalDepositPrevote(e.target.checked)}
+                        style={{ marginRight: '8px' }}
+                      />
+                      Burn deposits if proposal fails in prevote phase
+                    </label>
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Burn Vote Veto</ModalLabel>
+                  <ModalInput>
+                    <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
+                      <input
+                        type="checkbox"
+                        checked={govBurnVoteVeto}
+                        onChange={(e) => setGovBurnVoteVeto(e.target.checked)}
+                        style={{ marginRight: '8px' }}
+                      />
+                      Burn deposits when proposal is vetoed
+                    </label>
+                  </ModalInput>
+                </ModalInputWrap>
+                <ModalInputWrap>
+                  <ModalLabel>Min Deposit Ratio (decimal)</ModalLabel>
+                  <ModalInput>
+                    <InputBoxDefault
+                      type='text'
+                      placeholder='0.010000000000000000'
+                      value={govMinDepositRatio}
+                      onChange={(e) => setGovMinDepositRatio(e.target.value)}
+                    />
+                  </ModalInput>
+                </ModalInputWrap>
+              </div>
             </>
           )}
 
