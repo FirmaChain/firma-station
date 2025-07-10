@@ -16,7 +16,7 @@ import {
   Label,
   DepositContent,
   DepositMainTitle,
-  DepositButton,
+  DepositButton
 } from './styles';
 import { CHAIN_CONFIG } from '../../../config';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
@@ -34,12 +34,37 @@ const DepositCard = ({ proposalState }: IProps) => {
     return getDateTimeFormat(moment.utc(startTime).add(convertNumber(second), 'seconds').toISOString());
   };
 
+  //! Deprecated: Sum logic is not correct
+  // const getCurrentDeposit_deprecated = (deposits: any) => {
+  //   if (deposits === undefined) return 0;
+
+  //   let totalDeposit = 0;
+  //   for (let value of deposits) {
+  //     totalDeposit += convertNumber(value.amount[0].amount);
+  //   }
+
+  //   return totalDeposit;
+  // };
+
   const getCurrentDeposit = (deposits: any) => {
     if (deposits === undefined) return 0;
 
+    // Save the latest values by wallet address based on timestamp
+    const latestDepositsByAddress = new Map();
+
+    // Compare timestamps to keep only the latest deposit per wallet
+    for (let deposit of deposits) {
+      const existingDeposit = latestDepositsByAddress.get(deposit.depositor_address);
+
+      if (!existingDeposit || new Date(deposit.timestamp) > new Date(existingDeposit.timestamp)) {
+        latestDepositsByAddress.set(deposit.depositor_address, deposit);
+      }
+    }
+
+    // Sum the latest values of each wallet
     let totalDeposit = 0;
-    for (let value of deposits) {
-      totalDeposit += convertNumber(value.amount[0].amount);
+    for (let [address, deposit] of latestDepositsByAddress) {
+      totalDeposit += convertNumber(deposit.amount[0].amount);
     }
 
     return totalDeposit;
@@ -72,13 +97,13 @@ const DepositCard = ({ proposalState }: IProps) => {
           onClick={() => {
             if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
               modalActions.handleModalData({
-                proposalId: proposalState.proposalId,
+                proposalId: proposalState.proposalId
               });
               modalActions.handleModalDeposit(true);
             } else {
               enqueueSnackbar('Insufficient funds. Please check your account balance.', {
                 variant: 'error',
-                autoHideDuration: 2000,
+                autoHideDuration: 2000
               });
             }
           }}
