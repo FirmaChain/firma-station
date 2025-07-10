@@ -11,6 +11,7 @@ import { IProposalsState, IProposalDetailState } from '../../interfaces/governan
 import { IProposalData } from '../../interfaces/lcd';
 import { IProposalQueryData } from '../../interfaces/gql';
 import { CHAIN_CONFIG } from '../../config';
+import * as lodash from 'lodash';
 
 export const useGovernmentData = () => {
   const [proposalsState, setProposalsState] = useState<IProposalsState>({
@@ -47,7 +48,7 @@ export const useGovernmentData = () => {
           proposals
         });
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
@@ -63,21 +64,27 @@ export const useProposalData = (proposalId: string) => {
   const formatProposalQueryData = (data: IProposalQueryData | null) => {
     if (data) {
       const proposal = data.proposal[0];
+      if (!proposal) return [];
 
-      const depositors = proposal?.proposal_deposits;
-      const totalVotingPower = proposal?.staking_pool_snapshot?.bonded_tokens;
-      const votes = proposal
-        ? proposal.proposal_votes.map((vote: any) => {
-            const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, vote.voter_address);
+      const depositors = proposal.proposal_deposits;
+      const totalVotingPower = proposal.staking_pool_snapshot?.bonded_tokens;
 
-            return {
-              option: vote.option,
-              voterAddress: vote.voter_address,
-              moniker,
-              avatarURL
-            };
-          })
-        : [];
+      const latestVotesByVoter = lodash.chain(proposal.proposal_votes)
+        .groupBy('voter_address')
+        .values()
+        .map(votes => votes[votes.length - 1])
+        .value();
+
+      const votes = latestVotesByVoter.map(vote => {
+        const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, vote.voter_address);
+
+        return {
+          option: vote.option,
+          voterAddress: vote.voter_address,
+          moniker,
+          avatarURL
+        };
+      });
 
       return {
         depositors,
