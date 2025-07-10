@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
@@ -36,7 +36,7 @@ import {
   ItemColumn,
   ProfileImage,
   Quorum,
-  Arrow,
+  Arrow
 } from './styles';
 
 interface IProps {
@@ -48,26 +48,26 @@ const votingThemeData = [
     type: 'YES',
     key: 'yes',
     option: 'VOTE_OPTION_YES',
-    color: '#2BA891',
+    color: '#2BA891'
   },
   {
     type: 'NO',
     key: 'no',
     option: 'VOTE_OPTION_NO',
-    color: '#F17047',
+    color: '#F17047'
   },
   {
     type: 'NoWithVeto',
     key: 'noWithVeto',
     option: 'VOTE_OPTION_NO_WITH_VETO',
-    color: '#E79720',
+    color: '#E79720'
   },
   {
     type: 'Abstain',
     key: 'abstain',
     option: 'VOTE_OPTION_ABSTAIN',
-    color: '#9438DC',
-  },
+    color: '#9438DC'
+  }
 ];
 
 const Row = ({ data, index, style }: any) => {
@@ -122,20 +122,20 @@ const VotingCard = ({ proposalState }: IProps) => {
   const votingData = [
     {
       percent: getTallyPercent(proposalState, 'yes'),
-      value: getTallyValue(proposalState, 'yes'),
+      value: getTallyValue(proposalState, 'yes')
     },
     {
       percent: getTallyPercent(proposalState, 'no'),
-      value: getTallyValue(proposalState, 'no'),
+      value: getTallyValue(proposalState, 'no')
     },
     {
       percent: getTallyPercent(proposalState, 'noWithVeto'),
-      value: getTallyValue(proposalState, 'noWithVeto'),
+      value: getTallyValue(proposalState, 'noWithVeto')
     },
     {
       percent: getTallyPercent(proposalState, 'abstain'),
-      value: getTallyValue(proposalState, 'abstain'),
-    },
+      value: getTallyValue(proposalState, 'abstain')
+    }
   ];
 
   const votes = proposalState.votes.filter((v) => {
@@ -177,7 +177,7 @@ const VotingCard = ({ proposalState }: IProps) => {
       if (votingThemeData[value].key === 'abstain') continue;
       result.push({
         percent: `${convertNumberFormat((proposalState.tally[votingThemeData[value].key] / currentVoting) * 100, 2)}%`,
-        bgColor: votingThemeData[value].color,
+        bgColor: votingThemeData[value].color
       });
     }
 
@@ -191,16 +191,20 @@ const VotingCard = ({ proposalState }: IProps) => {
   const onClickVote = () => {
     if (convertNumber(balance) >= convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
       modalActions.handleModalData({
-        proposalId: proposalState.proposalId,
+        proposalId: proposalState.proposalId
       });
       modalActions.handleModalVoting(true);
     } else {
       enqueueSnackbar('Insufficient funds. Please check your account balance.', {
         variant: 'error',
-        autoHideDuration: 2000,
+        autoHideDuration: 2000
       });
     }
   };
+
+  const didVotingStarted = useMemo(() => {
+    return proposalState.votingStartTime && proposalState.votingEndTime;
+  }, [proposalState.votingStartTime, proposalState.votingEndTime]);
 
   return (
     <CardWrapper>
@@ -209,7 +213,9 @@ const VotingCard = ({ proposalState }: IProps) => {
         <VotingDetailItem>
           <VotingLabel>Voting Time</VotingLabel>
           <VotingContent>
-            {isSmall ? (
+            {!didVotingStarted ? (
+              'Voting has not started yet'
+            ) : isSmall ? (
               <>
                 <div style={{ marginBottom: '5px' }}>{getTimeFormat(proposalState.votingStartTime)} ~</div>
                 <div>{getTimeFormat(proposalState.votingEndTime)}</div>
