@@ -786,12 +786,20 @@ const NewProposalModal = () => {
       onClose={closeModal}
       width={newProposalModalWidth}
     >
-      <ModalContainer>
+      <ModalContainer style={{ maxHeight: '80vh', overflow: 'hidden' }}>
         <ModalTitle>
           New Proposal
           <HelpIcon onClick={() => window.open(GUIDE_LINK_NEW_PROPOSAL)} />
         </ModalTitle>
-        <ModalContent>
+        <ModalContent
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            height: '100%',
+            overflow: 'auto'
+          }}
+        >
           <ModalInputWrap>
             <ModalLabel>Type</ModalLabel>
             <ModalInput>
@@ -942,7 +950,7 @@ const NewProposalModal = () => {
 
           {/* Staking Parameters */}
           {proposalType === 'STAKING_PARAMS_UPDATE_PROPOSAL' && (
-            <div style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '10px' }}>
+            <>
               <ModalInputWrap>
                 <ModalLabel>Unbonding Time (seconds)</ModalLabel>
                 <ModalInput>
@@ -1017,7 +1025,7 @@ const NewProposalModal = () => {
                   </div>
                 </ModalInput>
               </ModalInputWrap>
-            </div>
+            </>
           )}
 
           {/* Cancel Software Upgrade */}
@@ -1085,210 +1093,208 @@ const NewProposalModal = () => {
           {/* Governance Parameters */}
           {proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL' && (
             <>
-              <div style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '10px' }}>
-                <ModalInputWrap>
-                  <ModalLabel>Min Deposit (ufct)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="5000000000"
-                      value={paramObj.minDeposit?.[0]?.amount || ''}
-                      onChange={(e) => updateParam('minDeposit', [{ denom: 'ufct', amount: e.target.value }])}
+              <ModalInputWrap>
+                <ModalLabel>Min Deposit (ufct)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="5000000000"
+                    value={paramObj.minDeposit?.[0]?.amount || ''}
+                    onChange={(e) => updateParam('minDeposit', [{ denom: 'ufct', amount: e.target.value }])}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Max Deposit Period (seconds)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="number"
+                    placeholder="172800"
+                    value={paramObj.maxDepositPeriod?.seconds ? String(paramObj.maxDepositPeriod.seconds) : ''}
+                    onChange={(e) =>
+                      updateParam('maxDepositPeriod', {
+                        seconds: BigInt(e.target.value),
+                        nanos: paramObj.maxDepositPeriod?.nanos || 0
+                      })
+                    }
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Voting Period (seconds)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="number"
+                    placeholder="172800"
+                    value={paramObj.votingPeriod?.seconds ? String(paramObj.votingPeriod.seconds) : ''}
+                    onChange={(e) =>
+                      updateParam('votingPeriod', {
+                        seconds: BigInt(e.target.value),
+                        nanos: paramObj.votingPeriod?.nanos || 0
+                      })
+                    }
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Quorum (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="number"
+                    placeholder="0.334000000000000000"
+                    value={paramObj.quorum || ''}
+                    onChange={(e) => updateParam('quorum', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Threshold (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="0.500000000000000000"
+                    value={paramObj.threshold || ''}
+                    onChange={(e) => updateParam('threshold', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Veto Threshold (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="0.334000000000000000"
+                    value={paramObj.vetoThreshold || ''}
+                    onChange={(e) => updateParam('vetoThreshold', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Min Initial Deposit Ratio (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="0.100000000000000000"
+                    value={paramObj.minInitialDepositRatio || ''}
+                    onChange={(e) => updateParam('minInitialDepositRatio', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Proposal Cancel Ratio (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="0.500000000000000000"
+                    value={paramObj.proposalCancelRatio || ''}
+                    onChange={(e) => updateParam('proposalCancelRatio', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Proposal Cancel Destination (optional)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="community pool or address"
+                    value={paramObj.proposalCancelDest || ''}
+                    onChange={(e) => updateParam('proposalCancelDest', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Expedited Voting Period (seconds)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="number"
+                    placeholder="86400"
+                    value={
+                      paramObj.expeditedVotingPeriod?.seconds ? String(paramObj.expeditedVotingPeriod.seconds) : ''
+                    }
+                    onChange={(e) =>
+                      updateParam('expeditedVotingPeriod', {
+                        seconds: BigInt(e.target.value),
+                        nanos: paramObj.expeditedVotingPeriod?.nanos || 0
+                      })
+                    }
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Expedited Threshold (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="0.667000000000000000"
+                    value={paramObj.expeditedThreshold || ''}
+                    onChange={(e) => updateParam('expeditedThreshold', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Expedited Min Deposit (ufct)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="10000000000"
+                    value={paramObj.expeditedMinDeposit?.[0]?.amount || ''}
+                    onChange={(e) => updateParam('expeditedMinDeposit', [{ denom: 'ufct', amount: e.target.value }])}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Burn Vote Quorum</ModalLabel>
+                <ModalInput>
+                  <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
+                    <input
+                      type="checkbox"
+                      checked={paramObj.burnVoteQuorum || false}
+                      onChange={(e) => updateParam('burnVoteQuorum', e.target.checked)}
+                      style={{ marginRight: '8px' }}
                     />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Max Deposit Period (seconds)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="number"
-                      placeholder="172800"
-                      value={paramObj.maxDepositPeriod?.seconds ? String(paramObj.maxDepositPeriod.seconds) : ''}
-                      onChange={(e) =>
-                        updateParam('maxDepositPeriod', {
-                          seconds: BigInt(e.target.value),
-                          nanos: paramObj.maxDepositPeriod?.nanos || 0
-                        })
-                      }
+                    Burn deposits when proposal doesn't meet quorum
+                  </label>
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Burn Proposal Deposit Prevote</ModalLabel>
+                <ModalInput>
+                  <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
+                    <input
+                      type="checkbox"
+                      checked={paramObj.burnProposalDepositPrevote || false}
+                      onChange={(e) => updateParam('burnProposalDepositPrevote', e.target.checked)}
+                      style={{ marginRight: '8px' }}
                     />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Voting Period (seconds)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="number"
-                      placeholder="172800"
-                      value={paramObj.votingPeriod?.seconds ? String(paramObj.votingPeriod.seconds) : ''}
-                      onChange={(e) =>
-                        updateParam('votingPeriod', {
-                          seconds: BigInt(e.target.value),
-                          nanos: paramObj.votingPeriod?.nanos || 0
-                        })
-                      }
+                    Burn deposits if proposal fails in prevote phase
+                  </label>
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Burn Vote Veto</ModalLabel>
+                <ModalInput>
+                  <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
+                    <input
+                      type="checkbox"
+                      checked={paramObj.burnVoteVeto !== false}
+                      onChange={(e) => updateParam('burnVoteVeto', e.target.checked)}
+                      style={{ marginRight: '8px' }}
                     />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Quorum (decimal)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="number"
-                      placeholder="0.334000000000000000"
-                      value={paramObj.quorum || ''}
-                      onChange={(e) => updateParam('quorum', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Threshold (decimal)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="0.500000000000000000"
-                      value={paramObj.threshold || ''}
-                      onChange={(e) => updateParam('threshold', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Veto Threshold (decimal)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="0.334000000000000000"
-                      value={paramObj.vetoThreshold || ''}
-                      onChange={(e) => updateParam('vetoThreshold', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Min Initial Deposit Ratio (decimal)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="0.100000000000000000"
-                      value={paramObj.minInitialDepositRatio || ''}
-                      onChange={(e) => updateParam('minInitialDepositRatio', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Proposal Cancel Ratio (decimal)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="0.500000000000000000"
-                      value={paramObj.proposalCancelRatio || ''}
-                      onChange={(e) => updateParam('proposalCancelRatio', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Proposal Cancel Destination (optional)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="community pool or address"
-                      value={paramObj.proposalCancelDest || ''}
-                      onChange={(e) => updateParam('proposalCancelDest', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Expedited Voting Period (seconds)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="number"
-                      placeholder="86400"
-                      value={
-                        paramObj.expeditedVotingPeriod?.seconds ? String(paramObj.expeditedVotingPeriod.seconds) : ''
-                      }
-                      onChange={(e) =>
-                        updateParam('expeditedVotingPeriod', {
-                          seconds: BigInt(e.target.value),
-                          nanos: paramObj.expeditedVotingPeriod?.nanos || 0
-                        })
-                      }
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Expedited Threshold (decimal)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="0.667000000000000000"
-                      value={paramObj.expeditedThreshold || ''}
-                      onChange={(e) => updateParam('expeditedThreshold', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Expedited Min Deposit (ufct)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="10000000000"
-                      value={paramObj.expeditedMinDeposit?.[0]?.amount || ''}
-                      onChange={(e) => updateParam('expeditedMinDeposit', [{ denom: 'ufct', amount: e.target.value }])}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Burn Vote Quorum</ModalLabel>
-                  <ModalInput>
-                    <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
-                      <input
-                        type="checkbox"
-                        checked={paramObj.burnVoteQuorum || false}
-                        onChange={(e) => updateParam('burnVoteQuorum', e.target.checked)}
-                        style={{ marginRight: '8px' }}
-                      />
-                      Burn deposits when proposal doesn't meet quorum
-                    </label>
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Burn Proposal Deposit Prevote</ModalLabel>
-                  <ModalInput>
-                    <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
-                      <input
-                        type="checkbox"
-                        checked={paramObj.burnProposalDepositPrevote || false}
-                        onChange={(e) => updateParam('burnProposalDepositPrevote', e.target.checked)}
-                        style={{ marginRight: '8px' }}
-                      />
-                      Burn deposits if proposal fails in prevote phase
-                    </label>
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Burn Vote Veto</ModalLabel>
-                  <ModalInput>
-                    <label style={{ display: 'flex', alignItems: 'center', color: '#ccc' }}>
-                      <input
-                        type="checkbox"
-                        checked={paramObj.burnVoteVeto !== false}
-                        onChange={(e) => updateParam('burnVoteVeto', e.target.checked)}
-                        style={{ marginRight: '8px' }}
-                      />
-                      Burn deposits when proposal is vetoed
-                    </label>
-                  </ModalInput>
-                </ModalInputWrap>
-                <ModalInputWrap>
-                  <ModalLabel>Min Deposit Ratio (decimal)</ModalLabel>
-                  <ModalInput>
-                    <InputBoxDefault
-                      type="text"
-                      placeholder="0.010000000000000000"
-                      value={paramObj.minDepositRatio || ''}
-                      onChange={(e) => updateParam('minDepositRatio', e.target.value)}
-                    />
-                  </ModalInput>
-                </ModalInputWrap>
-              </div>
+                    Burn deposits when proposal is vetoed
+                  </label>
+                </ModalInput>
+              </ModalInputWrap>
+              <ModalInputWrap>
+                <ModalLabel>Min Deposit Ratio (decimal)</ModalLabel>
+                <ModalInput>
+                  <InputBoxDefault
+                    type="text"
+                    placeholder="0.010000000000000000"
+                    value={paramObj.minDepositRatio || ''}
+                    onChange={(e) => updateParam('minDepositRatio', e.target.value)}
+                  />
+                </ModalInput>
+              </ModalInputWrap>
             </>
           )}
 
