@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import Select from 'react-select';
@@ -101,7 +101,7 @@ const NewProposalModal = () => {
   const [proposalType, setProposalType] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [initialDeposit, setInitialDeposit] = useState(0);
+  const [initialDeposit, setInitialDeposit] = useState('');
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState(0);
   const [upgradeName, setUpgradeName] = useState('');
@@ -152,7 +152,7 @@ const NewProposalModal = () => {
   const resetAllParams = () => {
     setTitle('');
     setDescription('');
-    setInitialDeposit(0);
+    setInitialDeposit('');
     setRecipient('');
     setAmount(0);
     setParamList([]);
@@ -163,7 +163,7 @@ const NewProposalModal = () => {
   const newProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     switch (proposalType) {
       case 'TEXT_PROPOSAL':
-        submitTextProposal(title, description, initialDeposit, gas)
+        submitTextProposal(title, description, Number(initialDeposit), gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -173,7 +173,7 @@ const NewProposalModal = () => {
           });
         break;
       case 'COMMUNITY_POOL_SPEND_PROPOSAL':
-        submitCommunityPoolSpendProposal(title, description, initialDeposit, amount, recipient, gas)
+        submitCommunityPoolSpendProposal(title, description, Number(initialDeposit), amount, recipient, gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -225,7 +225,14 @@ const NewProposalModal = () => {
           minCommissionRate: processCommissionRate(paramObj.minCommissionRate || '')
         };
         const stakingMetadata = '';
-        submitStakingParamsUpdateProposal(title, description, initialDeposit, stakingParams, stakingMetadata, gas)
+        submitStakingParamsUpdateProposal(
+          title,
+          description,
+          Number(initialDeposit),
+          stakingParams,
+          stakingMetadata,
+          gas
+        )
           .then(() => {
             setUserData();
             resolveTx();
@@ -263,7 +270,7 @@ const NewProposalModal = () => {
           minDepositRatio: paramObj.minDepositRatio
         };
         const govMetadata = '';
-        submitGovParamsUpdateProposal(title, description, initialDeposit, govParams, govMetadata, gas)
+        submitGovParamsUpdateProposal(title, description, Number(initialDeposit), govParams, govMetadata, gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -273,7 +280,7 @@ const NewProposalModal = () => {
           });
         break;
       case 'SOFTWARE_UPGRADE':
-        submitSoftwareUpgrade(title, description, initialDeposit, upgradeName, height, gas)
+        submitSoftwareUpgrade(title, description, Number(initialDeposit), upgradeName, height, gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -283,7 +290,7 @@ const NewProposalModal = () => {
           });
         break;
       case 'CANCEL_SOFTWARE_UPGRADE':
-        submitCancelSoftwareUpgrade(title, description, initialDeposit, gas)
+        submitCancelSoftwareUpgrade(title, description, Number(initialDeposit), gas)
           .then(() => {
             setUserData();
             resolveTx();
@@ -323,28 +330,60 @@ const NewProposalModal = () => {
     setDescription(e.target.value);
   };
 
-  const onChangeInitialDeposit = (e: any) => {
+  // Helper function to remove leading zeros from number string
+  const removeLeadingZeros = (value: string): string => {
+    if (value.includes('.')) {
+      const [integerPart, decimalPart] = value.split('.');
+      const cleanIntegerPart = integerPart.replace(/^0+/, '') || '0';
+      return `${cleanIntegerPart}.${decimalPart}`;
+    } else {
+      return value.replace(/^0+/, '') || '0';
+    }
+  };
+
+  // Helper function to validate and format decimal places
+  const formatDecimalPlaces = (value: string): string => {
+    const decimalPattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
+
+    if (!decimalPattern.test(value)) {
+      return makeDecimalPoint(convertNumber(value), 6);
+    }
+
+    return value;
+  };
+
+  // Helper function to enforce maximum amount limit
+  const enforceMaxAmount = (value: string): string => {
+    const maxAmount = getMaxAmount();
+    const currentAmount = convertNumber(value);
+
+    return currentAmount > maxAmount ? maxAmount.toString() : value;
+  };
+
+  const onChangeInitialDeposit = (e: ChangeEvent<HTMLInputElement>) => {
     if (e === null) return;
-    const { value } = e.target;
 
-    let amount: string = value.replace(/[^0-9.]/g, '');
+    const inputValue = e.target.value;
 
-    if (amount === '') {
-      setInitialDeposit(0);
+    // Basic validation
+    if (isNaN(Number(inputValue))) return;
+    if (inputValue.startsWith('-')) return;
+
+    // Clean input - keep only numbers and decimal point
+    let cleanValue = inputValue.replace(/[^0-9.]/g, '');
+
+    // Handle empty input
+    if (cleanValue === '') {
+      setInitialDeposit('');
       return;
     }
 
-    const pattern = /(^\d+$)|(^\d{1,}.\d{0,6}$)/;
+    // Process the value through formatting steps
+    cleanValue = removeLeadingZeros(cleanValue);
+    cleanValue = formatDecimalPlaces(cleanValue);
+    cleanValue = enforceMaxAmount(cleanValue);
 
-    if (!pattern.test(amount)) {
-      amount = makeDecimalPoint(convertNumber(amount), 6);
-    }
-
-    if (convertNumber(amount) > getMaxAmount()) {
-      amount = getMaxAmount().toString();
-    }
-
-    setInitialDeposit(convertNumber(amount));
+    setInitialDeposit(cleanValue);
   };
 
   const getMaxAmount = () => {
@@ -375,29 +414,29 @@ const NewProposalModal = () => {
     setHeight(e.target.value);
   };
 
-  const onChangeSubspace = (e: any, index: number) => {
-    setParamList((prevState) => [
-      ...prevState.map((item, i) => (i === index ? { ...item, subspace: e.target.value } : item))
-    ]);
-  };
-  const onChangeKey = (e: any, index: number) => {
-    setParamList((prevState) => [
-      ...prevState.map((item, i) => (i === index ? { ...item, key: e.target.value } : item))
-    ]);
-  };
-  const onChangeValue = (e: any, index: number) => {
-    setParamList((prevState) => [
-      ...prevState.map((item, i) => (i === index ? { ...item, value: e.target.value } : item))
-    ]);
-  };
+  // const onChangeSubspace = (e: any, index: number) => {
+  //   setParamList((prevState) => [
+  //     ...prevState.map((item, i) => (i === index ? { ...item, subspace: e.target.value } : item))
+  //   ]);
+  // };
+  // const onChangeKey = (e: any, index: number) => {
+  //   setParamList((prevState) => [
+  //     ...prevState.map((item, i) => (i === index ? { ...item, key: e.target.value } : item))
+  //   ]);
+  // };
+  // const onChangeValue = (e: any, index: number) => {
+  //   setParamList((prevState) => [
+  //     ...prevState.map((item, i) => (i === index ? { ...item, value: e.target.value } : item))
+  //   ]);
+  // };
 
-  const addParam = () => {
-    setParamList((prevState) => [...prevState, { subspace: '', key: '', value: '' }]);
-  };
+  // const addParam = () => {
+  //   setParamList((prevState) => [...prevState, { subspace: '', key: '', value: '' }]);
+  // };
 
-  const deleteParam = (index: number) => {
-    setParamList((prevState) => [...prevState.filter((v, i) => i !== index)]);
-  };
+  // const deleteParam = (index: number) => {
+  //   setParamList((prevState) => [...prevState.filter((v, i) => i !== index)]);
+  // };
 
   const getParamsTx = () => {
     switch (proposalType) {
@@ -548,7 +587,7 @@ const NewProposalModal = () => {
       (value: any) => value.subspace !== '' && value.key !== '' && value.value !== ''
     );
 
-    const isCommonInvalid = title === '' || description === '' || initialDeposit === 0;
+    const isCommonInvalid = title === '' || description === '' || Number(initialDeposit) === 0;
     const isCommunityPoolInvalid =
       proposalType === 'COMMUNITY_POOL_SPEND_PROPOSAL' && (recipient === '' || amount === 0);
     // const isParameterChangeInvalid = proposalType === 'PARAMETER_CHANGE_PROPOSAL' && validParamList.length === 0;
@@ -574,7 +613,7 @@ const NewProposalModal = () => {
     // const isCancelProposalInvalid =
     //   proposalType === 'CANCEL_PROPOSAL' && (proposalId === '' || isNaN(parseInt(proposalId)));
 
-    if (initialDeposit === 0) {
+    if (Number(initialDeposit) === 0) {
       enqueueSnackbar('Insufficient funds. Please check your account balance.', {
         variant: 'error',
         autoHideDuration: 2000
@@ -607,13 +646,13 @@ const NewProposalModal = () => {
     try {
       switch (proposalType) {
         case 'TEXT_PROPOSAL':
-          currentGas = await getGasEstimationSubmitTextProposal(title, description, initialDeposit);
+          currentGas = await getGasEstimationSubmitTextProposal(title, description, Number(initialDeposit));
           break;
         case 'COMMUNITY_POOL_SPEND_PROPOSAL':
           currentGas = await getGasEstimationSubmitCommunityPoolSpendProposal(
             title,
             description,
-            initialDeposit,
+            Number(initialDeposit),
             amount,
             recipient
           );
@@ -661,7 +700,7 @@ const NewProposalModal = () => {
           currentGas = await getGasEstimationSubmitStakingParamsUpdateProposal(
             title,
             description,
-            initialDeposit,
+            Number(initialDeposit),
             stakingParamsEstimate,
             stakingMetadataEstimate
           );
@@ -698,7 +737,7 @@ const NewProposalModal = () => {
           currentGas = await getGasEstimationSubmitGovParamsUpdateProposal(
             title,
             description,
-            initialDeposit,
+            Number(initialDeposit),
             govParamsEstimate,
             govMetadataEstimate
           );
@@ -707,13 +746,13 @@ const NewProposalModal = () => {
           currentGas = await getGasEstimationSubmitSoftwareUpgrade(
             title,
             description,
-            initialDeposit,
+            Number(initialDeposit),
             upgradeName,
             height
           );
           break;
         case 'CANCEL_SOFTWARE_UPGRADE':
-          currentGas = await getGasEstimationSubmitCancelSoftwareUpgrade(title, description, initialDeposit);
+          currentGas = await getGasEstimationSubmitCancelSoftwareUpgrade(title, description, Number(initialDeposit));
           break;
         // case 'CANCEL_PROPOSAL':
         //   currentGas = await getGasEstimationCancelProposal(proposalId);
@@ -729,7 +768,7 @@ const NewProposalModal = () => {
     }
 
     if (currentGas > 0) {
-      if (convertNumber(balance) - initialDeposit >= convertToFctNumber(getFeesFromGas(currentGas))) {
+      if (convertNumber(balance) - Number(initialDeposit) >= convertToFctNumber(getFeesFromGas(currentGas))) {
         modalActions.handleModalData({
           action: 'Proposal',
           module: `/gov${getGovModuleName()}`,
@@ -825,7 +864,7 @@ const NewProposalModal = () => {
           <ModalInputWrap>
             <ModalLabel>Initial Deposit</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type="number" placeholder="" value={initialDeposit} onChange={onChangeInitialDeposit} />
+              <InputBoxDefault type="text" placeholder="0" value={initialDeposit} onChange={onChangeInitialDeposit} />
             </ModalInput>
           </ModalInputWrap>
           {/* Parameter Change - Deprecated */}
