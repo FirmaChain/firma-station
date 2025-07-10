@@ -13,12 +13,14 @@ import {
   RightCardTopWrap,
   RightCardBottomWrap
 } from '../styles/accounts';
+import { useMediaQuery } from 'react-responsive';
 
 const Accounts = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
   const { vesting } = useSelector((state: rootState) => state.user);
   const { transferHistoryByAddressState, tokenDataState, isLoading, hasMore, loadMoreData } =
     useTransferHistoryByAddress();
+  const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 
   return (
     <ContentContainer>
@@ -30,9 +32,12 @@ const Accounts = () => {
           </LeftCardWrap>
         )}
         <RightCardWrap>
-          <RightCardTopWrap>
-            <SendCard />
-          </RightCardTopWrap>
+          {!isMobile && (
+            // Update: hide send button on mobile
+            <RightCardTopWrap>
+              <SendCard />
+            </RightCardTopWrap>
+          )}
           <RightCardBottomWrap>
             {vesting && vesting.vestingPeriod.length > 0 && <VestingCard vestingState={vesting} />}
             {transferHistoryByAddressState && (
