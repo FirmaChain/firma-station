@@ -1034,12 +1034,31 @@ export const DisconnectButton = styled(ButtonStyleByStatus)<{ status: number }>`
 export const MnemonicBox = styled.div`
   background-color: #15151f;
   border-radius: 10px;
-  padding: 20px 45px;
+  padding: 10px 5px;
   line-height: 24px;
   color: #b4b4b4;
   text-align: center;
   white-space: pre-wrap;
   font-size: 1.5rem;
+`;
+
+export const MnemonicTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+`;
+
+export const MnemonicRow = styled.tr`
+  background: transparent;
+`;
+
+export const MnemonicCell = styled.td`
+  padding: 6px;
+  color: #b4b4b4;
+  font-size: 1.5rem;
+  text-align: center;
+  background: transparent;
+  border: none;
 `;
 
 export const PrivatekeyBox = styled.div`
@@ -1049,7 +1068,8 @@ export const PrivatekeyBox = styled.div`
   line-height: 24px;
   color: #b4b4b4;
   text-align: center;
-  white-space: pre-wrap;
+  word-break: break-all;
+  // white-space: pre-wrap;
   font-size: 1.6rem;
 `;
 

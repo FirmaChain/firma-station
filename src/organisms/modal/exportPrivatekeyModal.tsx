@@ -27,7 +27,7 @@ import {
   ModalInputWrap,
   PrivatekeyBox,
   ExportQRContainer,
-  QRWrapper,
+  QRWrapper
 } from './styles';
 import theme from '../../themes';
 
@@ -46,7 +46,7 @@ const ExportPrivatekeyModal = () => {
     } else {
       enqueueSnackbar('Invalid Password', {
         variant: 'error',
-        autoHideDuration: 2000,
+        autoHideDuration: 2000
       });
     }
   };
@@ -56,7 +56,7 @@ const ExportPrivatekeyModal = () => {
 
     enqueueSnackbar('Copied', {
       variant: 'success',
-      autoHideDuration: 1000,
+      autoHideDuration: 1000
     });
   };
 
@@ -95,8 +95,8 @@ const ExportPrivatekeyModal = () => {
               <ExportPasswordWrapper>
                 <InputBoxDefault
                   ref={inputRef}
-                  placeholder='Enter Password'
-                  type='password'
+                  placeholder="Enter Password"
+                  type="password"
                   value={password}
                   onChange={onChangePassword}
                   onKeyDown={onKeyDownPassword}
@@ -124,7 +124,8 @@ const ExportPrivatekeyModal = () => {
                 <ModalLabel>Private Key</ModalLabel>
                 <ModalInput>
                   <CopyIcon style={{ left: '85px' }} onClick={clipboard} />
-                  <PrivatekeyBox>{`${privatekey.substring(0, 50)}\n${privatekey.substring(50)}`}</PrivatekeyBox>
+                  {/* //? Fix: privateKey line break issue */}
+                  <PrivatekeyBox>{privatekey}</PrivatekeyBox>
                 </ModalInput>
               </ModalInputWrap>
               <ExportQRContainer>
