@@ -97,7 +97,12 @@ const LABELS: IKeyValue = {
   txCosmwasmExecuteContractLabel: 'CosmWasm ExecuteContract',
   txCosmwasmMigrateContractLabel: 'CosmWasm MigrateContract',
   txCosmwasmUpdateAdminLabel: 'CosmWasm UpdateAdmin',
-  txCosmwasmClearAdminLabel: 'CosmWasm ClearAdmin'
+  txCosmwasmClearAdminLabel: 'CosmWasm ClearAdmin',
+  txCommunityPoolSpendLabel: 'Community Pool Spend',
+  txSoftwareUpgradeLabel: 'Software Upgrade',
+  txGovParameterChangeLabel: 'Governance Parameter Change',
+  txStakingParameterChangeLabel: 'Staking Parameter Change',
+  txVoteWeightedLabel: 'Vote Weighted' // New. In case
 };
 
 export const TRANSACTION_TYPE_MODEL: IKeyValue = {
@@ -179,7 +184,16 @@ export const TRANSACTION_TYPE_MODEL: IKeyValue = {
     tagTheme: TYPE_COLORS['seven'],
     tagDisplay: LABELS['txDepositLabel']
   },
+  '/cosmos.gov.v1.MsgDeposit': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txDepositLabel']
+  },
+
   '/cosmos.gov.v1beta1.MsgVote': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txVoteLabel']
+  },
+  '/cosmos.gov.v1.MsgVote': {
     tagTheme: TYPE_COLORS['seven'],
     tagDisplay: LABELS['txVoteLabel']
   },
@@ -195,6 +209,27 @@ export const TRANSACTION_TYPE_MODEL: IKeyValue = {
   '/cosmos.gov.v1.MsgCancelProposal': {
     tagTheme: TYPE_COLORS['seven'],
     tagDisplay: LABELS['txCancelProposalLabel']
+  },
+  '/cosmos.distribution.v1beta1.MsgCommunityPoolSpend': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txCommunityPoolSpendLabel']
+  },
+  '/cosmos.upgrade.v1.MsgSoftwareUpgrade': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txSoftwareUpgradeLabel']
+  },
+  '/cosmos.gov.v1.MsgUpdateParams': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txGovParameterChangeLabel']
+  },
+  '/cosmos.staking.v1.MsgUpdateParams': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txStakingParameterChangeLabel']
+  },
+  //? Weighted Vote does not supported in firmachain, but added for compatibility with cosmos
+  '/cosmos.gov.v1.MsgVoteWeighted': {
+    tagTheme: TYPE_COLORS['seven'],
+    tagDisplay: LABELS['txVoteWeightedLabel']
   },
   // ========================
   // ibc client

@@ -18,12 +18,14 @@ export const PROPOSAL_MESSAGE_TYPE: IKeyValue = {
   '/cosmos.params.v1beta1.ParameterChangeProposal': 'ParameterChange',
   '/cosmos.gov.v1.MsgUpdateParams': 'GovParameterChange', // New
   '/cosmos.staking.v1beta1.MsgUpdateParams': 'StakingParameterChange', // New
+  '/cosmos.staking.v1.MsgUpdateParams': 'StakingParameterChange', // New
 
   '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal': 'CommunityPoolSpend',
   '/cosmos.distribution.v1beta1.MsgCommunityPoolSpend': 'CommunityPoolSpend', // New
 
   '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal': 'SoftwareUpgrade',
-  '/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade': 'SoftwareUpgrade' // New
+  '/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade': 'SoftwareUpgrade', // New
+  '/cosmos.upgrade.v1.MsgSoftwareUpgrade': 'SoftwareUpgrade' // New
 };
 
 export const PROPOSAL_MESSAGE_TYPE_TEXT = 'Text';
