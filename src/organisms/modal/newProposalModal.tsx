@@ -523,12 +523,21 @@ const NewProposalModal = () => {
 
     const isGovParamsInvalid =
       proposalType === 'GOV_PARAMS_UPDATE_PROPOSAL' &&
-      (!paramObj.minDeposit ||
+      (!paramObj.minDeposit?.[0].amount ||
         !paramObj.maxDepositPeriod?.seconds ||
         !paramObj.votingPeriod?.seconds ||
         !paramObj.quorum ||
         !paramObj.threshold ||
-        !paramObj.vetoThreshold);
+        !paramObj.vetoThreshold ||
+        !paramObj.minInitialDepositRatio ||
+        !paramObj.proposalCancelRatio ||
+        !paramObj.expeditedVotingPeriod?.seconds ||
+        !paramObj.expeditedThreshold ||
+        !paramObj.expeditedMinDeposit?.[0].amount ||
+        paramObj.burnVoteQuorum === undefined ||
+        paramObj.burnProposalDepositPrevote === undefined ||
+        paramObj.burnVoteVeto === undefined ||
+        !paramObj.minDepositRatio);
 
     const isSoftwareUpgradeInvalid = proposalType === 'SOFTWARE_UPGRADE' && (upgradeName === '' || height <= 0);
 
@@ -596,9 +605,9 @@ const NewProposalModal = () => {
               seconds: BigInt(paramObj.unbondingTime?.seconds || '0'),
               nanos: paramObj.unbondingTime?.nanos || 0
             },
-            maxValidators: paramObj.maxValidators,
-            maxEntries: paramObj.maxEntries,
-            historicalEntries: paramObj.historicalEntries,
+            maxValidators: Number(paramObj.maxValidators),
+            maxEntries: Number(paramObj.maxEntries),
+            historicalEntries: Number(paramObj.historicalEntries),
             bondDenom: paramObj.bondDenom,
             minCommissionRate: processCommissionRateEstimate(paramObj.minCommissionRate || '')
           };
@@ -825,13 +834,14 @@ const NewProposalModal = () => {
                   <InputBoxDefault
                     type="number"
                     placeholder="1814400"
-                    value={paramObj.unbondingTime?.seconds ? String(paramObj.unbondingTime.seconds) : ''}
+                    value={paramObj.unbondingTime?.seconds.toString() || ''}
                     onChange={(e) =>
                       updateParam('unbondingTime', {
-                        seconds: BigInt(e.target.value),
+                        seconds: e.target.value,
                         nanos: paramObj.unbondingTime?.nanos || 0
                       })
                     }
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -841,8 +851,9 @@ const NewProposalModal = () => {
                   <InputBoxDefault
                     type="number"
                     placeholder="100"
-                    value={paramObj.maxValidators || ''}
-                    onChange={(e) => updateParam('maxValidators', Number(e.target.value))}
+                    value={paramObj.maxValidators?.toString() || ''}
+                    onChange={(e) => updateParam('maxValidators', e.target.value)}
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -852,8 +863,9 @@ const NewProposalModal = () => {
                   <InputBoxDefault
                     type="number"
                     placeholder="7"
-                    value={paramObj.maxEntries || ''}
-                    onChange={(e) => updateParam('maxEntries', Number(e.target.value))}
+                    value={paramObj.maxEntries?.toString() || ''}
+                    onChange={(e) => updateParam('maxEntries', e.target.value)}
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -863,8 +875,9 @@ const NewProposalModal = () => {
                   <InputBoxDefault
                     type="number"
                     placeholder="10000"
-                    value={paramObj.historicalEntries || ''}
-                    onChange={(e) => updateParam('historicalEntries', Number(e.target.value))}
+                    value={paramObj.historicalEntries?.toString() || ''}
+                    onChange={(e) => updateParam('historicalEntries', e.target.value)}
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -883,10 +896,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Min Commission Rate (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="0.05"
                     value={paramObj.minCommissionRate || ''}
                     onChange={(e) => updateParam('minCommissionRate', e.target.value)}
+                    decimal={18}
                   />
                   <div style={{ fontSize: '11px', color: '#888', marginTop: '5px' }}>
                     Enter as decimal (e.g., 0.05 for 5%). Range: 0.0 to 1.0
@@ -925,10 +939,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Min Deposit (ufct)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="5000000000"
                     value={paramObj.minDeposit?.[0]?.amount || ''}
                     onChange={(e) => updateParam('minDeposit', [{ denom: 'ufct', amount: e.target.value }])}
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -938,13 +953,14 @@ const NewProposalModal = () => {
                   <InputBoxDefault
                     type="number"
                     placeholder="172800"
-                    value={paramObj.maxDepositPeriod?.seconds ? String(paramObj.maxDepositPeriod.seconds) : ''}
+                    value={paramObj.maxDepositPeriod?.seconds?.toString() || ''}
                     onChange={(e) =>
                       updateParam('maxDepositPeriod', {
-                        seconds: BigInt(e.target.value),
+                        seconds: e.target.value,
                         nanos: paramObj.maxDepositPeriod?.nanos || 0
                       })
                     }
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -954,13 +970,14 @@ const NewProposalModal = () => {
                   <InputBoxDefault
                     type="number"
                     placeholder="172800"
-                    value={paramObj.votingPeriod?.seconds ? String(paramObj.votingPeriod.seconds) : ''}
+                    value={paramObj.votingPeriod?.seconds?.toString() || ''}
                     onChange={(e) =>
                       updateParam('votingPeriod', {
-                        seconds: BigInt(e.target.value),
+                        seconds: e.target.value,
                         nanos: paramObj.votingPeriod?.nanos || 0
                       })
                     }
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -972,6 +989,7 @@ const NewProposalModal = () => {
                     placeholder="0.334000000000000000"
                     value={paramObj.quorum || ''}
                     onChange={(e) => updateParam('quorum', e.target.value)}
+                    decimal={18}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -979,10 +997,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Threshold (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="0.500000000000000000"
                     value={paramObj.threshold || ''}
                     onChange={(e) => updateParam('threshold', e.target.value)}
+                    decimal={18}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -990,10 +1009,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Veto Threshold (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="0.334000000000000000"
                     value={paramObj.vetoThreshold || ''}
                     onChange={(e) => updateParam('vetoThreshold', e.target.value)}
+                    decimal={18}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -1001,10 +1021,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Min Initial Deposit Ratio (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="0.100000000000000000"
                     value={paramObj.minInitialDepositRatio || ''}
                     onChange={(e) => updateParam('minInitialDepositRatio', e.target.value)}
+                    decimal={18}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -1012,10 +1033,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Proposal Cancel Ratio (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="0.500000000000000000"
                     value={paramObj.proposalCancelRatio || ''}
                     onChange={(e) => updateParam('proposalCancelRatio', e.target.value)}
+                    decimal={18}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -1041,10 +1063,11 @@ const NewProposalModal = () => {
                     }
                     onChange={(e) =>
                       updateParam('expeditedVotingPeriod', {
-                        seconds: BigInt(e.target.value),
+                        seconds: e.target.value,
                         nanos: paramObj.expeditedVotingPeriod?.nanos || 0
                       })
                     }
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -1052,10 +1075,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Expedited Threshold (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="0.667000000000000000"
                     value={paramObj.expeditedThreshold || ''}
                     onChange={(e) => updateParam('expeditedThreshold', e.target.value)}
+                    decimal={18}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -1063,10 +1087,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Expedited Min Deposit (ufct)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="10000000000"
                     value={paramObj.expeditedMinDeposit?.[0]?.amount || ''}
                     onChange={(e) => updateParam('expeditedMinDeposit', [{ denom: 'ufct', amount: e.target.value }])}
+                    decimal={0}
                   />
                 </ModalInput>
               </ModalInputWrap>
@@ -1116,10 +1141,11 @@ const NewProposalModal = () => {
                 <ModalLabel>Min Deposit Ratio (decimal)</ModalLabel>
                 <ModalInput>
                   <InputBoxDefault
-                    type="text"
+                    type="number"
                     placeholder="0.010000000000000000"
                     value={paramObj.minDepositRatio || ''}
                     onChange={(e) => updateParam('minDepositRatio', e.target.value)}
+                    decimal={18}
                   />
                 </ModalInput>
               </ModalInputWrap>

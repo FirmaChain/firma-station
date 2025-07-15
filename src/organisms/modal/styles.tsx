@@ -6,6 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import HelpIconOrigin from '@mui/icons-material/Help';
 import { getRestakeStatusColor } from '../../utils/common';
+import { ComponentProps, useRef } from 'react';
 
 export const confirmTxModalWidth = '500px';
 export const loginModalWidth = '500px';
@@ -285,10 +286,6 @@ export const ConfirmInput = styled.div<{ point?: boolean }>`
   ${(props) =>
     props.point &&
     `font-size:${props.theme.sizes.modal20};color:white;& > span { font-size: ${props.theme.sizes.modal16};`}
-`;
-
-export const InputBoxDefault = styled(InputBoxStyleDefault)<{ isInvalid?: boolean }>`
-  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
 `;
 
 export const InputBoxNumber = styled(InputBoxStyleDefault)<{ isInvalid?: boolean }>`
@@ -1273,3 +1270,130 @@ export const InvalidTypo = styled.div`
   margin-top: 10px;
   margin-left: 5px;
 `;
+
+const InputBoxBase = styled(InputBoxStyleDefault)<{ isInvalid?: boolean }>`
+  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
+`;
+
+export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number }) => {
+  const ref = useRef<HTMLInputElement>(null);
+
+  // Prevents the default action for ArrowUp and ArrowDown keys if the input's `type` attribute is 'number'.
+  const disableArrowKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.currentTarget.type === 'number' && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+      e.preventDefault();
+    }
+  };
+
+  // Blurs the input on wheel event if the input's `type` attribute is 'number'.
+  const onWheelBlur = (e: React.WheelEvent<HTMLInputElement>) => {
+    if (e.currentTarget.type === 'number') {
+      e.currentTarget.blur();
+    }
+  };
+
+  // Blocks key presses that are not numbers or a decimal point when the `type` prop is 'number'.
+  // Allows specific keys like Backspace, Delete, Tab, arrow keys, and Ctrl/Cmd shortcuts.
+  const disableKeyInputWithDecimal = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (p.type === 'number') {
+      if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+        return;
+      }
+
+      if (e.metaKey || e.ctrlKey) {
+        return;
+      }
+
+      if (p.decimal === 0 && e.key === '.') {
+        e.preventDefault();
+        return;
+      }
+
+      if (e.currentTarget.value.includes('.') && e.key === '.') {
+        e.preventDefault();
+        return;
+      }
+
+      if (!/[0-9.]/.test(e.key)) {
+        e.preventDefault();
+        return;
+      }
+    }
+  };
+
+  const onChangeValue: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    // If the `decimal` or `type` props are not set for number input, call the original onChange and exit.
+    if (typeof p.decimal !== 'number' || p.type !== 'number') {
+      p.onChange?.(e);
+      return;
+    }
+
+    // Sanitizes the input value through a series of `replace` calls.
+    const cleaned = e.target.value
+      .replace(/[^0-9.]/g, '') // Remove chars except number and decimal point
+      .replace(/^\./, '') // Remove leading decimal point
+      .replace(/(\..*)\./g, '$1'); // Remove second decimal point and after
+
+    // Removes leading zeros from the integer part of the string.
+    const noLeadingZero = cleaned.replace(/^0+(?=\d)/, '');
+
+    // Updates the event target's value if the sanitization has changed it.
+    if (noLeadingZero !== e.target.value) {
+      e.target.value = noLeadingZero; // Apply cleaned value
+    }
+
+    // Removes negative and exponential characters ('-', 'e', 'E') from the value.
+    const blockedPattern = /[-eE]/g;
+    if (blockedPattern.test(e.target.value)) {
+      const sanitized = e.target.value.replace(blockedPattern, '');
+      e.target.value = sanitized;
+    }
+
+    // If the `decimal` prop is 0, remove the decimal part and call onChange.
+    if (p.decimal === 0) {
+      const intPart = e.target.value.split('.')[0] ?? '';
+
+      p.onChange?.({
+        ...e,
+        target: { ...e.target, value: intPart }
+      } as React.ChangeEvent<HTMLInputElement>);
+      return;
+    }
+
+    // Trims the value to the number of decimal places specified by the `decimal` prop.
+    const { value } = e.target;
+    const [intPart, decPart = ''] = value.split('.');
+
+    if (decPart.length <= p.decimal) {
+      p.onChange?.(e);
+      return;
+    }
+
+    const trimmed = `${intPart}.${decPart.slice(0, p.decimal)}`;
+
+    // Calls the original onChange handler with the final, trimmed value.
+    p.onChange?.({
+      ...e,
+      target: { ...e.target, value: trimmed }
+    } as React.ChangeEvent<HTMLInputElement>);
+  };
+
+  return (
+    <InputBoxBase
+      {...p}
+      type={p.type === 'number' ? 'text' : p.type}
+      onWheel={(e: React.WheelEvent<HTMLInputElement>) => {
+        p?.onWheel && p.onWheel(e);
+        onWheelBlur(e);
+      }}
+      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        p?.onKeyDown && p.onKeyDown(e);
+        disableArrowKey(e);
+      }}
+      onKeyDownCapture={disableKeyInputWithDecimal}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChangeValue(e)}
+      ref={ref}
+      inputMode={p.type === 'number' ? 'decimal' : 'text'}
+    />
+  );
+};
