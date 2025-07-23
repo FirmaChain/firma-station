@@ -11,7 +11,7 @@ import { PROPOSAL_STATUS_DEPOSIT_PERIOD, PROPOSAL_STATUS_VOTING_PERIOD } from '.
 
 const Proposals = () => {
   const proposalId = window.location.pathname.replace('/government/proposals/', '');
-  const { proposalState } = useProposalData(proposalId);
+  const { proposalState } = useProposalData(proposalId, () => (window.location.href = '/government'));
   const address = useSelector((v: rootState) => v.wallet.address);
 
   return (

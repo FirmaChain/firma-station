@@ -29,11 +29,10 @@ const ButtonText = styled.span`
 const CancelProposalButton = ({ proposalId }: { proposalId: string }) => {
   const { cancelProposal, getGasEstimationCancelProposal } = useFirma();
 
-  const newProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) =>
+  const cancelProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) =>
     cancelProposal(proposalId, gas)
       .then(() => {
         resolveTx();
-        window.location.href = '/government';
       })
       .catch(() => {
         rejectTx();
@@ -53,7 +52,7 @@ const CancelProposalButton = ({ proposalId }: { proposalId: string }) => {
       module: `/gov/cancelproposal`,
       data: { fees: getFeesFromGas(gas), gas: gas },
       prevModalAction: modalActions.handleModalNewProposal,
-      txAction: newProposalTx,
+      txAction: cancelProposalTx,
       txParams: getParamsTx
     });
 
