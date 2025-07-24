@@ -66,6 +66,12 @@ yarn build
 - **State**: Redux Toolkit
 - **UI**: Material-UI, Styled Components
 
+## E2E Test
+
+```bash
+yarn cypress:open
+```
+
 ## Scripts
 
 - `yarn dev`: Start development server
