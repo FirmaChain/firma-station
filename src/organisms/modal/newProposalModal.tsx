@@ -414,9 +414,9 @@ const NewProposalModal = () => {
           title,
           summary: description,
           initialDepositFCT: initialDeposit,
-          stakingParams: {
+          params: {
             unbondingTime: {
-              seconds: BigInt(paramObj.unbondingTime?.seconds || '0'),
+              seconds: String(paramObj.unbondingTime?.seconds) || '0',
               nanos: paramObj.unbondingTime?.nanos || 0
             },
             maxValidators: paramObj.maxValidators,
@@ -427,19 +427,20 @@ const NewProposalModal = () => {
           },
           metadata: ''
         };
+
       case 'GOV_PARAMS_UPDATE_PROPOSAL':
         return {
           title,
           summary: description,
           initialDepositFCT: initialDeposit,
-          govParams: {
+          params: {
             minDeposit: paramObj.minDeposit,
             maxDepositPeriod: {
-              seconds: BigInt(paramObj.maxDepositPeriod?.seconds || '0'),
+              seconds: String(paramObj.maxDepositPeriod?.seconds || '0'),
               nanos: paramObj.maxDepositPeriod?.nanos || 0
             },
             votingPeriod: {
-              seconds: BigInt(paramObj.votingPeriod?.seconds || '0'),
+              seconds: String(paramObj.votingPeriod?.seconds || '0'),
               nanos: paramObj.votingPeriod?.nanos || 0
             },
             quorum: paramObj.quorum,
@@ -449,7 +450,7 @@ const NewProposalModal = () => {
             proposalCancelRatio: paramObj.proposalCancelRatio,
             proposalCancelDest: paramObj.proposalCancelDest,
             expeditedVotingPeriod: {
-              seconds: BigInt(paramObj.expeditedVotingPeriod?.seconds || '0'),
+              seconds: String(paramObj.expeditedVotingPeriod?.seconds || '0'),
               nanos: paramObj.expeditedVotingPeriod?.nanos || 0
             },
             expeditedThreshold: paramObj.expeditedThreshold,
@@ -461,14 +462,24 @@ const NewProposalModal = () => {
           },
           metadata: ''
         };
+
       case 'SOFTWARE_UPGRADE':
         return {
           title,
-          description,
+          summary: description,
           initialDepositFCT: initialDeposit,
-          upgradeName,
-          upgradeHeight: height
+          plan: {
+            name: title,
+            info: description,
+            height: String(height),
+            time: {
+              seconds: String(0),
+              nanos: 0
+            }
+          },
+          metadata: ''
         };
+
       case 'CANCEL_SOFTWARE_UPGRADE':
         return {
           title,
@@ -755,7 +766,13 @@ const NewProposalModal = () => {
             <ModalLabel>Type</ModalLabel>
             <ModalInput>
               <SelectWrapper data-testid="proposal-type-select-wrapper">
-                <Select options={options} styles={customStyles} onChange={onChangeType} ref={selectInputRef} data-testid="proposal-type-select" />
+                <Select
+                  options={options}
+                  styles={customStyles}
+                  onChange={onChangeType}
+                  ref={selectInputRef}
+                  data-testid="proposal-type-select"
+                />
               </SelectWrapper>
             </ModalInput>
           </ModalInputWrap>
@@ -763,20 +780,37 @@ const NewProposalModal = () => {
           <ModalInputWrap>
             <ModalLabel>Title</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type="text" placeholder="Proposal Title" value={title} onChange={onChangeTitle} data-testid="proposal-title-input" />
+              <InputBoxDefault
+                type="text"
+                placeholder="Proposal Title"
+                value={title}
+                onChange={onChangeTitle}
+                data-testid="proposal-title-input"
+              />
             </ModalInput>
           </ModalInputWrap>
 
           <ModalInputWrap>
             <ModalLabel>Description</ModalLabel>
             <ModalInput>
-              <TextAreaDefault value={description} placeholder="Proposal Description" onChange={onChangeDescription} data-testid="proposal-description-textarea" />
+              <TextAreaDefault
+                value={description}
+                placeholder="Proposal Description"
+                onChange={onChangeDescription}
+                data-testid="proposal-description-textarea"
+              />
             </ModalInput>
           </ModalInputWrap>
           <ModalInputWrap>
             <ModalLabel>Initial Deposit</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type="text" placeholder="0" value={initialDeposit} onChange={onChangeInitialDeposit} data-testid="proposal-initial-deposit-input" />
+              <InputBoxDefault
+                type="text"
+                placeholder="0"
+                value={initialDeposit}
+                onChange={onChangeInitialDeposit}
+                data-testid="proposal-initial-deposit-input"
+              />
             </ModalInput>
           </ModalInputWrap>
           {/* CommunityPool */}
@@ -797,7 +831,13 @@ const NewProposalModal = () => {
               <ModalInputWrap>
                 <ModalLabel>Amount</ModalLabel>
                 <ModalInput>
-                  <InputBoxDefault type="number" placeholder="" value={amount} onChange={onChangeAmount} data-testid="proposal-amount-input" />
+                  <InputBoxDefault
+                    type="number"
+                    placeholder=""
+                    value={amount}
+                    onChange={onChangeAmount}
+                    data-testid="proposal-amount-input"
+                  />
                 </ModalInput>
               </ModalInputWrap>
             </>
@@ -821,7 +861,13 @@ const NewProposalModal = () => {
               <ModalInputWrap>
                 <ModalLabel>Height</ModalLabel>
                 <ModalInput>
-                  <InputBoxDefault type="number" placeholder="1" value={height} onChange={onChangeHeight} data-testid="proposal-height-input" />
+                  <InputBoxDefault
+                    type="number"
+                    placeholder="1"
+                    value={height}
+                    onChange={onChangeHeight}
+                    data-testid="proposal-height-input"
+                  />
                 </ModalInput>
               </ModalInputWrap>
             </>
