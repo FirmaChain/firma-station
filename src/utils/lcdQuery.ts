@@ -6,6 +6,7 @@ import { IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
 import { CHAIN_CONFIG } from '../config';
 import { convertNumber, convertNumberFormat } from './common';
 import { StakingValidatorStatus } from '@firmachain/firma-js/dist/sdk/FirmaStakingService';
+import { TmpCurrentVoteInfo } from '../interfaces/governance';
 
 export {
   getLatestBlock,
@@ -271,7 +272,9 @@ const getProposalList = async (): Promise<IProposalData[]> => {
 const getProposalFromId = async (proposalId: string): Promise<IProposalData> => {
   const proposal = await firmaSDK.Gov.getProposal(proposalId);
   const proposalParams = await firmaSDK.Gov.getParamAsGovParams();
-  const tallyRaw = await firmaSDK.Gov.getCurrentVoteInfo(proposalId);
+
+  //! Note: changed type intentionally to match current return interface. Remove this if tally type is fixed
+  const tallyRaw = (await firmaSDK.Gov.getCurrentVoteInfo(proposalId)) as unknown as TmpCurrentVoteInfo;
 
   const formatExtraData = (proposalContent: any) => {
     if (proposalContent.plan) {
@@ -322,10 +325,10 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
   const proposer = proposal.proposer;
 
   const tally = {
-    yes: convertNumber(tallyRaw.yes),
-    no: convertNumber(tallyRaw.no),
-    noWithVeto: convertNumber(tallyRaw.no_with_veto),
-    abstain: convertNumber(tallyRaw.abstain)
+    yes: convertNumber(tallyRaw.yes_count),
+    no: convertNumber(tallyRaw.no_count),
+    noWithVeto: convertNumber(tallyRaw.no_with_veto_count),
+    abstain: convertNumber(tallyRaw.abstain_count)
   };
 
   return {
