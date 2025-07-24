@@ -59,17 +59,17 @@ const Row = ({ data, index, style }: any) => {
   };
 
   return (
-    <ItemWrapper style={style}>
-      <ItemColumn>{currentHistory.height}</ItemColumn>
-      <ItemColumn>{getMessageType(currentHistory.type)}</ItemColumn>
-      <ItemColumn>
+    <ItemWrapper style={style} data-testid={`send-history-item-${index}`}>
+      <ItemColumn data-testid={`send-history-height-${index}`}>{currentHistory.height}</ItemColumn>
+      <ItemColumn data-testid={`send-history-type-${index}`}>{getMessageType(currentHistory.type)}</ItemColumn>
+      <ItemColumn data-testid={`send-history-hash-${index}`}>
         <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>
-      <ItemColumn className="clamp-single-line">{getMemo(currentHistory.memo)}</ItemColumn>
-      <ItemColumn>{getResult(currentHistory.success)}</ItemColumn>
-      <ItemColumn>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
+      <ItemColumn className="clamp-single-line" data-testid={`send-history-memo-${index}`}>{getMemo(currentHistory.memo)}</ItemColumn>
+      <ItemColumn data-testid={`send-history-result-${index}`}>{getResult(currentHistory.success)}</ItemColumn>
+      <ItemColumn data-testid={`send-history-time-${index}`}>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
     </ItemWrapper>
   );
 };
@@ -97,7 +97,7 @@ const HistoryCard = ({ historyByAddressState, loadMore }: IProps) => {
     : historyByAddressState.historyList.length;
 
   return (
-    <ListWrapper>
+    <ListWrapper data-testid="send-history-list">
       <AutoSizer>
         {({ height, width }: any) => (
           <>

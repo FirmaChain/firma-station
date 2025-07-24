@@ -52,7 +52,7 @@ const LoginModal = () => {
       <MobileAppWrapper>
         <MobileAppButton onClick={() => openSubModal(modalActions.handleModalConnectApp)}>
           <MobileAppButtonIcon />
-          <MobileAppButtonTypo>Connect to Mobile</MobileAppButtonTypo>
+          <MobileAppButtonTypo data-testid="login-modal-connect-to-mobile-button">Connect to Mobile</MobileAppButtonTypo>
         </MobileAppButton>
       </MobileAppWrapper>
       <DividerOR>
@@ -63,7 +63,12 @@ const LoginModal = () => {
         {menuList.map((menu, index) => {
           return (
             <LoginMenuItem key={index} onClick={() => openSubModal(menu.modalAction)}>
-              <LoginMenuButton status={1}>{menu.name}</LoginMenuButton>
+              <LoginMenuButton 
+                status={1} 
+                data-testid={`login-modal-${menu.name.toLowerCase().replace(/\s+/g, '-')}-button`}
+              >
+                {menu.name}
+              </LoginMenuButton>
             </LoginMenuItem>
           );
         })}

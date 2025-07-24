@@ -29,6 +29,7 @@ const SendCard = () => {
             });
           }
         }}
+        data-testid="send-to-address-button"
       >
         Send to Address
       </NextButton>

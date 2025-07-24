@@ -83,9 +83,10 @@ const ConnectQR = ({ qrSize, qrcode, expireDate, isActive, setTimerText, onExpir
   return (
     <QRWrapper isLoading={qrcode === ''}>
       {qrcode === '' ? (
-        <GridLoader loading={true} color={'#3550DEcc'} />
+        <GridLoader loading={true} color={'#3550DEcc'} data-testid="qr-code-loading" />
       ) : (
         <QRCode
+          data-testid="qr-code"
           value={`${qrcode}`}
           size={qrSize}
           quietZone={0}

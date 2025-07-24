@@ -737,8 +737,8 @@ const NewProposalModal = () => {
       onClose={closeModal}
       width={newProposalModalWidth}
     >
-      <ModalContainer style={{ maxHeight: '80vh', overflow: 'hidden' }}>
-        <ModalTitle>
+      <ModalContainer style={{ maxHeight: '80vh', overflow: 'hidden' }} data-testid="new-proposal-modal">
+        <ModalTitle data-testid="new-proposal-modal-title">
           New Proposal
           <HelpIcon onClick={() => window.open(GUIDE_LINK_NEW_PROPOSAL)} />
         </ModalTitle>
@@ -754,8 +754,8 @@ const NewProposalModal = () => {
           <ModalInputWrap>
             <ModalLabel>Type</ModalLabel>
             <ModalInput>
-              <SelectWrapper>
-                <Select options={options} styles={customStyles} onChange={onChangeType} ref={selectInputRef} />
+              <SelectWrapper data-testid="proposal-type-select-wrapper">
+                <Select options={options} styles={customStyles} onChange={onChangeType} ref={selectInputRef} data-testid="proposal-type-select" />
               </SelectWrapper>
             </ModalInput>
           </ModalInputWrap>
@@ -763,20 +763,20 @@ const NewProposalModal = () => {
           <ModalInputWrap>
             <ModalLabel>Title</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type="text" placeholder="Proposal Title" value={title} onChange={onChangeTitle} />
+              <InputBoxDefault type="text" placeholder="Proposal Title" value={title} onChange={onChangeTitle} data-testid="proposal-title-input" />
             </ModalInput>
           </ModalInputWrap>
 
           <ModalInputWrap>
             <ModalLabel>Description</ModalLabel>
             <ModalInput>
-              <TextAreaDefault value={description} placeholder="Proposal Description" onChange={onChangeDescription} />
+              <TextAreaDefault value={description} placeholder="Proposal Description" onChange={onChangeDescription} data-testid="proposal-description-textarea" />
             </ModalInput>
           </ModalInputWrap>
           <ModalInputWrap>
             <ModalLabel>Initial Deposit</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type="text" placeholder="0" value={initialDeposit} onChange={onChangeInitialDeposit} />
+              <InputBoxDefault type="text" placeholder="0" value={initialDeposit} onChange={onChangeInitialDeposit} data-testid="proposal-initial-deposit-input" />
             </ModalInput>
           </ModalInputWrap>
           {/* CommunityPool */}
@@ -790,13 +790,14 @@ const NewProposalModal = () => {
                     placeholder="Enter Recipient Address"
                     value={recipient}
                     onChange={onChangeRecipient}
+                    data-testid="proposal-recipient-input"
                   />
                 </ModalInput>
               </ModalInputWrap>
               <ModalInputWrap>
                 <ModalLabel>Amount</ModalLabel>
                 <ModalInput>
-                  <InputBoxDefault type="number" placeholder="" value={amount} onChange={onChangeAmount} />
+                  <InputBoxDefault type="number" placeholder="" value={amount} onChange={onChangeAmount} data-testid="proposal-amount-input" />
                 </ModalInput>
               </ModalInputWrap>
             </>
@@ -813,13 +814,14 @@ const NewProposalModal = () => {
                     placeholder="v0.1.0"
                     value={upgradeName}
                     onChange={onChangeUpgradeName}
+                    data-testid="proposal-upgrade-name-input"
                   />
                 </ModalInput>
               </ModalInputWrap>
               <ModalInputWrap>
                 <ModalLabel>Height</ModalLabel>
                 <ModalInput>
-                  <InputBoxDefault type="number" placeholder="1" value={height} onChange={onChangeHeight} />
+                  <InputBoxDefault type="number" placeholder="1" value={height} onChange={onChangeHeight} data-testid="proposal-height-input" />
                 </ModalInput>
               </ModalInputWrap>
             </>
@@ -1153,7 +1155,7 @@ const NewProposalModal = () => {
           )}
 
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1}>
+            <CancelButton onClick={() => closeModal()} status={1} data-testid="proposal-cancel-button">
               Cancel
             </CancelButton>
             <NextButton
@@ -1161,6 +1163,7 @@ const NewProposalModal = () => {
                 if (proposalType) nextStep();
               }}
               status={proposalType !== '' ? 0 : 2}
+              data-testid="proposal-next-button"
             >
               Next
             </NextButton>

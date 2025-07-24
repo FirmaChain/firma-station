@@ -74,26 +74,26 @@ const Row = ({ data, index, style, tokenDataState }: any) => {
   }, [currentHistory]);
 
   return (
-    <ItemWrapper style={style}>
-      <ItemColumn>
+    <ItemWrapper style={style} data-testid={`send-history-item-${index}`}>
+      <ItemColumn data-testid={`send-history-hash-${index}`}>
         <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
           {getHash(currentHistory.hash)}
         </Link>
       </ItemColumn>
-      <ItemColumn>
+      <ItemColumn data-testid={`send-history-from-${index}`}>
         <Link to={{ pathname: fromURL }} target={'_blank'}>
           {getAddress(currentHistory.from)}
         </Link>
       </ItemColumn>
-      <ItemColumn>
+      <ItemColumn data-testid={`send-history-to-${index}`}>
         <Link to={{ pathname: toURL }} target={'_blank'}>
           {getAddress(currentHistory.to)}
         </Link>
       </ItemColumn>
-      <ItemColumn>{getAmount(currentHistory.denom, currentHistory.amount)}</ItemColumn>
-      <ItemColumn>{getResult(currentHistory.success)}</ItemColumn>
-      <ItemColumn>{getMemo(currentHistory.memo)}</ItemColumn>
-      <ItemColumn>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
+      <ItemColumn data-testid={`send-history-amount-${index}`}>{getAmount(currentHistory.denom, currentHistory.amount)}</ItemColumn>
+      <ItemColumn data-testid={`send-history-result-${index}`}>{getResult(currentHistory.success)}</ItemColumn>
+      <ItemColumn data-testid={`send-history-memo-${index}`}>{getMemo(currentHistory.memo)}</ItemColumn>
+      <ItemColumn data-testid={`send-history-time-${index}`}>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
     </ItemWrapper>
   );
 };
@@ -145,13 +145,13 @@ const TransferHistoryCard = ({
   );
 
   return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar}>
-      <TitleTypo>Send History</TitleTypo>
-      <ListWrapper>
+    <BlankCard bgColor={theme.colors.backgroundSideBar} data-testid="send-history-card">
+      <TitleTypo data-testid="send-history-title">Send History</TitleTypo>
+      <ListWrapper data-testid="send-history-list">
         <AutoSizer>
           {({ height, width }: any) => (
             <>
-              <HeaderWrapper style={{ width }}>
+              <HeaderWrapper style={{ width }} data-testid="send-history-header">
                 <HeaderColumn>Hash</HeaderColumn>
                 <HeaderColumn>From</HeaderColumn>
                 <HeaderColumn>To</HeaderColumn>

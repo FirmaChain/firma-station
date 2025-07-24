@@ -152,7 +152,7 @@ function HeaderDesktop() {
             </HeaderLeftWrapper>
           )}
           {isInit === false && (
-            <LoginWrap onClick={onLogin}>
+            <LoginWrap onClick={onLogin} data-testid="header-login-button">
               <LoginIconImg />
               <HeaderTypo>Login</HeaderTypo>
             </LoginWrap>
