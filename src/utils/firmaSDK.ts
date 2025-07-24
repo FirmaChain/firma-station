@@ -4,8 +4,6 @@ import TransportHID from '@ledgerhq/hw-transport-webhid';
 
 import { CHAIN_CONFIG, IBC_CONFIG } from '../config';
 import { convertToUTokenStringFromToken, getDefaultGas, getFeesFromGas, isElectron, isExternalConnect } from './common';
-import Long from 'long';
-// import Long from 'long';
 
 declare global {
   interface Window {
@@ -87,7 +85,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Bank.send(wallet, address, amount, {
       memo,
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -115,7 +113,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Bank.sendToken(wallet, address, tokenID, amount, decimal, {
       memo,
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -133,7 +131,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
     const wallet = await getWallet();
     const gasEstimation = await firmaSDK.Bank.getGasEstimationSendToken(wallet, address, tokenID, amount, decimal, {
-      memo,
+      memo
     });
 
     return gasEstimation;
@@ -168,10 +166,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const height = {
       revisionHeight:
         BigInt(clientState.identified_client_state.client_state.latest_height.revision_height) + BigInt(1000),
-      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_height, true)
-      //     .add(Long.fromNumber(1000))
-      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number),
-      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_number, true)
+      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number)
     };
 
     const result = await firmaSDK.Ibc.transfer(
@@ -183,6 +178,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       address,
       height,
       timeoutTimeStamp,
+      memo,
       { memo, gas: estimatedGas, fee: getFees(estimatedGas) }
     );
 
@@ -220,10 +216,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const height = {
       revisionHeight:
         BigInt(clientState.identified_client_state.client_state.latest_height.revision_height) + BigInt(1000),
-      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_height, true)
-      //     .add(Long.fromNumber(1000))
-      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number),
-      //   Long.fromString(clientState.identified_client_state.client_state.latest_height.revision_number, true)
+      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number)
     };
 
     try {
@@ -236,7 +229,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
         address,
         height,
         timeoutTimeStamp,
-        { memo }
+        memo
       );
 
       return gasEstimation;
@@ -250,7 +243,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.delegate(wallet, validatorAddress, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -275,7 +268,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.redelegate(wallet, validatorAddressSrc, validatorAddressDst, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
     return result;
   };
@@ -302,7 +295,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.undelegate(wallet, validatorAddress, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -322,7 +315,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Distribution.withdrawAllRewards(wallet, validatorAddress, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -344,7 +337,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
     const result = await firmaSDK.Distribution.withdrawAllRewardsFromAllValidator(wallet, delegationList, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -367,7 +360,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.vote(wallet, proposalId, votingType, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -387,7 +380,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.deposit(wallet, proposalId, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -411,7 +404,9 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     estimatedGas: number
   ) => {
     // This function is deprecated in v0.5, use specific param update functions instead
-    throw new Error('Parameter change proposal is deprecated. Use submitStakingParamsUpdateProposal or submitGovParamsUpdateProposal instead.');
+    throw new Error(
+      'Parameter change proposal is deprecated. Use submitStakingParamsUpdateProposal or submitGovParamsUpdateProposal instead.'
+    );
   };
 
   const getGasEstimationSubmitParameterChangeProposal = async (
@@ -421,7 +416,9 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     paramList: any[]
   ) => {
     // This function is deprecated in v0.5, use specific param update functions instead
-    throw new Error('Parameter change proposal is deprecated. Use getGasEstimationSubmitStakingParamsUpdateProposal or getGasEstimationSubmitGovParamsUpdateProposal instead.');
+    throw new Error(
+      'Parameter change proposal is deprecated. Use getGasEstimationSubmitStakingParamsUpdateProposal or getGasEstimationSubmitGovParamsUpdateProposal instead.'
+    );
   };
 
   const submitCommunityPoolSpendProposal = async (
@@ -443,7 +440,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       '',
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -482,7 +479,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.submitTextProposal(wallet, title, description, initialDeposit, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -516,19 +513,10 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       height: BigInt(height),
       info: ''
     };
-    
-    const result = await firmaSDK.Gov.submitSoftwareUpgradeProposal(
-      wallet,
-      title,
-      summary,
-      initialDeposit,
-      plan,
-      '',
-      {
-        gas: estimatedGas,
-        fee: getFees(estimatedGas),
-      }
-    );
+    const result = await firmaSDK.Gov.submitSoftwareUpgradeProposal(wallet, title, summary, initialDeposit, plan, '', {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas)
+    });
 
     return result;
   };
@@ -572,10 +560,9 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
-    
     // Create a CancelSoftwareUpgrade message
     const cancelUpgradeMessage = {
-      typeUrl: "/cosmos.upgrade.v1beta1.MsgCancelUpgrade",
+      typeUrl: '/cosmos.upgrade.v1beta1.MsgCancelUpgrade',
       value: new Uint8Array([]) // Empty value for cancel upgrade
     };
 
@@ -588,7 +575,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       [cancelUpgradeMessage],
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -626,7 +613,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       metadata,
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -674,7 +661,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       metadata,
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -706,14 +693,10 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const cancelProposal = async (proposalId: string, estimatedGas: number) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.cancelProposal(
-      wallet,
-      parseInt(proposalId),
-      {
-        gas: estimatedGas,
-        fee: getFees(estimatedGas),
-      }
-    );
+    const result = await firmaSDK.Gov.cancelProposal(wallet, parseInt(proposalId), {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas)
+    });
 
     return result;
   };
@@ -735,16 +718,23 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
+
+    // Convert Date to Timestamp format
+    const timestampExpiration = {
+      seconds: BigInt(Math.floor(expirationDate.getTime() / 1000)),
+      nanos: (expirationDate.getTime() % 1000) * 1000000
+    };
+
     const result = await firmaSDK.Authz.grantStakeAuthorization(
       wallet,
       CHAIN_CONFIG.RESTAKE.ADDRESS,
       validatorAddressList,
       AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
-      expirationDate,
+      timestampExpiration,
       maxFCT,
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -760,12 +750,19 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       return getDefaultGas(isLedger, isMobileApp);
 
     const wallet = await getWallet();
+
+    // Convert Date to Timestamp format
+    const timestampExpiration = {
+      seconds: BigInt(Math.floor(expirationDate.getTime() / 1000)),
+      nanos: (expirationDate.getTime() % 1000) * 1000000
+    };
+
     const result = await firmaSDK.Authz.getGasEstimationGrantStakeAuthorization(
       wallet,
       CHAIN_CONFIG.RESTAKE.ADDRESS,
       validatorAddressList,
       AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
-      expirationDate,
+      timestampExpiration,
       maxFCT
     );
 
@@ -780,7 +777,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -846,7 +843,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     getGasEstimationSubmitGovParamsUpdateProposal,
     getGasEstimationCancelProposal,
     getGasEstimationGrantStakeAuthorizationDelegate,
-    getGasEstimationRevokeStakeAuthorizationDelegate,
+    getGasEstimationRevokeStakeAuthorizationDelegate
   };
 };
 
