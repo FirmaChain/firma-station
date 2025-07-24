@@ -557,27 +557,10 @@ describe('Firma JS Mobile Test', () => {
       // Periodically check if QR code disappears (max 10s, 500ms interval)
       cy.log('🔍 Periodically checking for QR code (data-testid="qr-code") existence.');
 
-      function checkQrCode() {
-        let qrCheckAttempts = 0;
-        const maxAttempts = 5;
-        const pollForQrCodeGone = () => {
-          cy.get('body').then(($body) => {
-            if ($body.find('[data-testid="qr-code"]').length > 0) {
-              cy.log('✅ QR code generated.');
-              return true;
-            } else if (qrCheckAttempts < maxAttempts) {
-              qrCheckAttempts++;
-              cy.log(`🔍 Waiting for QR code... ${qrCheckAttempts} / ${maxAttempts}`);
-              cy.wait(1000).then(pollForQrCodeGone);
-            } else {
-              throw new Error('Failed to generate QR code.');
-            }
-          });
-        };
-        pollForQrCodeGone();
-      }
-
-      checkQrCode();
+      cy.log('wait until qr code is visible (5000ms)');
+      cy.wait(5000);
+      cy.get('[data-testid="qr-code"]').should('be.visible');
+      cy.log('✅ QR code generated.');
 
       // Pause before final submit
       cy.pause();
