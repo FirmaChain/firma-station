@@ -6,7 +6,6 @@ import { IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
 import { CHAIN_CONFIG } from '../config';
 import { convertNumber, convertNumberFormat } from './common';
 import { StakingValidatorStatus } from '@firmachain/firma-js/dist/sdk/FirmaStakingService';
-import { TmpCurrentVoteInfo } from '../interfaces/governance';
 
 export {
   getLatestBlock,
@@ -274,7 +273,7 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
   const proposalParams = await firmaSDK.Gov.getParamAsGovParams();
 
   //! Note: changed type intentionally to match current return interface. Remove this if tally type is fixed
-  const tallyRaw = (await firmaSDK.Gov.getCurrentVoteInfo(proposalId)) as unknown as TmpCurrentVoteInfo;
+  const tallyRaw = await firmaSDK.Gov.getCurrentVoteInfo(proposalId);
 
   const formatExtraData = (proposalContent: any) => {
     if (proposalContent.plan) {

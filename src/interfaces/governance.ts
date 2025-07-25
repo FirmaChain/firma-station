@@ -37,11 +37,3 @@ interface IProposal {
   title: string;
   description: string;
 }
-
-//! Temp vote info for proposal tally. Remove this if tally type is fixed
-export interface TmpCurrentVoteInfo {
-  yes_count: string;
-  abstain_count: string;
-  no_count: string;
-  no_with_veto_count: string;
-}
