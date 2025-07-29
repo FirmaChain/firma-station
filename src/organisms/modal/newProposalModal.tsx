@@ -469,8 +469,8 @@ const NewProposalModal = () => {
           summary: description,
           initialDepositFCT: initialDeposit,
           plan: {
-            name: title,
-            info: description,
+            name: upgradeName,
+            info: "",
             height: String(height),
             time: {
               seconds: String(0),
