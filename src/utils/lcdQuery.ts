@@ -188,7 +188,7 @@ const parseValidator = (validator: ValidatorDataType, totalVotingPower: number) 
 };
 
 const getProposalList = async (): Promise<IProposalData[]> => {
-  const proposalList = await firmaSDK.Gov.getProposalList();
+  const proposalList = await firmaSDK.Gov.getAllProposalList(); // v0.3.7 firma-js new function
   const proposalParams = await firmaSDK.Gov.getParamAsGovParams();
 
   const formatExtraData = (proposalContent: any) => {
