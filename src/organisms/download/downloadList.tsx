@@ -10,7 +10,7 @@ import {
   DownloadItemTypo,
   DownloadContainer,
   DownloadCard,
-  DownloadTitle,
+  DownloadTitle
 } from './styles';
 import { CHAIN_CONFIG } from '../../config';
 
@@ -39,7 +39,7 @@ const DownloadList = () => {
             </DownloadItem>
             <DownloadItem onClick={() => openLink(CHAIN_CONFIG.DOWNLOAD_LINK_LIST[3])}>
               <DownloadItemIcon icon={theme.urls.mac} />
-              <DownloadItemTypo>Mac OS (M1)</DownloadItemTypo>
+              <DownloadItemTypo>Mac OS (ARM64)</DownloadItemTypo>
             </DownloadItem>
           </DownloadWrapper>
         </DownloadCard>
