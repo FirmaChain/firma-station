@@ -29,7 +29,7 @@ This app can also be used for TestNet and using Faucet, you can test various sce
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - Yarn
 
 ### 1. Install depdendency
@@ -77,6 +77,7 @@ yarn cypress:open
 - `yarn dev`: Start development server
 - `yarn build`: Build for production
 - `yarn start`: Preview production build
+- `yarn run cypress:open`: Open Cypress test
 
 ## Contact
 
