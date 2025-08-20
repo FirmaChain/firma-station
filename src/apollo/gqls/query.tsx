@@ -7,17 +7,17 @@ export const getTransactionCount = async (): Promise<number> => {
     const { data } = await client.query({
       query: gql`
         query {
-          transactions: transaction_aggregate {
+          transaction_aggregate {
             aggregate {
               count
             }
           }
         }
       `,
-      fetchPolicy: 'no-cache',
+      fetchPolicy: 'no-cache'
     });
 
-    return data.transactions.aggregate.count;
+    return data.transaction_aggregate.aggregate.count;
   } catch (error) {
     return 0;
   }
@@ -28,10 +28,11 @@ export const getProposalQueryFromId = async (proposalId: string): Promise<IPropo
     const { data } = await client.query({
       query: gql`
         query {
-          proposal(where: { id: { _eq: ${proposalId} } }) {
+          proposal(where: {id: {_eq: ${proposalId}}}) {
             proposal_deposits {
-              depositor_address
               amount
+              depositor_address
+              timestamp
             }
             proposal_votes {
               voter_address
@@ -43,7 +44,7 @@ export const getProposalQueryFromId = async (proposalId: string): Promise<IPropo
           }
         }
       `,
-      fetchPolicy: 'no-cache',
+      fetchPolicy: 'no-cache'
     });
     return data;
   } catch (error) {
@@ -83,8 +84,8 @@ export const getHistoryByAddress = async (
         address: `{${address}}`,
         types: `{${type}}`,
         limit,
-        offset,
-      },
+        offset
+      }
     });
 
     return data;

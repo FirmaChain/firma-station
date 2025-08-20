@@ -349,8 +349,8 @@ const SendModal = () => {
 
   return (
     <Modal visible={sendModalState} closable={true} visibleClose={false} onClose={closeModal} width={sendModalWidth}>
-      <ModalContainer>
-        <ModalTitle>
+      <ModalContainer data-testid="send-modal">
+        <ModalTitle data-testid="send-modal-title">
           Send
           <HelpIcon onClick={() => window.open(GUIDE_LINK_SEND)} />
         </ModalTitle>
@@ -363,6 +363,7 @@ const SendModal = () => {
                 placeholder='Wallet Address'
                 value={targetAddress}
                 onChange={onChangeTargetAddress}
+                data-testid="send-to-input"
               />
             </ModalInput>
             {isNotIBC && <InvalidTypo>IBC sends can only be sent to addresses starting with "osmo1...".</InvalidTypo>}
@@ -439,7 +440,7 @@ const SendModal = () => {
               <MaxButton active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
                 Max
               </MaxButton>
-              <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />
+              <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} data-testid="amount-input" />
             </ModalInput>
           </ModalInputWrap>
 
@@ -461,7 +462,7 @@ const SendModal = () => {
           <ModalInputWrap>
             <ModalLabel>Memo (optional)</ModalLabel>
             <ModalInput>
-              <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} />
+              <InputBoxDefault type='text' placeholder='' value={memo} onChange={onChangeMemo} data-testid="memo-input" />
             </ModalInput>
           </ModalInputWrap>
 
@@ -474,6 +475,7 @@ const SendModal = () => {
                 if (isActiveButton) nextStep();
               }}
               status={isActiveButton ? 0 : 2}
+              data-testid="send-next-button"
             >
               Next
             </NextButton>

@@ -19,6 +19,7 @@ export interface IProposalDetailState {
   votes: any[];
   depositors: any[];
   tally: ITally;
+  proposer: string;
 }
 
 export interface ITally {

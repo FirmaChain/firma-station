@@ -4,9 +4,15 @@
 /node_modules
 /.pnp
 .pnp.js
+.yarn
 
 # testing
 /coverage
+
+# cypress
+cypress.env.json
+/cypress/videos
+/cypress/screenshots
 
 # production
 /build
@@ -27,3 +33,6 @@ yarn-debug.log*
 yarn-error.log*
 yarn.lock
 package-lock.json
+
+.yarn
+!.yarn/releases

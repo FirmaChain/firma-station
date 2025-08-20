@@ -7,13 +7,19 @@ import { convertNumber } from '../../utils/common';
 import { getHistoryByAddress } from '../../apollo/gqls/query';
 import { getTokenData } from '../../utils/lcdQuery';
 import { IBC_CONFIG } from '../../config';
+import { useSnackbar } from 'notistack';
 
 export const useTransferHistoryByAddress = () => {
   const [transferHistoryByAddressState, setTransferHistoryByAddressState] = useState<ITransferHistoryByAddressState>({
-    historyList: [],
+    historyList: []
   });
   const [tokenDataState, setTokenDatas] = useState<ITokensState>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
   const { address } = useSelector((state: rootState) => state.wallet);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const updateTokenData = useCallback(
     async (data: any) => {
@@ -34,7 +40,7 @@ export const useTransferHistoryByAddress = () => {
             let tokenData: any = {
               denom: '',
               symbol: '',
-              decimal: 0,
+              decimal: 0
             };
 
             if (denom.includes('ibc') === true) {
@@ -51,20 +57,21 @@ export const useTransferHistoryByAddress = () => {
 
             setTokenDatas((prev) => {
               let newData = {
-                ...prev,
+                ...prev
               };
 
               newData[denom] = {
                 denom: tokenData.denom,
                 symbol: tokenData.symbol,
-                decimal: convertNumber(tokenData.decimal),
+                decimal: convertNumber(tokenData.decimal)
               };
 
               return {
-                ...newData,
+                ...newData
               };
             });
           } catch (error) {
+            enqueueSnackbar('Failed to get transfer history.', { variant: 'error', autoHideDuration: 2000 });
             console.log(error);
             continue;
           }
@@ -104,27 +111,93 @@ export const useTransferHistoryByAddress = () => {
         amount,
         memo: message.transaction.memo,
         timestamp: message.transaction.block.timestamp,
-        success: message.transaction.success,
+        success: message.transaction.success
       };
     });
   }, []);
 
-  useEffect(() => {
-    getHistoryByAddress(address, 'cosmos.bank.v1beta1.MsgSend,ibc.applications.transfer.v1.MsgTransfer')
-      .then(async (data) => {
+  const loadMoreData = useCallback(async () => {
+    if (isLoading || !hasMore) return;
+
+    setIsLoading(true);
+    try {
+      const data = await getHistoryByAddress(
+        address,
+        '/cosmos.bank.v1beta1.MsgSend,/ibc.applications.transfer.v1.MsgTransfer',
+        50,
+        offset + 50
+      );
+
+      if (data && data.messagesByAddress.length > 0) {
         await updateTokenData(data);
 
-        setTransferHistoryByAddressState({
-          historyList: formatHistoryList(data),
-        });
-      })
-      .catch((error) => {
+        const newHistoryList = formatHistoryList(data);
+
+        setTransferHistoryByAddressState((prev) => ({
+          historyList: [...prev.historyList, ...newHistoryList]
+        }));
+
+        setOffset((prev) => prev + 50);
+
+        // There would be no more data if current response is less than 50
+        if (data.messagesByAddress.length < 50) {
+          setHasMore(false);
+        }
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      enqueueSnackbar('Failed to get transfer history.', { variant: 'error', autoHideDuration: 2000 });
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [address, offset, isLoading, hasMore, updateTokenData, formatHistoryList]);
+
+  useEffect(() => {
+    const loadInitialData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getHistoryByAddress(
+          address,
+          '/cosmos.bank.v1beta1.MsgSend,/ibc.applications.transfer.v1.MsgTransfer',
+          50,
+          0
+        );
+
+        if (data) {
+          await updateTokenData(data);
+
+          setTransferHistoryByAddressState({
+            historyList: formatHistoryList(data)
+          });
+
+          // This function runs when address is changed -> so set offset to 0.
+          setOffset(0);
+
+          // There would be no more data if current response is less than 50
+          if (data.messagesByAddress.length < 50) {
+            setHasMore(false);
+          }
+        }
+      } catch (error) {
+        enqueueSnackbar('Failed to get transfer history.', { variant: 'error', autoHideDuration: 2000 });
         console.log(error);
-      });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (address) {
+      loadInitialData();
+    }
+  }, [address]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     transferHistoryByAddressState,
     tokenDataState,
+    isLoading,
+    hasMore,
+    loadMoreData
   };
 };

@@ -121,8 +121,8 @@ const ConfirmTxModal = () => {
       onClose={closeConfirmTxModal}
       width={confirmTxModalWidth}
     >
-      <ModalContainer>
-        <ModalTitle>Confirm</ModalTitle>
+      <ModalContainer data-testid="confirm-modal">
+        <ModalTitle data-testid="confirm-modal-title">Confirm</ModalTitle>
         <ModalContent>
           <ConfirmContainer>
             {targetAddress && (
@@ -179,6 +179,7 @@ const ConfirmTxModal = () => {
                     onChange={onChangePassword}
                     onKeyDown={onKeyDownPassword}
                     autoFocus={true}
+                    data-testid="confirm-password-input"
                   />
                 </ModalInputWrap>
               </PasswordWrapper>
@@ -190,7 +191,7 @@ const ConfirmTxModal = () => {
               Cancel
             </CancelButton>
             {(isMobileApp === false || isMobileApp === undefined) && (
-              <NextButton onClick={() => queueTx()} status={isActive || isLedger ? 0 : 2}>
+              <NextButton onClick={() => queueTx()} status={isActive || isLedger ? 0 : 2} data-testid="confirm-send-button">
                 {isLedger ? `Sign Ledger` : actionName}
               </NextButton>
             )}

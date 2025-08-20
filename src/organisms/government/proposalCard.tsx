@@ -55,14 +55,14 @@ const Row = ({ data, index, style }: any) => {
 
   return (
     <Link to={{ pathname: `/government/proposals/${currnetProposal.proposalId}` }} style={{ textDecoration: 'none' }}>
-      <ItemWrapper style={style}>
-        <ItemColumn>{`# ${currnetProposal.proposalId}`}</ItemColumn>
-        <ItemColumn>{getStatusTypo(currnetProposal.status)}</ItemColumn>
-        <ItemColumn>{getTypeTypo(currnetProposal.proposalType)}</ItemColumn>
+      <ItemWrapper style={style} data-testid={`proposal-item-${currnetProposal.proposalId}`}>
+        <ItemColumn data-testid={`proposal-id-${currnetProposal.proposalId}`}>{`# ${currnetProposal.proposalId}`}</ItemColumn>
+        <ItemColumn data-testid={`proposal-status-${currnetProposal.proposalId}`}>{getStatusTypo(currnetProposal.status)}</ItemColumn>
+        <ItemColumn data-testid={`proposal-type-${currnetProposal.proposalId}`}>{getTypeTypo(currnetProposal.proposalType)}</ItemColumn>
 
-        <ItemColumn>
-          <TitleTypo>{currnetProposal.title}</TitleTypo>
-          <DescriptionTypo>{currnetProposal.description}</DescriptionTypo>
+        <ItemColumn data-testid={`proposal-content-${currnetProposal.proposalId}`}>
+          <TitleTypo data-testid={`proposal-title-${currnetProposal.proposalId}`}>{currnetProposal.title}</TitleTypo>
+          <DescriptionTypo data-testid={`proposal-description-${currnetProposal.proposalId}`}>{currnetProposal.description}</DescriptionTypo>
         </ItemColumn>
       </ItemWrapper>
     </Link>
@@ -73,9 +73,9 @@ const ProposalCard = ({ proposalsState }: IProps) => {
   const isSmall = useMediaQuery({ query: '(max-width: 900px)' });
 
   return (
-    <ListWrapper>
+    <ListWrapper data-testid="proposals-list-wrapper">
       {isSmall ? (
-        <SmallList>
+        <SmallList data-testid="proposals-small-list">
           {proposalsState.proposals.map((proposal, i) => {
             const getStatusTypo = (status: string) => {
               const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : 'UNKNOWN';
@@ -90,11 +90,11 @@ const ProposalCard = ({ proposalsState }: IProps) => {
 
             return (
               <Link to={{ pathname: `/government/proposals/${proposal.proposalId}` }} key={i}>
-                <SmallItemCard>
-                  <SmallProposalId>{`# ${proposal.proposalId}`}</SmallProposalId>
-                  <SmallProposalTitle>{proposal.title}</SmallProposalTitle>
-                  <SmallProposalType>{getTypeTypo(proposal.proposalType)}</SmallProposalType>
-                  <SmallProposalStatus>{getStatusTypo(proposal.status)}</SmallProposalStatus>
+                <SmallItemCard data-testid={`proposal-item-small-${proposal.proposalId}`}>
+                  <SmallProposalId data-testid={`proposal-id-${proposal.proposalId}`}>{`# ${proposal.proposalId}`}</SmallProposalId>
+                  <SmallProposalTitle data-testid={`proposal-title-${proposal.proposalId}`}>{proposal.title}</SmallProposalTitle>
+                  <SmallProposalType data-testid={`proposal-type-${proposal.proposalId}`}>{getTypeTypo(proposal.proposalType)}</SmallProposalType>
+                  <SmallProposalStatus data-testid={`proposal-status-${proposal.proposalId}`}>{getStatusTypo(proposal.status)}</SmallProposalStatus>
                 </SmallItemCard>
               </Link>
             );

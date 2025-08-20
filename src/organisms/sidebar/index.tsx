@@ -33,8 +33,8 @@ function Sidebar() {
     }
   };
   return (
-    <DrawerStyled variant='permanent' anchor='left'>
-      <Link to={{ pathname: `/` }}>
+    <DrawerStyled variant='permanent' anchor='left' data-testid="sidebar-navigation">
+      <Link to={{ pathname: `/` }} data-testid="sidebar-logo">
         <LogoImg />
       </Link>
 
@@ -47,6 +47,7 @@ function Sidebar() {
                 selected={'/' + location.pathname.split('/')[1] === menu.path}
                 onClick={(e) => linkTo(e, menu.externalLink)}
                 to={{ pathname: menu.path }}
+                data-testid={`sidebar-main-${menu.name.toLowerCase()}`}
               >
                 <MainMenuIcon>
                   <menu.icon />
@@ -64,7 +65,12 @@ function Sidebar() {
         <SubMenuList>
           {subMenuList.map((menu, index) => {
             return (
-              <SubMenuItem key={index} onClick={(e) => linkTo(e, menu.externalLink)} to={{ pathname: menu.path }}>
+              <SubMenuItem 
+                key={index} 
+                onClick={(e) => linkTo(e, menu.externalLink)} 
+                to={{ pathname: menu.path }}
+                data-testid={`sidebar-sub-${menu.name.toLowerCase().replace(/\s+/g, '-')}`}
+              >
                 <SubMenuIcon>
                   <menu.icon />
                 </SubMenuIcon>
@@ -84,7 +90,12 @@ function Sidebar() {
         <BottomMenuList>
           {bottomMenuList.map((menu, index) => {
             return (
-              <BottomMenuItem key={index} onClick={(e) => linkTo(e, menu.externalLink)} to={{ pathname: menu.path }}>
+              <BottomMenuItem 
+                key={index} 
+                onClick={(e) => linkTo(e, menu.externalLink)} 
+                to={{ pathname: menu.path }}
+                data-testid={`sidebar-bottom-${menu.name.toLowerCase()}`}
+              >
                 <BottomMenuLabel>
                   {menu.name}
                   <LinkIcon />

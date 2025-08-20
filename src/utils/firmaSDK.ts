@@ -4,7 +4,6 @@ import TransportHID from '@ledgerhq/hw-transport-webhid';
 
 import { CHAIN_CONFIG, IBC_CONFIG } from '../config';
 import { convertToUTokenStringFromToken, getDefaultGas, getFeesFromGas, isElectron, isExternalConnect } from './common';
-import Long from 'long';
 
 declare global {
   interface Window {
@@ -86,7 +85,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Bank.send(wallet, address, amount, {
       memo,
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -114,7 +113,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Bank.sendToken(wallet, address, tokenID, amount, decimal, {
       memo,
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -132,7 +131,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
     const wallet = await getWallet();
     const gasEstimation = await firmaSDK.Bank.getGasEstimationSendToken(wallet, address, tokenID, amount, decimal, {
-      memo,
+      memo
     });
 
     return gasEstimation;
@@ -163,16 +162,11 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const convertAmount = convertToUTokenStringFromToken(amount, decimal);
     const clientState = await firmaSDK.Ibc.getClientState(channel, port);
     const timeStamp = (Date.now() + 600000).toString() + '000000';
-    const timeoutTimeStamp = Long.fromString(timeStamp, true);
+    const timeoutTimeStamp = BigInt(timeStamp); // Long.fromString(timeStamp, true)
     const height = {
-      revisionHeight: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_height,
-        true
-      ).add(Long.fromNumber(1000)),
-      revisionNumber: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_number,
-        true
-      ),
+      revisionHeight:
+        BigInt(clientState.identified_client_state.client_state.latest_height.revision_height) + BigInt(1000),
+      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number)
     };
 
     const result = await firmaSDK.Ibc.transfer(
@@ -184,6 +178,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       address,
       height,
       timeoutTimeStamp,
+      memo,
       { memo, gas: estimatedGas, fee: getFees(estimatedGas) }
     );
 
@@ -217,16 +212,11 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const convertAmount = convertToUTokenStringFromToken(amount, decimal);
     const clientState = await firmaSDK.Ibc.getClientState(channel, port);
     const timeStamp = (Date.now() + 600000).toString() + '000000';
-    const timeoutTimeStamp = Long.fromString(timeStamp, true);
+    const timeoutTimeStamp = BigInt(timeStamp); // Long.fromString(timeStamp, true)
     const height = {
-      revisionHeight: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_height,
-        true
-      ).add(Long.fromNumber(1000)),
-      revisionNumber: Long.fromString(
-        clientState.identified_client_state.client_state.latest_height.revision_number,
-        true
-      ),
+      revisionHeight:
+        BigInt(clientState.identified_client_state.client_state.latest_height.revision_height) + BigInt(1000),
+      revisionNumber: BigInt(clientState.identified_client_state.client_state.latest_height.revision_number)
     };
 
     try {
@@ -239,7 +229,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
         address,
         height,
         timeoutTimeStamp,
-        { memo }
+        memo
       );
 
       return gasEstimation;
@@ -253,7 +243,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.delegate(wallet, validatorAddress, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -278,7 +268,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.redelegate(wallet, validatorAddressSrc, validatorAddressDst, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
     return result;
   };
@@ -305,7 +295,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Staking.undelegate(wallet, validatorAddress, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -325,7 +315,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Distribution.withdrawAllRewards(wallet, validatorAddress, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -347,7 +337,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
     const result = await firmaSDK.Distribution.withdrawAllRewardsFromAllValidator(wallet, delegationList, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -370,7 +360,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.vote(wallet, proposalId, votingType, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -390,7 +380,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.deposit(wallet, proposalId, amount, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -413,20 +403,10 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     paramList: any[],
     estimatedGas: number
   ) => {
-    const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitParameterChangeProposal(
-      wallet,
-      title,
-      description,
-      initialDeposit,
-      paramList,
-      {
-        gas: estimatedGas,
-        fee: getFees(estimatedGas),
-      }
+    // This function is deprecated in v0.5, use specific param update functions instead
+    throw new Error(
+      'Parameter change proposal is deprecated. Use submitStakingParamsUpdateProposal or submitGovParamsUpdateProposal instead.'
     );
-
-    return result;
   };
 
   const getGasEstimationSubmitParameterChangeProposal = async (
@@ -435,24 +415,15 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     initialDeposit: number,
     paramList: any[]
   ) => {
-    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
-      return getDefaultGas(isLedger, isMobileApp);
-
-    const wallet = await getWallet();
-    const result = await firmaSDK.Gov.getGasEstimationSubmitParameterChangeProposal(
-      wallet,
-      title,
-      description,
-      initialDeposit,
-      paramList
+    // This function is deprecated in v0.5, use specific param update functions instead
+    throw new Error(
+      'Parameter change proposal is deprecated. Use getGasEstimationSubmitStakingParamsUpdateProposal or getGasEstimationSubmitGovParamsUpdateProposal instead.'
     );
-
-    return result;
   };
 
   const submitCommunityPoolSpendProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     amount: number,
     recipient: string,
@@ -462,13 +433,14 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Gov.submitCommunityPoolSpendProposal(
       wallet,
       title,
-      description,
+      summary,
       initialDeposit,
       amount,
       recipient,
+      '',
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -477,7 +449,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const getGasEstimationSubmitCommunityPoolSpendProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     amount: number,
     recipient: string
@@ -489,7 +461,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const result = await firmaSDK.Gov.getGasEstimationSubmitCommunityPoolSpendProposal(
       wallet,
       title,
-      description,
+      summary,
       initialDeposit,
       amount,
       recipient
@@ -507,7 +479,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     const wallet = await getWallet();
     const result = await firmaSDK.Gov.submitTextProposal(wallet, title, description, initialDeposit, {
       gas: estimatedGas,
-      fee: getFees(estimatedGas),
+      fee: getFees(estimatedGas)
     });
 
     return result;
@@ -525,32 +497,33 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const submitSoftwareUpgradeProposalByHeight = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     upgradeName: string,
     height: number,
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitSoftwareUpgradeProposalByHeight(
-      wallet,
-      title,
-      description,
-      initialDeposit,
-      upgradeName,
-      height,
-      {
-        gas: estimatedGas,
-        fee: getFees(estimatedGas),
-      }
-    );
+    const plan = {
+      name: upgradeName,
+      time: {
+        seconds: BigInt(0),
+        nanos: 0
+      },
+      height: BigInt(height),
+      info: ''
+    };
+    const result = await firmaSDK.Gov.submitSoftwareUpgradeProposal(wallet, title, summary, initialDeposit, plan, '', {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas)
+    });
 
     return result;
   };
 
   const getGasEstimationSubmitSoftwareUpgradeProposalByHeight = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     upgradeName: string,
     height: number
@@ -559,13 +532,22 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       return getDefaultGas(isLedger, isMobileApp);
 
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.getGasEstimationSubmitSoftwareUpgradeProposalByHeight(
+    const plan = {
+      name: upgradeName,
+      time: {
+        seconds: BigInt(0),
+        nanos: 0
+      },
+      height: BigInt(height),
+      info: ''
+    };
+
+    const result = await firmaSDK.Gov.getGasEstimationSubmitSoftwareUpgradeProposal(
       wallet,
       title,
-      description,
+      summary,
       initialDeposit,
-      upgradeName,
-      height
+      plan
     );
 
     return result;
@@ -573,34 +555,158 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 
   const submitCancelSoftwareUpgradeProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number,
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.submitCancelSoftwareUpgradeProposal(wallet, title, description, initialDeposit, {
-      gas: estimatedGas,
-      fee: getFees(estimatedGas),
-    });
+    // Create a CancelSoftwareUpgrade message
+    const cancelUpgradeMessage = {
+      typeUrl: '/cosmos.upgrade.v1beta1.MsgCancelUpgrade',
+      value: new Uint8Array([]) // Empty value for cancel upgrade
+    };
+
+    const result = await firmaSDK.Gov.submitGenericProposal(
+      wallet,
+      title,
+      summary,
+      [{ denom: CHAIN_CONFIG.FIRMACHAIN_CONFIG.denom, amount: (initialDeposit * 1000000).toString() }],
+      '', // metadata
+      [cancelUpgradeMessage],
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas)
+      }
+    );
 
     return result;
   };
 
   const getGasEstimationSubmitCancelSoftwareUpgradeProposal = async (
     title: string,
-    description: string,
+    summary: string,
     initialDeposit: number
   ) => {
     if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
       return getDefaultGas(isLedger, isMobileApp);
 
+    // For now, return a reasonable gas estimate for cancel upgrade proposals
+    // This can be refined based on actual testing
+    return 200000;
+  };
+
+  const submitStakingParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = '',
+    estimatedGas: number
+  ) => {
     const wallet = await getWallet();
-    const result = await firmaSDK.Gov.getGasEstimationSubmitCancelSoftwareUpgradeProposal(
+    const result = await firmaSDK.Gov.submitStakingParamsUpdateProposal(
       wallet,
       title,
-      description,
-      initialDeposit
+      summary,
+      initialDeposit,
+      params,
+      metadata,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas)
+      }
     );
+
+    return result;
+  };
+
+  const getGasEstimationSubmitStakingParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = ''
+  ) => {
+    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
+      return getDefaultGas(isLedger, isMobileApp);
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitStakingParamsUpdateProposal(
+      wallet,
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata
+    );
+
+    return result;
+  };
+
+  const submitGovParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = '',
+    estimatedGas: number
+  ) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.submitGovParamsUpdateProposal(
+      wallet,
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata,
+      {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas)
+      }
+    );
+
+    return result;
+  };
+
+  const getGasEstimationSubmitGovParamsUpdateProposal = async (
+    title: string,
+    summary: string,
+    initialDeposit: number,
+    params: any,
+    metadata: string = ''
+  ) => {
+    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
+      return getDefaultGas(isLedger, isMobileApp);
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationSubmitGovParamsUpdateProposal(
+      wallet,
+      title,
+      summary,
+      initialDeposit,
+      params,
+      metadata
+    );
+
+    return result;
+  };
+
+  const cancelProposal = async (proposalId: string, estimatedGas: number) => {
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.cancelProposal(wallet, parseInt(proposalId), {
+      gas: estimatedGas,
+      fee: getFees(estimatedGas)
+    });
+
+    return result;
+  };
+
+  const getGasEstimationCancelProposal = async (proposalId: string) => {
+    if (isExternalConnect(isLedger, isMobileApp) || CHAIN_CONFIG.IS_DEFAULT_GAS)
+      return getDefaultGas(isLedger, isMobileApp);
+
+    const wallet = await getWallet();
+    const result = await firmaSDK.Gov.getGasEstimationCancelProposal(wallet, parseInt(proposalId));
 
     return result;
   };
@@ -612,16 +718,23 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     estimatedGas: number
   ) => {
     const wallet = await getWallet();
+
+    // Convert Date to Timestamp format
+    const timestampExpiration = {
+      seconds: BigInt(Math.floor(expirationDate.getTime() / 1000)),
+      nanos: (expirationDate.getTime() % 1000) * 1000000
+    };
+
     const result = await firmaSDK.Authz.grantStakeAuthorization(
       wallet,
       CHAIN_CONFIG.RESTAKE.ADDRESS,
       validatorAddressList,
       AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
-      expirationDate,
+      timestampExpiration,
       maxFCT,
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -637,12 +750,19 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       return getDefaultGas(isLedger, isMobileApp);
 
     const wallet = await getWallet();
+
+    // Convert Date to Timestamp format
+    const timestampExpiration = {
+      seconds: BigInt(Math.floor(expirationDate.getTime() / 1000)),
+      nanos: (expirationDate.getTime() % 1000) * 1000000
+    };
+
     const result = await firmaSDK.Authz.getGasEstimationGrantStakeAuthorization(
       wallet,
       CHAIN_CONFIG.RESTAKE.ADDRESS,
       validatorAddressList,
       AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
-      expirationDate,
+      timestampExpiration,
       maxFCT
     );
 
@@ -657,7 +777,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
       AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
       {
         gas: estimatedGas,
-        fee: getFees(estimatedGas),
+        fee: getFees(estimatedGas)
       }
     );
 
@@ -698,6 +818,9 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     submitTextProposal,
     submitSoftwareUpgradeProposalByHeight,
     submitCancelSoftwareUpgradeProposal,
+    submitStakingParamsUpdateProposal,
+    submitGovParamsUpdateProposal,
+    cancelProposal,
     grantStakeAuthorizationDelegate,
     revokeStakeAuthorizationDelegate,
 
@@ -716,8 +839,11 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     getGasEstimationSubmitTextProposal,
     getGasEstimationSubmitSoftwareUpgradeProposalByHeight,
     getGasEstimationSubmitCancelSoftwareUpgradeProposal,
+    getGasEstimationSubmitStakingParamsUpdateProposal,
+    getGasEstimationSubmitGovParamsUpdateProposal,
+    getGasEstimationCancelProposal,
     getGasEstimationGrantStakeAuthorizationDelegate,
-    getGasEstimationRevokeStakeAuthorizationDelegate,
+    getGasEstimationRevokeStakeAuthorizationDelegate
   };
 };
 

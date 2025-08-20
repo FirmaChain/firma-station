@@ -31,8 +31,9 @@ const ProposalButtons = () => {
   };
 
   return (
-    <ButtonWrapper>
+    <ButtonWrapper data-testid="governance-buttons-wrapper">
       <Button
+        data-testid="new-proposal-button"
         onClick={async () => {
           if (await isInvalidProposalAddress()) {
             enqueueSnackbar('This address is not valid for proposal. Please contact to contact@firmachain.org.', {

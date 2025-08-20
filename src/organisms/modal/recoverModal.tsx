@@ -147,9 +147,19 @@ const RecoverModal = () => {
             <ModalLabel>{recoverType === 0 ? 'Mnemonic' : 'Private Key'}</ModalLabel>
             <ModalInput>
               {recoverType === 0 ? (
-                <MnemonicTextArea onChange={checkWords} ref={inputRefMnemonic} placeholder='Enter Mnemonic' />
+                <MnemonicTextArea 
+                  onChange={checkWords} 
+                  ref={inputRefMnemonic} 
+                  placeholder='Enter Mnemonic'
+                  data-testid="recover-mnemonic-textarea"
+                />
               ) : (
-                <PrivatekeyTextArea onChange={checkWords} ref={inputRefPrivateKey} placeholder='Enter Private Key' />
+                <PrivatekeyTextArea 
+                  onChange={checkWords} 
+                  ref={inputRefPrivateKey} 
+                  placeholder='Enter Private Key'
+                  data-testid="recover-privatekey-textarea"
+                />
               )}
             </ModalInput>
           </ModalInputWrap>
@@ -161,6 +171,7 @@ const RecoverModal = () => {
             onClick={() => {
               if (isActiveRecoverButton) recoverWallet();
             }}
+            data-testid="login-recover-button"
           >
             Recover
           </RecoverButton>

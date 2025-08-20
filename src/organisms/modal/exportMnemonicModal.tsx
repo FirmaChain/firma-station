@@ -26,8 +26,11 @@ import {
   ButtonWrapper,
   CancelButton,
   MnemonicBox,
+  MnemonicTable,
+  MnemonicRow,
+  MnemonicCell,
   ExportQRContainer,
-  QRWrapper,
+  QRWrapper
 } from './styles';
 import theme from '../../themes';
 
@@ -40,6 +43,15 @@ const ExportMnemonicModal = () => {
   const [mnemonic, setMnemonic] = useState('');
   const inputRef = useRef(null);
 
+  const groupMnemonicWords = (mnemonic: string) => {
+    const words = mnemonic.split(' ');
+    const groups = [];
+    for (let i = 0; i < words.length; i += 4) {
+      groups.push(words.slice(i, i + 4));
+    }
+    return groups;
+  };
+
   const exportWallet = () => {
     if (isCorrectPassword(password)) {
       const mnemonic = getDecryptMnemonic();
@@ -47,14 +59,14 @@ const ExportMnemonicModal = () => {
       if (mnemonic === '') {
         enqueueSnackbar('Faild get Mnemonic (Private Key User)', {
           variant: 'error',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
       }
       setMnemonic(getDecryptMnemonic());
     } else {
       enqueueSnackbar('Invalid Password', {
         variant: 'error',
-        autoHideDuration: 2000,
+        autoHideDuration: 2000
       });
     }
   };
@@ -64,7 +76,7 @@ const ExportMnemonicModal = () => {
 
     enqueueSnackbar('Copied', {
       variant: 'success',
-      autoHideDuration: 1000,
+      autoHideDuration: 1000
     });
   };
 
@@ -103,8 +115,8 @@ const ExportMnemonicModal = () => {
                 <ExportPasswordWrapper>
                   <InputBoxDefault
                     ref={inputRef}
-                    placeholder='Enter Password'
-                    type='password'
+                    placeholder="Enter Password"
+                    type="password"
                     value={password}
                     onChange={onChangePassword}
                     onKeyDown={onKeyDownPassword}
@@ -132,7 +144,19 @@ const ExportMnemonicModal = () => {
               <ModalInputWrap>
                 <ModalLabel>Mnemonic</ModalLabel>
                 <ModalInput>
-                  <MnemonicBox>{mnemonic}</MnemonicBox>
+                  <MnemonicBox>
+                    <MnemonicTable>
+                      <tbody>
+                        {groupMnemonicWords(mnemonic).map((group, index) => (
+                          <MnemonicRow key={index}>
+                            {group.map((word, wordIndex) => (
+                              <MnemonicCell key={wordIndex}>{word}</MnemonicCell>
+                            ))}
+                          </MnemonicRow>
+                        ))}
+                      </tbody>
+                    </MnemonicTable>
+                  </MnemonicBox>
                   <CopyIcon onClick={clipboard} />
                 </ModalInput>
               </ModalInputWrap>

@@ -1,5 +1,8 @@
 export interface IHistoryByAddressState {
   historyList: IHistory[];
+  loading: boolean;
+  hasMore: boolean;
+  offset: number;
 }
 
 interface IHistory {

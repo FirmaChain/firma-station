@@ -1,3 +1,5 @@
+//! Note: Proposal list data is snake_case, but interface is CamelCase (not match)
+
 import { FirmaSDK, FirmaUtil, ValidatorDataType } from '@firmachain/firma-js';
 
 import { IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
@@ -19,7 +21,7 @@ export {
   getSignedBlocksWindow,
   getAccAddressFromValOperAddress,
   getProposalList,
-  getProposalFromId,
+  getProposalFromId
 };
 
 const firmaSDK = new FirmaSDK(CHAIN_CONFIG.FIRMACHAIN_CONFIG);
@@ -37,14 +39,13 @@ const getStakingPool = async (): Promise<{ bondedTokens: number; unbondedTokens:
 
   return {
     bondedTokens: convertNumber(FirmaUtil.getFCTStringFromUFCTStr(stakingPool.bonded_tokens)),
-    unbondedTokens: convertNumber(FirmaUtil.getFCTStringFromUFCTStr(stakingPool.not_bonded_tokens)),
+    unbondedTokens: convertNumber(FirmaUtil.getFCTStringFromUFCTStr(stakingPool.not_bonded_tokens))
   };
 };
 
 const getTotalSupply = async (): Promise<number> => {
   try {
     const amount = await firmaSDK.Bank.getTokenSupply(CHAIN_CONFIG.PARAMS.DENOM);
-
     return convertNumber(FirmaUtil.getFCTStringFromUFCTStr(amount));
   } catch (error) {
     return 0;
@@ -95,14 +96,14 @@ const getTokenData = async (denom: string): Promise<{ denom: string; symbol: str
     return {
       denom: denom,
       symbol: tokenData.symbol,
-      decimal: tokenData.decimal,
+      decimal: tokenData.decimal
     };
   }
 
   return {
     denom: CHAIN_CONFIG.PARAMS.DENOM,
     symbol: CHAIN_CONFIG.PARAMS.SYMBOL,
-    decimal: 6,
+    decimal: 6
   };
 };
 
@@ -117,7 +118,7 @@ const getValidatorDelegationsFromAddress = async (
       delegatorAddress: delegation.delegation.delegator_address,
       moniker: delegation.delegation.delegator_address,
       avatarURL: '',
-      amount: convertNumber(delegation.balance.amount),
+      amount: convertNumber(delegation.balance.amount)
     });
   }
 
@@ -182,31 +183,31 @@ const parseValidator = (validator: ValidatorDataType, totalVotingPower: number) 
     votingPowerPercent,
     commission,
     status,
-    jailed,
+    jailed
   };
 };
 
 const getProposalList = async (): Promise<IProposalData[]> => {
-  const proposalList = await firmaSDK.Gov.getProposalList();
-  const proposalParams = await firmaSDK.Gov.getParam();
+  const proposalList = await firmaSDK.Gov.getAllProposalList(); // v0.3.7 firma-js new function
+  const proposalParams = await firmaSDK.Gov.getParamAsGovParams();
 
   const formatExtraData = (proposalContent: any) => {
     if (proposalContent.plan) {
       return {
         height: proposalContent.plan.height,
         name: proposalContent.plan.name,
-        info: proposalContent.plan.info,
+        info: proposalContent.plan.info
       };
     }
     if (proposalContent.recipient) {
       return {
         recipient: proposalContent.recipient,
-        amount: proposalContent.amount[0].amount,
+        amount: proposalContent.amount[0].amount
       };
     }
     if (proposalContent.changes) {
       return {
-        changes: proposalContent.changes,
+        changes: proposalContent.changes
       };
     }
 
@@ -215,19 +216,29 @@ const getProposalList = async (): Promise<IProposalData[]> => {
 
   let result: IProposalData[] = [];
   for (let proposal of proposalList) {
-    const proposalId = proposal.proposal_id;
-    const status = proposal.status;
-    const title = proposal.content.title;
-    const description = proposal.content.description;
-    const proposalType = proposal.content['@type'];
-    const submitTime = proposal.submit_time;
-    const extraData = formatExtraData(proposal.content);
+    const _proposal = proposal as any;
 
-    const votingStartTime = proposal.voting_start_time;
-    const votingEndTime = proposal.voting_end_time;
-    const paramQuorum = convertNumber(proposalParams.tally_params.quorum);
-    const paramMinDepositAmount = convertNumber(proposalParams.deposit_params.min_deposit[0].amount);
-    const periodDeposit = convertNumber(proposalParams.deposit_params.max_deposit_period);
+    const proposalId = proposal.id.toString(); // Replaced from proposal.proposal_id
+    const status = proposal.status.toString();
+    const title = proposal.title; // Replaced from proposal.content.title
+    const description = proposal.summary; // Replaced from proposal.content.description
+
+    const firstMsg = proposal.messages[0] as any;
+    const firmsMsgContent = firstMsg?.content || null;
+
+    //? Remove 'Msg' from the start
+    const proposalType = (firmsMsgContent ? firmsMsgContent['@type'] : firstMsg['@type'] || '').replace('Msg', ''); //? Need to check
+
+    const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
+    const extraData = formatExtraData(proposal.messages); // Replaced from proposal.content
+
+    const votingStartTime = _proposal.voting_start_time; // Replaced from proposal.voting_start_time
+    const votingEndTime = _proposal.voting_end_time; // Replaced from proposal.voting_end_time
+    const paramQuorum = convertNumber(proposalParams.quorum); // Replaced from proposalParams.tally_params.quorum
+    const paramMinDepositAmount = convertNumber(proposalParams.minDeposit[0].amount); // Replaced from proposalParams.deposit_params.min_deposit[0].amount
+    const periodDeposit = convertNumber(proposalParams.maxDepositPeriod?.seconds.toString()); // Replaced from proposalParams.deposit_params.max_deposit_period
+
+    const proposer = proposal.proposer;
 
     result.push({
       proposalId,
@@ -242,12 +253,13 @@ const getProposalList = async (): Promise<IProposalData[]> => {
       paramQuorum,
       paramMinDepositAmount,
       periodDeposit,
+      proposer,
       tally: {
         yes: 0,
         no: 0,
         noWithVeto: 0,
-        abstain: 0,
-      },
+        abstain: 0
+      }
     });
   }
 
@@ -258,7 +270,9 @@ const getProposalList = async (): Promise<IProposalData[]> => {
 
 const getProposalFromId = async (proposalId: string): Promise<IProposalData> => {
   const proposal = await firmaSDK.Gov.getProposal(proposalId);
-  const proposalParams = await firmaSDK.Gov.getParam();
+  const proposalParams = await firmaSDK.Gov.getParamAsGovParams();
+
+  //! Note: changed type intentionally to match current return interface. Remove this if tally type is fixed
   const tallyRaw = await firmaSDK.Gov.getCurrentVoteInfo(proposalId);
 
   const formatExtraData = (proposalContent: any) => {
@@ -266,42 +280,54 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
       return {
         height: proposalContent.plan.height,
         name: proposalContent.plan.name,
-        info: proposalContent.plan.info,
+        info: proposalContent.plan.info
       };
     }
     if (proposalContent.recipient) {
       return {
         recipient: proposalContent.recipient,
-        amount: proposalContent.amount[0].amount,
+        amount: proposalContent.amount[0].amount
       };
     }
     if (proposalContent.changes) {
       return {
-        changes: proposalContent.changes,
+        changes: proposalContent.changes
       };
     }
 
     return null;
   };
 
-  const status = proposal.status;
-  const title = proposal.content.title;
-  const description = proposal.content.description;
-  const proposalType = proposal.content['@type'];
-  const submitTime = proposal.submit_time;
-  const extraData = formatExtraData(proposal.content);
+  const _proposal = proposal as any;
 
-  const votingStartTime = proposal.voting_start_time;
-  const votingEndTime = proposal.voting_end_time;
-  const paramQuorum = convertNumber(proposalParams.tally_params.quorum);
-  const paramMinDepositAmount = convertNumber(proposalParams.deposit_params.min_deposit[0].amount);
-  const periodDeposit = convertNumber(proposalParams.deposit_params.max_deposit_period);
+  const status = proposal.status.toString();
+  const title = proposal.title; // Replaced from proposal.content.title
+  const description = proposal.summary; // Replaced from proposal.content.description
+
+  const firstMsg = proposal.messages[0] as any;
+  const firmsMsgContent = firstMsg?.content || null;
+
+  const proposalType = firmsMsgContent ? firmsMsgContent['@type'] : firstMsg['@type'] || ''; //? Need to check
+
+  const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
+
+  // Proposal before before v0.5.0 has extraData in firstMsg / after v0.5.0 has extraData in firmsMsgContent
+  // So just merge them into one object to reduct complexity
+  const extraData = formatExtraData({ ...firstMsg, ...firmsMsgContent }); // Replaced from proposal.content
+
+  const votingStartTime = _proposal.voting_start_time; // Replaced from proposal.voting_start_time
+  const votingEndTime = _proposal.voting_end_time; // Replaced from proposal.voting_end_time
+  const paramQuorum = convertNumber(proposalParams.quorum); // Replaced from proposalParams.tally_params.quorum
+  const paramMinDepositAmount = convertNumber(proposalParams.minDeposit[0].amount); // Replaced from proposalParams.deposit_params.min_deposit[0].amount
+  const periodDeposit = convertNumber(proposalParams.maxDepositPeriod?.seconds.toString()); // Replaced from proposalParams.deposit_params.max_deposit_period
+
+  const proposer = proposal.proposer;
 
   const tally = {
-    yes: convertNumber(tallyRaw.yes),
-    no: convertNumber(tallyRaw.no),
-    noWithVeto: convertNumber(tallyRaw.no_with_veto),
-    abstain: convertNumber(tallyRaw.abstain),
+    yes: convertNumber(tallyRaw.yes_count),
+    no: convertNumber(tallyRaw.no_count),
+    noWithVeto: convertNumber(tallyRaw.no_with_veto_count),
+    abstain: convertNumber(tallyRaw.abstain_count)
   };
 
   return {
@@ -318,5 +344,6 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
     paramMinDepositAmount,
     periodDeposit,
     tally,
+    proposer
   };
 };

@@ -12,29 +12,30 @@ import {
   HeaderTypoMobile,
   HeaderIcon,
   MobileMenuList,
-  MobileMenuItem,
+  MobileMenuItem
 } from './styles';
 
 const menus = [
   { name: 'Home', path: '/', externalLink: '' },
+  { name: 'Account', path: '/accounts', externalLink: '' },
   { name: 'Staking', path: '/staking', externalLink: '' },
   { name: 'Governance', path: '/government', externalLink: '' },
   { name: 'Community', path: '/community', externalLink: '' },
   {
     name: 'Download',
     path: '/download',
-    externalLink: '',
+    externalLink: ''
   },
   {
     name: 'Buy Firma',
     path: '/market',
-    externalLink: 'https://coinmarketcap.com/currencies/firmachain/markets',
+    externalLink: 'https://coinmarketcap.com/currencies/firmachain/markets'
   },
   {
     name: 'Explorer',
     path: '/explorer',
-    externalLink: CHAIN_CONFIG.EXPLORER_URI,
-  },
+    externalLink: CHAIN_CONFIG.EXPLORER_URI
+  }
 ];
 
 const HeaderMobile = () => {

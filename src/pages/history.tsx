@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import { useHistoryByAddress } from "../organisms/history/hooks";
+import { useHistoryByAddress } from '../organisms/history/hooks';
 
-import { HistoryCard } from "../organisms/history";
-import { ContentContainer } from "../styles/accounts";
+import { HistoryCard } from '../organisms/history';
+import { ContentContainer } from '../styles/accounts';
 
 const History = () => {
-  const { historyByAddressState } = useHistoryByAddress();
+  const { historyByAddressState, loadMore } = useHistoryByAddress();
   return (
     <ContentContainer>
-      {historyByAddressState && <HistoryCard historyByAddressState={historyByAddressState} />}
+      {historyByAddressState && <HistoryCard historyByAddressState={historyByAddressState} loadMore={loadMore} />}
     </ContentContainer>
   );
 };
