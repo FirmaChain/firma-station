@@ -14,12 +14,12 @@ export const getAvatarInfo = (
   if (avatar) {
     return {
       moniker: avatar.moniker,
-      avatarURL: avatar.url,
+      avatarURL: avatar.url
     };
   } else {
     return {
       moniker: operatorAddress,
-      avatarURL: '',
+      avatarURL: ''
     };
   }
 };
@@ -34,12 +34,12 @@ export const getAvatarInfoFromAcc = (
   if (avatar) {
     return {
       moniker: avatar.moniker,
-      avatarURL: avatar.url,
+      avatarURL: avatar.url
     };
   } else {
     return {
       moniker: accAddress,
-      avatarURL: '',
+      avatarURL: ''
     };
   }
 };
@@ -52,7 +52,7 @@ export const initializeAvatar = (lastUpdated: number) => {
         avatarList.push({
           operatorAddress: validator.validatorAddress,
           moniker: validator.validatorMoniker,
-          url: '',
+          url: ''
         });
       }
 
@@ -61,7 +61,8 @@ export const initializeAvatar = (lastUpdated: number) => {
           if (avatarRaw && avatarRaw.avatarList) {
             const lastUpdatedTime = avatarRaw.lastUpdatedTime;
 
-            if (lastUpdated !== lastUpdatedTime) {
+            if (lastUpdated === lastUpdatedTime) {
+              //! Fix: validator info not visible. replaced !== with ===
               for (let avatar of avatarList) {
                 for (let avatarUrlRaw of avatarRaw.avatarList) {
                   if (avatar.operatorAddress === avatarUrlRaw.operatorAddress) {
@@ -96,7 +97,7 @@ const getAvatarRaw = async (): Promise<{ avatarList: IAvatar[]; lastUpdatedTime:
 
     return {
       avatarList: response.data.profileInfos,
-      lastUpdatedTime: response.data.lastUpdatedTime,
+      lastUpdatedTime: response.data.lastUpdatedTime
     };
   } catch (error) {
     return null;
