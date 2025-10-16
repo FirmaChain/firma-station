@@ -150,3 +150,30 @@ export const getRestakeStatusColor = (status: number, isLedger = false) => {
       return '#888888';
   }
 };
+
+export const isValidMnemonic = (mnemonic: string): boolean => {
+  if (!mnemonic || typeof mnemonic !== 'string') return false;
+
+  // Clean the mnemonic - trim and normalize whitespace
+  const cleanedMnemonic = mnemonic.trim().toLowerCase().replace(/\s+/g, ' ');
+  const words = cleanedMnemonic.split(' ');
+
+  // Check if mnemonic has valid word count (12, 15, 18, 21, or 24 words)
+  const validWordCounts = [12, 15, 18, 21, 24];
+  if (!validWordCounts.includes(words.length)) return false;
+
+  // Check if all words are non-empty and contain only lowercase letters
+  const validWordPattern = /^[a-z]+$/;
+  return words.every(word => word.length > 0 && validWordPattern.test(word));
+};
+
+export const isValidPrivateKey = (privateKey: string): boolean => {
+  if (!privateKey || typeof privateKey !== 'string') return false;
+
+  // Remove any whitespace
+  const cleanKey = privateKey.trim().replace(/\s/g, '');
+
+  // Check if it's a valid hex string (64 characters for secp256k1)
+  const hexRegex = /^[0-9a-fA-F]{64}$/;
+  return hexRegex.test(cleanKey);
+};

@@ -11,6 +11,7 @@ import BuyFirmaIcon from '@mui/icons-material/Payment';
 import ExplorerIcon from '@mui/icons-material/Public';
 import DownloadIcon from '@mui/icons-material/Archive';
 import HelpIcon from '@mui/icons-material/Help';
+import OfflineBoltIcon from '@mui/icons-material/OfflineBolt';
 
 export const mainMenuList: IMenu[] = [
   { name: 'Home', path: '/', icon: HomeIcon, externalLink: '' },
@@ -22,6 +23,12 @@ export const mainMenuList: IMenu[] = [
     name: 'Download',
     path: '/download',
     icon: DownloadIcon,
+    externalLink: '',
+  },
+  {
+    name: 'Offline Mode',
+    path: '/offline-mode',
+    icon: OfflineBoltIcon,
     externalLink: '',
   },
 ];

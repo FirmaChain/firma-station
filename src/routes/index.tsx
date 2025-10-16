@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { rootState } from '../redux/reducers';
 
-import { Home, Staking, Accounts, History, Validators, Government, Proposals, Community, Download } from '../pages';
+import { Home, Staking, Accounts, History, Validators, Government, Proposals, Community, Download, OfflineMode } from '../pages';
 
 const routePublic = (path: string, component: React.FC) => ({
   path,
@@ -28,6 +28,7 @@ const routes = {
   Proposals: routePublic('/government/proposals/:id', Proposals),
   Community: routePublic('/community', Community),
   Download: routePublic('/download', Download),
+  OfflineMode: routePublic('/offline-mode', OfflineMode),
 };
 
 interface IProps {
