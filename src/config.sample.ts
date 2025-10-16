@@ -5,6 +5,7 @@ const CHAIN_CONFIGS = {
     FIRMACHAIN_CONFIG: FirmaConfig.MainNetConfig,
     LEDGER_FEE: 30000,
     LEDGER_GAS: 300000,
+    API_HOST: 'https://',
     EXPLORER_URI: 'https://',
     GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
     PARAMS: {
@@ -12,24 +13,27 @@ const CHAIN_CONFIGS = {
       AVERAGE_BLOCK_TIME: 0,
       COMMUNITY_POOL: 0,
       DENOM: '',
-      SYMBOL: '',
+      SYMBOL: ''
     },
     IS_DEFAULT_GAS: true,
     ENABLE_IBC: true,
     RESTAKE: {
-      API: '',
-      WEB: '',
-      ADDRESS: '',
+      API: 'https://',
+      WEB: 'https://',
+      ADDRESS: ''
     },
-    VALIDATOR_IDENTITY_JSON_URI: '',
+    PROPOSAL_JSON: 'https://',
+    WALLET_JSON: 'https://',
+    VALIDATOR_IDENTITY_JSON_URI: 'https://',
     DOWNLOAD_LINK_LIST: ['', '', '', '', '', ''],
-    VESTING_ACCOUNTS: [],
+    VESTING_ACCOUNTS: []
   },
 
   TESTNET: {
     FIRMACHAIN_CONFIG: FirmaConfig.TestNetConfig,
     LEDGER_FEE: 30000,
     LEDGER_GAS: 300000,
+    API_HOST: 'https://',
     EXPLORER_URI: 'https://',
     GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
     PARAMS: {
@@ -37,56 +41,76 @@ const CHAIN_CONFIGS = {
       AVERAGE_BLOCK_TIME: 0,
       COMMUNITY_POOL: 0,
       DENOM: '',
-      SYMBOL: '',
+      SYMBOL: ''
     },
     IS_DEFAULT_GAS: true,
+    ENABLE_IBC: false,
     RESTAKE: {
-      API: '',
-      WEB: '',
-      ADDRESS: '',
+      API: 'https://',
+      WEB: 'https://',
+      ADDRESS: ''
     },
+    PROPOSAL_JSON: 'https://',
+    WALLET_JSON: 'https://',
     VALIDATOR_IDENTITY_JSON_URI: '',
     DOWNLOAD_LINK_LIST: ['', '', '', '', '', ''],
-    VESTING_ACCOUNTS: [],
+    VESTING_ACCOUNTS: []
   },
 
   DEVNET: {
     FIRMACHAIN_CONFIG: FirmaConfig.DevNetConfig,
     LEDGER_FEE: 30000,
     LEDGER_GAS: 300000,
-    EXPLORER_URI: 'https://',
-    GRAPHQL_CONFIG: { URI: 'https://:8080/v1/graphql' },
+    API_HOST: 'http://',
+    EXPLORER_URI: 'http://',
+    GRAPHQL_CONFIG: { URI: 'http://:8080/v1/graphql' },
     PARAMS: {
       BLOCKS_PER_YEAR: 0,
       AVERAGE_BLOCK_TIME: 0,
       COMMUNITY_POOL: 0,
       DENOM: '',
-      SYMBOL: '',
+      SYMBOL: ''
     },
     IS_DEFAULT_GAS: true,
     ENABLE_IBC: false,
     RESTAKE: {
-      API: '',
-      WEB: '',
-      ADDRESS: '',
+      API: 'http://',
+      WEB: 'http://',
+      ADDRESS: ''
     },
+    PROPOSAL_JSON: '',
+    WALLET_JSON: '',
     VALIDATOR_IDENTITY_JSON_URI: '',
     DOWNLOAD_LINK_LIST: ['', '', '', '', '', ''],
-    VESTING_ACCOUNTS: [],
-  },
+    VESTING_ACCOUNTS: []
+  }
 };
 
-export const CHAIN_CONFIG = CHAIN_CONFIGS.MAINNET;
-
-export const OSMOSIS_EXPLORER = 'https://www.mintscan.io/osmosis';
-
-export const NOTICE_JSON_URI = '';
-
-export const NETWORK_INFO_LIST = [];
+export const OSMOSIS_EXPLORER = '';
 
 export const SESSION_TIMOUT = 1000 * 60 * 10;
 
+export const NOTICE_JSON_URI = '';
+
+export const CHAIN_CONFIG = CHAIN_CONFIGS.MAINNET;
+
+export const IBC_CONFIG: { [key: string]: { symbol: string; decimal: number; channel: string; port: string } } = {
+  // Add IBC configurations as needed
+  // Example:
+  // 'ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B': {
+  //   symbol: 'OSMO',
+  //   decimal: 6,
+  //   channel: 'channel-1',
+  //   port: 'transfer'
+  // }
+};
+
+export const COMMON_KEY = '';
+
+export const NETWORK_INFO_LIST = [];
+
 export const HELP_URI = '';
+
 export const GUIDE_LINK_LOGIN_WALLET = '';
 export const GUIDE_LINK_NEW_WALLET = '';
 export const GUIDE_LINK_CONFIRM_WALLET = '';

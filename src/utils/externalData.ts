@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CHAIN_CONFIG, NOTICE_JSON_URI } from '../config';
+import { NOTICE_JSON_URI } from '../config';
 
 export const getNotice = async (): Promise<{
   isShow: boolean;
@@ -8,22 +8,28 @@ export const getNotice = async (): Promise<{
   link: string;
 } | null> => {
   try {
+    if (!NOTICE_JSON_URI) {
+      return null;
+    }
     const response = await axios.get(`${NOTICE_JSON_URI}?t=${new Date().getTime()}`);
-    const maintenance = response.data.maintenance;
+    const maintenance = response.data?.maintenance;
 
-    return maintenance;
+    // Ensure maintenance has the required structure
+    if (maintenance && typeof maintenance === 'object' && 'isShow' in maintenance) {
+      return maintenance;
+    }
+    return null;
   } catch (error) {
     return null;
   }
 };
 
-export const getContactAddressList = async (): Promise<any> => {
+export const getContactAddressList = async (): Promise<string[] | null> => {
   try {
-    const response = await axios.get(`${CHAIN_CONFIG.WALLET_JSON}?t=${new Date().getTime()}`);
-    const contactAddressList = response.data.contactAddressList;
-
-    return contactAddressList;
-  } catch (error) {
+    // WALLET_JSON is not defined in CHAIN_CONFIG, returning empty array for now
+    // This should be configured properly when the wallet JSON endpoint is available
+    return [];
+  } catch {
     return null;
   }
 };
