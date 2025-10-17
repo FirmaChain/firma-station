@@ -23,14 +23,8 @@ export const mainMenuList: IMenu[] = [
     name: 'Download',
     path: '/download',
     icon: DownloadIcon,
-    externalLink: '',
-  },
-  {
-    name: 'Offline Mode',
-    path: '/offline-mode',
-    icon: OfflineBoltIcon,
-    externalLink: '',
-  },
+    externalLink: ''
+  }
 ];
 
 export const subMenuList: IMenu[] = [
@@ -38,7 +32,7 @@ export const subMenuList: IMenu[] = [
     name: 'Help',
     path: '/help',
     icon: HelpIcon,
-    externalLink: HELP_URI,
+    externalLink: HELP_URI
   },
 
   { name: 'Community', path: '/community', icon: ForumIcon, externalLink: '' },
@@ -46,14 +40,14 @@ export const subMenuList: IMenu[] = [
     name: 'Explorer',
     path: '/explorer',
     icon: ExplorerIcon,
-    externalLink: CHAIN_CONFIG.EXPLORER_URI,
+    externalLink: CHAIN_CONFIG.EXPLORER_URI
   },
   {
     name: 'Buy FCT',
     path: '/market',
     icon: BuyFirmaIcon,
-    externalLink: 'https://coinmarketcap.com/currencies/firmachain/markets',
-  },
+    externalLink: 'https://coinmarketcap.com/currencies/firmachain/markets'
+  }
 ];
 
 export const bottomMenuList: IMenu[] = [
@@ -61,6 +55,6 @@ export const bottomMenuList: IMenu[] = [
     name: 'Restake',
     path: '/restake',
     icon: null,
-    externalLink: CHAIN_CONFIG.RESTAKE.WEB,
-  },
+    externalLink: CHAIN_CONFIG.RESTAKE.WEB
+  }
 ];
