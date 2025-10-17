@@ -5,6 +5,8 @@ import {
   HANDLE_WALLET_INIT,
   HANDLE_WALLET_LEDGER,
   HANDLE_WALLET_APP,
+  HANDLE_WALLET_NAME,
+  RESET_WALLET,
 } from '../types';
 
 export interface IWalletState {
@@ -13,6 +15,8 @@ export interface IWalletState {
   isInit: boolean;
   isLedger: boolean;
   isMobileApp: boolean;
+  walletName: string;
+  balance: string;
 }
 
 const initialState = {
@@ -21,6 +25,8 @@ const initialState = {
   isInit: false,
   isLedger: false,
   isMobileApp: false,
+  walletName: '',
+  balance: '0',
 };
 
 export default createReducer(initialState, {
@@ -38,5 +44,17 @@ export default createReducer(initialState, {
   },
   [HANDLE_WALLET_APP]: (state: IWalletState, { isMobileApp }) => {
     state.isMobileApp = isMobileApp;
+  },
+  [HANDLE_WALLET_NAME]: (state: IWalletState, { walletName }) => {
+    state.walletName = walletName;
+  },
+  [RESET_WALLET]: (state: IWalletState) => {
+    state.address = '';
+    state.timeKey = '';
+    state.isInit = false;
+    state.isLedger = false;
+    state.isMobileApp = false;
+    state.walletName = '';
+    state.balance = '0';
   },
 });

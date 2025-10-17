@@ -45,6 +45,13 @@ export const getAvatarInfoFromAcc = (
 };
 
 export const initializeAvatar = (lastUpdated: number) => {
+  // Skip avatar initialization if in offline mode
+  const isOfflineMode = window.location.pathname.includes('/offline-mode');
+  if (isOfflineMode) {
+    console.log('Skipping avatar initialization in offline mode');
+    return;
+  }
+
   getValidatorList()
     .then((validatorList) => {
       let avatarList: IAvatar[] = [];

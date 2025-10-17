@@ -22,6 +22,13 @@ function useFirma() {
   const [isVesting, setVesting] = useState(true);
 
   const initializeFirma = () => {
+    // Skip initialization if in offline mode
+    const isOfflineMode = window.location.pathname.includes('/offline-mode');
+    if (isOfflineMode) {
+      console.log('Skipping wallet data initialization in offline mode');
+      return;
+    }
+
     if (isInit) {
       if (isTimeout(timeKey)) {
         timeout();
@@ -104,7 +111,12 @@ function useFirma() {
       privateKey,
       address
     };
-    getVestingAccount();
+
+    // Skip vesting account check if in offline mode
+    const isOfflineMode = window.location.pathname.includes('/offline-mode');
+    if (!isOfflineMode) {
+      getVestingAccount();
+    }
 
     walletActions.handleWalletAddress(address);
     walletActions.handleWalletLedger(false);
@@ -1177,7 +1189,60 @@ function useFirma() {
     getGasEstimationRevokeStakeAuthorizationDelegate,
     isValidWallet,
     isValidAddress,
-    downloadPaperWallet
+    downloadPaperWallet,
+    // New functions for offline mode
+    getMnemonic: async (password: string): Promise<string | null> => {
+      try {
+        if (!isCorrectPassword(password)) return null;
+        const mnemonic = getDecryptMnemonic();
+        return mnemonic || null;
+      } catch (error) {
+        console.error('Error getting mnemonic:', error);
+        return null;
+      }
+    },
+    getPrivateKey: async (password: string): Promise<string | null> => {
+      try {
+        if (!isCorrectPassword(password)) return null;
+        const privateKey = getDecryptPrivateKey();
+        return privateKey || null;
+      } catch (error) {
+        console.error('Error getting private key:', error);
+        return null;
+      }
+    },
+    recoverWalletFromMnemonic: async (mnemonic: string, walletName: string, password: string): Promise<boolean> => {
+      try {
+        await storeWalletFromMnemonic(password, mnemonic);
+        // Set wallet name in state if needed
+        walletActions.handleWalletName(walletName);
+        return true;
+      } catch (error) {
+        console.error('Error recovering wallet from mnemonic:', error);
+        return false;
+      }
+    },
+    recoverWalletFromPrivateKey: async (privateKey: string, walletName: string, password: string): Promise<boolean> => {
+      try {
+        await storeWalletFromPrivateKey(password, privateKey);
+        // Set wallet name in state if needed
+        walletActions.handleWalletName(walletName);
+        return true;
+      } catch (error) {
+        console.error('Error recovering wallet from private key:', error);
+        return false;
+      }
+    },
+    disconnectWallet: async (): Promise<void> => {
+      try {
+        resetWallet();
+        // Clear any additional state if needed
+        localStorage.removeItem('firma-wallet-data');
+        sessionStorage.clear();
+      } catch (error) {
+        console.error('Error disconnecting wallet:', error);
+      }
+    }
   };
 }
 
