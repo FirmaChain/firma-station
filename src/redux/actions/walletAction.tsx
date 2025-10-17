@@ -4,6 +4,8 @@ import {
   HANDLE_WALLET_INIT,
   HANDLE_WALLET_LEDGER,
   HANDLE_WALLET_APP,
+  HANDLE_WALLET_NAME,
+  RESET_WALLET,
 } from '../types';
 
 export const handleWalletAddress = (address: string) => ({ type: HANDLE_WALLET_ADDRESS, address });
@@ -11,3 +13,5 @@ export const handleWalletTimeKey = (timeKey: string) => ({ type: HANDLE_WALLET_T
 export const handleWalletInit = (isInit: boolean) => ({ type: HANDLE_WALLET_INIT, isInit });
 export const handleWalletLedger = (isLedger: boolean) => ({ type: HANDLE_WALLET_LEDGER, isLedger });
 export const handleWalletApp = (isMobileApp: boolean) => ({ type: HANDLE_WALLET_APP, isMobileApp });
+export const handleWalletName = (walletName: string) => ({ type: HANDLE_WALLET_NAME, walletName });
+export const resetWallet = () => ({ type: RESET_WALLET });
