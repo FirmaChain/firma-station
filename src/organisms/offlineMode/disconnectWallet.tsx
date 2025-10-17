@@ -29,6 +29,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #efefef;
 
   &:hover {
     opacity: 0.7;
@@ -38,7 +39,7 @@ const BackButton = styled.button`
 const Title = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
 `;
 
 const ContentContainer = styled.div`
@@ -48,23 +49,23 @@ const ContentContainer = styled.div`
 `;
 
 const WarningBox = styled.div`
-  background: #FEE2E2;
-  border: 1px solid #FCA5A5;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
   border-radius: 4px;
   padding: 16px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #991B1B;
+  color: #991b1b;
 `;
 
 const InfoBox = styled.div`
-  background: #FEF3C7;
-  border: 1px solid #FDE68A;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #92400E;
+  color: #92400e;
 `;
 
 const WalletInfo = styled.div`
@@ -87,12 +88,12 @@ const WalletInfoRow = styled.div`
 `;
 
 const WalletInfoLabel = styled.span`
-  color: #666;
+  color: #aaa;
   font-weight: 500;
 `;
 
 const WalletInfoValue = styled.span`
-  color: #333;
+  color: #a0a0a0;
   font-weight: 500;
   font-family: monospace;
 `;
@@ -108,7 +109,7 @@ const ChecklistContainer = styled.div`
 const ChecklistTitle = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: #333;
+  color: #a0a0a0;
   margin-bottom: 12px;
 `;
 
@@ -119,7 +120,7 @@ const ChecklistItem = styled.label`
   margin-bottom: 8px;
   cursor: pointer;
   font-size: 14px;
-  color: #333;
+  color: #a0a0a0;
 
   &:last-child {
     margin-bottom: 0;
@@ -138,29 +139,32 @@ const ButtonGroup = styled.div`
 const Button = styled.button<{ variant?: 'danger' | 'secondary'; disabled?: boolean }>`
   flex: 1;
   padding: 12px;
-  background: ${props =>
-    props.variant === 'secondary' ? 'white' :
-    props.variant === 'danger' ? (props.disabled ? '#ccc' : '#EF4444') :
-    props.disabled ? '#ccc' : '#3B82F6'
-  };
-  color: ${props => props.variant === 'secondary' ? '#333' : 'white'};
-  border: ${props => props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none'};
+  background: ${(props) =>
+    props.variant === 'secondary'
+      ? 'white'
+      : props.variant === 'danger'
+        ? props.disabled
+          ? '#ccc'
+          : '#EF4444'
+        : props.disabled
+          ? '#ccc'
+          : '#3B82F6'};
+  color: ${(props) => (props.variant === 'secondary' ? '#aaa' : 'white')};
+  border: ${(props) => (props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none')};
   border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: ${props =>
-      props.variant === 'secondary' ? '#f5f5f5' :
-      props.variant === 'danger' ? '#DC2626' : '#2563EB'
-    };
+    background: ${(props) =>
+      props.variant === 'secondary' ? '#f5f5f5' : props.variant === 'danger' ? '#DC2626' : '#2563EB'};
   }
 `;
 
 const ConfirmationModal = styled.div<{ show: boolean }>`
-  display: ${props => props.show ? 'block' : 'none'};
+  display: ${(props) => (props.show ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -185,13 +189,13 @@ const ModalContent = styled.div`
 const ModalTitle = styled.div`
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
   margin-bottom: 16px;
 `;
 
 const ModalText = styled.div`
   font-size: 14px;
-  color: #666;
+  color: #aaa;
   margin-bottom: 20px;
   line-height: 1.5;
 `;
@@ -209,24 +213,24 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
   const [checklist, setChecklist] = useState({
     backup: false,
     privateKey: false,
-    understand: false,
+    understand: false
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleChecklistChange = (key: keyof typeof checklist) => {
-    setChecklist(prev => ({
+    setChecklist((prev) => ({
       ...prev,
       [key]: !prev[key]
     }));
   };
 
-  const allChecked = Object.values(checklist).every(value => value);
+  const allChecked = Object.values(checklist).every((value) => value);
 
   const handleDisconnect = () => {
     if (!allChecked) {
       enqueueSnackbar('Please complete all checklist items', {
         variant: 'warning',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
       return;
     }
@@ -243,7 +247,7 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
 
       enqueueSnackbar('Wallet disconnected successfully', {
         variant: 'success',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
 
       // Return to offline mode menu instead of redirecting to home
@@ -252,7 +256,7 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
       console.error('Error disconnecting wallet:', error);
       enqueueSnackbar('Failed to disconnect wallet', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     }
   };
@@ -265,9 +269,7 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
           <Title>Disconnect Wallet</Title>
         </Header>
         <ContentContainer>
-          <InfoBox>
-            No wallet is currently connected.
-          </InfoBox>
+          <InfoBox>No wallet is currently connected.</InfoBox>
           <Button variant="secondary" onClick={onBack}>
             Back
           </Button>
@@ -286,8 +288,8 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
 
         <ContentContainer>
           <WarningBox>
-            <strong>⚠️ Warning:</strong> Disconnecting your wallet will remove all wallet data from this browser.
-            Make sure you have backed up your mnemonic phrase and/or private key before proceeding.
+            <strong>⚠️ Warning:</strong> Disconnecting your wallet will remove all wallet data from this browser. Make
+            sure you have backed up your mnemonic phrase and/or private key before proceeding.
           </WarningBox>
 
           <WalletInfo>
@@ -309,12 +311,8 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
             <ChecklistTitle>Before disconnecting, please confirm:</ChecklistTitle>
 
             <ChecklistItem>
-              <input
-                type="checkbox"
-                checked={checklist.backup}
-                onChange={() => handleChecklistChange('backup')}
-              />
-              I have backed up my mnemonic phrase
+              <input type="checkbox" checked={checklist.backup} onChange={() => handleChecklistChange('backup')} />I
+              have backed up my mnemonic phrase
             </ChecklistItem>
 
             <ChecklistItem>
@@ -337,19 +335,15 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
           </ChecklistContainer>
 
           <InfoBox>
-            💡 Tip: Use the "Export Mnemonic" or "Export Private Key" features before disconnecting
-            if you haven't already backed up your wallet.
+            💡 Tip: Use the "Export Mnemonic" or "Export Private Key" features before disconnecting if you haven't
+            already backed up your wallet.
           </InfoBox>
 
           <ButtonGroup>
             <Button variant="secondary" onClick={onBack}>
               Cancel
             </Button>
-            <Button
-              variant="danger"
-              onClick={handleDisconnect}
-              disabled={!allChecked}
-            >
+            <Button variant="danger" onClick={handleDisconnect} disabled={!allChecked}>
               Disconnect Wallet
             </Button>
           </ButtonGroup>
@@ -360,21 +354,14 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
         <ModalContent>
           <ModalTitle>Final Confirmation</ModalTitle>
           <ModalText>
-            Are you absolutely sure you want to disconnect this wallet?
-            This action cannot be undone. You will need your mnemonic phrase
-            or private key to access this wallet again.
+            Are you absolutely sure you want to disconnect this wallet? This action cannot be undone. You will need your
+            mnemonic phrase or private key to access this wallet again.
           </ModalText>
           <ButtonGroup>
-            <Button
-              variant="secondary"
-              onClick={() => setShowConfirmation(false)}
-            >
+            <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
               Cancel
             </Button>
-            <Button
-              variant="danger"
-              onClick={confirmDisconnect}
-            >
+            <Button variant="danger" onClick={confirmDisconnect}>
               Yes, Disconnect
             </Button>
           </ButtonGroup>

@@ -15,7 +15,7 @@ import {
   VotingPowerDetailWrapper,
   VotingPowerDetail,
   VotingPowerDetailTitle,
-  VotingPowerDetailContent,
+  VotingPowerDetailContent
 } from './styles';
 
 interface IProps {

@@ -28,6 +28,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #efefef;
 
   &:hover {
     opacity: 0.7;
@@ -37,7 +38,7 @@ const BackButton = styled.button`
 const Title = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
 `;
 
 const ContentContainer = styled.div`
@@ -47,26 +48,26 @@ const ContentContainer = styled.div`
 `;
 
 const WarningBox = styled.div`
-  background: #FEE2E2;
-  border: 1px solid #FCA5A5;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #991B1B;
+  color: #991b1b;
   display: flex;
   align-items: flex-start;
   gap: 8px;
 `;
 
 const InfoBox = styled.div`
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #1E40AF;
+  color: #1e40af;
 `;
 
 const InputGroup = styled.div`
@@ -78,7 +79,7 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: #000;
 `;
 
 const PasswordInput = styled.input.attrs({ type: 'password' })`
@@ -89,9 +90,13 @@ const PasswordInput = styled.input.attrs({ type: 'password' })`
   font-size: 14px;
   box-sizing: border-box;
 
+  ::placeholder {
+    color: #aaa;
+  }
+
   &:focus {
     outline: none;
-    border-color: #3B82F6;
+    border-color: #3b82f6;
   }
 `;
 
@@ -123,12 +128,12 @@ const MnemonicWord = styled.div`
 `;
 
 const WordNumber = styled.span`
-  color: #666;
+  color: #aaa;
   font-size: 12px;
 `;
 
 const WordText = styled.span`
-  color: #333;
+  color: #a0a0a0;
   font-weight: 500;
 `;
 
@@ -136,8 +141,8 @@ const CopyButton = styled.button`
   width: 100%;
   padding: 10px;
   background: white;
-  color: #3B82F6;
-  border: 1px solid #3B82F6;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
   border-radius: 4px;
   font-size: 14px;
   font-weight: 500;
@@ -145,7 +150,7 @@ const CopyButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #3B82F6;
+    background: #3b82f6;
     color: white;
   }
 `;
@@ -158,25 +163,22 @@ const ButtonGroup = styled.div`
 const Button = styled.button<{ variant?: 'primary' | 'secondary'; disabled?: boolean }>`
   flex: 1;
   padding: 12px;
-  background: ${props =>
-    props.variant === 'secondary' ? 'white' :
-    props.disabled ? '#ccc' : '#3B82F6'
-  };
-  color: ${props => props.variant === 'secondary' ? '#333' : 'white'};
-  border: ${props => props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none'};
+  background: ${(props) => (props.variant === 'secondary' ? 'white' : props.disabled ? '#ccc' : '#3B82F6')};
+  color: ${(props) => (props.variant === 'secondary' ? '#aaa' : 'white')};
+  border: ${(props) => (props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none')};
   border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: ${props => props.variant === 'secondary' ? '#f5f5f5' : '#2563EB'};
+    background: ${(props) => (props.variant === 'secondary' ? '#f5f5f5' : '#2563EB')};
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #EF4444;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
 `;
@@ -215,7 +217,7 @@ const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
     if (!isValidWallet()) {
       enqueueSnackbar('No wallet connected. Please connect a wallet first.', {
         variant: 'warning',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
       return;
     }
@@ -226,7 +228,7 @@ const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
         setError('Invalid password');
         enqueueSnackbar('Invalid password', {
           variant: 'error',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
         setIsLoading(false);
         return;
@@ -240,19 +242,19 @@ const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
         setShowMnemonic(true);
         enqueueSnackbar('Mnemonic revealed successfully', {
           variant: 'success',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
       } else {
         enqueueSnackbar('Failed to retrieve mnemonic', {
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
       }
     } catch (error) {
       console.error('Error retrieving mnemonic:', error);
       enqueueSnackbar('An error occurred while retrieving mnemonic', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     } finally {
       setIsLoading(false);
@@ -264,7 +266,7 @@ const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
       navigator.clipboard.writeText(mnemonic.join(' '));
       enqueueSnackbar('Mnemonic copied to clipboard', {
         variant: 'success',
-        autoHideDuration: 2000,
+        autoHideDuration: 2000
       });
     }
   };
@@ -286,22 +288,19 @@ const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
 
       <ContentContainer>
         <WarningBox>
-          ⚠️ <strong>Warning:</strong> Never share your mnemonic phrase with anyone.
-          Anyone with access to your mnemonic can control your wallet and funds.
+          ⚠️ <strong>Warning:</strong> Never share your mnemonic phrase with anyone. Anyone with access to your mnemonic
+          can control your wallet and funds.
         </WarningBox>
 
         {!showMnemonic ? (
           <>
             <InfoBox>
-              Your mnemonic phrase is the master key to your wallet.
-              Write it down and store it in a secure location.
+              Your mnemonic phrase is the master key to your wallet. Write it down and store it in a secure location.
               You will need it to recover your wallet if you lose access.
             </InfoBox>
 
             {!isValidWallet() && (
-              <WarningBox>
-                No wallet connected. Please connect a wallet to export its mnemonic phrase.
-              </WarningBox>
+              <WarningBox>No wallet connected. Please connect a wallet to export its mnemonic phrase.</WarningBox>
             )}
 
             <InputGroup>
@@ -320,10 +319,7 @@ const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
               <Button variant="secondary" onClick={onBack}>
                 Cancel
               </Button>
-              <Button
-                onClick={handleRevealMnemonic}
-                disabled={isLoading || !isValidWallet() || password.length < 8}
-              >
+              <Button onClick={handleRevealMnemonic} disabled={isLoading || !isValidWallet() || password.length < 8}>
                 {isLoading ? 'Revealing...' : 'Reveal Mnemonic'}
               </Button>
             </ButtonGroup>
@@ -339,19 +335,14 @@ const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
                   </MnemonicWord>
                 ))}
               </MnemonicGrid>
-              <CopyButton onClick={handleCopyMnemonic}>
-                Copy to Clipboard
-              </CopyButton>
+              <CopyButton onClick={handleCopyMnemonic}>Copy to Clipboard</CopyButton>
             </MnemonicDisplay>
 
             <WarningBox>
-              Make sure to write down these words in the exact order.
-              Store them securely and never share them online.
+              Make sure to write down these words in the exact order. Store them securely and never share them online.
             </WarningBox>
 
-            <Button onClick={handleClose}>
-              Done
-            </Button>
+            <Button onClick={handleClose}>Done</Button>
           </>
         )}
       </ContentContainer>

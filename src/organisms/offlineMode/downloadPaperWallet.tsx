@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 
 import useFirma from '../../utils/wallet';
 import { rootState } from '../../redux/reducers';
+import { SamplePaperWallet } from '../modal/styles';
 
 const Container = styled.div`
   width: 100%;
@@ -28,6 +29,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #efefef;
 
   &:hover {
     opacity: 0.7;
@@ -37,7 +39,7 @@ const BackButton = styled.button`
 const Title = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
 `;
 
 const ContentContainer = styled.div`
@@ -55,22 +57,13 @@ const PreviewContainer = styled.div`
   text-align: center;
 `;
 
-const PreviewImage = styled.div`
+const PreviewImage = styled(SamplePaperWallet)`
   width: 100%;
-  height: 300px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 18px;
-  margin-bottom: 16px;
 `;
 
 const PreviewDescription = styled.div`
   font-size: 14px;
-  color: #666;
+  color: #aaa;
   line-height: 1.5;
 `;
 
@@ -83,7 +76,7 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: #000;
 `;
 
 const PasswordInput = styled.input.attrs({ type: 'password' })`
@@ -94,20 +87,24 @@ const PasswordInput = styled.input.attrs({ type: 'password' })`
   font-size: 14px;
   box-sizing: border-box;
 
+  ::placeholder {
+    color: #aaa;
+  }
+
   &:focus {
     outline: none;
-    border-color: #3B82F6;
+    border-color: #3b82f6;
   }
 `;
 
 const InfoBox = styled.div`
-  background: #FEF3C7;
-  border: 1px solid #FDE68A;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #92400E;
+  color: #92400e;
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -121,25 +118,22 @@ const ButtonGroup = styled.div`
 const Button = styled.button<{ variant?: 'primary' | 'secondary'; disabled?: boolean }>`
   flex: 1;
   padding: 12px;
-  background: ${props =>
-    props.variant === 'secondary' ? 'white' :
-    props.disabled ? '#ccc' : '#3B82F6'
-  };
-  color: ${props => props.variant === 'secondary' ? '#333' : 'white'};
-  border: ${props => props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none'};
+  background: ${(props) => (props.variant === 'secondary' ? 'white' : props.disabled ? '#ccc' : '#3B82F6')};
+  color: ${(props) => (props.variant === 'secondary' ? '#aaa' : 'white')};
+  border: ${(props) => (props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none')};
   border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: ${props => props.variant === 'secondary' ? '#f5f5f5' : '#2563EB'};
+    background: ${(props) => (props.variant === 'secondary' ? '#f5f5f5' : '#2563EB')};
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #EF4444;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
 `;
@@ -164,11 +158,11 @@ const WalletInfoRow = styled.div`
 `;
 
 const WalletInfoLabel = styled.span`
-  color: #666;
+  color: #aaa;
 `;
 
 const WalletInfoValue = styled.span`
-  color: #333;
+  color: #000;
   font-weight: 500;
   font-family: monospace;
 `;
@@ -205,7 +199,7 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
     if (!isValidWallet()) {
       enqueueSnackbar('No wallet connected. Please connect a wallet first.', {
         variant: 'warning',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
       return;
     }
@@ -216,7 +210,7 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
         setError('Invalid password');
         enqueueSnackbar('Invalid password', {
           variant: 'error',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
         setIsLoading(false);
         return;
@@ -235,7 +229,7 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
 
         enqueueSnackbar('Paper wallet downloaded successfully!', {
           variant: 'success',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
 
         // Clear password for security
@@ -243,14 +237,14 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
       } else {
         enqueueSnackbar('Failed to generate paper wallet', {
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
       }
     } catch (error) {
       console.error('Error downloading paper wallet:', error);
       enqueueSnackbar('An error occurred while generating paper wallet', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     } finally {
       setIsLoading(false);
@@ -266,12 +260,10 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
 
       <ContentContainer>
         <PreviewContainer>
-          <PreviewImage>
-            Paper Wallet Preview
-          </PreviewImage>
+          <PreviewImage />
           <PreviewDescription>
-            A paper wallet is a physical document containing your wallet's private key and mnemonic phrase.
-            It provides an offline backup solution for your cryptocurrency wallet.
+            A paper wallet is a physical document containing your wallet's private key and mnemonic phrase. It provides
+            an offline backup solution for your cryptocurrency wallet.
           </PreviewDescription>
         </PreviewContainer>
 
@@ -283,18 +275,18 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
             </WalletInfoRow>
             <WalletInfoRow>
               <WalletInfoLabel>Address:</WalletInfoLabel>
-              <WalletInfoValue>{address.slice(0, 10)}...{address.slice(-8)}</WalletInfoValue>
+              <WalletInfoValue>
+                {address.slice(0, 10)}...{address.slice(-8)}
+              </WalletInfoValue>
             </WalletInfoRow>
           </WalletInfo>
         ) : (
-          <InfoBox>
-            ⚠️ No wallet connected. Please connect a wallet to download a paper wallet.
-          </InfoBox>
+          <InfoBox>⚠️ No wallet connected. Please connect a wallet to download a paper wallet.</InfoBox>
         )}
 
         <InfoBox>
-          🔒 The paper wallet will contain sensitive information including your private key and mnemonic phrase.
-          Store it in a secure location and never share it with anyone.
+          🔒 The paper wallet will contain sensitive information including your private key and mnemonic phrase. Store
+          it in a secure location and never share it with anyone.
         </InfoBox>
 
         <InputGroup>
@@ -312,10 +304,7 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
           <Button variant="secondary" onClick={onBack}>
             Cancel
           </Button>
-          <Button
-            onClick={handleDownload}
-            disabled={isLoading || !isValidWallet() || password.length < 8}
-          >
+          <Button onClick={handleDownload} disabled={isLoading || !isValidWallet() || password.length < 8}>
             {isLoading ? 'Generating...' : 'Download Paper Wallet'}
           </Button>
         </ButtonGroup>

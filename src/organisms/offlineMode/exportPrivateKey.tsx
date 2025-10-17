@@ -28,6 +28,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #efefef;
 
   &:hover {
     opacity: 0.7;
@@ -37,7 +38,7 @@ const BackButton = styled.button`
 const Title = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
 `;
 
 const ContentContainer = styled.div`
@@ -47,26 +48,26 @@ const ContentContainer = styled.div`
 `;
 
 const WarningBox = styled.div`
-  background: #FEE2E2;
-  border: 1px solid #FCA5A5;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #991B1B;
+  color: #991b1b;
   display: flex;
   align-items: flex-start;
   gap: 8px;
 `;
 
 const InfoBox = styled.div`
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #1E40AF;
+  color: #1e40af;
 `;
 
 const InputGroup = styled.div`
@@ -78,7 +79,7 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: #000;
 `;
 
 const PasswordInput = styled.input.attrs({ type: 'password' })`
@@ -89,9 +90,13 @@ const PasswordInput = styled.input.attrs({ type: 'password' })`
   font-size: 14px;
   box-sizing: border-box;
 
+  ::placeholder {
+    color: #aaa;
+  }
+
   &:focus {
     outline: none;
-    border-color: #3B82F6;
+    border-color: #3b82f6;
   }
 `;
 
@@ -112,7 +117,7 @@ const PrivateKeyText = styled.div`
   font-size: 14px;
   word-break: break-all;
   line-height: 1.5;
-  color: #333;
+  color: #a0a0a0;
   margin-bottom: 16px;
 `;
 
@@ -120,8 +125,8 @@ const CopyButton = styled.button`
   width: 100%;
   padding: 10px;
   background: white;
-  color: #3B82F6;
-  border: 1px solid #3B82F6;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
   border-radius: 4px;
   font-size: 14px;
   font-weight: 500;
@@ -129,7 +134,7 @@ const CopyButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: #3B82F6;
+    background: #3b82f6;
     color: white;
   }
 `;
@@ -142,25 +147,22 @@ const ButtonGroup = styled.div`
 const Button = styled.button<{ variant?: 'primary' | 'secondary'; disabled?: boolean }>`
   flex: 1;
   padding: 12px;
-  background: ${props =>
-    props.variant === 'secondary' ? 'white' :
-    props.disabled ? '#ccc' : '#3B82F6'
-  };
-  color: ${props => props.variant === 'secondary' ? '#333' : 'white'};
-  border: ${props => props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none'};
+  background: ${(props) => (props.variant === 'secondary' ? 'white' : props.disabled ? '#ccc' : '#3B82F6')};
+  color: ${(props) => (props.variant === 'secondary' ? '#aaa' : 'white')};
+  border: ${(props) => (props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none')};
   border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: ${props => props.variant === 'secondary' ? '#f5f5f5' : '#2563EB'};
+    background: ${(props) => (props.variant === 'secondary' ? '#f5f5f5' : '#2563EB')};
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #EF4444;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
 `;
@@ -185,11 +187,11 @@ const WalletInfoRow = styled.div`
 `;
 
 const WalletInfoLabel = styled.span`
-  color: #666;
+  color: #aaa;
 `;
 
 const WalletInfoValue = styled.span`
-  color: #333;
+  color: #aaa;
   font-weight: 500;
   font-family: monospace;
 `;
@@ -228,7 +230,7 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
     if (!isValidWallet()) {
       enqueueSnackbar('No wallet connected. Please connect a wallet first.', {
         variant: 'warning',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
       return;
     }
@@ -239,7 +241,7 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
         setError('Invalid password');
         enqueueSnackbar('Invalid password', {
           variant: 'error',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
         setIsLoading(false);
         return;
@@ -252,19 +254,19 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
         setShowPrivateKey(true);
         enqueueSnackbar('Private key revealed successfully', {
           variant: 'success',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
       } else {
         enqueueSnackbar('Failed to retrieve private key', {
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
       }
     } catch (error) {
       console.error('Error retrieving private key:', error);
       enqueueSnackbar('An error occurred while retrieving private key', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     } finally {
       setIsLoading(false);
@@ -276,7 +278,7 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
       navigator.clipboard.writeText(privateKey);
       enqueueSnackbar('Private key copied to clipboard', {
         variant: 'success',
-        autoHideDuration: 2000,
+        autoHideDuration: 2000
       });
     }
   };
@@ -298,15 +300,17 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
 
       <ContentContainer>
         <WarningBox>
-          🔴 <strong>Extreme Caution:</strong> Your private key gives complete control over your wallet.
-          Never share it with anyone or enter it on untrusted websites.
+          <p>
+            🔴 <strong>Extreme Caution:</strong> Your private key gives complete control over your wallet. Never share
+            it with anyone or enter it on untrusted websites.
+          </p>
         </WarningBox>
 
         {!showPrivateKey ? (
           <>
             <InfoBox>
-              Your private key is a 64-character hexadecimal string that controls your wallet.
-              Only export it if you absolutely need it for advanced operations.
+              Your private key is a 64-character hexadecimal string that controls your wallet. Only export it if you
+              absolutely need it for advanced operations.
             </InfoBox>
 
             {isValidWallet() && address ? (
@@ -317,13 +321,13 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
                 </WalletInfoRow>
                 <WalletInfoRow>
                   <WalletInfoLabel>Address:</WalletInfoLabel>
-                  <WalletInfoValue>{address.slice(0, 10)}...{address.slice(-8)}</WalletInfoValue>
+                  <WalletInfoValue>
+                    {address.slice(0, 10)}...{address.slice(-8)}
+                  </WalletInfoValue>
                 </WalletInfoRow>
               </WalletInfo>
             ) : (
-              <WarningBox>
-                No wallet connected. Please connect a wallet to export its private key.
-              </WarningBox>
+              <WarningBox>No wallet connected. Please connect a wallet to export its private key.</WarningBox>
             )}
 
             <InputGroup>
@@ -342,10 +346,7 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
               <Button variant="secondary" onClick={onBack}>
                 Cancel
               </Button>
-              <Button
-                onClick={handleRevealPrivateKey}
-                disabled={isLoading || !isValidWallet() || password.length < 8}
-              >
+              <Button onClick={handleRevealPrivateKey} disabled={isLoading || !isValidWallet() || password.length < 8}>
                 {isLoading ? 'Revealing...' : 'Reveal Private Key'}
               </Button>
             </ButtonGroup>
@@ -355,20 +356,15 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
             <PrivateKeyDisplay>
               <Label>Your Private Key:</Label>
               <PrivateKeyText>{privateKey}</PrivateKeyText>
-              <CopyButton onClick={handleCopyPrivateKey}>
-                Copy to Clipboard
-              </CopyButton>
+              <CopyButton onClick={handleCopyPrivateKey}>Copy to Clipboard</CopyButton>
             </PrivateKeyDisplay>
 
             <WarningBox>
-              ⚠️ This private key controls your wallet completely.
-              Store it securely and never share it with anyone.
+              ⚠️ This private key controls your wallet completely. Store it securely and never share it with anyone.
               Consider deleting it from your clipboard after use.
             </WarningBox>
 
-            <Button onClick={handleClose}>
-              Done
-            </Button>
+            <Button onClick={handleClose}>Done</Button>
           </>
         )}
       </ContentContainer>

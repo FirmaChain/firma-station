@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+const Wrapper = styled.div`
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+`;
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
   padding: 40px;
+  margin: 0 40px;
   display: flex;
   flex-direction: column;
   gap: 30px;
   box-sizing: border-box;
+  background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+  border-radius: 4px;
 
   * {
     box-sizing: border-box;
@@ -18,13 +28,13 @@ const Container = styled.div`
 const Title = styled.div`
   font-size: 24px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
   margin-bottom: 10px;
 `;
 
 const Description = styled.div`
   font-size: 14px;
-  color: #666;
+  color: #aaa;
   margin-bottom: 30px;
   line-height: 1.5;
 `;
@@ -53,13 +63,13 @@ const FeatureCard = styled.div`
 const FeatureTitle = styled.div`
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #000000;
   margin-bottom: 8px;
 `;
 
 const FeatureDescription = styled.div`
   font-size: 14px;
-  color: #666;
+  color: #aaa;
   line-height: 1.5;
 `;
 
@@ -76,7 +86,7 @@ const WarningBanner = styled.div`
 `;
 
 const BackButton = styled.button`
-  background: #3B82F6;
+  background: #3b82f6;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -86,7 +96,7 @@ const BackButton = styled.button`
   margin-bottom: 20px;
 
   &:hover {
-    background: #2563EB;
+    background: #2563eb;
   }
 `;
 
@@ -118,12 +128,12 @@ const OfflineMode = () => {
     {
       id: 'mnemonic',
       title: 'Export Mnemonic',
-      description: 'Export your wallet\'s mnemonic phrase for backup purposes'
+      description: "Export your wallet's mnemonic phrase for backup purposes"
     },
     {
       id: 'privatekey',
       title: 'Export Private Key',
-      description: 'Export your wallet\'s private key for advanced usage'
+      description: "Export your wallet's private key for advanced usage"
     },
     {
       id: 'disconnect',
@@ -199,40 +209,39 @@ const OfflineMode = () => {
   };
 
   return (
-    <Container>
-      {!activeFeature ? (
-        <>
-          <div>
-            <Title>Offline Wallet Management</Title>
-            <Description>
-              Manage your wallet securely in offline mode. You can recover wallets, export keys,
-              and perform other wallet operations without connecting to the blockchain.
-            </Description>
-          </div>
+    <Wrapper>
+      <Container>
+        {!activeFeature ? (
+          <>
+            <div>
+              <Title>Offline Wallet Management</Title>
+              <Description>
+                Manage your wallet securely in offline mode. You can recover wallets, export keys, and perform other
+                wallet operations without connecting to the blockchain.
+              </Description>
+            </div>
 
-          <WarningBanner>
-            ⚠️ Warning: These operations involve sensitive wallet data. Make sure you are in a secure environment.
-          </WarningBanner>
+            <WarningBanner>
+              ⚠️ Warning: These operations involve sensitive wallet data. Make sure you are in a secure environment.
+            </WarningBanner>
 
-          <FeatureGrid>
-            {features.map((feature) => (
-              <FeatureCard
-                key={feature.id}
-                onClick={() => handleFeatureClick(feature.id)}
-              >
-                <FeatureTitle>{feature.title}</FeatureTitle>
-                <FeatureDescription>{feature.description}</FeatureDescription>
-              </FeatureCard>
-            ))}
-          </FeatureGrid>
-        </>
-      ) : (
-        <ComponentContainer>
-          <BackButton onClick={handleBack}>← Back to Offline Mode</BackButton>
-          {renderActiveComponent()}
-        </ComponentContainer>
-      )}
-    </Container>
+            <FeatureGrid>
+              {features.map((feature) => (
+                <FeatureCard key={feature.id} onClick={() => handleFeatureClick(feature.id)}>
+                  <FeatureTitle>{feature.title}</FeatureTitle>
+                  <FeatureDescription>{feature.description}</FeatureDescription>
+                </FeatureCard>
+              ))}
+            </FeatureGrid>
+          </>
+        ) : (
+          <ComponentContainer>
+            {/* <BackButton onClick={handleBack}>← Back to Offline Mode</BackButton> */}
+            {renderActiveComponent()}
+          </ComponentContainer>
+        )}
+      </Container>
+    </Wrapper>
   );
 };
 

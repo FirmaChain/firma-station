@@ -28,6 +28,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #efefef;
 
   &:hover {
     opacity: 0.7;
@@ -37,7 +38,7 @@ const BackButton = styled.button`
 const Title = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
 `;
 
 const FormContainer = styled.div`
@@ -55,7 +56,7 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: #000;
 `;
 
 const Input = styled.input`
@@ -66,9 +67,13 @@ const Input = styled.input`
   font-size: 14px;
   box-sizing: border-box;
 
+  ::placeholder {
+    color: #aaa;
+  }
+
   &:focus {
     outline: none;
-    border-color: #3B82F6;
+    border-color: #3b82f6;
   }
 `;
 
@@ -77,48 +82,43 @@ const PasswordInput = styled(Input).attrs({ type: 'password' })``;
 const Button = styled.button<{ disabled?: boolean; variant?: 'primary' | 'secondary' }>`
   width: 100%;
   padding: 12px;
-  background: ${props =>
-    props.variant === 'secondary' ? 'white' :
-    props.disabled ? '#ccc' : '#3B82F6'
-  };
-  color: ${props => props.variant === 'secondary' ? '#333' : 'white'};
-  border: ${props => props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none'};
+  background: ${(props) => (props.variant === 'secondary' ? 'white' : props.disabled ? '#ccc' : '#3B82F6')};
+  color: ${(props) => (props.variant === 'secondary' ? '#efefef' : 'white')};
+  border: ${(props) => (props.variant === 'secondary' ? '1px solid #e0e0e0' : 'none')};
   border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease;
-  margin-bottom: ${props => props.variant === 'secondary' ? '20px' : '0'};
+  margin-bottom: ${(props) => (props.variant === 'secondary' ? '20px' : '0')};
 
   &:hover:not(:disabled) {
-    background: ${props =>
-      props.variant === 'secondary' ? '#f5f5f5' : '#2563EB'
-    };
+    background: ${(props) => (props.variant === 'secondary' ? '#f5f5f5' : '#2563EB')};
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #EF4444;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
 `;
 
 const SuccessBox = styled.div`
-  background: #F0FDF4;
-  border: 1px solid #86EFAC;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
   border-radius: 4px;
   padding: 16px;
   margin-bottom: 20px;
 `;
 
 const WarningBox = styled.div`
-  background: #FEE2E2;
-  border: 1px solid #FCA5A5;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
   border-radius: 4px;
   padding: 16px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #991B1B;
+  color: #991b1b;
 `;
 
 const MnemonicDisplay = styled.div`
@@ -148,7 +148,7 @@ const MnemonicWord = styled.div`
 `;
 
 const WordNumber = styled.span`
-  color: #666;
+  color: #aaa;
   font-size: 12px;
 `;
 
@@ -156,26 +156,26 @@ const CopyButton = styled.button`
   width: 100%;
   padding: 10px;
   background: white;
-  color: #3B82F6;
-  border: 1px solid #3B82F6;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s ease;
 
   &:hover {
-    background: #EFF6FF;
+    background: #eff6ff;
   }
 `;
 
 const InfoBox = styled.div`
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #1E40AF;
+  color: #1e40af;
 `;
 
 const CheckBox = styled.div`
@@ -191,7 +191,7 @@ const CheckBox = styled.div`
 
   label {
     cursor: pointer;
-    color: #333;
+    color: #000;
   }
 `;
 
@@ -254,7 +254,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
       console.error('Error generating wallet:', error);
       enqueueSnackbar('Failed to generate wallet', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     } finally {
       setIsLoading(false);
@@ -265,7 +265,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
     navigator.clipboard.writeText(mnemonic);
     enqueueSnackbar('Mnemonic copied to clipboard', {
       variant: 'success',
-      autoHideDuration: 2000,
+      autoHideDuration: 2000
     });
   };
 
@@ -273,7 +273,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
     if (!confirmedSave) {
       enqueueSnackbar('Please confirm that you have saved your mnemonic', {
         variant: 'warning',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
       return;
     }
@@ -281,25 +281,21 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
     setIsLoading(true);
     try {
       // Store the wallet using the existing recoverWalletFromMnemonic function
-      const success = await recoverWalletFromMnemonic(
-        mnemonic,
-        walletName.trim(),
-        password
-      );
+      const success = await recoverWalletFromMnemonic(mnemonic, walletName.trim(), password);
 
       if (success) {
         setStep('confirm');
       } else {
         enqueueSnackbar('Failed to create wallet', {
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
       }
     } catch (error) {
       console.error('Error creating wallet:', error);
       enqueueSnackbar('An error occurred while creating wallet', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     } finally {
       setIsLoading(false);
@@ -326,9 +322,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
 
         <FormContainer>
           <SuccessBox>
-            <h3 style={{ margin: '0 0 12px 0', color: '#166534' }}>
-              ✓ Your wallet has been created!
-            </h3>
+            <h3 style={{ margin: '0 0 12px 0', color: '#166534' }}>✓ Your wallet has been created!</h3>
             <p style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#166534' }}>
               Wallet Name: <strong>{walletName}</strong>
             </p>
@@ -338,13 +332,11 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
           </SuccessBox>
 
           <InfoBox>
-            Your wallet has been successfully created and stored in offline mode.
-            You can now use it to sign transactions or export your keys.
+            Your wallet has been successfully created and stored in offline mode. You can now use it to sign
+            transactions or export your keys.
           </InfoBox>
 
-          <Button onClick={onBack}>
-            Return to Offline Mode Menu
-          </Button>
+          <Button onClick={onBack}>Return to Offline Mode Menu</Button>
         </FormContainer>
       </Container>
     );
@@ -360,21 +352,18 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
 
         <FormContainer>
           <WarningBox>
-            <strong>⚠️ Important:</strong> Write down these words in order and store them safely.
-            This is the ONLY way to recover your wallet. Never share this phrase with anyone!
+            <strong>⚠️ Important:</strong> Write down these words in order and store them safely. This is the ONLY way
+            to recover your wallet. Never share this phrase with anyone!
           </WarningBox>
 
           <MnemonicDisplay>
-            <MnemonicGrid>
-              {renderMnemonicWords()}
-            </MnemonicGrid>
-            <CopyButton onClick={handleCopyMnemonic}>
-              📋 Copy to Clipboard
-            </CopyButton>
+            <MnemonicGrid>{renderMnemonicWords()}</MnemonicGrid>
+            <CopyButton onClick={handleCopyMnemonic}>📋 Copy to Clipboard</CopyButton>
           </MnemonicDisplay>
 
           <InfoBox>
-            <strong>Your wallet address:</strong><br />
+            <strong>Your wallet address:</strong>
+            <br />
             <span style={{ fontFamily: 'monospace', fontSize: '12px' }}>{walletAddress}</span>
           </InfoBox>
 
@@ -385,15 +374,10 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
               checked={confirmedSave}
               onChange={(e) => setConfirmedSave(e.target.checked)}
             />
-            <label htmlFor="confirmSave">
-              I have safely written down and stored my recovery phrase
-            </label>
+            <label htmlFor="confirmSave">I have safely written down and stored my recovery phrase</label>
           </CheckBox>
 
-          <Button
-            onClick={handleConfirmAndSave}
-            disabled={!confirmedSave || isLoading}
-          >
+          <Button onClick={handleConfirmAndSave} disabled={!confirmedSave || isLoading}>
             {isLoading ? 'Creating Wallet...' : 'Confirm & Create Wallet'}
           </Button>
         </FormContainer>
@@ -410,8 +394,8 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
 
       <FormContainer>
         <InfoBox>
-          Create a new wallet with a randomly generated mnemonic phrase.
-          Make sure to save your mnemonic phrase in a secure location.
+          Create a new wallet with a randomly generated mnemonic phrase. Make sure to save your mnemonic phrase in a
+          secure location.
         </InfoBox>
 
         <InputGroup>
@@ -444,10 +428,7 @@ const CreateWallet: React.FC<CreateWalletProps> = ({ onBack }) => {
           {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
         </InputGroup>
 
-        <Button
-          onClick={handleGenerateWallet}
-          disabled={isLoading}
-        >
+        <Button onClick={handleGenerateWallet} disabled={isLoading}>
           {isLoading ? 'Generating...' : 'Generate New Wallet'}
         </Button>
       </FormContainer>

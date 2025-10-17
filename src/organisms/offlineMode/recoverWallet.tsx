@@ -27,6 +27,7 @@ const BackButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #efefef;
 
   &:hover {
     opacity: 0.7;
@@ -36,7 +37,7 @@ const BackButton = styled.button`
 const Title = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: #efefef;
 `;
 
 const TabContainer = styled.div`
@@ -49,13 +50,13 @@ const TabContainer = styled.div`
 const Tab = styled.div<{ active: boolean }>`
   padding: 12px 20px;
   cursor: pointer;
-  color: ${props => props.active ? '#3B82F6' : '#666'};
-  border-bottom: 2px solid ${props => props.active ? '#3B82F6' : 'transparent'};
-  font-weight: ${props => props.active ? '600' : '400'};
+  color: ${(props) => (props.active ? '#3B82F6' : '#aaa')};
+  border-bottom: 2px solid ${(props) => (props.active ? '#3B82F6' : 'transparent')};
+  font-weight: ${(props) => (props.active ? '600' : '400')};
   transition: all 0.2s ease;
 
   &:hover {
-    color: #3B82F6;
+    color: #3b82f6;
   }
 `;
 
@@ -74,7 +75,7 @@ const Label = styled.label`
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: #000;
 `;
 
 const TextArea = styled.textarea`
@@ -87,10 +88,15 @@ const TextArea = styled.textarea`
   resize: vertical;
   font-family: 'Courier New', monospace;
   box-sizing: border-box;
+  resize: none;
+
+  ::placeholder {
+    color: #aaa;
+  }
 
   &:focus {
     outline: none;
-    border-color: #3B82F6;
+    border-color: #3b82f6;
   }
 `;
 
@@ -102,9 +108,13 @@ const Input = styled.input`
   font-size: 14px;
   box-sizing: border-box;
 
+  ::placeholder {
+    color: #aaa;
+  }
+
   &:focus {
     outline: none;
-    border-color: #3B82F6;
+    border-color: #3b82f6;
   }
 `;
 
@@ -113,34 +123,34 @@ const PasswordInput = styled(Input).attrs({ type: 'password' })``;
 const Button = styled.button<{ disabled?: boolean }>`
   width: 100%;
   padding: 12px;
-  background: ${props => props.disabled ? '#ccc' : '#3B82F6'};
+  background: ${(props) => (props.disabled ? '#ccc' : '#3B82F6')};
   color: white;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: #2563EB;
+    background: #2563eb;
   }
 `;
 
 const ErrorMessage = styled.div`
-  color: #EF4444;
+  color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
 `;
 
 const InfoBox = styled.div`
-  background: #EFF6FF;
-  border: 1px solid #BFDBFE;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
   border-radius: 4px;
   padding: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #1E40AF;
+  color: #1e40af;
 `;
 
 interface RecoverWalletProps {
@@ -222,28 +232,24 @@ const RecoverWallet: React.FC<RecoverWalletProps> = ({ onBack }) => {
       // Normalize the mnemonic - trim and ensure single spaces between words
       const normalizedMnemonic = mnemonic.trim().toLowerCase().replace(/\s+/g, ' ');
 
-      const success = await recoverWalletFromMnemonic(
-        normalizedMnemonic,
-        walletName.trim(),
-        password
-      );
+      const success = await recoverWalletFromMnemonic(normalizedMnemonic, walletName.trim(), password);
 
       if (success) {
         enqueueSnackbar('Wallet recovered successfully!', {
           variant: 'success',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
         onBack(); // Return to offline mode menu instead of navigating to root
       } else {
         enqueueSnackbar('Failed to recover wallet', {
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
       }
     } catch (error) {
       enqueueSnackbar('An error occurred while recovering wallet', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     } finally {
       setIsLoading(false);
@@ -255,28 +261,24 @@ const RecoverWallet: React.FC<RecoverWalletProps> = ({ onBack }) => {
 
     setIsLoading(true);
     try {
-      const success = await recoverWalletFromPrivateKey(
-        privateKey.trim(),
-        walletName.trim(),
-        password
-      );
+      const success = await recoverWalletFromPrivateKey(privateKey.trim(), walletName.trim(), password);
 
       if (success) {
         enqueueSnackbar('Wallet recovered successfully!', {
           variant: 'success',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
         onBack(); // Return to offline mode menu instead of navigating to root
       } else {
         enqueueSnackbar('Failed to recover wallet', {
           variant: 'error',
-          autoHideDuration: 3000,
+          autoHideDuration: 3000
         });
       }
     } catch (error) {
       enqueueSnackbar('An error occurred while recovering wallet', {
         variant: 'error',
-        autoHideDuration: 3000,
+        autoHideDuration: 3000
       });
     } finally {
       setIsLoading(false);
@@ -291,16 +293,10 @@ const RecoverWallet: React.FC<RecoverWalletProps> = ({ onBack }) => {
       </Header>
 
       <TabContainer>
-        <Tab
-          active={activeTab === 'mnemonic'}
-          onClick={() => setActiveTab('mnemonic')}
-        >
+        <Tab active={activeTab === 'mnemonic'} onClick={() => setActiveTab('mnemonic')}>
           Mnemonic Phrase
         </Tab>
-        <Tab
-          active={activeTab === 'privatekey'}
-          onClick={() => setActiveTab('privatekey')}
-        >
+        <Tab active={activeTab === 'privatekey'} onClick={() => setActiveTab('privatekey')}>
           Private Key
         </Tab>
       </TabContainer>
@@ -308,8 +304,8 @@ const RecoverWallet: React.FC<RecoverWalletProps> = ({ onBack }) => {
       {activeTab === 'mnemonic' ? (
         <FormContainer>
           <InfoBox>
-            Enter your 12 or 24 word mnemonic phrase to recover your wallet.
-            Make sure to enter the words in the correct order.
+            Enter your 12 or 24 word mnemonic phrase to recover your wallet. Make sure to enter the words in the correct
+            order.
           </InfoBox>
 
           <InputGroup>
@@ -352,18 +348,14 @@ const RecoverWallet: React.FC<RecoverWalletProps> = ({ onBack }) => {
             {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
           </InputGroup>
 
-          <Button
-            onClick={handleRecoverFromMnemonic}
-            disabled={isLoading}
-          >
+          <Button onClick={handleRecoverFromMnemonic} disabled={isLoading}>
             {isLoading ? 'Recovering...' : 'Recover Wallet'}
           </Button>
         </FormContainer>
       ) : (
         <FormContainer>
           <InfoBox>
-            Enter your private key to recover your wallet.
-            Your private key should be a 64-character hexadecimal string.
+            Enter your private key to recover your wallet. Your private key should be a 64-character hexadecimal string.
           </InfoBox>
 
           <InputGroup>
@@ -407,10 +399,7 @@ const RecoverWallet: React.FC<RecoverWalletProps> = ({ onBack }) => {
             {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
           </InputGroup>
 
-          <Button
-            onClick={handleRecoverFromPrivateKey}
-            disabled={isLoading}
-          >
+          <Button onClick={handleRecoverFromPrivateKey} disabled={isLoading}>
             {isLoading ? 'Recovering...' : 'Recover Wallet'}
           </Button>
         </FormContainer>
