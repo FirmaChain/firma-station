@@ -1,5 +1,4 @@
-import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 import { ApolloLink, concat } from '@apollo/client/link/core';
 import { HttpLink } from '@apollo/client/link/http';
 
