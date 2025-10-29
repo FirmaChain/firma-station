@@ -30,7 +30,7 @@ const colors = {
   mainskyblue: '#1FBAFF',
   mainred: '#D8424A',
   mainyellow: '#F4B017',
-  maingreen: '#47EC9F',
+  maingreen: '#47EC9F'
 };
 
 const sizes = {
@@ -88,7 +88,7 @@ const sizes = {
   comingTitle: '5.0rem',
   communityTitle: '4.0rem',
   communitySubTitle: '1.8rem',
-  sideMenuDrawer: '210px',
+  sideMenuDrawer: '210px'
 };
 
 const urls = {
@@ -99,7 +99,8 @@ const urls = {
   qr: '/images/qr.png',
   telegram: '/images/ic_telegram.svg',
   github: '/images/ic_github.svg',
-  twitter: '/images/ic_twitter.svg',
+  twitter: '/images/ic_x.svg',
+  x: '/images/ic_x.svg',
   medium: '/images/ic_medium.svg',
   profile: '/images/profile.png',
   ledger: '/images/ledger.png',
@@ -127,13 +128,13 @@ const urls = {
   mobileLoginStep2: '/images/ic_step_mobile_login2.png',
   mobileLoginStep3: '/images/ic_step_mobile_login3.png',
   disconnect: '/images/ic_disconnect.png',
-  ibc: '/images/ic_ibc.png',
+  ibc: '/images/ic_ibc.png'
 };
 
 const theme = {
   colors,
   sizes,
-  urls,
+  urls
 };
 
 export default theme;

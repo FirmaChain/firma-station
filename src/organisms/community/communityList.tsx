@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import theme from "../../themes";
-import { CommunityWrapper, CommunityItem, CommunityItemIcon, CommunityItemTypo } from "./styles";
+import theme from '../../themes';
+import { CommunityWrapper, CommunityItem, CommunityItemIcon, CommunityItemTypo } from './styles';
 
 const CommunityList = () => {
   const openLink = (url: string) => {
@@ -10,19 +10,19 @@ const CommunityList = () => {
 
   return (
     <CommunityWrapper>
-      <CommunityItem onClick={() => openLink("https://t.me/firmachain_announcement")}>
+      <CommunityItem onClick={() => openLink('https://t.me/firmachain_announcement')}>
         <CommunityItemIcon icon={theme.urls.telegram} />
         <CommunityItemTypo>Telegram</CommunityItemTypo>
       </CommunityItem>
-      <CommunityItem onClick={() => openLink("https://github.com/firmachain")}>
+      <CommunityItem onClick={() => openLink('https://github.com/firmachain')}>
         <CommunityItemIcon icon={theme.urls.github} />
         <CommunityItemTypo>Github</CommunityItemTypo>
       </CommunityItem>
-      <CommunityItem onClick={() => openLink("https://twitter.com/firmachain")}>
-        <CommunityItemIcon icon={theme.urls.twitter} />
-        <CommunityItemTypo>Twitter</CommunityItemTypo>
+      <CommunityItem onClick={() => openLink('https://x.com/firmachain')}>
+        <CommunityItemIcon icon={theme.urls.x} />
+        <CommunityItemTypo>X (Twitter)</CommunityItemTypo>
       </CommunityItem>
-      <CommunityItem onClick={() => openLink("https://medium.com/firmachain")}>
+      <CommunityItem onClick={() => openLink('https://medium.com/firmachain')}>
         <CommunityItemIcon icon={theme.urls.medium} />
         <CommunityItemTypo>Medium</CommunityItemTypo>
       </CommunityItem>
