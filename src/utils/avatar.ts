@@ -68,8 +68,9 @@ export const initializeAvatar = (lastUpdated: number) => {
           if (avatarRaw && avatarRaw.avatarList) {
             const lastUpdatedTime = avatarRaw.lastUpdatedTime;
 
-            if (lastUpdated === lastUpdatedTime) {
-              //! Fix: validator info not visible. replaced !== with ===
+            if (lastUpdated < lastUpdatedTime) {
+              //? If saved lastUpdatedTime is less than lastUpdatedTime, update the avatar list
+              //? If two values are same, means current list is latest.
               for (let avatar of avatarList) {
                 for (let avatarUrlRaw of avatarRaw.avatarList) {
                   if (avatar.operatorAddress === avatarUrlRaw.operatorAddress) {
