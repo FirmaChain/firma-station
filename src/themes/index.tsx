@@ -99,7 +99,6 @@ const urls = {
   qr: '/images/qr.png',
   telegram: '/images/ic_telegram.svg',
   github: '/images/ic_github.svg',
-  twitter: '/images/ic_x.svg',
   x: '/images/ic_x.svg',
   medium: '/images/ic_medium.svg',
   profile: '/images/profile.png',

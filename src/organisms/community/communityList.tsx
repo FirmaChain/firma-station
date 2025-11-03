@@ -20,7 +20,7 @@ const CommunityList = () => {
       </CommunityItem>
       <CommunityItem onClick={() => openLink('https://x.com/firmachain')}>
         <CommunityItemIcon icon={theme.urls.x} />
-        <CommunityItemTypo>X (Twitter)</CommunityItemTypo>
+        <CommunityItemTypo>X</CommunityItemTypo>
       </CommunityItem>
       <CommunityItem onClick={() => openLink('https://medium.com/firmachain')}>
         <CommunityItemIcon icon={theme.urls.medium} />
