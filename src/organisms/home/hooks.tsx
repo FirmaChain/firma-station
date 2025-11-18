@@ -9,21 +9,27 @@ export const useDashboard = () => {
   const [blockState, setBlockState] = useState<IBlockState>({
     height: 0,
     transactions: 0,
-    inflation: '0 %',
+    inflation: '0 %'
   });
 
   const [votingPowerState, setVotingPowerState] = useState<IVotingPowerState>({
     height: 0,
     votingPower: 0,
-    totalVotingPower: 0,
+    totalVotingPower: 0
   });
 
   const [tokenomicsState, setTokenomicsState] = useState<ITokenomicsState>({
     supply: 0,
     delegated: 0,
     undelegated: 0,
-    undelegate: 0,
+    undelegate: 0
   });
+
+  useEffect(() => {
+    getTransactionCount().then((count) => {
+      setBlockState((prevState) => ({ ...prevState, transactions: count }));
+    });
+  }, []);
 
   useInterval(() => {
     Promise.all([getLatestBlock(), getInflation(), getTotalSupply(), getStakingPool()])
@@ -31,24 +37,20 @@ export const useDashboard = () => {
         setBlockState((prevState) => ({
           ...prevState,
           height: latestBlock,
-          inflation: `${convertNumberFormat(inflation * 100, 2)} %`,
+          inflation: `${convertNumberFormat(inflation * 100, 2)} %`
         }));
 
         setVotingPowerState({
           height: latestBlock,
           votingPower: stakingPool.bondedTokens,
-          totalVotingPower: stakingPool.bondedTokens,
+          totalVotingPower: stakingPool.bondedTokens
         });
 
         setTokenomicsState({
           supply: totalSupply,
           delegated: stakingPool.bondedTokens,
           undelegated: totalSupply - (stakingPool.bondedTokens + stakingPool.unbondedTokens),
-          undelegate: stakingPool.unbondedTokens,
-        });
-
-        getTransactionCount().then((count) => {
-          setBlockState((prevState) => ({ ...prevState, transactions: count }));
+          undelegate: stakingPool.unbondedTokens
         });
       })
       .catch(() => {});
@@ -57,7 +59,7 @@ export const useDashboard = () => {
   return {
     blockState,
     votingPowerState,
-    tokenomicsState,
+    tokenomicsState
   };
 };
 

@@ -2,14 +2,17 @@ import gql from 'graphql-tag';
 import { client } from '../../apollo';
 import { IProposalQueryData, IMessagesByAddress } from '../../interfaces/gql';
 
+//? Note: do not call it frequently. It is VERY heavy query.
 export const getTransactionCount = async (): Promise<number> => {
   try {
     const { data } = await client.query({
       query: gql`
         query {
-          transaction_aggregate {
+          block_aggregate {
             aggregate {
-              count
+              sum {
+                num_txs
+              }
             }
           }
         }
@@ -17,7 +20,7 @@ export const getTransactionCount = async (): Promise<number> => {
       fetchPolicy: 'no-cache'
     });
 
-    return data.transaction_aggregate.aggregate.count;
+    return data.block_aggregate.aggregate.sum.num_txs;
   } catch (error) {
     return 0;
   }
