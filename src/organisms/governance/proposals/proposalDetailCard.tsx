@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import {
   PROPOSAL_STATUS,
@@ -22,7 +24,8 @@ import {
   ProposalDetailItem,
   Label,
   ProposalContent,
-  ProposalMainTitle
+  ProposalMainTitle,
+  MarkdownContent
 } from './styles';
 
 interface IProps {
@@ -75,16 +78,17 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
         </ProposalDetailItem>
         <ProposalDetailItem>
           <Label>Description</Label>
-          <ProposalContent>
-            {proposalState.description.split('\n').map((line, index) => {
-              return (
-                <span key={index}>
-                  {line}
-                  <br />
-                </span>
-              );
-            })}
-          </ProposalContent>
+          <MarkdownContent>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              skipHtml={true}
+              components={{
+                a: ({ ...props }) => <a {...props} target='_blank' rel='noopener noreferrer' />
+              }}
+            >
+              {proposalState.description || ''}
+            </ReactMarkdown>
+          </MarkdownContent>
         </ProposalDetailItem>
 
         {/* Spend Community Pools */}

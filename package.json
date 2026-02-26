@@ -30,6 +30,7 @@
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-idle-timer": "^4.6.4",
+    "react-markdown": "^10.1.0",
     "react-qrcode-logo": "^2.8.0",
     "react-redux": "^7.2.6",
     "react-responsive": "^10.0.1",
@@ -41,6 +42,7 @@
     "recharts": "^2.1.6",
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
+    "remark-gfm": "^4.0.1",
     "styled-components": "^5.3.3",
     "styled-normalize": "^8.0.7"
   },

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const CardWrapper = styled.div`
   display: flex;
@@ -138,6 +138,158 @@ export const ProposalContent = styled.div<{ isSmall?: boolean }>`
   }
 `;
 
+export const MarkdownContent = styled.div`
+  width: 100%;
+  line-height: 23px;
+  color: ${({ theme }) => theme.colors.defaultGray};
+  overflow-wrap: anywhere;
+  word-break: break-word;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 18px 0 10px 0;
+  }
+
+  h1 {
+    font-size: 28px;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+    padding-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 24px;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+    padding-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  h4 {
+    font-size: 18px;
+  }
+
+  h5 {
+    font-size: 16px;
+  }
+
+  h6 {
+    font-size: 15px;
+    color: ${({ theme }) => theme.colors.defaultGray2};
+  }
+
+  p {
+    margin: 0 0 10px 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  ul,
+  ol {
+    margin: 0 0 10px 20px;
+    padding: 0;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  li {
+    display: list-item;
+    margin: 4px 0;
+  }
+
+  a {
+    color: ${({ theme }) => theme.colors.mainblue};
+    text-decoration: underline;
+  }
+
+  a:hover {
+    opacity: 0.9;
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+    color: ${({ theme }) => theme.colors.defaultGray2};
+  }
+
+  code {
+    font-family: monospace;
+    background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+    border: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+    border-radius: 4px;
+    padding: 1px 4px;
+    white-space: pre-wrap;
+  }
+
+  pre {
+    margin: 8px 0;
+    padding: 10px;
+    overflow-x: auto;
+    border: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  pre code {
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  blockquote {
+    margin: 8px 0;
+    padding: 4px 0 4px 12px;
+    border-left: 3px solid ${({ theme }) => theme.colors.defaultGray5};
+    color: ${({ theme }) => theme.colors.defaultGray4};
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+    margin: 14px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 12px 0;
+    display: block;
+    overflow-x: auto;
+  }
+
+  th,
+  td {
+    border: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: ${({ theme }) => theme.colors.backgroundSideBar};
+    font-weight: 700;
+  }
+`;
+
 export const ProposalMainTitle = styled.div`
   font-size: ${({ theme }) => theme.sizes.proposalTitle};
   color: ${({ theme }) => theme.colors.defaultDarkGray};
@@ -218,7 +370,7 @@ export const VotingGauge = styled.div`
   position: relative;
 `;
 
-export const Quorum = styled.div<{percent:string}>`
+export const Quorum = styled.div<{ percent: string }>`
   width: 100px;
   margin-left: -42px;
   position: absolute;
