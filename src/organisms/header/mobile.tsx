@@ -19,7 +19,7 @@ const menus = [
   { name: 'Home', path: '/', externalLink: '' },
   { name: 'Account', path: '/accounts', externalLink: '' },
   { name: 'Staking', path: '/staking', externalLink: '' },
-  { name: 'Governance', path: '/government', externalLink: '' },
+  { name: 'Governance', path: '/governance', externalLink: '' },
   { name: 'Community', path: '/community', externalLink: '' },
   {
     name: 'Download',

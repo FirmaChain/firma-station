@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 
 import { rootState } from '../../../redux/reducers';
 import { convertNumber, convertToFctNumber, convertNumberFormat, getDefaultFee } from '../../../utils/common';
-import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from '../../../constants/government';
+import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from '../../../constants/governance';
 import { IProposalDetailState } from '../../../interfaces/governance';
 import { modalActions } from '../../../redux/action';
 

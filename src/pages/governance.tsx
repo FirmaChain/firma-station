@@ -2,15 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { rootState } from '../redux/reducers';
-import { useGovernmentData } from '../organisms/government/hooks';
+import { useGovernanceData } from '../organisms/governance/hooks';
 
-import { ProposalCard, ProposalButtons } from '../organisms/government';
-import { ContentContainer } from '../styles/government';
+import { ProposalCard, ProposalButtons } from '../organisms/governance';
+import { ContentContainer } from '../styles/governance';
 import { useMediaQuery } from 'react-responsive';
 
-const Government = () => {
+const Governance = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
-  const { proposalsState } = useGovernmentData();
+  const { proposalsState } = useGovernanceData();
   const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 
   return (
@@ -21,4 +21,4 @@ const Government = () => {
   );
 };
 
-export default React.memo(Government);
+export default React.memo(Governance);

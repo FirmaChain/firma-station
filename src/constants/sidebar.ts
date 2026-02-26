@@ -5,7 +5,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AccountsIcon from '@mui/icons-material/AccountBalanceWallet';
 import HistoryIcon from '@mui/icons-material/History';
 import StakingIcon from '@mui/icons-material/Inbox';
-import GovernmentIcon from '@mui/icons-material/AccountBalance';
+import GovernanceIcon from '@mui/icons-material/AccountBalance';
 import ForumIcon from '@mui/icons-material/Forum';
 import BuyFirmaIcon from '@mui/icons-material/Payment';
 import ExplorerIcon from '@mui/icons-material/Public';
@@ -18,7 +18,7 @@ export const mainMenuList: IMenu[] = [
   { name: 'Accounts', path: '/accounts', icon: AccountsIcon, externalLink: '' },
   { name: 'History', path: '/history', icon: HistoryIcon, externalLink: '' },
   { name: 'Staking', path: '/staking', icon: StakingIcon, externalLink: '' },
-  { name: 'Governance', path: '/government', icon: GovernmentIcon, externalLink: '' },
+  { name: 'Governance', path: '/governance', icon: GovernanceIcon, externalLink: '' },
   {
     name: 'Download',
     path: '/download',

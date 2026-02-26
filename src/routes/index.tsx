@@ -4,18 +4,29 @@ import { useSnackbar } from 'notistack';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { rootState } from '../redux/reducers';
 
-import { Home, Staking, Accounts, History, Validators, Government, Proposals, Community, Download, OfflineMode } from '../pages';
+import {
+  Home,
+  Staking,
+  Accounts,
+  History,
+  Validators,
+  Governance,
+  Proposals,
+  Community,
+  Download,
+  OfflineMode
+} from '../pages';
 
 const routePublic = (path: string, component: React.FC) => ({
   path,
   component,
-  auth: false,
+  auth: false
 });
 
 const routePrivate = (path: string, component: React.FC) => ({
   path,
   component,
-  auth: true,
+  auth: true
 });
 
 const routes = {
@@ -24,11 +35,11 @@ const routes = {
   History: routePrivate('/history', History),
   Staking: routePublic('/staking', Staking),
   Validators: routePublic('/staking/validators/:address', Validators),
-  Government: routePublic('/government', Government),
-  Proposals: routePublic('/government/proposals/:id', Proposals),
+  Governance: routePublic('/governance', Governance),
+  Proposals: routePublic('/governance/proposals/:id', Proposals),
   Community: routePublic('/community', Community),
   Download: routePublic('/download', Download),
-  OfflineMode: routePublic('/offline-mode', OfflineMode),
+  OfflineMode: routePublic('/offline-mode', OfflineMode)
 };
 
 interface IProps {
@@ -47,7 +58,7 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
       if (address === '') {
         enqueueSnackbar('You Need Login First', {
           variant: 'error',
-          autoHideDuration: 2000,
+          autoHideDuration: 2000
         });
 
         return <Redirect to={{ pathname: '/' }} />;
@@ -65,7 +76,7 @@ const route = () => (
     {Object.values(routes).map((x, i) => (
       <CustomRoute key={i} exact path={x.path} component={x.component} auth={x.auth} />
     ))}
-    <Route render={() => <Redirect to='/' />} />
+    <Route render={() => <Redirect to="/" />} />
   </Switch>
 );
 

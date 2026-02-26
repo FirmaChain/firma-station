@@ -4,7 +4,7 @@ import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
-import { PROPOSAL_STATUS } from '../../constants/government';
+import { PROPOSAL_STATUS } from '../../constants/governance';
 import { IProposalsState } from '../../interfaces/governance';
 
 import {
@@ -19,7 +19,7 @@ import {
   SmallProposalId,
   SmallProposalTitle,
   SmallProposalType,
-  SmallProposalStatus,
+  SmallProposalStatus
 } from './styles';
 
 interface IProps {
@@ -36,7 +36,7 @@ const STATUS_COLOR: IKeyValue = {
   PROPOSAL_STATUS_PASSED: '#F17047',
   PROPOSAL_STATUS_REJECTED: '#DA4B4B',
   PROPOSAL_STATUS_FAILED: '#9438DC',
-  PROPOSAL_STATUS_INVALID: '#2BA891',
+  PROPOSAL_STATUS_INVALID: '#2BA891'
 };
 
 const Row = ({ data, index, style }: any) => {
@@ -56,13 +56,21 @@ const Row = ({ data, index, style }: any) => {
   return (
     <Link to={{ pathname: `/government/proposals/${currnetProposal.proposalId}` }} style={{ textDecoration: 'none' }}>
       <ItemWrapper style={style} data-testid={`proposal-item-${currnetProposal.proposalId}`}>
-        <ItemColumn data-testid={`proposal-id-${currnetProposal.proposalId}`}>{`# ${currnetProposal.proposalId}`}</ItemColumn>
-        <ItemColumn data-testid={`proposal-status-${currnetProposal.proposalId}`}>{getStatusTypo(currnetProposal.status)}</ItemColumn>
-        <ItemColumn data-testid={`proposal-type-${currnetProposal.proposalId}`}>{getTypeTypo(currnetProposal.proposalType)}</ItemColumn>
+        <ItemColumn
+          data-testid={`proposal-id-${currnetProposal.proposalId}`}
+        >{`# ${currnetProposal.proposalId}`}</ItemColumn>
+        <ItemColumn data-testid={`proposal-status-${currnetProposal.proposalId}`}>
+          {getStatusTypo(currnetProposal.status)}
+        </ItemColumn>
+        <ItemColumn data-testid={`proposal-type-${currnetProposal.proposalId}`}>
+          {getTypeTypo(currnetProposal.proposalType)}
+        </ItemColumn>
 
         <ItemColumn data-testid={`proposal-content-${currnetProposal.proposalId}`}>
           <TitleTypo data-testid={`proposal-title-${currnetProposal.proposalId}`}>{currnetProposal.title}</TitleTypo>
-          <DescriptionTypo data-testid={`proposal-description-${currnetProposal.proposalId}`}>{currnetProposal.description}</DescriptionTypo>
+          <DescriptionTypo data-testid={`proposal-description-${currnetProposal.proposalId}`}>
+            {currnetProposal.description}
+          </DescriptionTypo>
         </ItemColumn>
       </ItemWrapper>
     </Link>
@@ -91,10 +99,18 @@ const ProposalCard = ({ proposalsState }: IProps) => {
             return (
               <Link to={{ pathname: `/government/proposals/${proposal.proposalId}` }} key={i}>
                 <SmallItemCard data-testid={`proposal-item-small-${proposal.proposalId}`}>
-                  <SmallProposalId data-testid={`proposal-id-${proposal.proposalId}`}>{`# ${proposal.proposalId}`}</SmallProposalId>
-                  <SmallProposalTitle data-testid={`proposal-title-${proposal.proposalId}`}>{proposal.title}</SmallProposalTitle>
-                  <SmallProposalType data-testid={`proposal-type-${proposal.proposalId}`}>{getTypeTypo(proposal.proposalType)}</SmallProposalType>
-                  <SmallProposalStatus data-testid={`proposal-status-${proposal.proposalId}`}>{getStatusTypo(proposal.status)}</SmallProposalStatus>
+                  <SmallProposalId
+                    data-testid={`proposal-id-${proposal.proposalId}`}
+                  >{`# ${proposal.proposalId}`}</SmallProposalId>
+                  <SmallProposalTitle data-testid={`proposal-title-${proposal.proposalId}`}>
+                    {proposal.title}
+                  </SmallProposalTitle>
+                  <SmallProposalType data-testid={`proposal-type-${proposal.proposalId}`}>
+                    {getTypeTypo(proposal.proposalType)}
+                  </SmallProposalType>
+                  <SmallProposalStatus data-testid={`proposal-status-${proposal.proposalId}`}>
+                    {getStatusTypo(proposal.status)}
+                  </SmallProposalStatus>
                 </SmallItemCard>
               </Link>
             );

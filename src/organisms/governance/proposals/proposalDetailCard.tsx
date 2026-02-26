@@ -5,8 +5,8 @@ import {
   PROPOSAL_MESSAGE_TYPE,
   PROPOSAL_MESSAGE_TYPE_PARAMETERCHANGE,
   PROPOSAL_MESSAGE_TYPE_COMMUNITYPOOLSPEND,
-  PROPOSAL_MESSAGE_TYPE_SOFTWAREUPGRADE,
-} from '../../../constants/government';
+  PROPOSAL_MESSAGE_TYPE_SOFTWAREUPGRADE
+} from '../../../constants/governance';
 import { CHAIN_CONFIG } from '../../../config';
 import { convertNumberFormat, convertToFctNumber } from '../../../utils/common';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
@@ -22,7 +22,7 @@ import {
   ProposalDetailItem,
   Label,
   ProposalContent,
-  ProposalMainTitle,
+  ProposalMainTitle
 } from './styles';
 
 interface IProps {

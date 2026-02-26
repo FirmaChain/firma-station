@@ -13,7 +13,7 @@ import { IProposalQueryData } from '../../interfaces/gql';
 import { CHAIN_CONFIG } from '../../config';
 import * as lodash from 'lodash';
 
-export const useGovernmentData = () => {
+export const useGovernanceData = () => {
   const [proposalsState, setProposalsState] = useState<IProposalsState>({
     proposals: []
   });

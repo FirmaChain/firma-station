@@ -4,10 +4,22 @@ import Accounts from './accounts';
 import History from './history';
 import Staking from './staking';
 import Validators from './validators';
-import Government from './government';
+import Governance from './governance';
 import Proposals from './proposals';
 import Community from './community';
 import Download from './download';
 import OfflineMode from './offlineMode';
 
-export { Home, Coming, Accounts, History, Staking, Validators, Government, Proposals, Community, Download, OfflineMode };
+export {
+  Home,
+  Coming,
+  Accounts,
+  History,
+  Staking,
+  Validators,
+  Governance,
+  Proposals,
+  Community,
+  Download,
+  OfflineMode
+};

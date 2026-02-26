@@ -113,7 +113,7 @@ describe('Firma JS Mobile Test', () => {
 
     // Go to Governance page
     cy.get('[data-testid="sidebar-main-governance"]').click();
-    cy.url().should('include', '/government');
+    cy.url().should('include', '/governance');
     cy.wait(1000);
     cy.log('✅ Governance page navigation complete');
 
@@ -339,10 +339,10 @@ describe('Firma JS Mobile Test', () => {
     // Reuse Connect to Mobile login session
     loginToFirmaMobile();
 
-    // Visit Government page
-    cy.visit('/government');
+    // Visit Governance page
+    cy.visit('/governance');
     cy.wait(3000);
-    cy.log('✅ Navigated to Government page');
+    cy.log('✅ Navigated to Governance page');
 
     // Check New Proposal button
     cy.get('[data-testid="governance-buttons-wrapper"]').should('be.visible');
@@ -373,18 +373,18 @@ describe('Firma JS Mobile Test', () => {
         cy.wait(3000);
 
         // Check URL changed (proposal detail page)
-        cy.url().should('include', '/government/proposals/');
+        cy.url().should('include', '/governance/proposals/');
         cy.log('✅ Navigated to Proposal detail page');
 
         // Check basic elements on detail page
         cy.get('body').should('contain.text', 'Proposal');
         cy.log('✅ Proposal detail page loaded');
 
-        // Go back to Government main page
+        // Go back to Governance main page
         cy.get('[data-testid="sidebar-main-governance"]').click();
-        cy.url().should('include', '/government');
+        cy.url().should('include', '/governance');
         cy.wait(2000);
-        cy.log('✅ Returned to Government main page');
+        cy.log('✅ Returned to Governance main page');
       } else {
         cy.log('📋 No active Proposal currently');
 
@@ -415,10 +415,10 @@ describe('Firma JS Mobile Test', () => {
       // Reuse Connect to Mobile login session
       loginToFirmaMobile();
 
-      // Visit Government page
-      cy.visit('/government');
+      // Visit Governance page
+      cy.visit('/governance');
       cy.wait(3000);
-      cy.log('✅ Navigated to Government page');
+      cy.log('✅ Navigated to Governance page');
 
       // Click New Proposal button
       cy.get('[data-testid="new-proposal-button"]').should('be.visible').click();
@@ -569,9 +569,9 @@ describe('Firma JS Mobile Test', () => {
       cy.wait(10000); // Wait for tx processing
       cy.log('⏳ Waiting for tx processing...');
 
-      // Check for success message or redirect to Government page
-      cy.url().should('include', '/government');
-      cy.log('✅ Redirected to Government page');
+      // Check for success message or redirect to Governance page
+      cy.url().should('include', '/governance');
+      cy.log('✅ Redirected to Governance page');
 
       // Reload page to get latest proposal list
       cy.reload();
@@ -653,10 +653,10 @@ describe('Firma JS Mobile Test', () => {
           cy.pause();
           cy.log('⏸️ Check submitted info on Proposal detail page');
 
-          // Go back to Government main page
-          cy.visit('/government');
+          // Go back to Governance main page
+          cy.visit('/governance');
           cy.wait(2000);
-          cy.log('✅ Returned to Government main page');
+          cy.log('✅ Returned to Governance main page');
         });
 
       cy.log(`🎉 Connect to Mobile ${test.testId}: ${test.label} Proposal submit & check complete!`);
