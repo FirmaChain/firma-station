@@ -306,10 +306,11 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
   const title = proposal.title; // Replaced from proposal.content.title
   const description = proposal.summary; // Replaced from proposal.content.description
 
-  const firstMsg = proposal.messages[0] as any;
+  const messageList = Array.isArray(proposal.messages) ? proposal.messages : [];
+  const firstMsg = messageList[0] as any;
   const firmsMsgContent = firstMsg?.content || null;
 
-  const proposalType = firmsMsgContent ? firmsMsgContent['@type'] : firstMsg['@type'] || ''; //? Need to check
+  const proposalType = firmsMsgContent ? firmsMsgContent['@type'] : firstMsg?.['@type'] || ''; //? Need to check
 
   const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
 
