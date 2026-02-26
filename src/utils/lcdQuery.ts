@@ -223,14 +223,16 @@ const getProposalList = async (): Promise<IProposalData[]> => {
     const title = proposal.title; // Replaced from proposal.content.title
     const description = proposal.summary; // Replaced from proposal.content.description
 
-    const firstMsg = proposal.messages[0] as any;
+    const messageList = Array.isArray(proposal.messages) ? proposal.messages : [];
+    const firstMsg = messageList[0] as any;
     const firmsMsgContent = firstMsg?.content || null;
 
     //? Remove 'Msg' from the start
-    const proposalType = (firmsMsgContent ? firmsMsgContent['@type'] : firstMsg['@type'] || '').replace('Msg', ''); //? Need to check
+    const proposalTypeRaw = firmsMsgContent ? firmsMsgContent['@type'] : firstMsg?.['@type'] || '';
+    const proposalType = proposalTypeRaw.replace('Msg', ''); //? Need to check
 
     const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
-    const extraData = formatExtraData(proposal.messages); // Replaced from proposal.content
+    const extraData = formatExtraData({ ...firstMsg, ...firmsMsgContent }); // Replaced from proposal.content
 
     const votingStartTime = _proposal.voting_start_time; // Replaced from proposal.voting_start_time
     const votingEndTime = _proposal.voting_end_time; // Replaced from proposal.voting_end_time

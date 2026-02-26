@@ -27,10 +27,11 @@ export const useGovernmentData = () => {
           if (CHAIN_CONFIG.PROPOSAL_JSON !== '') {
             const response = await axios.get(`${CHAIN_CONFIG.PROPOSAL_JSON}?t=${new Date().getTime()}`);
             const { ignoreProposalIdList } = response.data;
+            const ignoredProposalIds = Array.isArray(ignoreProposalIdList) ? ignoreProposalIdList : [];
 
             proposals = proposalList
               .filter(({ proposalId }) => {
-                return ignoreProposalIdList.includes(Number(proposalId)) === false;
+                return ignoredProposalIds.includes(Number(proposalId)) === false;
               })
               .map(({ proposalId, proposalType, status, title, description }) => {
                 return { proposalId, proposalType, status, title, description };
@@ -48,7 +49,9 @@ export const useGovernmentData = () => {
           proposals
         });
       })
-      .catch(() => {});
+      .catch((error) => {
+        console.error('[government] failed to load proposal list', error);
+      });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
