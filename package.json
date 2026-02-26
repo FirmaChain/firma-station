@@ -32,7 +32,7 @@
     "react-idle-timer": "^4.6.4",
     "react-qrcode-logo": "^2.8.0",
     "react-redux": "^7.2.6",
-    "react-responsive": "^8.2.0",
+    "react-responsive": "^10.0.1",
     "react-router-dom": "^5.3.0",
     "react-select": "^5.1.0",
     "react-spinners": "^0.14.1",

@@ -50,7 +50,7 @@ export const useGovernanceData = () => {
         });
       })
       .catch((error) => {
-        console.error('[government] failed to load proposal list', error);
+        console.error('[governance] failed to load proposal list', error);
       });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

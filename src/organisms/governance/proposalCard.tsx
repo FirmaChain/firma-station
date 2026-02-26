@@ -54,7 +54,7 @@ const Row = ({ data, index, style }: any) => {
   };
 
   return (
-    <Link to={{ pathname: `/government/proposals/${currnetProposal.proposalId}` }} style={{ textDecoration: 'none' }}>
+    <Link to={{ pathname: `/governance/proposals/${currnetProposal.proposalId}` }} style={{ textDecoration: 'none' }}>
       <ItemWrapper style={style} data-testid={`proposal-item-${currnetProposal.proposalId}`}>
         <ItemColumn
           data-testid={`proposal-id-${currnetProposal.proposalId}`}
@@ -97,7 +97,7 @@ const ProposalCard = ({ proposalsState }: IProps) => {
             };
 
             return (
-              <Link to={{ pathname: `/government/proposals/${proposal.proposalId}` }} key={i}>
+              <Link to={{ pathname: `/governance/proposals/${proposal.proposalId}` }} key={i}>
                 <SmallItemCard data-testid={`proposal-item-small-${proposal.proposalId}`}>
                   <SmallProposalId
                     data-testid={`proposal-id-${proposal.proposalId}`}
