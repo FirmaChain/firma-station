@@ -229,9 +229,12 @@ const getProposalList = async (): Promise<IProposalData[]> => {
 
     //? Remove 'Msg' from the start
     // Use default as "Text" if no messages are found
-    const proposalTypeRaw = firmsMsgContent
-      ? firmsMsgContent['@type']
-      : firstMsg?.['@type'] || '/cosmos.gov.v1beta1.TextProposal';
+    const isEmptyMessage = messageList.length === 0;
+    const proposalTypeRaw = isEmptyMessage
+      ? '/cosmos.gov.v1beta1.TextProposal'
+      : firmsMsgContent
+        ? firmsMsgContent['@type']
+        : firstMsg?.['@type'] || '';
     const proposalType = proposalTypeRaw.replace('Msg', ''); //? Need to check
 
     const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
@@ -312,11 +315,14 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
   const messageList = Array.isArray(proposal.messages) ? proposal.messages : [];
   const firstMsg = messageList[0] as any;
   const firmsMsgContent = firstMsg?.content || null;
+  const isEmptyMessage = messageList.length === 0;
 
   // Use default as "Text" if no messages are found
-  const proposalType = firmsMsgContent
-    ? firmsMsgContent['@type']
-    : firstMsg?.['@type'] || '/cosmos.gov.v1beta1.TextProposal'; //? Need to check
+  const proposalType = isEmptyMessage
+    ? '/cosmos.gov.v1beta1.TextProposal'
+    : firmsMsgContent
+      ? firmsMsgContent['@type']
+      : firstMsg?.['@type'] || ''; //? Need to check
 
   const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
 
