@@ -37,6 +37,7 @@ import {
   MsgSendTd,
   ExplorerLink
 } from './styles';
+import { FirmaUtil } from '@firmachain/firma-js';
 
 interface IProps {
   proposalState: IProposalDetailState;
@@ -143,8 +144,9 @@ const ProposalDetailCard = ({ proposalState }: IProps) => {
     const normalizedAddress = address || '';
     if (!normalizedAddress) return '-';
 
-    const prefix = CHAIN_CONFIG.FIRMACHAIN_CONFIG.prefix;
-    if (normalizedAddress.startsWith(prefix) === false) return normalizedAddress;
+    if (!FirmaUtil.isValidAddress(normalizedAddress)) {
+      return normalizedAddress;
+    }
 
     return (
       <ExplorerLink
