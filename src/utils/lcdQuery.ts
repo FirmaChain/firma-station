@@ -284,15 +284,18 @@ const getProposalMessageSource = (proposal: any): any[] => {
   }
 
   if (proposal?.content && typeof proposal.content === 'object') {
-    return [
-      {
-        '@type': proposal.content['@type'] || DEFAULT_PROPOSAL_TYPE,
-        ...proposal.content
-      }
-    ];
+    const hasContentField = Object.keys(proposal.content).length > 0;
+    if (hasContentField) {
+      return [
+        {
+          '@type': proposal.content['@type'] || DEFAULT_PROPOSAL_TYPE,
+          ...proposal.content
+        }
+      ];
+    }
   }
 
-  return [{ '@type': DEFAULT_PROPOSAL_TYPE }];
+  return [];
 };
 
 const getProposalList = async (): Promise<IProposalData[]> => {
