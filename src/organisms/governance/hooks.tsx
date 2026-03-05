@@ -33,15 +33,15 @@ export const useGovernanceData = () => {
               .filter(({ proposalId }) => {
                 return ignoredProposalIds.includes(Number(proposalId)) === false;
               })
-              .map(({ proposalId, proposalType, status, title, description }) => {
-                return { proposalId, proposalType, status, title, description };
+              .map(({ proposalId, proposalTypeSummary, status, title, description }) => {
+                return { proposalId, proposalTypeSummary, status, title, description };
               });
           } else {
             throw new Error('INVALID CONFIG');
           }
         } catch (error) {
-          proposals = proposalList.map(({ proposalId, proposalType, status, title, description }) => {
-            return { proposalId, proposalType, status, title, description };
+          proposals = proposalList.map(({ proposalId, proposalTypeSummary, status, title, description }) => {
+            return { proposalId, proposalTypeSummary, status, title, description };
           });
         }
 
@@ -104,7 +104,7 @@ export const useProposalData = (proposalId: string, errorCallback?: (e: any) => 
         const title = proposalData.title;
         const description = proposalData.description;
         const status = proposalData.status;
-        const proposalType = proposalData.proposalType;
+        const proposalTypeSummary = proposalData.proposalTypeSummary;
         const submitTime = proposalData.submitTime;
         const votingStartTime = proposalData.votingStartTime;
         const votingEndTime = proposalData.votingEndTime;
@@ -112,6 +112,7 @@ export const useProposalData = (proposalId: string, errorCallback?: (e: any) => 
         const paramQuorum = proposalData.paramQuorum;
         const periodDeposit = proposalData.periodDeposit;
         const extraData = proposalData.extraData;
+        const messages = proposalData.messages;
         const tally = proposalData.tally;
         const proposer = proposalData.proposer;
 
@@ -120,7 +121,7 @@ export const useProposalData = (proposalId: string, errorCallback?: (e: any) => 
           title,
           description,
           status,
-          proposalType,
+          proposalTypeSummary,
           submitTime,
           votingStartTime,
           votingEndTime,
@@ -128,6 +129,7 @@ export const useProposalData = (proposalId: string, errorCallback?: (e: any) => 
           paramQuorum,
           periodDeposit,
           extraData,
+          messages,
           tally,
           totalVotingPower: 0,
           votes: [],

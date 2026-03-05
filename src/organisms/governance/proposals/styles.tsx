@@ -138,6 +138,126 @@ export const ProposalContent = styled.div<{ isSmall?: boolean }>`
   }
 `;
 
+export const MessageList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+export const MessageItemCard = styled.div`
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.defaultGray5};
+  border-radius: 4px;
+  background: linear-gradient(180deg, ${({ theme }) => `${theme.colors.defaultGray6}10`} 0%, transparent 100%);
+  padding: 16px;
+  box-sizing: border-box;
+
+  ${ProposalDetailItem} {
+    align-items: flex-start;
+    gap: 0 12px;
+    margin-bottom: 10px;
+  }
+
+  ${ProposalDetailItem}:last-child {
+    margin-bottom: 0;
+  }
+
+  ${Label} {
+    width: 140px;
+    color: ${({ theme }) => theme.colors.defaultDarkGray};
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  ${ProposalContent} {
+    color: ${({ theme }) => theme.colors.defaultGray2};
+    line-height: 24px;
+  }
+
+  @media only screen and (max-width: 900px) {
+    padding: 12px;
+
+    ${ProposalDetailItem} {
+      margin-bottom: 12px;
+      gap: 0;
+    }
+
+    ${Label} {
+      width: 100%;
+      line-height: 20px;
+      padding-bottom: 6px;
+    }
+  }
+`;
+
+export const MessageTitle = styled.div`
+  width: 100%;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+  color: ${({ theme }) => theme.colors.defaultDarkGray};
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  font-weight: 400;
+`;
+
+export const AmountList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+export const MsgSendTable = styled.table`
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  border: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+  border-radius: 4px;
+  overflow: hidden;
+`;
+
+export const MsgSendTh = styled.th`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.defaultGray6};
+  padding: 9px 10px;
+  text-align: left;
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.defaultGray2};
+  background-color: ${({ theme }) => `${theme.colors.backgroundSideBar}80`};
+`;
+
+export const MsgSendTd = styled.td`
+  border-top: 1px solid ${({ theme }) => `${theme.colors.defaultGray6}60`};
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+  color: ${({ theme }) => theme.colors.defaultGray};
+  overflow-wrap: anywhere;
+  word-break: break-word;
+
+  &:nth-child(1),
+  &:nth-child(2) {
+    color: ${({ theme }) => theme.colors.defaultGray3};
+  }
+
+  &:nth-child(3) {
+    font-weight: 400;
+    color: ${({ theme }) => theme.colors.defaultGray};
+  }
+`;
+
+export const ExplorerLink = styled.a`
+  color: ${({ theme }) => theme.colors.defaultGray};
+  text-decoration: none;
+  word-break: break-word;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+`;
+
 export const MarkdownContent = styled.div`
   width: 100%;
   line-height: 23px;

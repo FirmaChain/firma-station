@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { PROPOSAL_STATUS } from '../../constants/governance';
 import { IProposalsState } from '../../interfaces/governance';
+import { getProposalTypeLabels } from '../../utils/governance';
 
 import {
   ListWrapper,
@@ -48,11 +49,6 @@ const Row = ({ data, index, style }: any) => {
     return <StatusTypo statusColor={color}>{typo}</StatusTypo>;
   };
 
-  const getTypeTypo = (type: string) => {
-    const splitTypes = type.split('.');
-    return splitTypes[splitTypes.length - 1].replace('Proposal', '');
-  };
-
   return (
     <Link to={{ pathname: `/governance/proposals/${currnetProposal.proposalId}` }} style={{ textDecoration: 'none' }}>
       <ItemWrapper style={style} data-testid={`proposal-item-${currnetProposal.proposalId}`}>
@@ -63,7 +59,9 @@ const Row = ({ data, index, style }: any) => {
           {getStatusTypo(currnetProposal.status)}
         </ItemColumn>
         <ItemColumn data-testid={`proposal-type-${currnetProposal.proposalId}`}>
-          {getTypeTypo(currnetProposal.proposalType)}
+          {getProposalTypeLabels(currnetProposal.proposalTypeSummary).map((typeLabel: string, typeIndex: number) => (
+            <div key={`${currnetProposal.proposalId}-type-${typeIndex}`}>{typeLabel}</div>
+          ))}
         </ItemColumn>
 
         <ItemColumn data-testid={`proposal-content-${currnetProposal.proposalId}`}>
@@ -91,11 +89,6 @@ const ProposalCard = ({ proposalsState }: IProps) => {
               return <StatusTypo statusColor={color}>{typo}</StatusTypo>;
             };
 
-            const getTypeTypo = (type: string) => {
-              const splitTypes = type.split('.');
-              return splitTypes[splitTypes.length - 1].replace('Proposal', '');
-            };
-
             return (
               <Link to={{ pathname: `/governance/proposals/${proposal.proposalId}` }} key={i}>
                 <SmallItemCard data-testid={`proposal-item-small-${proposal.proposalId}`}>
@@ -106,7 +99,9 @@ const ProposalCard = ({ proposalsState }: IProps) => {
                     {proposal.title}
                   </SmallProposalTitle>
                   <SmallProposalType data-testid={`proposal-type-${proposal.proposalId}`}>
-                    {getTypeTypo(proposal.proposalType)}
+                    {getProposalTypeLabels(proposal.proposalTypeSummary).map((typeLabel: string, typeIndex: number) => (
+                      <div key={`${proposal.proposalId}-small-type-${typeIndex}`}>{typeLabel}</div>
+                    ))}
                   </SmallProposalType>
                   <SmallProposalStatus data-testid={`proposal-status-${proposal.proposalId}`}>
                     {getStatusTypo(proposal.status)}

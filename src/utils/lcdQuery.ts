@@ -2,10 +2,11 @@
 
 import { FirmaSDK, FirmaUtil, ValidatorDataType } from '@firmachain/firma-js';
 
-import { IProposalData, ISigningInfo, IValidatorData } from '../interfaces/lcd';
+import { IProposalData, IProposalMessageItem, ISigningInfo, IValidatorData } from '../interfaces/lcd';
 import { CHAIN_CONFIG } from '../config';
 import { convertNumber, convertNumberFormat } from './common';
 import { StakingValidatorStatus } from '@firmachain/firma-js/dist/sdk/FirmaStakingService';
+import { PROPOSAL_MESSAGE_TYPE } from '../constants/governance';
 
 export {
   getLatestBlock,
@@ -25,6 +26,7 @@ export {
 };
 
 const firmaSDK = new FirmaSDK(CHAIN_CONFIG.FIRMACHAIN_CONFIG);
+const DEFAULT_PROPOSAL_TYPE = '/cosmos.gov.v1beta1.TextProposal';
 
 const getAccAddressFromValOperAddress = (valoperAddress: string): string => {
   return FirmaUtil.getAccAddressFromValOperAddress(valoperAddress);
@@ -187,32 +189,115 @@ const parseValidator = (validator: ValidatorDataType, totalVotingPower: number) 
   };
 };
 
+const parseMessageExtraData = (proposalContent: any) => {
+  const toAmountList = (amounts: any[]) => {
+    if (Array.isArray(amounts) === false) return [];
+    return amounts
+      .filter((value) => value && typeof value.amount === 'string')
+      .map((value) => ({ denom: value.denom || CHAIN_CONFIG.PARAMS.DENOM, amount: value.amount }));
+  };
+
+  const parseMsgSend = (message: any) => {
+    return {
+      fromAddress: message?.from_address || '',
+      toAddress: message?.to_address || '',
+      amounts: toAmountList(message?.amount)
+    };
+  };
+
+  if (proposalContent?.plan) {
+    return {
+      height: proposalContent.plan.height,
+      name: proposalContent.plan.name,
+      info: proposalContent.plan.info
+    };
+  }
+  if (proposalContent?.recipient) {
+    const amounts = Array.isArray(proposalContent.amount) ? proposalContent.amount : [];
+
+    return {
+      recipient: proposalContent.recipient,
+      amount: amounts[0]?.amount || '0',
+      amounts
+    };
+  }
+  if (proposalContent?.changes) {
+    return {
+      changes: proposalContent.changes
+    };
+  }
+  if (proposalContent?.params) {
+    return {
+      params: proposalContent.params
+    };
+  }
+  if (Array.isArray(proposalContent?.msgs)) {
+    const sends = proposalContent.msgs
+      .filter((msg: any) => msg?.['@type'] === '/cosmos.bank.v1beta1.MsgSend')
+      .map((msg: any) => parseMsgSend(msg));
+
+    return {
+      grantee: proposalContent?.grantee || '',
+      sends
+    };
+  }
+  if (proposalContent?.from_address && proposalContent?.to_address) {
+    return parseMsgSend(proposalContent);
+  }
+
+  return null;
+};
+
+const normalizeProposalMessages = (messages: any[]): IProposalMessageItem[] => {
+  if (Array.isArray(messages) === false) return [];
+
+  return messages.map((message) => {
+    const mergedPayload = { ...(message || {}), ...(message?.content || {}) };
+    const typeRaw = message?.content?.['@type'] || message?.['@type'] || DEFAULT_PROPOSAL_TYPE;
+    const typeLabel = PROPOSAL_MESSAGE_TYPE[typeRaw] || typeRaw;
+
+    return {
+      typeRaw,
+      typeLabel,
+      extraData: parseMessageExtraData(mergedPayload),
+      raw: mergedPayload
+    };
+  });
+};
+
+const buildMessageTypeSummary = (messageItems: IProposalMessageItem[], fallbackTypeRaw: string): string[] => {
+  if (messageItems.length === 0) {
+    return [fallbackTypeRaw];
+  }
+
+  const uniqueTypeRawList = new Set<string>();
+  for (const messageItem of messageItems) {
+    uniqueTypeRawList.add(messageItem.typeRaw || DEFAULT_PROPOSAL_TYPE);
+  }
+
+  return Array.from(uniqueTypeRawList.values());
+};
+
+const getProposalMessageSource = (proposal: any): any[] => {
+  if (Array.isArray(proposal?.messages) && proposal.messages.length > 0) {
+    return proposal.messages;
+  }
+
+  if (proposal?.content && typeof proposal.content === 'object') {
+    return [
+      {
+        '@type': proposal.content['@type'] || DEFAULT_PROPOSAL_TYPE,
+        ...proposal.content
+      }
+    ];
+  }
+
+  return [{ '@type': DEFAULT_PROPOSAL_TYPE }];
+};
+
 const getProposalList = async (): Promise<IProposalData[]> => {
   const proposalList = await firmaSDK.Gov.getAllProposalList(); // v0.3.7 firma-js new function
   const proposalParams = await firmaSDK.Gov.getParamAsGovParams();
-
-  const formatExtraData = (proposalContent: any) => {
-    if (proposalContent.plan) {
-      return {
-        height: proposalContent.plan.height,
-        name: proposalContent.plan.name,
-        info: proposalContent.plan.info
-      };
-    }
-    if (proposalContent.recipient) {
-      return {
-        recipient: proposalContent.recipient,
-        amount: proposalContent.amount[0].amount
-      };
-    }
-    if (proposalContent.changes) {
-      return {
-        changes: proposalContent.changes
-      };
-    }
-
-    return null;
-  };
 
   let result: IProposalData[] = [];
   for (let proposal of proposalList) {
@@ -223,22 +308,13 @@ const getProposalList = async (): Promise<IProposalData[]> => {
     const title = proposal.title; // Replaced from proposal.content.title
     const description = proposal.summary; // Replaced from proposal.content.description
 
-    const messageList = Array.isArray(proposal.messages) ? proposal.messages : [];
-    const firstMsg = messageList[0] as any;
-    const firmsMsgContent = firstMsg?.content || null;
-
-    //? Remove 'Msg' from the start
-    // Use default as "Text" if no messages are found
-    const isEmptyMessage = messageList.length === 0;
-    const proposalTypeRaw = isEmptyMessage
-      ? '/cosmos.gov.v1beta1.TextProposal'
-      : firmsMsgContent
-        ? firmsMsgContent['@type']
-        : firstMsg?.['@type'] || '';
-    const proposalType = proposalTypeRaw.replace('Msg', ''); //? Need to check
+    const messageItems = normalizeProposalMessages(getProposalMessageSource(proposal));
+    const firstMessage = messageItems[0];
+    const proposalTypeRaw = firstMessage?.typeRaw || DEFAULT_PROPOSAL_TYPE;
+    const proposalTypeSummary = buildMessageTypeSummary(messageItems, proposalTypeRaw);
 
     const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
-    const extraData = formatExtraData({ ...firstMsg, ...firmsMsgContent }); // Replaced from proposal.content
+    const extraData = firstMessage?.extraData || null;
 
     const votingStartTime = _proposal.voting_start_time; // Replaced from proposal.voting_start_time
     const votingEndTime = _proposal.voting_end_time; // Replaced from proposal.voting_end_time
@@ -253,9 +329,10 @@ const getProposalList = async (): Promise<IProposalData[]> => {
       status,
       title,
       description,
-      proposalType,
+      proposalTypeSummary,
       submitTime,
       extraData,
+      messages: messageItems,
       votingStartTime,
       votingEndTime,
       paramQuorum,
@@ -283,52 +360,19 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
   //! Note: changed type intentionally to match current return interface. Remove this if tally type is fixed
   const tallyRaw = await firmaSDK.Gov.getCurrentVoteInfo(proposalId);
 
-  const formatExtraData = (proposalContent: any) => {
-    if (proposalContent.plan) {
-      return {
-        height: proposalContent.plan.height,
-        name: proposalContent.plan.name,
-        info: proposalContent.plan.info
-      };
-    }
-    if (proposalContent.recipient) {
-      return {
-        recipient: proposalContent.recipient,
-        amount: proposalContent.amount[0].amount
-      };
-    }
-    if (proposalContent.changes) {
-      return {
-        changes: proposalContent.changes
-      };
-    }
-
-    return null;
-  };
-
   const _proposal = proposal as any;
 
   const status = proposal.status.toString();
   const title = proposal.title; // Replaced from proposal.content.title
   const description = proposal.summary; // Replaced from proposal.content.description
 
-  const messageList = Array.isArray(proposal.messages) ? proposal.messages : [];
-  const firstMsg = messageList[0] as any;
-  const firmsMsgContent = firstMsg?.content || null;
-  const isEmptyMessage = messageList.length === 0;
-
-  // Use default as "Text" if no messages are found
-  const proposalType = isEmptyMessage
-    ? '/cosmos.gov.v1beta1.TextProposal'
-    : firmsMsgContent
-      ? firmsMsgContent['@type']
-      : firstMsg?.['@type'] || ''; //? Need to check
+  const messageItems = normalizeProposalMessages(getProposalMessageSource(proposal));
+  const firstMessage = messageItems[0];
+  const proposalTypeSummary = buildMessageTypeSummary(messageItems, DEFAULT_PROPOSAL_TYPE);
 
   const submitTime = _proposal.submit_time; // Replaced from proposal.submit_time
 
-  // Proposal before before v0.5.0 has extraData in firstMsg / after v0.5.0 has extraData in firmsMsgContent
-  // So just merge them into one object to reduct complexity
-  const extraData = formatExtraData({ ...firstMsg, ...firmsMsgContent }); // Replaced from proposal.content
+  const extraData = firstMessage?.extraData || null;
 
   const votingStartTime = _proposal.voting_start_time; // Replaced from proposal.voting_start_time
   const votingEndTime = _proposal.voting_end_time; // Replaced from proposal.voting_end_time
@@ -350,9 +394,10 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
     status,
     title,
     description,
-    proposalType,
+    proposalTypeSummary,
     submitTime,
     extraData,
+    messages: messageItems,
     votingStartTime,
     votingEndTime,
     paramQuorum,

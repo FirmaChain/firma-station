@@ -50,7 +50,9 @@ export const ItemColumn = styled.div`
   &:nth-child(3) {
     text-align: center;
     flex: 1 1 300px;
-    line-height: 50px;
+    line-height: 20px;
+    padding-top: 14px;
+    padding-bottom: 8px;
   }
 `;
 
@@ -119,6 +121,7 @@ export const SmallProposalTitle = styled.div`
 export const SmallProposalType = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingSmall};
   color: #777;
+  line-height: 20px;
 `;
 
 export const SmallProposalStatus = styled.div`

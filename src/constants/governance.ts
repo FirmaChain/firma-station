@@ -23,6 +23,9 @@ export const PROPOSAL_MESSAGE_TYPE: IKeyValue = {
   '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal': 'CommunityPoolSpend',
   '/cosmos.distribution.v1beta1.MsgCommunityPoolSpend': 'CommunityPoolSpend', // New
 
+  '/cosmos.authz.v1beta1.MsgExec': 'AuthzExec',
+  '/cosmos.bank.v1beta1.MsgSend': 'Send',
+
   '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal': 'SoftwareUpgrade',
   '/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade': 'SoftwareUpgrade', // New
   '/cosmos.upgrade.v1.MsgSoftwareUpgrade': 'SoftwareUpgrade' // New

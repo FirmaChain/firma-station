@@ -27,14 +27,15 @@ export interface IProposalData {
   status: string;
   title: string;
   description: string;
-  proposalType: string;
+  proposalTypeSummary: string[];
   submitTime: string;
   votingStartTime: string;
   votingEndTime: string;
   paramQuorum: number;
   paramMinDepositAmount: number;
   periodDeposit: number;
-  extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | null;
+  extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | IAuthzExec | IMsgSend | null;
+  messages: IProposalMessageItem[];
   proposer: string;
   tally: {
     yes: number;
@@ -54,8 +55,33 @@ interface ISoftwareUpgrade {
 interface ICommunityPoolSpend {
   recipient: string;
   amount: string;
+  amounts?: ITokenAmount[];
 }
 
 interface IParamChange {
-  changes: { subspace: string; key: string; value: string }[];
+  changes?: { subspace: string; key: string; value: string }[];
+  params?: Record<string, any>;
+}
+
+interface IAuthzExec {
+  grantee: string;
+  sends: IMsgSend[];
+}
+
+interface IMsgSend {
+  fromAddress: string;
+  toAddress: string;
+  amounts: ITokenAmount[];
+}
+
+interface ITokenAmount {
+  denom: string;
+  amount: string;
+}
+
+export interface IProposalMessageItem {
+  typeRaw: string;
+  typeLabel: string;
+  extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | IAuthzExec | IMsgSend | null;
+  raw: any;
 }

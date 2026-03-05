@@ -1,3 +1,5 @@
+import { IProposalMessageItem } from './lcd';
+
 export interface IProposalsState {
   proposals: IProposal[];
 }
@@ -7,7 +9,7 @@ export interface IProposalDetailState {
   title: string;
   description: string;
   status: string;
-  proposalType: string;
+  proposalTypeSummary: string[];
   submitTime: string;
   votingStartTime: string;
   votingEndTime: string;
@@ -15,6 +17,7 @@ export interface IProposalDetailState {
   paramQuorum: number;
   periodDeposit: number;
   extraData: any;
+  messages: IProposalMessageItem[];
   totalVotingPower: number;
   votes: any[];
   depositors: any[];
@@ -32,7 +35,7 @@ export interface ITally {
 
 interface IProposal {
   proposalId: string;
-  proposalType: string;
+  proposalTypeSummary: string[];
   status: string;
   title: string;
   description: string;
