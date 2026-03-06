@@ -265,6 +265,10 @@ const normalizeProposalMessages = (messages: any[]): IProposalMessageItem[] => {
   });
 };
 
+/** Exclude Text proposal messages so they are not shown in the Messages section (description covers text content). */
+const filterOutTextProposalMessages = (items: IProposalMessageItem[]): IProposalMessageItem[] =>
+  items.filter((item) => item.typeRaw !== DEFAULT_PROPOSAL_TYPE);
+
 const buildMessageTypeSummary = (messageItems: IProposalMessageItem[], fallbackTypeRaw: string): string[] => {
   if (messageItems.length === 0) {
     return [fallbackTypeRaw];
@@ -335,7 +339,7 @@ const getProposalList = async (): Promise<IProposalData[]> => {
       proposalTypeSummary,
       submitTime,
       extraData,
-      messages: messageItems,
+      messages: filterOutTextProposalMessages(messageItems),
       votingStartTime,
       votingEndTime,
       paramQuorum,
@@ -400,7 +404,7 @@ const getProposalFromId = async (proposalId: string): Promise<IProposalData> => 
     proposalTypeSummary,
     submitTime,
     extraData,
-    messages: messageItems,
+    messages: filterOutTextProposalMessages(messageItems),
     votingStartTime,
     votingEndTime,
     paramQuorum,
