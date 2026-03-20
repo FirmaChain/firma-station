@@ -162,7 +162,14 @@ const ExportMnemonicModal = () => {
               </ModalInputWrap>
               <ExportQRContainer>
                 <QRWrapper>
-                  <QRCode value={mnemonic} quietZone={0} logoImage={theme.urls.qrIcon} logoWidth={40} logoHeight={40} />
+                  <QRCode
+                    value={mnemonic}
+                    quietZone={0}
+                    logoImage={theme.urls.qrIcon}
+                    logoWidth={60}
+                    logoHeight={60}
+                    size={200}
+                  />
                 </QRWrapper>
               </ExportQRContainer>
               <ButtonWrapper>

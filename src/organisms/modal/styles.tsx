@@ -1125,8 +1125,8 @@ export const ExportQRContainer = styled.div`
 `;
 
 export const QRWrapper = styled.div`
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 200px;
   padding: 14px;
   background-color: white;
   border-radius: 8px;
