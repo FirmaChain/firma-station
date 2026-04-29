@@ -62,6 +62,14 @@ export default defineConfig(({ mode }) => {
       sourcemap: false
     },
 
+    resolve: {
+      preserveSymlinks: true
+    },
+
+    optimizeDeps: {
+      include: ['@firmachain/firma-js']
+    },
+
     define: {
       'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version)
     }

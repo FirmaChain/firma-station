@@ -8,8 +8,7 @@
     "@apollo/client": "^3.4.16",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@firmachain/firma-js": "0.3.8",
-    "@firmachain/firma-js-ledger": "^0.0.8",
+    "@firmachain/firma-js": "0.4.0-beta1",
     "@ledgerhq/hw-transport-webhid": "^6.29.4",
     "@mui/icons-material": "^5.0.5",
     "@mui/material": "^5.0.6",
@@ -17,7 +16,7 @@
     "@nivo/pie": "^0.87.0",
     "@pdf-lib/fontkit": "^1.1.1",
     "@reduxjs/toolkit": "^1.6.2",
-    "axios": "^1.15.0",
+    "axios": "^1.15.1",
     "crypto-js": "^4.1.1",
     "graphql": "^15.7.1",
     "hamburger-react": "^2.4.1",
@@ -92,5 +91,8 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.9.2",
+  "resolutions": {
+    "axios": "1.15.1"
+  }
 }
