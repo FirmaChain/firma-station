@@ -144,7 +144,7 @@ function HeaderDesktop() {
               {isLedger && <LedgerIconImg onClick={onClickLedger} />}
               <QrIconImg onClick={onClickQR} />
               <CopyIconImg onClick={clipboard} />
-              {isMobileApp ? (
+              {isExternalConnect(isLedger, isMobileApp) ? (
                 <LogoutImg onClick={onDisconnect} />
               ) : (
                 <SettingIconImg onClick={onSettings} />

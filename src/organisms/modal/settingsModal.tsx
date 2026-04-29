@@ -23,7 +23,6 @@ import {
 
 const ExportWalletModal = () => {
   const exportWalletModalState = useSelector((state: rootState) => state.modal.settings);
-  const { isLedger } = useSelector((state: rootState) => state.wallet);
   const { resetWallet } = useFirma();
 
   const menuList = [
@@ -49,23 +48,19 @@ const ExportWalletModal = () => {
           <HelpIcon onClick={() => window.open(GUIDE_LINK_WALLET_SETTING)} />
         </ModalTitle>
 
-        {!isLedger && (
-          <>
-            <SettingMenuListWrap>
-              {menuList.map((menu, index) => {
-                return (
-                  <SettingMenuItem key={index} onClick={() => openSubModal(menu.modalAction)}>
-                    <SettingMenuButton status={1}>{menu.name}</SettingMenuButton>
-                  </SettingMenuItem>
-                );
-              })}
-            </SettingMenuListWrap>
-            <DividerOR>
-              <DividerORLine />
-              <DividerORTypo>OR</DividerORTypo>
-            </DividerOR>
-          </>
-        )}
+        <SettingMenuListWrap>
+          {menuList.map((menu, index) => {
+            return (
+              <SettingMenuItem key={index} onClick={() => openSubModal(menu.modalAction)}>
+                <SettingMenuButton status={1}>{menu.name}</SettingMenuButton>
+              </SettingMenuItem>
+            );
+          })}
+        </SettingMenuListWrap>
+        <DividerOR>
+          <DividerORLine />
+          <DividerORTypo>OR</DividerORTypo>
+        </DividerOR>
         <DisconnectButton
           status={3}
           onClick={() => {
