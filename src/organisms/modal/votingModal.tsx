@@ -24,6 +24,7 @@ const VotingModal = () => {
   const votingModalState = useSelector((state: rootState) => state.modal.voting);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
+  const { isLedger} = useSelector((state: rootState) => state.wallet);
   const [votingType, setVotingType] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -61,11 +62,11 @@ const VotingModal = () => {
 
     getGasEstimationVote(modalData.proposalId, votingType)
       .then((gas) => {
-        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas, isLedger))) {
           modalActions.handleModalData({
             action: 'Voting',
             module: '/gov/vote',
-            data: { fees: getFeesFromGas(gas), gas },
+            data: { fees: getFeesFromGas(gas, isLedger), gas },
             prevModalAction: modalActions.handleModalVoting,
             txAction: votingTx,
             txParams: getParamsTx,

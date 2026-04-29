@@ -189,7 +189,7 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 
 const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { isInit, address, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isInit, address, isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
   const { balance } = useSelector((state: rootState) => state.user);
   const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
 
@@ -290,11 +290,11 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
   const withdrawAllValidatorAction = () => {
     getGasEstimationWithdrawAllValidator()
       .then((gas) => {
-        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) > convertToFctNumber(getFeesFromGas(gas, isLedger))) {
           modalActions.handleModalData({
             action: 'Withdraw',
             module: '/distribution/withdrawall',
-            data: { amount: totalStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
+            data: { amount: totalStakingState.stakingReward, fees: getFeesFromGas(gas, isLedger), gas },
             txAction: withdrawAllValidatorTx,
             txParams: getParamsTx,
           });

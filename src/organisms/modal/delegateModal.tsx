@@ -44,7 +44,7 @@ const DelegateModal = () => {
   const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { delegate, getGasEstimationDelegate, setUserData } = useFirma();
@@ -153,11 +153,11 @@ const DelegateModal = () => {
 
     getGasEstimationDelegate(targetValidator, convertNumber(amount))
       .then((gas) => {
-        if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas, isLedger))) {
           modalActions.handleModalData({
             action: 'Delegate',
             module: '/staking/delegate',
-            data: { amount, fees: getFeesFromGas(gas), gas },
+            data: { amount, fees: getFeesFromGas(gas, isLedger), gas },
             prevModalAction: modalActions.handleModalDelegate,
             txAction: delegateTx,
             txParams: getParamsTx,
@@ -207,9 +207,13 @@ const DelegateModal = () => {
           </ModalInputRowWrap>
           <ModalInputRowWrap>
             <ModalLabel>Fee estimation</ModalLabel>
-            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} ${
-              CHAIN_CONFIG.PARAMS.SYMBOL
-            }`}</ModalValue>
+            <ModalValue>
+              {isLedger
+                ? 'Calculated when signing'
+                : `${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} ${
+                    CHAIN_CONFIG.PARAMS.SYMBOL
+                  }`}
+            </ModalValue>
           </ModalInputRowWrap>
           <ModalInputWrap>
             <ModalLabel>Amount</ModalLabel>

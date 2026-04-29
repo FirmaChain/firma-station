@@ -49,6 +49,7 @@ import {
 const RestakeModal = () => {
   const restakeModalState = useSelector((state: rootState) => state.modal.restake);
   const modalData = useSelector((state: rootState) => state.modal.data);
+  const { isLedger} = useSelector((state: rootState) => state.wallet);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -143,12 +144,17 @@ const RestakeModal = () => {
     return date;
   };
 
+  // .catch logs the error before rejectTx(). The previous empty-catch form
+  // (`() => rejectTx()`) hid broadcast failures behind a generic toast; the
+  // TEXTUAL-mode sig verification issues we hit on authz flows were only
+  // traceable once this logging landed.
   const grantStakeAuthorizationDelegateTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     grantStakeAuthorizationDelegate(validatorAddressList, expiryDate, 0, gas)
       .then(() => {
         resolveTx();
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error('[GrantStakeAuth] tx error:', e);
         rejectTx();
       });
   };
@@ -174,7 +180,8 @@ const RestakeModal = () => {
       .then(() => {
         resolveTx();
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error('[RevokeStakeAuth] tx error:', e);
         rejectTx();
       });
   };
@@ -185,7 +192,7 @@ const RestakeModal = () => {
         modalActions.handleModalData({
           action: 'Grant restake',
           module: '/authz/stake/grant',
-          data: { fees: getFeesFromGas(gas), gas },
+          data: { fees: getFeesFromGas(gas, isLedger), gas },
           txAction: grantStakeAuthorizationDelegateTx,
           txParams: getGrantParamsTx,
         });
@@ -207,7 +214,7 @@ const RestakeModal = () => {
         modalActions.handleModalData({
           action: 'Revoke restake',
           module: '/authz/stake/revoke',
-          data: { fees: getFeesFromGas(gas), gas },
+          data: { fees: getFeesFromGas(gas, isLedger), gas },
           txAction: revokeStakeAuthorizationDelegateTx,
           txParams: getRevokeParamsTx,
         });

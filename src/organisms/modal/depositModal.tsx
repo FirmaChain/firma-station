@@ -36,7 +36,7 @@ const DepositModal = () => {
   const depositModalState = useSelector((state: rootState) => state.modal.deposit);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { deposit, getGasEstimationDeposit, setUserData } = useFirma();
@@ -112,11 +112,11 @@ const DepositModal = () => {
 
     getGasEstimationDeposit(proposalId, convertNumber(amount))
       .then((gas) => {
-        if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) - convertNumber(amount) >= convertToFctNumber(getFeesFromGas(gas, isLedger))) {
           modalActions.handleModalData({
             action: 'Deposit',
             module: '/gov/deposit',
-            data: { amount, fees: getFeesFromGas(gas), gas },
+            data: { amount, fees: getFeesFromGas(gas, isLedger), gas },
             prevModalAction: modalActions.handleModalDeposit,
             txAction: depositTx,
             txParams: getParamsTx,
@@ -158,9 +158,13 @@ const DepositModal = () => {
 
           <ModalInputRowWrap>
             <ModalLabel>Fee estimation</ModalLabel>
-            <ModalValue>{`${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} ${
-              CHAIN_CONFIG.PARAMS.SYMBOL
-            }`}</ModalValue>
+            <ModalValue>
+              {isLedger
+                ? 'Calculated when signing'
+                : `${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} ${
+                    CHAIN_CONFIG.PARAMS.SYMBOL
+                  }`}
+            </ModalValue>
           </ModalInputRowWrap>
 
           <ModalInputWrap>

@@ -12,7 +12,7 @@ const GasEstimationModal = () => {
   const gasEstimationModalState = useSelector((state: rootState) => state.modal.gasEstimation);
 
   const closeGasEstimationModal = () => {
-    modalActions.handleModalQueueTx(false);
+    modalActions.handleModalGasEstimation(false);
   };
 
   return (
@@ -28,7 +28,7 @@ const GasEstimationModal = () => {
           <LoadingWrapper>
             <GridLoader loading={true} color={'#3550DE80'} />
           </LoadingWrapper>
-          <ModalTypo>To estimate your gas fee we need your ledger signature</ModalTypo>
+          <ModalTypo>Calculating gas and fee...</ModalTypo>
         </ModalContent>
       </ModalContainer>
     </Modal>

@@ -100,7 +100,7 @@ const Row = ({ data, index, style }: any) => {
 const VotingCard = ({ proposalState }: IProps) => {
   const [currentVotingTab, setVotingTab] = useState(0);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const isSmall = useMediaQuery({ query: '(max-width: 900px)' });
