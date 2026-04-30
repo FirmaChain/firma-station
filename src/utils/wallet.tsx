@@ -508,6 +508,7 @@ function useFirma() {
     const stakingReward = convertToFctNumber(totalReward.total);
     const stakingRewardList = totalReward.rewards;
 
+    const delegationList = await getDelegationList();
     const redelegationList = await getRedelegationList();
     const undelegationList = await getUndelegationList();
 
@@ -517,7 +518,7 @@ function useFirma() {
       undelegate,
       stakingReward,
       stakingRewardList,
-      delegateList,
+      delegationList,
       redelegationList,
       undelegationList
     };
@@ -558,10 +559,15 @@ function useFirma() {
     const delegationList = (await firmaSDK.Staking.getTotalDelegationInfo(address)).dataList;
 
     const parseList = delegationList.map((value) => {
+      const validatorAddress = value.delegation.validator_address;
+      const { moniker, avatarURL } = getAvatarInfo(avatarList, validatorAddress);
+      console.log("value.balance.amount", value.balance.amount);
       return {
-        value: value.delegation.validator_address,
-        label: value.delegation.validator_address,
-        amount: value.balance.amount
+        validatorAddress,
+        delegatorAddress: value.delegation.delegator_address,
+        moniker,
+        avatarURL,
+        amount: convertNumber(value.balance.amount)
       };
     });
 
@@ -609,28 +615,26 @@ function useFirma() {
     const firmaSDK = FirmaSDK.getSDK();
     const address = getAddressInternal();
 
-    const redelegationList = await firmaSDK.Staking.getTotalRedelegationInfo(address);
+    const redelegationInfoList = await firmaSDK.Staking.getTotalRedelegationInfo(address);
 
     let parseList = [];
-    for (let redelegation of redelegationList) {
-      const srcAddress = redelegation.redelegation.validator_src_address;
-      const dstAddress = redelegation.redelegation.validator_dst_address;
-      const srcAvatar = getAvatarInfo(avatarList, srcAddress);
-      const dstAvatar = getAvatarInfo(avatarList, dstAddress);
+    for (let redelegationInfo of redelegationInfoList) {
+      const srcValoperAddress = redelegationInfo.redelegation.validator_src_address;
+      const dstvaloperAddress = redelegationInfo.redelegation.validator_dst_address;
 
-      for (let entry of redelegation.entries) {
-        const completionTime = entry.redelegation_entry.completion_time;
-        const balance = convertToFctString(entry.redelegation_entry.shares_dst);
-
+      for (let redelegationEntry of redelegationInfo.entries) {
         parseList.push({
-          srcAddress,
-          srcMoniker: srcAvatar.moniker,
-          srcAvatarURL: srcAvatar.avatarURL,
-          dstAddress,
-          dstMoniker: dstAvatar.moniker,
-          dstAvatarURL: dstAvatar.avatarURL,
-          balance,
-          completionTime
+          delegatorAddress: address,
+          delegatorMoniker: '',
+          delegatorAvatarURL: '',
+          balance: redelegationEntry.balance,
+          completionTime: redelegationEntry.redelegation_entry.completion_time,
+          srcAddress: srcValoperAddress,
+          srcMoniker: getAvatarInfo(avatarList, srcValoperAddress).moniker,
+          srcAvatarURL: getAvatarInfo(avatarList, srcValoperAddress).avatarURL,
+          dstAddress: dstvaloperAddress,
+          dstMoniker: getAvatarInfo(avatarList, dstvaloperAddress).moniker,
+          dstAvatarURL: getAvatarInfo(avatarList, dstvaloperAddress).avatarURL,
         });
       }
     }
@@ -648,19 +652,20 @@ function useFirma() {
 
     const undelegationList = await firmaSDK.Staking.getTotalUndelegateInfo(address);
 
+    console.log("undelegationList", undelegationList);
     let parseList = [];
     for (let undelegation of undelegationList) {
       const validatorAddress = undelegation.validator_address;
-      const avatar = getAvatarInfo(avatarList, validatorAddress);
+      const { moniker, avatarURL } = getAvatarInfo(avatarList, validatorAddress);
 
       for (let entry of undelegation.entries) {
         const completionTime = entry.completion_time;
-        const balance = convertToFctString(entry.balance);
+        const balance = entry.balance;
 
         parseList.push({
           validatorAddress,
-          moniker: avatar.moniker,
-          avatarURL: avatar.avatarURL,
+          moniker,
+          avatarURL,
           balance,
           completionTime
         });
