@@ -825,9 +825,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firmachain/firma-js@npm:0.4.0-beta1":
-  version: 0.4.0-beta1
-  resolution: "@firmachain/firma-js@npm:0.4.0-beta1"
+"@firmachain/firma-js@npm:0.4.0-beta2":
+  version: 0.4.0-beta2
+  resolution: "@firmachain/firma-js@npm:0.4.0-beta2"
   dependencies:
     "@cosmjs/amino": "npm:0.34.0"
     "@cosmjs/math": "npm:0.34.0"
@@ -848,7 +848,7 @@ __metadata:
     pako: "npm:2.0.2"
     protobufjs: "npm:7.5.5"
     readline-sync: "npm:1.4.10"
-  checksum: 10c0/44ebe24859d2ff9e1125742143505ba511f9ced38e8eec07183b9193ff948a75866df442e049ea626f9b140179634b6a40dd0341b43cc2f1b18f51ed7ac1b1f9
+  checksum: 10c0/1cb9bb40ba42e4f5aa6f9370a00dfaabdf7d5bd7a9918e6c5afe060b365dd10106444c4aed8712ba8de6b57725762cf0606f7007975822c9be4eb95ed10719f6
   languageName: node
   linkType: hard
 
@@ -4369,7 +4369,7 @@ __metadata:
     "@babel/plugin-proposal-private-property-in-object": "npm:^7.21.11"
     "@emotion/react": "npm:^11.5.0"
     "@emotion/styled": "npm:^11.3.0"
-    "@firmachain/firma-js": "npm:0.4.0-beta1"
+    "@firmachain/firma-js": "npm:0.4.0-beta2"
     "@ledgerhq/hw-transport-webhid": "npm:^6.29.4"
     "@mui/icons-material": "npm:^5.0.5"
     "@mui/material": "npm:^5.0.6"
