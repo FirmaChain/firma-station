@@ -189,7 +189,7 @@ export const DelegationItemColumn = styled.div`
     flex: 1;
     text-align: right;
   }
-  &:nth-child(3) {
+  &:last-child {
     flex: 1;
     text-align: right;
     margin-right: 20px;
@@ -306,7 +306,7 @@ export const RedelegationItemColumn = styled.div`
     text-align: right;
     margin-right: 5px;
   }
-  &:nth-child(4) {
+  &:last-child {
     flex: 1;
     min-width: 16rem;
     margin-right: 5px;
@@ -342,8 +342,9 @@ export const RedelegationHeaderColumn = styled.div`
     text-align: right;
     margin-right: 5px;
   }
-  &:nth-child(4) {
+  &:last-child {
     flex: 1;
+    text-align: right;
     min-width: 16rem;
     margin-right: 5px;
   }
