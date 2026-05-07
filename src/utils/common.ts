@@ -51,12 +51,12 @@ export const getFeesFromGas = (estimatedGas: number, skipFloor = false) => {
 };
 
 export const getDefaultFee = (_isLedger: boolean, isMobileApp: boolean): number => {
-  if (isMobileApp) return CHAIN_CONFIG.LEDGER_FEE;
+  if (isMobileApp) return CHAIN_CONFIG.MOBILE_FEE;
   return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee;
 };
 
 export const getDefaultGas = (isLedger: boolean, isMobileApp: boolean) => {
-  return isLedger || isMobileApp ? CHAIN_CONFIG.LEDGER_GAS : CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+  return isLedger || isMobileApp ? CHAIN_CONFIG.MOBILE_GAS : CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
 };
 
 export const isValid = (data: any) => {
