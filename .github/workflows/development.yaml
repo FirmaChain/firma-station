@@ -71,7 +71,7 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ vars.PROD_FIRMACHAIN_AWS_ACCOUNT_ID }}:role/${{ vars.PROD_FIRMACHAIN_AWS_IAM_ROLE_NAME }}
+          role-to-assume: arn:aws:iam::${{ vars.PROD_FIRMACHAIN_AWS_ACCOUNT_ID }}:role/${{ vars.PROD_FIRMACHAIN_AWS_IAM_ROLE_NAME_TESTNET }}
           aws-region: ${{ vars.PROD_FIRMACHAIN_AWS_REGION }}
 
       - name: Sync immutable assets to S3
