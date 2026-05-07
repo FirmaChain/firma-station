@@ -1,0 +1,62 @@
+name: Deploy mainnet
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-mainnet
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: mainnet
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - run: corepack enable
+
+      - run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.PROD_FIRMACHAIN_AWS_ACCOUNT_ID }}:role/${{ vars.PROD_FIRMACHAIN_AWS_IAM_ROLE_NAME }}
+          aws-region: ${{ vars.PROD_FIRMACHAIN_AWS_REGION }}
+
+      - name: Sync immutable assets to S3
+        run: |
+          aws s3 sync ./build s3://${{ vars.PROD_FIRMACHAIN_AWS_S3_BUCKET_MAINNET }} \
+            --delete \
+            --cache-control "public,max-age=31536000,immutable" \
+            --exclude "index.html" \
+            --exclude "*.json"
+
+      - name: Sync entry files to S3 (no-cache)
+        run: |
+          aws s3 sync ./build s3://${{ vars.PROD_FIRMACHAIN_AWS_S3_BUCKET_MAINNET }} \
+            --cache-control "no-cache" \
+            --exclude "*" \
+            --include "index.html" \
+            --include "*.json"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.PROD_FIRMACHAIN_AWS_DISTRIBUTION_ID_MAINNET }} \
+            --paths "/*"
