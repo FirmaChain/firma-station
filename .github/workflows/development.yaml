@@ -36,12 +36,12 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ vars.PROD_FIRMACHAIN_AWS_ACCOUNT_ID }}:role/${{ vars.PROD_FIRMACHAIN_AWS_IAM_ROLE_NAME }}
+          aws-region: ${{ vars.PROD_FIRMACHAIN_AWS_REGION }}
 
       - name: Sync immutable assets to S3
         run: |
-          aws s3 sync ./build s3://${{ vars.S3_BUCKET }} \
+          aws s3 sync ./build s3://${{ vars.PROD_FIRMACHAIN_AWS_S3_BUCKET_TESTNET }} \
             --delete \
             --cache-control "public,max-age=31536000,immutable" \
             --exclude "index.html" \
@@ -49,7 +49,7 @@ jobs:
 
       - name: Sync entry files to S3 (no-cache)
         run: |
-          aws s3 sync ./build s3://${{ vars.S3_BUCKET }} \
+          aws s3 sync ./build s3://${{ vars.PROD_FIRMACHAIN_AWS_S3_BUCKET_TESTNET }} \
             --cache-control "no-cache" \
             --exclude "*" \
             --include "index.html" \
@@ -58,5 +58,5 @@ jobs:
       - name: Invalidate CloudFront
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --distribution-id ${{ vars.PROD_FIRMACHAIN_AWS_DISTRIBUTION_ID_TESTNET }} \
             --paths "/*"
