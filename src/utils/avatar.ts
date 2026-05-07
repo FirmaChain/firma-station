@@ -11,17 +11,16 @@ export const getAvatarInfo = (
   operatorAddress: string
 ): { moniker: string; avatarURL: string } => {
   const avatar = avatarList.find((avatar) => avatar.operatorAddress === operatorAddress);
-  if (avatar) {
+  if (avatar && avatar.moniker) {
     return {
       moniker: avatar.moniker,
       avatarURL: avatar.url
     };
-  } else {
-    return {
-      moniker: operatorAddress,
-      avatarURL: ''
-    };
   }
+  return {
+    moniker: operatorAddress,
+    avatarURL: avatar?.url || ''
+  };
 };
 
 export const getAvatarInfoFromAcc = (
@@ -31,17 +30,16 @@ export const getAvatarInfoFromAcc = (
   const avatar = avatarList.find(
     (avatar) => avatar.operatorAddress === FirmaUtil.getValOperAddressFromAccAddress(accAddress)
   );
-  if (avatar) {
+  if (avatar && avatar.moniker) {
     return {
       moniker: avatar.moniker,
       avatarURL: avatar.url
     };
-  } else {
-    return {
-      moniker: accAddress,
-      avatarURL: ''
-    };
   }
+  return {
+    moniker: accAddress,
+    avatarURL: avatar?.url || ''
+  };
 };
 
 export const initializeAvatar = (lastUpdated: number) => {

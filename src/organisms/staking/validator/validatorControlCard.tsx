@@ -24,7 +24,7 @@ interface IProps {
 const DelegationCard = ({ targetStakingState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
   const { avatarList } = useSelector((state: rootState) => state.avatar);
   const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw, getUndelegationList } = useFirma();
 
@@ -49,7 +49,15 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
   const redelegateAction = () => {
     getDelegationList()
       .then((delegationList) => {
-        if (delegationList && delegationList.filter((v) => v.value !== targetValidator).length === 0) {
+        const options = (delegationList || [])
+          .filter((d) => d.validatorAddress !== targetValidator)
+          .map((d) => ({
+            value: d.validatorAddress,
+            label: getMoniker(d.validatorAddress),
+            amount: d.amount,
+          }));
+
+        if (options.length === 0) {
           enqueueSnackbar('There is no target that has been delegated', {
             variant: 'error',
             autoHideDuration: 2000,
@@ -57,16 +65,10 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
           return;
         }
 
-        if (delegationList !== undefined) {
-          for (let i = 0; i < delegationList.length; i++) {
-            delegationList[i].label = getMoniker(delegationList[i].value);
-          }
-        }
-
         if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger, isMobileApp) + 5000)) {
           modalActions.handleModalData({
             action: 'Redelegate',
-            data: { targetValidator, delegationList },
+            data: { targetValidator, delegationList: options },
           });
 
           modalActions.handleModalRedelegate(true);
@@ -77,7 +79,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
           });
         }
       })
-      .catch((e) => {});
+      .catch(() => {});
   };
 
   const getMoniker = (validatorAddress: string) => {
@@ -139,11 +141,11 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
   const withdrawAction = () => {
     getGasEstimationWithdraw(targetValidator)
       .then((gas) => {
-        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
+        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas, isLedger))) {
           modalActions.handleModalData({
             action: 'Withdraw',
             module: '/distribution/withdraw',
-            data: { amount: targetStakingState.stakingReward, fees: getFeesFromGas(gas), gas },
+            data: { amount: targetStakingState.stakingReward, fees: getFeesFromGas(gas, isLedger), gas },
             txAction: withdrawTx,
             txParams: getParamsTx,
           });

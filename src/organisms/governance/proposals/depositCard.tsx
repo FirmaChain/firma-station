@@ -27,7 +27,7 @@ interface IProps {
 
 const DepositCard = ({ proposalState }: IProps) => {
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const getAddTimeFormat = (startTime: string, second: number) => {

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import useFirma from '../../utils/wallet';
 import { modalActions } from '../../redux/action';
+import { rootState } from '../../redux/reducers';
 import { getFeesFromGas } from '../../utils/common';
 
 const Contaienr = styled.div`
@@ -27,6 +29,7 @@ const ButtonText = styled.span`
 `;
 
 const CancelProposalButton = ({ proposalId }: { proposalId: string }) => {
+  const { isLedger} = useSelector((state: rootState) => state.wallet);
   const { cancelProposal, getGasEstimationCancelProposal } = useFirma();
 
   const cancelProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) =>
@@ -50,7 +53,7 @@ const CancelProposalButton = ({ proposalId }: { proposalId: string }) => {
     modalActions.handleModalData({
       action: 'Cancel Proposal',
       module: `/gov/cancelproposal`,
-      data: { fees: getFeesFromGas(gas), gas: gas },
+      data: { fees: getFeesFromGas(gas, isLedger), gas: gas },
       prevModalAction: modalActions.handleModalNewProposal,
       txAction: cancelProposalTx,
       txParams: getParamsTx

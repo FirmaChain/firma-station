@@ -96,7 +96,7 @@ const customStyles = {
 const SendModal = () => {
   const sendModalState = useSelector((state: rootState) => state.modal.send);
   const { balance, tokenList } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
 
   const {
     sendFCT,
@@ -301,7 +301,7 @@ const SendModal = () => {
           modalActions.handleModalData({
             action: 'Send',
             module: '/bank/send',
-            data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress },
+            data: { amount, fees: getFeesFromGas(gas, isLedger), gas, memo, targetAddress },
             prevModalAction: modalActions.handleModalSend,
             txAction: sendTx,
             txParams: getParamsTx,
@@ -317,7 +317,7 @@ const SendModal = () => {
             modalActions.handleModalData({
               action: 'Send',
               module: '/ibc/transfer',
-              data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress, symbol: tokenData.symbol },
+              data: { amount, fees: getFeesFromGas(gas, isLedger), gas, memo, targetAddress, symbol: tokenData.symbol },
               prevModalAction: modalActions.handleModalSend,
               txAction: sendTx,
               txParams: getParamsTx,
@@ -334,7 +334,7 @@ const SendModal = () => {
             modalActions.handleModalData({
               action: 'Send',
               module: '/bank/sendToken',
-              data: { amount, fees: getFeesFromGas(gas), gas, memo, targetAddress, symbol: tokenData.symbol },
+              data: { amount, fees: getFeesFromGas(gas, isLedger), gas, memo, targetAddress, symbol: tokenData.symbol },
               prevModalAction: modalActions.handleModalSend,
               txAction: sendTx,
               txParams: getParamsTx,
@@ -429,7 +429,11 @@ const SendModal = () => {
 
               <ModalInputRowWrap>
                 <ModalLabel>Fee estimation</ModalLabel>
-                <ModalValue>{`${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} FCT`}</ModalValue>
+                <ModalValue>
+                  {isLedger
+                    ? 'Calculated when signing'
+                    : `${convertToFctString(getDefaultFee(isLedger, isMobileApp).toString())} FCT`}
+                </ModalValue>
               </ModalInputRowWrap>
             </>
           )}

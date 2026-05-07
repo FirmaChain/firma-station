@@ -1,7 +1,21 @@
 import { FirmaUtil } from '@firmachain/firma-js';
 import { CHAIN_CONFIG } from '../config';
 
-export const isElectron = navigator.userAgent.includes('Electron');
+/**
+ * Runs inside the Electron desktop shell.
+ *
+ * We check for the preload-exposed `window.electron` bridge rather than
+ * scanning `navigator.userAgent`, because:
+ *   1. UA string spoofing (browser extensions, headless contexts) can falsely
+ *      flag a plain browser as Electron, routing Ledger IPC calls to a
+ *      non-existent `window.electron.sendSync` and crashing the connect flow.
+ *   2. Whether the app can actually reach Electron IPC is precisely the
+ *      thing we care about, and that is what `window.electron` signals.
+ */
+export const isElectron =
+  typeof window !== 'undefined' &&
+  typeof (window as any).electron !== 'undefined' &&
+  typeof (window as any).electron.sendSync === 'function';
 
 export const isExternalConnect = (isLedger: boolean, isMobileApp: boolean) => {
   return isLedger || isMobileApp;
@@ -29,14 +43,16 @@ export const convertCurrent = (value: number | string) => {
   return val.join('.');
 };
 
-export const getFeesFromGas = (estimatedGas: number) => {
+export const getFeesFromGas = (estimatedGas: number, skipFloor = false) => {
   const fee = Math.ceil(estimatedGas * 0.1);
 
+  if (skipFloor) return fee;
   return Math.max(fee, CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
 };
 
-export const getDefaultFee = (isLedger: boolean, isMobileApp: boolean): number => {
-  return isLedger || isMobileApp ? CHAIN_CONFIG.LEDGER_FEE : CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee;
+export const getDefaultFee = (_isLedger: boolean, isMobileApp: boolean): number => {
+  if (isMobileApp) return CHAIN_CONFIG.LEDGER_FEE;
+  return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee;
 };
 
 export const getDefaultGas = (isLedger: boolean, isMobileApp: boolean) => {

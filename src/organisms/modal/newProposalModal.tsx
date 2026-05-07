@@ -88,7 +88,7 @@ const NewProposalModal = () => {
   const selectInputRef = useRef<any>(null);
   const { enqueueSnackbar } = useSnackbar();
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
 
   const [proposalType, setProposalType] = useState('');
   const [title, setTitle] = useState('');
@@ -146,6 +146,12 @@ const NewProposalModal = () => {
     setParamObj({});
   };
 
+  // Each proposal case's .catch logs the error before rejectTx(). Previously
+  // these catch blocks swallowed the error (`.catch(() => rejectTx())`), so
+  // chain-side broadcast failures (e.g. TEXTUAL sig verification, deposit
+  // rules) produced only a toast with no console signal — impossible to
+  // diagnose without patching the SDK. Keep the `[<ProposalType>] tx error:`
+  // tag so failures in different proposal paths remain distinguishable.
   const newProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) => {
     switch (proposalType) {
       case 'TEXT_PROPOSAL':
@@ -154,7 +160,8 @@ const NewProposalModal = () => {
             setUserData();
             resolveTx();
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error('[TextProposal] tx error:', e);
             rejectTx();
           });
         break;
@@ -164,7 +171,8 @@ const NewProposalModal = () => {
             setUserData();
             resolveTx();
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error('[CommunityPoolSpend] tx error:', e);
             rejectTx();
           });
         break;
@@ -210,7 +218,8 @@ const NewProposalModal = () => {
             setUserData();
             resolveTx();
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error('[StakingParamsUpdate] tx error:', e);
             rejectTx();
           });
         break;
@@ -248,7 +257,8 @@ const NewProposalModal = () => {
             setUserData();
             resolveTx();
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error('[GovParamsUpdate] tx error:', e);
             rejectTx();
           });
         break;
@@ -258,7 +268,8 @@ const NewProposalModal = () => {
             setUserData();
             resolveTx();
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error('[SoftwareUpgrade] tx error:', e);
             rejectTx();
           });
         break;
@@ -268,7 +279,8 @@ const NewProposalModal = () => {
             setUserData();
             resolveTx();
           })
-          .catch(() => {
+          .catch((e) => {
+            console.error('[CancelSoftwareUpgrade] tx error:', e);
             rejectTx();
           });
         break;
@@ -382,7 +394,7 @@ const NewProposalModal = () => {
       case 'TEXT_PROPOSAL':
         return {
           title,
-          description,
+          summary: description,
           initialDepositFCT: initialDeposit
         };
       case 'COMMUNITY_POOL_SPEND_PROPOSAL':
@@ -691,11 +703,11 @@ const NewProposalModal = () => {
     }
 
     if (currentGas > 0) {
-      if (convertNumber(balance) - Number(initialDeposit) >= convertToFctNumber(getFeesFromGas(currentGas))) {
+      if (convertNumber(balance) - Number(initialDeposit) >= convertToFctNumber(getFeesFromGas(currentGas, isLedger))) {
         modalActions.handleModalData({
           action: 'Proposal',
           module: `/gov${getGovModuleName()}`,
-          data: { fees: getFeesFromGas(currentGas), gas: currentGas },
+          data: { fees: getFeesFromGas(currentGas, isLedger), gas: currentGas },
           prevModalAction: modalActions.handleModalNewProposal,
           txAction: newProposalTx,
           txParams: getParamsTx

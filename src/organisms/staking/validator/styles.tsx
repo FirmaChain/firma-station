@@ -10,7 +10,7 @@ export const CardWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundSideBar};
   display: flex;
   z-index: 2;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 0 30px;
 `;
 
@@ -63,6 +63,25 @@ export const DelegatorsCardWrapper = styled.div`
   }
 `;
 
+export const TabBar = styled.div`
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid #444;
+  margin-bottom: 8px;
+`;
+
+export const TabItem = styled.div<{ active?: boolean }>`
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.sizes.defaultSize};
+  color: ${({ active }) => (active ? '#fff' : '#888')};
+  border-bottom: 2px solid ${({ active }) => (active ? '#3550DE' : 'transparent')};
+  transition: color 0.15s ease;
+  &:hover {
+    color: #ddd;
+  }
+`;
+
 export const DelegatorList = styled.div`
   width: 100%;
   height: 300px;
@@ -79,15 +98,11 @@ export const RowWrapper = styled.div`
   flex-wrap: nowrap;
 `;
 
-export const Column = styled.div`
+export const Column = styled.div<{ avatar?: boolean }>`
   width: 100%;
-  & {
-    flex: 1 1 100%;
-  }
-  &:nth-child(1) {
-    flex: 90px;
-  }
-  &:nth-child(3) {
+  flex: ${({ avatar }) => (avatar ? '0 0 40px' : '1 1 100%')};
+
+  &:last-child {
     text-align: right;
     padding-right: 30px;
   }

@@ -90,7 +90,7 @@ const RedelegateModal = () => {
   const redelegateModalState = useSelector((state: rootState) => state.modal.redelegate);
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
-  const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
   const { enqueueSnackbar } = useSnackbar();
 
   const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma();
@@ -191,12 +191,12 @@ const RedelegateModal = () => {
 
     getGasEstimationRedelegate(sourceValidator, targetValidator, convertNumber(amount))
       .then((gas) => {
-        if (isLedger || isMobileApp) gas += 50000;
-        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas))) {
+        if (isMobileApp) gas += 50000;
+        if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas, isLedger))) {
           modalActions.handleModalData({
             action: 'Redelegate',
             module: '/staking/redelegate',
-            data: { amount, fees: getFeesFromGas(gas), gas },
+            data: { amount, fees: getFeesFromGas(gas, isLedger), gas },
             prevModalAction: modalActions.handleModalRedelegate,
             txAction: redelegateTx,
             txParams: getParamsTx,
@@ -252,9 +252,13 @@ const RedelegateModal = () => {
 
               <ModalInputRowWrap>
                 <ModalLabel>Fee estimation</ModalLabel>
-                <ModalValue>{`${convertToFctString((getDefaultFee(isLedger, isMobileApp) + 5000).toString())} ${
-                  CHAIN_CONFIG.PARAMS.SYMBOL
-                }`}</ModalValue>
+                <ModalValue>
+                  {isLedger
+                    ? 'Calculated when signing'
+                    : `${convertToFctString((getDefaultFee(isLedger, isMobileApp) + 5000).toString())} ${
+                        CHAIN_CONFIG.PARAMS.SYMBOL
+                      }`}
+                </ModalValue>
               </ModalInputRowWrap>
 
               <ModalLabel>Amount</ModalLabel>

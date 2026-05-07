@@ -4,16 +4,20 @@ import { useSelector } from 'react-redux';
 import { rootState } from '../../redux/reducers';
 import useFirma from '../../utils/wallet';
 import { CHAIN_CONFIG } from '../../config';
-import { convertNumber, makeDecimalPoint } from '../../utils/common';
+import { convertNumber, convertToFctString, makeDecimalPoint } from '../../utils/common';
 import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
 import {
   IDelegationState,
-  IDelegateInfo,
+  IDelegationList,
   ITotalStakingState,
   ITargetStakingState,
   IValidatorsState,
   IValidator,
   IGrantsDataState,
+  IUndelegationList,
+  IRedelegationList,
+  IRedelegationState,
+  IUndelegationState,
 } from '../../interfaces/staking';
 import { ISigningInfo, IValidatorData } from '../../interfaces/lcd';
 
@@ -25,12 +29,16 @@ import {
   getSignedBlocksWindow,
   getValidatorFromAddress,
   getValidatorDelegationsFromAddress,
+  getValidatorUndelegationsFromAddress,
+  getValidatorRedelegationsFromAddress,
   getAccAddressFromValOperAddress,
   getSigningInfos,
 } from '../../utils/lcdQuery';
 
 export {
   useDelegations,
+  useUndelegations,
+  useRedelegations,
   useStakingData,
   useStakingDataFromTarget,
   useGrantData,
@@ -45,7 +53,7 @@ const useDelegations = () => {
   const [delegateState, setDelegateState] = useState<IDelegationState>({
     self: 0,
     selfPercent: 0,
-    delegateList: [],
+    delegationList: [],
   });
 
   useEffect(() => {
@@ -56,7 +64,7 @@ const useDelegations = () => {
         .then(async (result) => {
           let self = 0;
           let totalDelegationAmount = 0;
-          let delegateList: IDelegateInfo[] = [];
+          let delegationList: IDelegationList[] = [];
 
           for (const delegate of result) {
             totalDelegationAmount += delegate.amount;
@@ -66,8 +74,9 @@ const useDelegations = () => {
 
             const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
 
-            delegateList.push({
+            delegationList.push({
               ...delegate,
+              validatorAddress: targetValidator,
               moniker,
               avatarURL,
             });
@@ -78,7 +87,7 @@ const useDelegations = () => {
           setDelegateState({
             self,
             selfPercent,
-            delegateList,
+            delegationList,
           });
         })
         .catch(() => {});
@@ -88,6 +97,98 @@ const useDelegations = () => {
   return {
     delegateState,
   };
+};
+
+const useRedelegations = () => {
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
+  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+
+  const [redelegateState, setRedelegateState] = useState<IRedelegationState>({
+    self: 0,
+    selfPercent: 0,
+    redelegationList: [],
+  });
+
+  useEffect(() => {
+    if (targetValidator === '') {
+      setRedelegateState({ self: 0, selfPercent: 0, redelegationList: [] });
+      return;
+    }
+
+    getValidatorRedelegationsFromAddress(targetValidator)
+      .then((list) => {
+        const redelegationList: IRedelegationList[] = list.map((r) => {
+          const delegatorAvatar = getAvatarInfoFromAcc(avatarList, r.delegatorAddress);
+          const srcAvatar = getAvatarInfo(avatarList, r.srcAddress);
+          const dstAvatar = getAvatarInfo(avatarList, r.dstAddress);
+          return {
+            delegatorAddress: r.delegatorAddress,
+            delegatorMoniker: delegatorAvatar.moniker,
+            delegatorAvatarURL: delegatorAvatar.avatarURL,
+            balance: r.balance,
+            completionTime: r.completionTime,
+            srcAddress: r.srcAddress,
+            srcMoniker: srcAvatar.moniker,
+            srcAvatarURL: srcAvatar.avatarURL,
+            dstAddress: r.dstAddress,
+            dstMoniker: dstAvatar.moniker,
+            dstAvatarURL: dstAvatar.avatarURL,
+          };
+        });
+
+        setRedelegateState({
+          self: 0,
+          selfPercent: 0,
+          redelegationList,
+        });
+      })
+      .catch(() => {});
+  }, [targetValidator, avatarList]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return {
+    redelegateState
+  };
+};
+
+const useUndelegations = () => {
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
+  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+
+  const [undelegateState, setUndelegateState] = useState<IUndelegationState>({
+    self: 0,
+    selfPercent: 0,
+    undelegationList: [],
+  });
+
+  useEffect(() => {
+    if (targetValidator === '') {
+      setUndelegateState({ self: 0, selfPercent: 0, undelegationList: [] });
+      return;
+    }
+
+    getValidatorUndelegationsFromAddress(targetValidator)
+      .then((list) => {
+        const undelegationList: IUndelegationList[] = list.map((entry) => {
+          const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, entry.delegatorAddress);
+          return {
+            validatorAddress: targetValidator,
+            moniker: moniker || entry.delegatorAddress,
+            avatarURL,
+            balance: entry.balance,
+            completionTime: entry.completionTime,
+          };
+        });
+
+        setUndelegateState({
+          self: 0,
+          selfPercent: 0,
+          undelegationList,
+        });
+      })
+      .catch(() => {});
+  }, [targetValidator, avatarList]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return { undelegateState };
 };
 
 const useStakingData = () => {
@@ -100,7 +201,7 @@ const useStakingData = () => {
     undelegate: 0,
     stakingReward: 0,
     stakingRewardList: [],
-    delegateList: [],
+    delegationList: [],
     redelegationList: [],
     undelegationList: [],
   });
