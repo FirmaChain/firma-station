@@ -1,0 +1,92 @@
+import { FirmaConfig } from '@firmachain/firma-js';
+
+import { MAINNET_VESTING_ACCOUNTS } from './vestingAccounts/mainnet';
+import { TESTNET_VESTING_ACCOUNTS } from './vestingAccounts/testnet';
+
+const env = import.meta.env;
+const NETWORK = (env.VITE_NETWORK || 'TESTNET') as 'MAINNET' | 'TESTNET';
+
+const FIRMACHAIN_CONFIG_MAP = {
+  MAINNET: FirmaConfig.MainNetConfig,
+  TESTNET: FirmaConfig.TestNetConfig
+} as const;
+
+const PARAMS_MAP = {
+  MAINNET: { BLOCKS_PER_YEAR: 5111183, AVERAGE_BLOCK_TIME: 5.89, COMMUNITY_POOL: 0.03, DENOM: 'ufct', SYMBOL: 'FCT' },
+  TESTNET: { BLOCKS_PER_YEAR: 5111183, AVERAGE_BLOCK_TIME: 5.3, COMMUNITY_POOL: 0.03, DENOM: 'ufct', SYMBOL: 'FCT' }
+} as const;
+
+const ENABLE_IBC_MAP = { MAINNET: true, TESTNET: false } as const;
+
+const VESTING_ACCOUNTS_MAP: Record<'MAINNET' | 'TESTNET', any[]> = {
+  MAINNET: MAINNET_VESTING_ACCOUNTS,
+  TESTNET: TESTNET_VESTING_ACCOUNTS
+};
+
+export const CHAIN_CONFIG = {
+  FIRMACHAIN_CONFIG: FIRMACHAIN_CONFIG_MAP[NETWORK],
+  LEDGER_FEE: 30000,
+  LEDGER_GAS: 300000,
+  API_HOST: env.VITE_API_HOST ?? '',
+  EXPLORER_URI: env.VITE_EXPLORER_URI ?? '',
+  GRAPHQL_CONFIG: { URI: env.VITE_GRAPHQL_URI ?? '' },
+  PARAMS: PARAMS_MAP[NETWORK],
+  IS_DEFAULT_GAS: false,
+  ENABLE_IBC: ENABLE_IBC_MAP[NETWORK],
+  RESTAKE: {
+    API: env.VITE_RESTAKE_API ?? '',
+    WEB: env.VITE_RESTAKE_WEB ?? '',
+    ADDRESS: env.VITE_RESTAKE_ADDRESS ?? ''
+  },
+  PROPOSAL_JSON: env.VITE_PROPOSAL_JSON ?? '',
+  WALLET_JSON: env.VITE_WALLET_JSON ?? '',
+  VALIDATOR_IDENTITY_JSON_URI: env.VITE_VALIDATOR_IDENTITY_JSON_URI ?? '',
+  DOWNLOAD_LINK_LIST: [
+    env.VITE_DOWNLOAD_LINK_WIN ?? '',
+    env.VITE_DOWNLOAD_LINK_LINUX ?? '',
+    env.VITE_DOWNLOAD_LINK_MAC_X64 ?? '',
+    env.VITE_DOWNLOAD_LINK_MAC_ARM64 ?? '',
+    env.VITE_DOWNLOAD_LINK_IOS ?? '',
+    env.VITE_DOWNLOAD_LINK_ANDROID ?? ''
+  ],
+  VESTING_ACCOUNTS: VESTING_ACCOUNTS_MAP[NETWORK]
+};
+
+export const OSMOSIS_EXPLORER = env.VITE_OSMOSIS_EXPLORER ?? '';
+export const SESSION_TIMOUT = 1000 * 60 * 720;
+export const NOTICE_JSON_URI = env.VITE_NOTICE_JSON_URI ?? '';
+
+export const IBC_CONFIG: { [key: string]: { symbol: string; decimal: number; channel: string; port: string } } = {
+  'ibc/0471F1C4E7AFD3F07702BEF6DC365268D64570F7C1FDC98EA6098DD6DE59817B': {
+    symbol: 'OSMO',
+    decimal: 6,
+    channel: 'channel-1',
+    port: 'transfer'
+  },
+  'ibc/FA0006F056DB6719B8C16C551FC392B62F5729978FC0B125AC9A432DBB2AA1A5': {
+    symbol: 'ATOM',
+    decimal: 6,
+    channel: 'channel-1',
+    port: 'transfer'
+  }
+};
+
+export const COMMON_KEY = env.VITE_COMMON_KEY ?? '';
+export const NETWORK_INFO_LIST: any[] = [];
+export const HELP_URI = env.VITE_HELP_URI ?? '';
+
+export const GUIDE_LINK_LOGIN_WALLET = env.VITE_GUIDE_LINK_LOGIN_WALLET ?? '';
+export const GUIDE_LINK_NEW_WALLET = env.VITE_GUIDE_LINK_NEW_WALLET ?? '';
+export const GUIDE_LINK_CONFIRM_WALLET = env.VITE_GUIDE_LINK_CONFIRM_WALLET ?? '';
+export const GUIDE_LINK_RECOVER_FROM_MNEMONIC = env.VITE_GUIDE_LINK_RECOVER_FROM_MNEMONIC ?? '';
+export const GUIDE_LINK_IMPORT_PRIVATE_KEY = env.VITE_GUIDE_LINK_IMPORT_PRIVATE_KEY ?? '';
+export const GUIDE_LINK_CONNECT_TO_LEDGER = env.VITE_GUIDE_LINK_CONNECT_TO_LEDGER ?? '';
+export const GUIDE_LINK_WALLET_SETTING = env.VITE_GUIDE_LINK_WALLET_SETTING ?? '';
+export const GUIDE_LINK_DOWNLOAD_PAPER_WALLET = env.VITE_GUIDE_LINK_DOWNLOAD_PAPER_WALLET ?? '';
+export const GUIDE_LINK_EXPORT_MNEMONIC = env.VITE_GUIDE_LINK_EXPORT_MNEMONIC ?? '';
+export const GUIDE_LINK_EXPORT_PRIVATE_KEY = env.VITE_GUIDE_LINK_EXPORT_PRIVATE_KEY ?? '';
+export const GUIDE_LINK_SEND = env.VITE_GUIDE_LINK_SEND ?? '';
+export const GUIDE_LINK_DELEGATE = env.VITE_GUIDE_LINK_DELEGATE ?? '';
+export const GUIDE_LINK_REDELEGATE = env.VITE_GUIDE_LINK_REDELEGATE ?? '';
+export const GUIDE_LINK_UNDELEGATE = env.VITE_GUIDE_LINK_UNDELEGATE ?? '';
+export const GUIDE_LINK_NEW_PROPOSAL = env.VITE_GUIDE_LINK_NEW_PROPOSAL ?? '';
