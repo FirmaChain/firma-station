@@ -16,7 +16,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: testnet
+    environment: prod-testnet-station
     steps:
       - uses: actions/checkout@v4
 
