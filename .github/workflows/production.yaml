@@ -1,0 +1,97 @@
+name: Deploy mainnet
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-mainnet
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod-mainnet-station
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - run: corepack enable
+
+      - run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+          VITE_NETWORK: MAINNET
+          VITE_API_HOST: ${{ secrets.VITE_API_HOST }}
+          VITE_EXPLORER_URI: ${{ secrets.VITE_EXPLORER_URI }}
+          VITE_GRAPHQL_URI: ${{ secrets.VITE_GRAPHQL_URI }}
+          VITE_RESTAKE_API: ${{ secrets.VITE_RESTAKE_API }}
+          VITE_RESTAKE_WEB: ${{ secrets.VITE_RESTAKE_WEB }}
+          VITE_RESTAKE_ADDRESS: ${{ secrets.VITE_RESTAKE_ADDRESS }}
+          VITE_PROPOSAL_JSON: ${{ secrets.VITE_PROPOSAL_JSON }}
+          VITE_WALLET_JSON: ${{ secrets.VITE_WALLET_JSON }}
+          VITE_VALIDATOR_IDENTITY_JSON_URI: ${{ secrets.VITE_VALIDATOR_IDENTITY_JSON_URI }}
+          VITE_DOWNLOAD_LINK_WIN: ${{ secrets.VITE_DOWNLOAD_LINK_WIN }}
+          VITE_DOWNLOAD_LINK_LINUX: ${{ secrets.VITE_DOWNLOAD_LINK_LINUX }}
+          VITE_DOWNLOAD_LINK_MAC_X64: ${{ secrets.VITE_DOWNLOAD_LINK_MAC_X64 }}
+          VITE_DOWNLOAD_LINK_MAC_ARM64: ${{ secrets.VITE_DOWNLOAD_LINK_MAC_ARM64 }}
+          VITE_DOWNLOAD_LINK_IOS: ${{ secrets.VITE_DOWNLOAD_LINK_IOS }}
+          VITE_DOWNLOAD_LINK_ANDROID: ${{ secrets.VITE_DOWNLOAD_LINK_ANDROID }}
+          VITE_OSMOSIS_EXPLORER: ${{ secrets.VITE_OSMOSIS_EXPLORER }}
+          VITE_NOTICE_JSON_URI: ${{ secrets.VITE_NOTICE_JSON_URI }}
+          VITE_HELP_URI: ${{ secrets.VITE_HELP_URI }}
+          VITE_COMMON_KEY: ${{ secrets.VITE_COMMON_KEY }}
+          VITE_GUIDE_LINK_LOGIN_WALLET: ${{ secrets.VITE_GUIDE_LINK_LOGIN_WALLET }}
+          VITE_GUIDE_LINK_NEW_WALLET: ${{ secrets.VITE_GUIDE_LINK_NEW_WALLET }}
+          VITE_GUIDE_LINK_CONFIRM_WALLET: ${{ secrets.VITE_GUIDE_LINK_CONFIRM_WALLET }}
+          VITE_GUIDE_LINK_RECOVER_FROM_MNEMONIC: ${{ secrets.VITE_GUIDE_LINK_RECOVER_FROM_MNEMONIC }}
+          VITE_GUIDE_LINK_IMPORT_PRIVATE_KEY: ${{ secrets.VITE_GUIDE_LINK_IMPORT_PRIVATE_KEY }}
+          VITE_GUIDE_LINK_CONNECT_TO_LEDGER: ${{ secrets.VITE_GUIDE_LINK_CONNECT_TO_LEDGER }}
+          VITE_GUIDE_LINK_WALLET_SETTING: ${{ secrets.VITE_GUIDE_LINK_WALLET_SETTING }}
+          VITE_GUIDE_LINK_DOWNLOAD_PAPER_WALLET: ${{ secrets.VITE_GUIDE_LINK_DOWNLOAD_PAPER_WALLET }}
+          VITE_GUIDE_LINK_EXPORT_MNEMONIC: ${{ secrets.VITE_GUIDE_LINK_EXPORT_MNEMONIC }}
+          VITE_GUIDE_LINK_EXPORT_PRIVATE_KEY: ${{ secrets.VITE_GUIDE_LINK_EXPORT_PRIVATE_KEY }}
+          VITE_GUIDE_LINK_SEND: ${{ secrets.VITE_GUIDE_LINK_SEND }}
+          VITE_GUIDE_LINK_DELEGATE: ${{ secrets.VITE_GUIDE_LINK_DELEGATE }}
+          VITE_GUIDE_LINK_REDELEGATE: ${{ secrets.VITE_GUIDE_LINK_REDELEGATE }}
+          VITE_GUIDE_LINK_UNDELEGATE: ${{ secrets.VITE_GUIDE_LINK_UNDELEGATE }}
+          VITE_GUIDE_LINK_NEW_PROPOSAL: ${{ secrets.VITE_GUIDE_LINK_NEW_PROPOSAL }}
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.PROD_FIRMACHAIN_AWS_ACCOUNT_ID }}:role/${{ vars.PROD_FIRMACHAIN_AWS_IAM_ROLE_NAME_MAINNET }}
+          aws-region: ${{ vars.PROD_FIRMACHAIN_AWS_REGION }}
+
+      - name: Sync immutable assets to S3
+        run: |
+          aws s3 sync ./build s3://${{ vars.PROD_FIRMACHAIN_AWS_S3_BUCKET_MAINNET }} \
+            --delete \
+            --cache-control "public,max-age=31536000,immutable" \
+            --exclude "index.html" \
+            --exclude "*.json"
+
+      - name: Sync entry files to S3 (no-cache)
+        run: |
+          aws s3 sync ./build s3://${{ vars.PROD_FIRMACHAIN_AWS_S3_BUCKET_MAINNET }} \
+            --cache-control "no-cache" \
+            --exclude "*" \
+            --include "index.html" \
+            --include "*.json"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.PROD_FIRMACHAIN_AWS_DISTRIBUTION_ID_MAINNET }} \
+            --paths "/*"
