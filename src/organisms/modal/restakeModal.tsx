@@ -201,7 +201,7 @@ const RestakeModal = () => {
         modalActions.handleModalConfirmTx(true);
       })
       .catch((e) => {
-        enqueueSnackbar(e, {
+        enqueueSnackbar(e?.message ?? String(e), {
           variant: 'error',
           autoHideDuration: 5000,
         });
@@ -223,7 +223,7 @@ const RestakeModal = () => {
         modalActions.handleModalConfirmTx(true);
       })
       .catch((e) => {
-        enqueueSnackbar(e, {
+        enqueueSnackbar(e?.message ?? String(e), {
           variant: 'error',
           autoHideDuration: 5000,
         });
