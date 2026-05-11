@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
-      nodePolyfills(),
+      nodePolyfills({ exclude: ['crypto'] }),
       tsconfigPaths(),
       ...(env.NODE_ENV === 'production' ? [vitePluginBundleObfuscator(minimizeObfuscatorConfig)] : [])
     ],
