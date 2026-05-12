@@ -189,7 +189,7 @@ const UndelegateModal = () => {
           <ModalInputWrap>
             <ModalLabel>Amount</ModalLabel>
             <ModalInput>
-              <MaxButton active={true} onClick={onClickMaxAmount}>
+              <MaxButton $active={true} onClick={onClickMaxAmount}>
                 Max
               </MaxButton>
               <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />

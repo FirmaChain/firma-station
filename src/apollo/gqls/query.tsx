@@ -5,7 +5,9 @@ import { IProposalQueryData, IMessagesByAddress } from '../../interfaces/gql';
 //? Note: do not call it frequently. It is VERY heavy query.
 export const getTransactionCount = async (): Promise<number> => {
   try {
-    const { data } = await client.query({
+    const { data } = await client.query<{
+      block_aggregate: { aggregate: { sum: { num_txs: number } } };
+    }>({
       query: gql`
         query {
           block_aggregate {
@@ -20,7 +22,7 @@ export const getTransactionCount = async (): Promise<number> => {
       fetchPolicy: 'no-cache'
     });
 
-    return data.block_aggregate.aggregate.sum.num_txs;
+    return data?.block_aggregate.aggregate.sum.num_txs ?? 0;
   } catch (error) {
     return 0;
   }
@@ -28,7 +30,7 @@ export const getTransactionCount = async (): Promise<number> => {
 
 export const getProposalQueryFromId = async (proposalId: string): Promise<IProposalQueryData | null> => {
   try {
-    const { data } = await client.query({
+    const { data } = await client.query<IProposalQueryData>({
       query: gql`
         query {
           proposal(where: {id: {_eq: ${proposalId}}}) {
@@ -49,7 +51,7 @@ export const getProposalQueryFromId = async (proposalId: string): Promise<IPropo
       `,
       fetchPolicy: 'no-cache'
     });
-    return data;
+    return data ?? null;
   } catch (error) {
     return null;
   }
@@ -62,7 +64,7 @@ export const getHistoryByAddress = async (
   offset: number = 0
 ): Promise<IMessagesByAddress | null> => {
   try {
-    const { data } = await client.query({
+    const { data } = await client.query<IMessagesByAddress>({
       query: gql`
         query GetMessagesByAddress($address: _text, $limit: bigint = 50, $offset: bigint = 0, $types: _text = "{}") {
           messagesByAddress: messages_by_address(
@@ -91,7 +93,7 @@ export const getHistoryByAddress = async (
       }
     });
 
-    return data;
+    return data ?? null;
   } catch (error) {
     return null;
   }

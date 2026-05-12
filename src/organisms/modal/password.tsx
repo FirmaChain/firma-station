@@ -59,7 +59,7 @@ const Password = ({ onChange, onKeyDown }: any) => {
             placeholder='Enter Password'
             data-testid="password-input"
           />
-          <InputMessageText isActive={isInvalidPassword}>
+          <InputMessageText $isActive={isInvalidPassword}>
             {isInvalidPassword && `Your password must be at least 8 characters.`}
           </InputMessageText>
         </ModalInput>
@@ -76,7 +76,7 @@ const Password = ({ onChange, onKeyDown }: any) => {
             placeholder='Enter Confirm Password'
             data-testid="confirm-password-input"
           />
-          <InputMessageText isActive={isInvalidConfirmPassword}>
+          <InputMessageText $isActive={isInvalidConfirmPassword}>
             {isInvalidConfirmPassword && `The password confirmation does not match.`}
           </InputMessageText>
         </ModalInput>

@@ -227,13 +227,13 @@ const VotingCard = ({ proposalState }: IProps) => {
         </VotingDetailItem>
         <VotingDetailItem>
           <VotingLabel>Quorum</VotingLabel>
-          <VotingContent bigSize={true}>{convertNumberFormat(proposalState.paramQuorum * 100, 2)}%</VotingContent>
+          <VotingContent $bigSize={true}>{convertNumberFormat(proposalState.paramQuorum * 100, 2)}%</VotingContent>
         </VotingDetailItem>
         {proposalState.totalVotingPower > 0 && (
           <>
             <VotingDetailItem>
               <VotingLabel>Current Turnout</VotingLabel>
-              <VotingContent bigSize={true}>
+              <VotingContent $bigSize={true}>
                 {getCurrentVotingPower(proposalState.tally, proposalState.totalVotingPower).toFixed(2)}%
               </VotingContent>
             </VotingDetailItem>
@@ -270,7 +270,7 @@ const VotingCard = ({ proposalState }: IProps) => {
       </VotingWrapper>
 
       {proposalState.status === 'PROPOSAL_STATUS_VOTING_PERIOD' && (
-        <VotingButton active={true} onClick={onClickVote}>
+        <VotingButton $active={true} onClick={onClickVote}>
           Vote
         </VotingButton>
       )}
@@ -278,19 +278,19 @@ const VotingCard = ({ proposalState }: IProps) => {
       {isSmall === false && proposalState.votes.length > 0 && (
         <VotingListWrap>
           <VotingTabWrap>
-            <VotingTabItem active={currentVotingTab === 0} onClick={() => changeVotingTab(0)}>
+            <VotingTabItem $active={currentVotingTab === 0} onClick={() => changeVotingTab(0)}>
               All ({getVotingCountByOption('ALL')})
             </VotingTabItem>
-            <VotingTabItem active={currentVotingTab === 1} onClick={() => changeVotingTab(1)}>
+            <VotingTabItem $active={currentVotingTab === 1} onClick={() => changeVotingTab(1)}>
               Yes ({getVotingCountByOption(votingThemeData[0].option)})
             </VotingTabItem>
-            <VotingTabItem active={currentVotingTab === 2} onClick={() => changeVotingTab(2)}>
+            <VotingTabItem $active={currentVotingTab === 2} onClick={() => changeVotingTab(2)}>
               No ({getVotingCountByOption(votingThemeData[1].option)})
             </VotingTabItem>
-            <VotingTabItem active={currentVotingTab === 3} onClick={() => changeVotingTab(3)}>
+            <VotingTabItem $active={currentVotingTab === 3} onClick={() => changeVotingTab(3)}>
               NoWithVeto ({getVotingCountByOption(votingThemeData[2].option)})
             </VotingTabItem>
-            <VotingTabItem active={currentVotingTab === 4} onClick={() => changeVotingTab(4)}>
+            <VotingTabItem $active={currentVotingTab === 4} onClick={() => changeVotingTab(4)}>
               Abstain ({getVotingCountByOption(votingThemeData[3].option)})
             </VotingTabItem>
           </VotingTabWrap>

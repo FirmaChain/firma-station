@@ -51,8 +51,8 @@ const Modal = ({
 
   return (
     <Portal elementId='modal-root'>
-      <ModalOverlay visible={visible} />
-      <ModalWrapper tabIndex={-1} visible={visible} onClick={onMaskClick}>
+      <ModalOverlay $visible={visible} />
+      <ModalWrapper tabIndex={-1} $visible={visible} onClick={onMaskClick}>
         <ModalInner tabIndex={0} width={width}>
           {prev && <PrevButton onClick={prev} />}
           {closable && visibleClose && <CloseButton onClick={close} />}

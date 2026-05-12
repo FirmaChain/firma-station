@@ -102,7 +102,7 @@ const RedelegateModal = () => {
   const [delegationList, setDelegationList] = useState([]);
   const [targetValidator, setTargetValidator] = useState('');
 
-  const selectInputRef = useRef<any>();
+  const selectInputRef = useRef<any>(null);
 
   useEffect(() => {
     if (Object.keys(modalData).length > 0) {
@@ -263,7 +263,7 @@ const RedelegateModal = () => {
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
-                <MaxButton active={true} onClick={onClickMaxAmount}>
+                <MaxButton $active={true} onClick={onClickMaxAmount}>
                   Max
                 </MaxButton>
                 <InputBoxDefault type='text' placeholder='0' onChange={onChangeAmount} value={amount} />

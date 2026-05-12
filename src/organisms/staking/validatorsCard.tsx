@@ -268,23 +268,23 @@ const Validators = ({ validatorsState }: IProps) => {
         <HeaderColumn>No</HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(0)}>
           Validator
-          <SortArrow order={order} orderBy={orderBy} index={0} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={0} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(1)}>
           Voting Power
-          <SortArrow order={order} orderBy={orderBy} index={1} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={1} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(3)}>
           Commission
-          <SortArrow order={order} orderBy={orderBy} index={3} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={3} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(4)}>
           UpTime
-          <SortArrow order={order} orderBy={orderBy} index={4} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={4} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(5)}>
           APR / APY
-          <SortArrow order={order} orderBy={orderBy} index={5} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={5} />
         </HeaderColumn>
       </HeaderWrapper>
       {isSmall && <SmallTitle>Validators</SmallTitle>}

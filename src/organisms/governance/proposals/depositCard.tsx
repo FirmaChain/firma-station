@@ -84,16 +84,16 @@ const DepositCard = ({ proposalState }: IProps) => {
         </DepositDetailItem>
         <DepositDetailItem>
           <Label>Min Deposit Amount</Label>
-          <DepositContent bigSize={true}>{getAmountFormat(proposalState.paramMinDepositAmount)}</DepositContent>
+          <DepositContent $bigSize={true}>{getAmountFormat(proposalState.paramMinDepositAmount)}</DepositContent>
         </DepositDetailItem>
         <DepositDetailItem>
           <Label>Current Deposit</Label>
-          <DepositContent bigSize={true}>{getAmountFormat(getCurrentDeposit(proposalState.depositors))}</DepositContent>
+          <DepositContent $bigSize={true}>{getAmountFormat(getCurrentDeposit(proposalState.depositors))}</DepositContent>
         </DepositDetailItem>
       </DepositDetailWrapper>
       {proposalState.status === PROPOSAL_STATUS_DEPOSIT_PERIOD && (
         <DepositButton
-          active={true}
+          $active={true}
           onClick={() => {
             if (convertNumber(balance) > convertToFctNumber(getDefaultFee(isLedger, isMobileApp))) {
               modalActions.handleModalData({

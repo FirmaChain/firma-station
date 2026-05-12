@@ -47,12 +47,12 @@ const TabContainer = styled.div`
   border-bottom: 1px solid #e0e0e0;
 `;
 
-const Tab = styled.div<{ active: boolean }>`
+const Tab = styled.div<{ $active: boolean }>`
   padding: 12px 20px;
   cursor: pointer;
-  color: ${(props) => (props.active ? '#3B82F6' : '#aaa')};
-  border-bottom: 2px solid ${(props) => (props.active ? '#3B82F6' : 'transparent')};
-  font-weight: ${(props) => (props.active ? '600' : '400')};
+  color: ${(props) => (props.$active ? '#3B82F6' : '#aaa')};
+  border-bottom: 2px solid ${(props) => (props.$active ? '#3B82F6' : 'transparent')};
+  font-weight: ${(props) => (props.$active ? '600' : '400')};
   transition: all 0.2s ease;
 
   &:hover {
@@ -293,10 +293,10 @@ const RecoverWallet: React.FC<RecoverWalletProps> = ({ onBack }) => {
       </Header>
 
       <TabContainer>
-        <Tab active={activeTab === 'mnemonic'} onClick={() => setActiveTab('mnemonic')}>
+        <Tab $active={activeTab === 'mnemonic'} onClick={() => setActiveTab('mnemonic')}>
           Mnemonic Phrase
         </Tab>
-        <Tab active={activeTab === 'privatekey'} onClick={() => setActiveTab('privatekey')}>
+        <Tab $active={activeTab === 'privatekey'} onClick={() => setActiveTab('privatekey')}>
           Private Key
         </Tab>
       </TabContainer>
