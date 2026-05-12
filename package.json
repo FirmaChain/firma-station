@@ -42,7 +42,7 @@
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "styled-components": "^5.3.3",
+    "styled-components": "^6.4.1",
     "styled-normalize": "^8.0.7"
   },
   "devDependencies": {
