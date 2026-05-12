@@ -14,13 +14,13 @@ export const GaugePercent = styled.div<{ percent: string; $bgColor: string }>`
   background: ${(props) => props.$bgColor};
 `;
 
-export const MultiGaugeWrapper = styled.div<{ bgColor: string }>`
+export const MultiGaugeWrapper = styled.div<{ $bgColor: string }>`
   width: 100%;
   height: 10px;
   display: flex;
   overflow: hidden;
   border-radius: 4px;
-  background: ${(props) => props.bgColor}50;
+  background: ${(props) => props.$bgColor}50;
 `;
 
 export const MultiGaugePercent = styled.div<{ percent: string }>`
@@ -31,8 +31,8 @@ export const MultiGaugePercent = styled.div<{ percent: string }>`
   justify-content: center;
 `;
 
-export const MultiGaugeItem = styled.div<{ percent: string; bgColor: string }>`
+export const MultiGaugeItem = styled.div<{ percent: string; $bgColor: string }>`
   width: ${(props) => props.percent};
   height: 100%;
-  background: ${(props) => props.bgColor};
+  background: ${(props) => props.$bgColor};
 `;

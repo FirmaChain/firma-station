@@ -114,7 +114,7 @@ const TokenomicsCard = ({ tokenomicsState }: IProps) => {
             {pieData.map((x: any) => {
               return (
                 <PiechartLabelWrapper key={x.legendKey}>
-                  <PiechartLabelIcon bgColor={x.fill} />
+                  <PiechartLabelIcon $bgColor={x.fill} />
                   <PiechartLabelTypo>{x.legendKey}</PiechartLabelTypo>
                 </PiechartLabelWrapper>
               );

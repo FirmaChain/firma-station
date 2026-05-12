@@ -14,10 +14,10 @@ interface IProps {
 
 const MultiGauge = ({ percent, bgColor = theme.colors.mainblue, multiList }: IProps) => {
   return (
-    <MultiGaugeWrapper bgColor={bgColor}>
+    <MultiGaugeWrapper $bgColor={bgColor}>
       <MultiGaugePercent percent={percent}>
         {multiList.map((gaugeItem, index) => {
-          return <MultiGaugeItem key={index} percent={gaugeItem.percent} bgColor={gaugeItem.bgColor} />;
+          return <MultiGaugeItem key={index} percent={gaugeItem.percent} $bgColor={gaugeItem.bgColor} />;
         })}
       </MultiGaugePercent>
     </MultiGaugeWrapper>
