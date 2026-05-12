@@ -19,6 +19,12 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      # React 19 migration handled manually; react/react-dom must bump together.
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
