@@ -18,11 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod-testnet-station
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'yarn'
 
       - run: corepack enable
@@ -69,7 +69,7 @@ jobs:
           VITE_GUIDE_LINK_UNDELEGATE: ${{ secrets.VITE_GUIDE_LINK_UNDELEGATE }}
           VITE_GUIDE_LINK_NEW_PROPOSAL: ${{ secrets.VITE_GUIDE_LINK_NEW_PROPOSAL }}
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::${{ vars.PROD_FIRMACHAIN_AWS_ACCOUNT_ID }}:role/${{ vars.PROD_FIRMACHAIN_AWS_IAM_ROLE_NAME_TESTNET }}
           aws-region: ${{ vars.PROD_FIRMACHAIN_AWS_REGION }}
