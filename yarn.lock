@@ -4451,7 +4451,7 @@ __metadata:
     axios: "npm:^1.16.0"
     crypto-js: "npm:^4.1.1"
     cypress: "npm:^15.14.2"
-    graphql: "npm:^15.7.1"
+    graphql: "npm:^16.14.0"
     hamburger-react: "npm:^2.4.1"
     lodash: "npm:^4.17.21"
     moment: "npm:^2.29.1"
@@ -4741,10 +4741,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:^15.7.1":
-  version: 15.10.2
-  resolution: "graphql@npm:15.10.2"
-  checksum: 10c0/92070beb29b3e5b10a001e51b5abf1bac083c04d3393ff409b41de8c0b819183e26b4fe9aa13cb962ef62369f35a83d4d7992d3c36034b74e2f2fea30316e51d
+"graphql@npm:^16.14.0":
+  version: 16.14.0
+  resolution: "graphql@npm:16.14.0"
+  checksum: 10c0/baaa368fcfeb7bf2cdf94b9f31bf916e97eaa9e7e82148a7046f31cbd49b760b38190f22393b024cbdd9ca0f4f46287515de0136b6a0cc164074b36ad7b50618
   languageName: node
   linkType: hard
 
@@ -7495,7 +7495,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.0.0, redux@npm:^4.1.2":
+"redux@npm:^4.1.2":
   version: 4.2.1
   resolution: "redux@npm:4.2.1"
   dependencies:
