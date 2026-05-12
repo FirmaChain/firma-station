@@ -25,6 +25,9 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "react-dom"
         update-types: ["version-update:semver-major"]
+      # Redux Toolkit v2 removed createReducer object notation; migrate reducers first.
+      - dependency-name: "@reduxjs/toolkit"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
