@@ -5,7 +5,7 @@
   "type": "module",
   "homepage": "./",
   "dependencies": {
-    "@apollo/client": "^3.4.16",
+    "@apollo/client": "^4.1.9",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@firmachain/firma-js": "0.4.2",
