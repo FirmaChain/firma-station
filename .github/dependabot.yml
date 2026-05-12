@@ -28,6 +28,12 @@ updates:
       # Redux Toolkit v2 removed createReducer object notation; migrate reducers first.
       - dependency-name: "@reduxjs/toolkit"
         update-types: ["version-update:semver-major"]
+      # vite 8 + rolldown breaks CJS default-export interop for several deps; stay on 7.x.
+      - dependency-name: "vite"
+        update-types: ["version-update:semver-major"]
+      # recharts v3 reshaped Tooltip payload (PieChart legendKey access broke); stay on 2.x.
+      - dependency-name: "recharts"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
