@@ -1,3 +1,5 @@
+export {};
+
 describe('Firma JS Mobile Test', () => {
   // Helper function to generate a unique memo suffix
   const getMemoSuffix = () => {

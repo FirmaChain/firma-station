@@ -70,12 +70,12 @@ export const TabBar = styled.div`
   margin-bottom: 8px;
 `;
 
-export const TabItem = styled.div<{ active?: boolean }>`
+export const TabItem = styled.div<{ $active?: boolean }>`
   padding: 10px 18px;
   cursor: pointer;
   font-size: ${({ theme }) => theme.sizes.defaultSize};
-  color: ${({ active }) => (active ? '#fff' : '#888')};
-  border-bottom: 2px solid ${({ active }) => (active ? '#3550DE' : 'transparent')};
+  color: ${({ $active }) => ($active ? '#fff' : '#888')};
+  border-bottom: 2px solid ${({ $active }) => ($active ? '#3550DE' : 'transparent')};
   transition: color 0.15s ease;
   &:hover {
     color: #ddd;
@@ -98,9 +98,9 @@ export const RowWrapper = styled.div`
   flex-wrap: nowrap;
 `;
 
-export const Column = styled.div<{ avatar?: boolean }>`
+export const Column = styled.div<{ $avatar?: boolean }>`
   width: 100%;
-  flex: ${({ avatar }) => (avatar ? '0 0 40px' : '1 1 100%')};
+  flex: ${({ $avatar }) => ($avatar ? '0 0 40px' : '1 1 100%')};
 
   &:last-child {
     text-align: right;

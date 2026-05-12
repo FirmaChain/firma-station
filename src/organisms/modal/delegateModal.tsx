@@ -218,7 +218,7 @@ const DelegateModal = () => {
           <ModalInputWrap>
             <ModalLabel>Amount</ModalLabel>
             <ModalInput style={{ marginBottom: '10px' }}>
-              <MaxButton active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
+              <MaxButton $active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
                 Max
               </MaxButton>
               <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} />

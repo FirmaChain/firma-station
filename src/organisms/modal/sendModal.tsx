@@ -123,7 +123,7 @@ const SendModal = () => {
   const [isNotIBC, setIsNotIBC] = useState(false);
   const [sendTokenType, setSendTokenType] = useState('send');
 
-  const selectInputRef = useRef<any>();
+  const selectInputRef = useRef<any>(null);
 
   const closeModal = () => {
     resetModal();
@@ -372,7 +372,7 @@ const SendModal = () => {
           <ModalInputWrap>
             <ModalLabel>Symbol</ModalLabel>
             <SelectWrapper>
-              <Select
+              <Select<{ value: string; label: string; balance: string; decimal: number; denom: string }>
                 options={[
                   {
                     value: CHAIN_CONFIG.PARAMS.SYMBOL,
@@ -441,7 +441,7 @@ const SendModal = () => {
           <ModalInputWrap>
             <ModalLabel>Amount</ModalLabel>
             <ModalInput style={{ marginBottom: '10px' }}>
-              <MaxButton active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
+              <MaxButton $active={getMaxAmount() > 0} onClick={onClickMaxAmount}>
                 Max
               </MaxButton>
               <InputBoxDefault type='text' placeholder='0' value={amount} onChange={onChangeAmount} data-testid="amount-input" />

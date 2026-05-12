@@ -619,13 +619,13 @@ export const SmallTitle = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingLarge};
 `;
 
-export const SortArrow = styled.div<{ order?: number; orderBy?: number; index?: number }>`
+export const SortArrow = styled.div<{ $order?: number; $orderBy?: number; $index?: number }>`
   width: 14px;
   height: 70px;
   margin-left: 3px;
   background-image: url('${(props) => {
-    if (props.orderBy === props.index) {
-      return props.order === 0 ? props.theme.urls.sortASC : props.theme.urls.sortDESC;
+    if (props.$orderBy === props.$index) {
+      return props.$order === 0 ? props.theme.urls.sortASC : props.theme.urls.sortDESC;
     } else {
       return props.theme.urls.sortIdle;
     }

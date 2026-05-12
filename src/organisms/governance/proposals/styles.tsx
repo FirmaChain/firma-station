@@ -25,11 +25,11 @@ export const DepositDetailItem = styled.div`
   }
 `;
 
-export const DepositContent = styled.div<{ bigSize?: boolean }>`
+export const DepositContent = styled.div<{ $bigSize?: boolean }>`
   width: 100%;
   color: ${({ theme }) => theme.colors.defaultGray2};
   ${(props) =>
-    props.bigSize && `font-size:${props.theme.sizes.depositCardSize2};color:${props.theme.colors.defaultGray}`}
+    props.$bigSize && `font-size:${props.theme.sizes.depositCardSize2};color:${props.theme.colors.defaultGray}`}
 `;
 
 export const DepositMainTitle = styled.div`
@@ -38,7 +38,7 @@ export const DepositMainTitle = styled.div`
   margin-bottom: 30px;
 `;
 
-export const DepositButton = styled.div<{ active: boolean }>`
+export const DepositButton = styled.div<{ $active: boolean }>`
   width: 100px;
   height: 40px;
   line-height: 40px;
@@ -49,7 +49,7 @@ export const DepositButton = styled.div<{ active: boolean }>`
   border-radius: 4px;
   cursor: pointer;
   ${(props) =>
-    props.active ? `` : `background-color: ${props.theme.colors.defaultGray5};color:${props.theme.colors.defaultGray6}`}
+    props.$active ? `` : `background-color: ${props.theme.colors.defaultGray5};color:${props.theme.colors.defaultGray6}`}
 `;
 
 export const TitleWrapper = styled.div`
@@ -441,11 +441,11 @@ export const VotingLabel = styled.div`
   }
 `;
 
-export const VotingContent = styled.div<{ bigSize?: boolean }>`
+export const VotingContent = styled.div<{ $bigSize?: boolean }>`
   width: 100%;
   color: ${({ theme }) => theme.colors.defaultGray2};
   ${(props) =>
-    props.bigSize && `font-size:${props.theme.sizes.votingCardSize2};color:${props.theme.colors.defaultGray};`}
+    props.$bigSize && `font-size:${props.theme.sizes.votingCardSize2};color:${props.theme.colors.defaultGray};`}
 `;
 
 export const VotingMainTitle = styled.div`
@@ -531,7 +531,7 @@ export const VotingValue = styled.div`
   }
 `;
 
-export const VotingButton = styled.div<{ active: boolean }>`
+export const VotingButton = styled.div<{ $active: boolean }>`
   width: 100px;
   height: 40px;
   line-height: 40px;
@@ -542,7 +542,7 @@ export const VotingButton = styled.div<{ active: boolean }>`
   border-radius: 4px;
   cursor: pointer;
   ${(props) =>
-    props.active ? `` : `background-color: ${props.theme.colors.defaultGray5};color:${props.theme.colors.defaultGray6}`}
+    props.$active ? `` : `background-color: ${props.theme.colors.defaultGray5};color:${props.theme.colors.defaultGray6}`}
 `;
 
 export const VotingListWrap = styled.div`
@@ -557,14 +557,14 @@ export const VotingTabWrap = styled.div`
   display: flex;
 `;
 
-export const VotingTabItem = styled.div<{ active?: boolean }>`
+export const VotingTabItem = styled.div<{ $active?: boolean }>`
   width: 140px;
   height: 40px;
   line-height: 40px;
   text-align: center;
   cursor: pointer;
   ${(props) =>
-    props.active &&
+    props.$active &&
     `border-bottom:1px solid ${props.theme.colors.defaultWhite}; color:${props.theme.colors.defaultWhite}`}
 `;
 

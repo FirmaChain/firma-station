@@ -288,20 +288,20 @@ export const ConfirmInput = styled.div<{ point?: boolean }>`
     `font-size:${props.theme.sizes.modal20};color:white;& > span { font-size: ${props.theme.sizes.modal16};`}
 `;
 
-export const InputBoxNumber = styled(InputBoxStyleDefault)<{ isInvalid?: boolean }>`
-  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
+export const InputBoxNumber = styled(InputBoxStyleDefault)<{ $isInvalid?: boolean }>`
+  border: 1px solid ${(props) => (props.$isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
   text-align: right;
   padding-right: 63px;
   width: calc(100% - 2px - 10px - 63px);
 `;
 
-export const InputMessageText = styled.div<{ isActive: boolean }>`
+export const InputMessageText = styled.div<{ $isActive: boolean }>`
   width: 100%;
   height: 10px;
   line-height: 10px;
   margin-top: 10px;
   padding: 0 5px;
-  ${(props) => (props.isActive ? 'display:block;' : 'display:none;')}
+  ${(props) => (props.$isActive ? 'display:block;' : 'display:none;')}
 `;
 
 export const MnemonicContainter = styled.div`
@@ -395,7 +395,7 @@ export const CreateButton = styled(ButtonStyleByStatus)<{ status: number }>``;
 
 export const RecoverButton = styled(ButtonStyleByStatus)<{ status: number }>``;
 
-export const ImportButton = styled.div<{ active: boolean }>`
+export const ImportButton = styled.div<{ $active: boolean }>`
   width: 220px;
   height: 48px;
   font-size: ${({ theme }) => theme.sizes.modal18};
@@ -406,7 +406,7 @@ export const ImportButton = styled.div<{ active: boolean }>`
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   cursor: pointer;
-  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+  ${(props) => (props.$active ? `` : `background-color: #444;color:#777`)}
 `;
 
 export const MenuListWrap = styled.div`
@@ -459,8 +459,8 @@ export const InputWrapper = styled.div`
   }
 `;
 
-export const InputBox = styled(InputDivBoxStyleDefault)<{ active: boolean }>`
-  ${(props) => (props.active ? `border: 1px solid #888;` : ``)}
+export const InputBox = styled(InputDivBoxStyleDefault)<{ $active: boolean }>`
+  ${(props) => (props.$active ? `border: 1px solid #888;` : ``)}
   cursor: pointer;
 `;
 
@@ -571,7 +571,7 @@ export const VotingWrapper = styled.div`
   gap: 10px 10px;
 `;
 
-export const VotingItem = styled.div<{ active: boolean }>`
+export const VotingItem = styled.div<{ $active: boolean }>`
   width: calc(50% - 10px);
   height: 50px;
   line-height: 50px;
@@ -581,7 +581,7 @@ export const VotingItem = styled.div<{ active: boolean }>`
   border: 2px solid #ffffff00;
   text-align: center;
   background-color: #1c1c24;
-  ${(props) => props.active && `border:2px solid white`};
+  ${(props) => props.$active && `border:2px solid white`};
 `;
 
 export const PasswordWrapper = styled.div`
@@ -635,8 +635,8 @@ const fadeIn = keyframes`
   }
 `;
 
-export const AfterTypo = styled.div<{ isActive: boolean }>`
-  display: ${(props) => (props.isActive ? 'flex' : 'none')};
+export const AfterTypo = styled.div<{ $isActive: boolean }>`
+  display: ${(props) => (props.$isActive ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -646,7 +646,7 @@ export const AfterTypo = styled.div<{ isActive: boolean }>`
   animation-fill-mode: forwards;
 `;
 
-export const MaxButton = styled.div<{ active: boolean }>`
+export const MaxButton = styled.div<{ $active: boolean }>`
   width: 46px;
   height: 22px;
   line-height: 22px;
@@ -658,7 +658,7 @@ export const MaxButton = styled.div<{ active: boolean }>`
   right: 0;
   cursor: pointer;
   color: white;
-  ${(props) => (props.active ? `background-color: #3550de;color:#white` : `background-color: #444;color:#777`)}
+  ${(props) => (props.$active ? `background-color: #3550de;color:#white` : `background-color: #444;color:#777`)}
 `;
 
 export const HelpIcon = styled(HelpIconOrigin)`
@@ -927,12 +927,12 @@ export const RecoverTypeList = styled.div`
   border-radius: 20px;
   padding: 3px;
 `;
-export const RecoverTypeItem = styled.div<{ isActive: boolean }>`
+export const RecoverTypeItem = styled.div<{ $isActive: boolean }>`
   font-size: 1.6rem;
   padding: 7px 20px;
   border-radius: 20px;
   cursor: pointer;
-  ${(props) => (props.isActive ? 'color: white;background-color: #3550de;' : 'color: #ffffffaa')}
+  ${(props) => (props.$isActive ? 'color: white;background-color: #3550de;' : 'color: #ffffffaa')}
 `;
 
 export const ConfirmContainer = styled.div`
@@ -1271,11 +1271,12 @@ export const InvalidTypo = styled.div`
   margin-left: 5px;
 `;
 
-const InputBoxBase = styled(InputBoxStyleDefault)<{ isInvalid?: boolean }>`
-  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
+const InputBoxBase = styled(InputBoxStyleDefault)<{ $isInvalid?: boolean }>`
+  border: 1px solid ${(props) => (props.$isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
 `;
 
-export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number }) => {
+export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number; isInvalid?: boolean }) => {
+  const { isInvalid, ...rest } = p;
   const ref = useRef<HTMLInputElement>(null);
 
   // Prevents the default action for ArrowUp and ArrowDown keys if the input's `type` attribute is 'number'.
@@ -1380,7 +1381,8 @@ export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number 
 
   return (
     <InputBoxBase
-      {...p}
+      {...rest}
+      $isInvalid={isInvalid}
       type={p.type === 'number' ? 'text' : p.type}
       onWheel={(e: React.WheelEvent<HTMLInputElement>) => {
         p?.onWheel && p.onWheel(e);

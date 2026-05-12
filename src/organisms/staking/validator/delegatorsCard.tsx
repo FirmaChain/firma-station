@@ -82,7 +82,7 @@ const DelegatorRow = ({ data, index, style }: any) => {
   return (
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
-        <ItemColumn avatar>
+        <ItemColumn $avatar>
           <ProfileImage2 src={item.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${item.moniker}`}</ItemColumn>
@@ -122,7 +122,7 @@ const RedelegatorRow = ({ data, index, style }: any) => {
         </ItemColumn>
 
       
-      <ItemColumn avatar>
+      <ItemColumn $avatar>
         <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
           <ProfileImage2 src={item.dstAvatarURL} />
         </Link>
@@ -164,7 +164,7 @@ const UndelegatorRow = ({ data, index, style }: any) => {
   return (
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.moniker || item.validatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
-        <ItemColumn avatar>
+        <ItemColumn $avatar>
           <ProfileImage2 src={item.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${item.moniker || item.validatorAddress}`}</ItemColumn>
@@ -207,17 +207,16 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
   const sortedRedelegatorList = redelegateState?.redelegationList ? sortedUntimeDescending(redelegateState.redelegationList) : [];
   const sortedUndelegatorList = undelegateState?.undelegationList ? sortedUntimeDescending(undelegateState.undelegationList) : [];
 
-  console.log(sortedUndelegatorList);
   return (
     <DelegatorsCardWrapper>
       <TabBar>
-        <TabItem active={tab === 0} onClick={() => setTab(0)}>
+        <TabItem $active={tab === 0} onClick={() => setTab(0)}>
           Delegators ({delegatorCount})
         </TabItem>
-        <TabItem active={tab === 1} onClick={() => setTab(1)}>
+        <TabItem $active={tab === 1} onClick={() => setTab(1)}>
           Redelegators ({redelegatorCount})
         </TabItem>
-        <TabItem active={tab === 2} onClick={() => setTab(2)}>
+        <TabItem $active={tab === 2} onClick={() => setTab(2)}>
           Undelegators ({undelegatorCount})
         </TabItem>
       </TabBar>
@@ -244,7 +243,7 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
               ) : (
                 <>
                   <HeaderWrapper style={{ width }}>
-                    <HeaderColumn avatar></HeaderColumn>
+                    <HeaderColumn $avatar></HeaderColumn>
                     <HeaderColumn>Delegator</HeaderColumn>
                     <HeaderColumn>Amount</HeaderColumn>
                   </HeaderWrapper>
@@ -317,7 +316,7 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
             ) : (
               <>
                 <HeaderWrapper style={{ width }}>
-                  <HeaderColumn avatar></HeaderColumn>
+                  <HeaderColumn $avatar></HeaderColumn>
                   <HeaderColumn>Undelegator</HeaderColumn>
                   <HeaderColumn>Amount</HeaderColumn>
                   <HeaderColumn>Linked Until</HeaderColumn>

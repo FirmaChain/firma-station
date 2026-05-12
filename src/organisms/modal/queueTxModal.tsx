@@ -84,7 +84,7 @@ const QueueTxModal = () => {
           </LoadingWrapper>
           <QueueTypoWrapper>
             <QueueTypoOne>It can take up from 5 to 15 seconds for a transaction to be completed.</QueueTypoOne>
-            <AfterTypo isActive={depend}>
+            <AfterTypo $isActive={depend}>
               <ModalTooltipWrapper>
                 <ModalTooltipIcon />
                 <ModalTooltipTypo>
