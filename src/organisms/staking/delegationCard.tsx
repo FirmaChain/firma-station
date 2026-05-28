@@ -158,7 +158,7 @@ const RestakeRow = ({ data, index, style, totalStakingState }: any) => {
       <RestakeItemColumn>≈ {`${convertNumberFormat(restakeInfo.reward, 3)}`}</RestakeItemColumn>
       <RestakeItemColumn>≈ {`${convertNumberFormat(restakeInfo.latestReward, 3)}`}</RestakeItemColumn>
       <RestakeItemColumn>
-        <StatusBox status={restakeInfo.status}>{getRestakeStatus(restakeInfo.status)}</StatusBox>
+        <StatusBox $status={restakeInfo.status}>{getRestakeStatus(restakeInfo.status)}</StatusBox>
       </RestakeItemColumn>
     </RestakeItemWrapper>
   );
@@ -405,17 +405,17 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
       </ChartWrapper>
       <DelegationListWrapper>
         <DelegationTab>
-          <DelegationTabItem isActive={currentTab === 0} onClick={() => onCLickChangeTab(0)}>
+          <DelegationTabItem $isActive={currentTab === 0} onClick={() => onCLickChangeTab(0)}>
             Delegations ({totalStakingState.delegationList.length})
           </DelegationTabItem>
-          <DelegationTabItem isActive={currentTab === 1} onClick={() => onCLickChangeTab(1)}>
+          <DelegationTabItem $isActive={currentTab === 1} onClick={() => onCLickChangeTab(1)}>
             Redelegations ({totalStakingState.redelegationList.length})
           </DelegationTabItem>
-          <DelegationTabItem isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
+          <DelegationTabItem $isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
             Undelegations ({totalStakingState.undelegationList.length})
           </DelegationTabItem>
           {CHAIN_CONFIG.RESTAKE.API !== '' && (
-            <DelegationTabItem isActive={currentTab === 3} onClick={() => onCLickChangeTab(3)}>
+            <DelegationTabItem $isActive={currentTab === 3} onClick={() => onCLickChangeTab(3)}>
               Restake ({restakeList.length})
             </DelegationTabItem>
           )}
@@ -506,12 +506,12 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
       </DelegationListWrapper>
       <ButtonWrapper>
         {CHAIN_CONFIG.RESTAKE.API !== '' && (
-          <Button isActive={totalStakingState.delegationList.length > 0} onClick={onClickRestake}>
+          <Button $isActive={totalStakingState.delegationList.length > 0} onClick={onClickRestake}>
             Restake
           </Button>
         )}
 
-        <Button isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
+        <Button $isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
           Withdraw All
         </Button>
       </ButtonWrapper>

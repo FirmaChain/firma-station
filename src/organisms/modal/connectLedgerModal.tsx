@@ -51,7 +51,7 @@ const ConnectLedgerModal = () => {
           <HelpIcon onClick={() => window.open(GUIDE_LINK_CONNECT_TO_LEDGER)} />
         </ModalTitle>
         <ModalContent>
-          <NextButton status={0} onClick={() => onClickConnectLedger()}>
+          <NextButton $status={0} onClick={() => onClickConnectLedger()}>
             Connect
           </NextButton>
         </ModalContent>

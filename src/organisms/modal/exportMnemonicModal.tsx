@@ -125,12 +125,12 @@ const ExportMnemonicModal = () => {
                 </ExportPasswordWrapper>
               </ModalInputWrap>
               <ButtonWrapper>
-                <CancelButton onClick={() => closeModal()} status={1}>
+                <CancelButton onClick={() => closeModal()} $status={1}>
                   Cancel
                 </CancelButton>
 
                 <ExportButton
-                  status={password.length >= 8 ? 0 : 2}
+                  $status={password.length >= 8 ? 0 : 2}
                   onClick={() => {
                     if (password.length >= 8) exportWallet();
                   }}
@@ -173,7 +173,7 @@ const ExportMnemonicModal = () => {
                 </QRWrapper>
               </ExportQRContainer>
               <ButtonWrapper>
-                <CancelButton onClick={() => closeModal()} status={1}>
+                <CancelButton onClick={() => closeModal()} $status={1}>
                   Close
                 </CancelButton>
               </ButtonWrapper>

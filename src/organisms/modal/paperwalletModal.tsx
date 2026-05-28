@@ -108,11 +108,11 @@ const PaperwalletModal = () => {
           </ModalTooltipWrapper>
 
           <ButtonWrapper>
-            <CancelButton onClick={() => closePaperwalletModal()} status={1}>
+            <CancelButton onClick={() => closePaperwalletModal()} $status={1}>
               Cancel
             </CancelButton>
             <DownloadButton
-              status={password.length >= 8 ? 0 : 2}
+              $status={password.length >= 8 ? 0 : 2}
               onClick={() => {
                 if (password.length >= 8) downloadWallet();
               }}

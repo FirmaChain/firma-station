@@ -12,16 +12,17 @@ import {
   getFeesFromGas,
 } from '../../../utils/common';
 import { modalActions } from '../../../redux/action';
-import { ITargetStakingState } from '../../../interfaces/staking';
+import { IGrantsDataState, ITargetStakingState } from '../../../interfaces/staking';
 
 import { CardWrapper, InnerWrapper, Title, Content, Buttons, Button } from './styles';
 import { CHAIN_CONFIG } from '../../../config';
 
 interface IProps {
   targetStakingState: ITargetStakingState;
+  grantDataState: IGrantsDataState;
 }
 
-const DelegationCard = ({ targetStakingState }: IProps) => {
+const DelegationCard = ({ targetStakingState, grantDataState }: IProps) => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger, isMobileApp} = useSelector((state: rootState) => state.wallet);
@@ -68,7 +69,12 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
         if (targetStakingState.available >= convertToFctNumber(getDefaultFee(isLedger, isMobileApp) + 5000)) {
           modalActions.handleModalData({
             action: 'Redelegate',
-            data: { targetValidator, delegationList: options },
+            data: {
+              targetValidator,
+              targetValidatorMoniker: getMoniker(targetValidator),
+              delegationList: options,
+              allowValidatorList: grantDataState.allowValidatorList.map((v) => v.operatorAddress),
+            },
           });
 
           modalActions.handleModalRedelegate(true);
@@ -182,17 +188,17 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
         <Title>My Delegations</Title>
         <Content>{`${convertNumberFormat(targetStakingState.delegated, 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</Content>
         <Buttons>
-          <Button onClick={delegateAction} isActive={true}>
+          <Button onClick={delegateAction} $isActive={true}>
             Delegate
           </Button>
-          <Button onClick={redelegateAction} isActive={true}>
+          <Button onClick={redelegateAction} $isActive={true}>
             Redelegate
           </Button>
           <Button
             onClick={() => {
               if (targetStakingState.delegated > 0) undelegateAction();
             }}
-            isActive={targetStakingState.delegated > 0}
+            $isActive={targetStakingState.delegated > 0}
           >
             Undelegate
           </Button>
@@ -206,7 +212,7 @@ const DelegationCard = ({ targetStakingState }: IProps) => {
             onClick={() => {
               if (targetStakingState.stakingReward > 0) withdrawAction();
             }}
-            isActive={targetStakingState.stakingReward > 0}
+            $isActive={targetStakingState.stakingReward > 0}
           >
             Withdraw
           </Button>

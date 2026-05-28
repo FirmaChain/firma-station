@@ -50,10 +50,10 @@ const DisconnectModal = () => {
             {'Are you sure you want to disconnect your wallet?\nDisconnecting is done safely.'}
           </DisconnectDescription>
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1}>
+            <CancelButton onClick={() => closeModal()} $status={1}>
               Cancel
             </CancelButton>
-            <NextButton onClick={() => disconnectWallet()} status={0}>
+            <NextButton onClick={() => disconnectWallet()} $status={0}>
               Disconnect
             </NextButton>
           </ButtonWrapper>

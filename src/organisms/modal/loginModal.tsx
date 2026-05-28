@@ -64,7 +64,7 @@ const LoginModal = () => {
           return (
             <LoginMenuItem key={index} onClick={() => openSubModal(menu.modalAction)}>
               <LoginMenuButton 
-                status={1} 
+                $status={1} 
                 data-testid={`login-modal-${menu.name.toLowerCase().replace(/\s+/g, '-')}-button`}
               >
                 {menu.name}

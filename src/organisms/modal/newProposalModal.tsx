@@ -1213,14 +1213,14 @@ const NewProposalModal = () => {
           )}
 
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1} data-testid="proposal-cancel-button">
+            <CancelButton onClick={() => closeModal()} $status={1} data-testid="proposal-cancel-button">
               Cancel
             </CancelButton>
             <NextButton
               onClick={() => {
                 if (proposalType) nextStep();
               }}
-              status={proposalType !== '' ? 0 : 2}
+              $status={proposalType !== '' ? 0 : 2}
               data-testid="proposal-next-button"
             >
               Next
