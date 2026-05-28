@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
 import { persistReducer } from "redux-persist";
-import ReduxThunk from "redux-thunk";
+import { thunk } from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 
 import reducers from "./reducers";
@@ -11,4 +11,4 @@ const persistConfig = {
   blacklist: ["modal"],
 };
 
-export default createStore(persistReducer(persistConfig, reducers), applyMiddleware(ReduxThunk));
+export default createStore(persistReducer(persistConfig, reducers), applyMiddleware(thunk));
