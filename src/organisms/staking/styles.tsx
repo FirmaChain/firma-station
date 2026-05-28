@@ -425,14 +425,14 @@ export const DelegationTab = styled.div`
   padding-bottom: 10px;
 `;
 
-export const DelegationTabItem = styled.div<{ isActive: boolean }>`
+export const DelegationTabItem = styled.div<{ $isActive: boolean }>`
   text-align: center;
   padding: 12px 14px;
   font-size: 1.4rem;
   cursor: pointer;
   color: #888;
   ${(props) =>
-    props.isActive &&
+    props.$isActive &&
     `
     color:white;
     border-bottom:1px solid white;
@@ -465,10 +465,7 @@ export const DelegationListWrapper = styled.div`
 export const ChartWrapper = styled.div`
   width: 50%;
   height: 280px;
-  display: flex;
   position: relative;
-  align-items: center;
-  justify-content: center;
   @media only screen and (max-width: 1550px) {
     width: 100%;
   }
@@ -510,7 +507,7 @@ export const ButtonWrapper = styled.div`
   gap: 1rem;
 `;
 
-export const Button = styled.div<{ isActive?: boolean }>`
+export const Button = styled.div<{ $isActive?: boolean }>`
   width: 90px;
   height: 35px;
   padding-left: 7px;
@@ -522,7 +519,7 @@ export const Button = styled.div<{ isActive?: boolean }>`
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
-  ${(props) => (props.isActive ? `` : `background-color: #444;color:#777`)}
+  ${(props) => (props.$isActive ? `` : `background-color: #444;color:#777`)}
 `;
 
 export const ItemSmallWrapper = styled.div`
@@ -636,13 +633,13 @@ export const SortArrow = styled.div<{ $order?: number; $orderBy?: number; $index
   cursor: pointer;
 `;
 
-export const StatusBox = styled.div<{ status: number }>`
+export const StatusBox = styled.div<{ $status: number }>`
   height: 20px;
   line-height: 20px;
   text-align: center;
   background-color: #555;
-  color: ${(props) => `${getRestakeStatusColor(props.status)}`};
-  background-color: ${(props) => `${getRestakeStatusColor(props.status)}30`};
+  color: ${(props) => `${getRestakeStatusColor(props.$status)}`};
+  background-color: ${(props) => `${getRestakeStatusColor(props.$status)}30`};
   padding: 3px 8px 1px 8px;
   border-radius: 15px;
 `;

@@ -114,14 +114,14 @@ const VotingModal = () => {
             </VotingItem>
           </VotingWrapper>
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1}>
+            <CancelButton onClick={() => closeModal()} $status={1}>
               Cancel
             </CancelButton>
             <NextButton
               onClick={() => {
                 if (votingType) nextStep();
               }}
-              status={votingType !== 0 ? 0 : 2}
+              $status={votingType !== 0 ? 0 : 2}
             >
               Vote
             </NextButton>

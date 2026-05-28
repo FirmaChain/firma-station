@@ -10,6 +10,7 @@ import {
   useDelegations,
   useRedelegations,
   useUndelegations,
+  useGrantData,
 } from '../organisms/staking/hooks';
 import { ContentContainer } from '../styles/validators';
 
@@ -20,13 +21,14 @@ const Validators = () => {
   const { delegateState } = useDelegations();
   const { redelegateState } = useRedelegations();
   const { undelegateState } = useUndelegations();
+  const { grantDataState } = useGrantData();
 
   const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 
   return (
     <ContentContainer>
       {targetStakingState && isInit && isMobile === false && (
-        <ValidatorControlCard targetStakingState={targetStakingState} />
+        <ValidatorControlCard targetStakingState={targetStakingState} grantDataState={grantDataState} />
       )}
       <ValidatorInfoCard targetValidatorData={validatorState} />
       <DelegatorsCard

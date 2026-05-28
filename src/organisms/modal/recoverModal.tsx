@@ -167,7 +167,7 @@ const RecoverModal = () => {
           <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <RecoverButton
-            status={isActiveRecoverButton ? 0 : 2}
+            $status={isActiveRecoverButton ? 0 : 2}
             onClick={() => {
               if (isActiveRecoverButton) recoverWallet();
             }}

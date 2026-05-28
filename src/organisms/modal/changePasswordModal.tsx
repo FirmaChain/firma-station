@@ -66,10 +66,10 @@ const ChangePasswordModal = () => {
           <Password onChange={onChangeNewPassword} onKeyDown={onKeyDownPassword} />
 
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1}>
+            <CancelButton onClick={() => closeModal()} $status={1}>
               Cancel
             </CancelButton>
-            <ChangeButton status={0}>Change</ChangeButton>
+            <ChangeButton $status={0}>Change</ChangeButton>
           </ButtonWrapper>
         </ModalContent>
       </ModalContainer>

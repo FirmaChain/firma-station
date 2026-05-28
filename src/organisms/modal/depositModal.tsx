@@ -175,14 +175,14 @@ const DepositModal = () => {
           </ModalInputWrap>
 
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1}>
+            <CancelButton onClick={() => closeModal()} $status={1}>
               Cancel
             </CancelButton>
             <NextButton
               onClick={() => {
                 if (isActiveButton) nextStep();
               }}
-              status={isActiveButton ? 0 : 2}
+              $status={isActiveButton ? 0 : 2}
             >
               Next
             </NextButton>

@@ -93,7 +93,7 @@ export const LoginDescription = styled.div`
   margin-bottom: 50px;
 `;
 
-export const ButtonStyleByStatus = styled.div<{ status: number }>`
+export const ButtonStyleByStatus = styled.div<{ $status: number }>`
   width: calc(100% - 2px);
   height: 48px;
   line-height: 48px;
@@ -105,7 +105,7 @@ export const ButtonStyleByStatus = styled.div<{ status: number }>`
   text-align: center;
   margin-top: 30px;
   ${(props) => {
-    switch (props.status) {
+    switch (props.$status) {
       case 0:
         return 'background-color:#3550de;color:white;';
       case 1:
@@ -120,7 +120,7 @@ export const ButtonStyleByStatus = styled.div<{ status: number }>`
   }}
 `;
 
-export const LoginButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const LoginButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
 export const LogoutIconImg = styled(LogoutIcon)`
   width: 18px !important;

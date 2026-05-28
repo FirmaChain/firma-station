@@ -172,7 +172,7 @@ const ConfirmWalletModal = () => {
             onClick={() => {
               if (isActiveCreateButton) confirmWallet();
             }}
-            status={isActiveCreateButton ? 0 : 2}
+            $status={isActiveCreateButton ? 0 : 2}
           >
             Create
           </CreateButton>
