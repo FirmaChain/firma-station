@@ -6,7 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import HelpIconOrigin from '@mui/icons-material/Help';
 import { getRestakeStatusColor } from '../../utils/common';
-import { ComponentProps, useRef } from 'react';
+import React, { ComponentProps, useRef } from 'react';
 
 export const confirmTxModalWidth = '500px';
 export const loginModalWidth = '500px';
@@ -29,6 +29,7 @@ export const gasEstimationModalWidth = '500px';
 export const sendModalWidth = '500px';
 export const votingModalWidth = '500px';
 export const restakeModalWidth = '500px';
+export const redelegateRestakeModalWidth = '500px';
 export const disconnectModalWidth = '500px';
 export const settingModalWidth = '500px';
 
@@ -81,7 +82,7 @@ export const ModalContent = styled.div`
   }
 `;
 
-export const ButtonStyleByStatus = styled.div<{ status: number }>`
+export const ButtonStyleByStatus = styled.div<{ $status: number }>`
   width: calc(100% - 2px);
   height: 46px;
   line-height: 46px;
@@ -93,7 +94,7 @@ export const ButtonStyleByStatus = styled.div<{ status: number }>`
   text-align: center;
   margin-top: 30px;
   ${(props) => {
-    switch (props.status) {
+    switch (props.$status) {
       case 0:
         return 'background-color:#3550de;color:white;';
       case 1:
@@ -268,7 +269,7 @@ export const ConfirmLabel = styled.div`
   color: #b4b4b4;
 `;
 
-export const ConfirmInput = styled.div<{ point?: boolean }>`
+export const ConfirmInput = styled.div<{ $point?: boolean }>`
   width: 100%;
   flex-grow: 1;
 
@@ -284,7 +285,7 @@ export const ConfirmInput = styled.div<{ point?: boolean }>`
     color: #b4b4b4;
   }
   ${(props) =>
-    props.point &&
+    props.$point &&
     `font-size:${props.theme.sizes.modal20};color:white;& > span { font-size: ${props.theme.sizes.modal16};`}
 `;
 
@@ -381,19 +382,19 @@ export const CopyIcon = styled(FileCopyIcon)`
   cursor: pointer;
 `;
 
-export const CancelButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const CancelButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const NextButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const NextButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const DownloadButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const DownloadButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const ExportButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const ExportButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const ChangeButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const ChangeButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const CreateButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const CreateButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const RecoverButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const RecoverButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
 export const ImportButton = styled.div<{ $active: boolean }>`
   width: 220px;
@@ -718,7 +719,7 @@ export const ButtonWrapper = styled.div`
   gap: 10px;
 `;
 
-export const RestakeButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const RestakeButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
 export const Divider = styled.div`
   width: 100%;
@@ -736,7 +737,7 @@ export const DividerSolid = styled.div`
   border-bottom: 1px solid #555;
 `;
 
-export const StatusBox = styled.div<{ status: number }>`
+export const StatusBox = styled.div<{ $status: number }>`
   width: auto;
   display: inline-block;
   text-align: center;
@@ -744,8 +745,8 @@ export const StatusBox = styled.div<{ status: number }>`
   line-height: 22px;
   background-color: #555;
   font-size: 1.4rem;
-  color: ${(props) => `${getRestakeStatusColor(props.status)}`};
-  background-color: ${(props) => `${getRestakeStatusColor(props.status)}30`};
+  color: ${(props) => `${getRestakeStatusColor(props.$status)}`};
+  background-color: ${(props) => `${getRestakeStatusColor(props.$status)}30`};
   padding: 1px 8px 1px 8px;
   border-radius: 15px;
 `;
@@ -902,7 +903,7 @@ export const LoginMenuItem = styled.div`
   flex-direction: column;
 `;
 
-export const LoginMenuButton = styled(ButtonStyleByStatus)<{ status: number }>`
+export const LoginMenuButton = styled(ButtonStyleByStatus)<{ $status: number }>`
   height: 64px;
   display: flex;
   align-items: center;
@@ -1008,7 +1009,7 @@ export const SettingMenuItem = styled.div`
   flex-direction: column;
 `;
 
-export const SettingMenuButton = styled(ButtonStyleByStatus)<{ status: number }>`
+export const SettingMenuButton = styled(ButtonStyleByStatus)<{ $status: number }>`
   height: 64px;
   display: flex;
   align-items: center;
@@ -1018,7 +1019,7 @@ export const SettingMenuButton = styled(ButtonStyleByStatus)<{ status: number }>
   margin: 0;
 `;
 
-export const DisconnectButton = styled(ButtonStyleByStatus)<{ status: number }>`
+export const DisconnectButton = styled(ButtonStyleByStatus)<{ $status: number }>`
   height: 64px;
   display: flex;
   align-items: center;
@@ -1275,9 +1276,13 @@ const InputBoxBase = styled(InputBoxStyleDefault)<{ $isInvalid?: boolean }>`
   border: 1px solid ${(props) => (props.$isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
 `;
 
-export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number; isInvalid?: boolean }) => {
+export const InputBoxDefault = React.forwardRef<
+  HTMLInputElement,
+  ComponentProps<'input'> & { decimal?: number; isInvalid?: boolean }
+>((p, forwardedRef) => {
   const { isInvalid, ...rest } = p;
-  const ref = useRef<HTMLInputElement>(null);
+  const innerRef = useRef<HTMLInputElement>(null);
+  const ref = (forwardedRef as React.RefObject<HTMLInputElement>) ?? innerRef;
 
   // Prevents the default action for ArrowUp and ArrowDown keys if the input's `type` attribute is 'number'.
   const disableArrowKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -1398,4 +1403,4 @@ export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number;
       inputMode={p.type === 'number' ? 'decimal' : 'text'}
     />
   );
-};
+});

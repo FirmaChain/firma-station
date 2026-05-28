@@ -13,6 +13,7 @@ import ConnectAppModal from './connectAppModal';
 import DisconnectModal from './disconnectModal';
 import DelegateModal from './delegateModal';
 import RedelegateModal from './redelegateModal';
+import RedelegateRestakeModal from './redelegateRestakeModal';
 import UndelegateModal from './undelegateModal';
 import DepositModal from './depositModal';
 import VotingModal from './votingModal';
@@ -39,6 +40,7 @@ export {
   DisconnectModal,
   DelegateModal,
   RedelegateModal,
+  RedelegateRestakeModal,
   UndelegateModal,
   DepositModal,
   VotingModal,

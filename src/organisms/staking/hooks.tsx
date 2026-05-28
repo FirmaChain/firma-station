@@ -30,10 +30,10 @@ import {
   getValidatorFromAddress,
   getValidatorDelegationsFromAddress,
   getValidatorUndelegationsFromAddress,
-  getValidatorRedelegationsFromAddress,
   getAccAddressFromValOperAddress,
   getSigningInfos,
 } from '../../utils/lcdQuery';
+import { getValidatorRedelegationsFromIndexer } from '../../apollo/gqls/query';
 
 export {
   useDelegations,
@@ -115,7 +115,7 @@ const useRedelegations = () => {
       return;
     }
 
-    getValidatorRedelegationsFromAddress(targetValidator)
+    getValidatorRedelegationsFromIndexer(targetValidator)
       .then((list) => {
         const redelegationList: IRedelegationList[] = list.map((r) => {
           const delegatorAvatar = getAvatarInfoFromAcc(avatarList, r.delegatorAddress);
