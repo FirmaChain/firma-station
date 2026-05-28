@@ -25,6 +25,7 @@ import {
   HANDLE_MODAL_QUEUETX,
   HANDLE_MODAL_GASESTIMATION,
   HANDLE_MODAL_RESTAKE,
+  HANDLE_MODAL_REDELEGATERESTAKE,
   HANDLE_MODAL_DISCONNECT,
 } from '../types';
 
@@ -54,6 +55,7 @@ export interface IModalState {
   queueTx: boolean;
   gasEstimation: boolean;
   restake: boolean;
+  redelegateRestake: boolean;
 }
 
 const initialState: IModalState = {
@@ -82,6 +84,7 @@ const initialState: IModalState = {
   queueTx: false,
   gasEstimation: false,
   restake: false,
+  redelegateRestake: false,
 };
 
 export default createReducer(initialState, {
@@ -164,5 +167,8 @@ export default createReducer(initialState, {
   },
   [HANDLE_MODAL_RESTAKE]: (state: IModalState, { isVisible }) => {
     state.restake = isVisible;
+  },
+  [HANDLE_MODAL_REDELEGATERESTAKE]: (state: IModalState, { isVisible }) => {
+    state.redelegateRestake = isVisible;
   },
 });

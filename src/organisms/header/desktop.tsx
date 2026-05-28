@@ -24,6 +24,7 @@ import {
   ConnectAppModal,
   DelegateModal,
   RedelegateModal,
+  RedelegateRestakeModal,
   UndelegateModal,
   DepositModal,
   VotingModal,
@@ -76,6 +77,7 @@ function HeaderDesktop() {
     connectApp,
     delegate,
     redelegate,
+    redelegateRestake,
     undelegate,
     deposit,
     voting,
@@ -175,6 +177,7 @@ function HeaderDesktop() {
       {disconnect && <DisconnectModal />}
       {delegate && <DelegateModal />}
       {redelegate && <RedelegateModal />}
+      {redelegateRestake && <RedelegateRestakeModal />}
       {undelegate && <UndelegateModal />}
       {deposit && <DepositModal />}
       {voting && <VotingModal />}
