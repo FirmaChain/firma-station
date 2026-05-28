@@ -1,4 +1,14 @@
-import { FirmaSDK, AuthorizationType, FirmaCosmosLedgerWallet, FirmaBridgeLedgerWallet } from '@firmachain/firma-js';
+import {
+  FirmaSDK,
+  FirmaUtil,
+  AuthorizationType,
+  AuthzTxClient,
+  StakeAuthorization,
+  FirmaCosmosLedgerWallet,
+  FirmaBridgeLedgerWallet,
+  getSignAndBroadcastOption,
+} from '@firmachain/firma-js';
+import { MsgBeginRedelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx';
 import TransportHID from '@ledgerhq/hw-transport-webhid';
 
 import { CHAIN_CONFIG, IBC_CONFIG } from '../config';
@@ -887,6 +897,121 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     return result;
   };
 
+  // AuthzTxClient's registry knows MsgGrant but not MsgBeginRedelegate. Registering
+  // it here lets a single tx carry both messages. Registry.register is idempotent.
+  const buildRedelegateAndGrantMsgs = async (
+    validatorSrcAddress: string,
+    validatorDstAddress: string,
+    amount: number,
+    validatorAddressList: string[],
+    expirationDate: Date,
+    maxFCT: number
+  ) => {
+    AuthzTxClient.getRegistry().register('/cosmos.staking.v1beta1.MsgBeginRedelegate', MsgBeginRedelegate);
+
+    const wallet = await getWallet();
+    const granter = await wallet.getAddress();
+    const denom = CHAIN_CONFIG.FIRMACHAIN_CONFIG.denom;
+    const uAmount = FirmaUtil.getUFCTStringFromFCT(amount);
+    const uMaxTokens = maxFCT === 0 ? '0' : FirmaUtil.getUFCTStringFromFCT(maxFCT);
+
+    const redelegateMsg = {
+      typeUrl: '/cosmos.staking.v1beta1.MsgBeginRedelegate',
+      value: {
+        delegatorAddress: granter,
+        validatorSrcAddress,
+        validatorDstAddress,
+        amount: { denom, amount: uAmount },
+      },
+    };
+
+    const stakeAuthBytes = StakeAuthorization.encode(
+      StakeAuthorization.fromPartial({
+        allowList: { address: validatorAddressList },
+        maxTokens: uMaxTokens === '0' ? undefined : { denom, amount: uMaxTokens },
+        authorizationType: AuthorizationType.AUTHORIZATION_TYPE_DELEGATE,
+      })
+    ).finish();
+
+    const grantMsg = AuthzTxClient.msgGrantAllowance({
+      granter,
+      grantee: CHAIN_CONFIG.RESTAKE.ADDRESS,
+      grant: {
+        authorization: {
+          typeUrl: '/cosmos.staking.v1beta1.StakeAuthorization',
+          value: Uint8Array.from(stakeAuthBytes),
+        },
+        expiration: {
+          seconds: BigInt(Math.floor(expirationDate.getTime() / 1000)),
+          nanos: (expirationDate.getTime() % 1000) * 1000000,
+        },
+      },
+    });
+
+    return { wallet, denom, redelegateMsg, grantMsg };
+  };
+
+  const redelegateWithGrant = async (
+    validatorSrcAddress: string,
+    validatorDstAddress: string,
+    amount: number,
+    validatorAddressList: string[],
+    expirationDate: Date,
+    maxFCT: number,
+    estimatedGas: number
+  ) => {
+    try {
+      const { wallet, denom, redelegateMsg, grantMsg } = await buildRedelegateAndGrantMsgs(
+        validatorSrcAddress,
+        validatorDstAddress,
+        amount,
+        validatorAddressList,
+        expirationDate,
+        maxFCT
+      );
+
+      const client = new AuthzTxClient(wallet, CHAIN_CONFIG.FIRMACHAIN_CONFIG.rpcAddress);
+      const options = getSignAndBroadcastOption(denom, {
+        gas: estimatedGas,
+        fee: getFees(estimatedGas),
+      });
+
+      return await client.signAndBroadcast([redelegateMsg as any, grantMsg as any], options);
+    } catch (e: any) {
+      console.error('[firmaSDK] redelegateWithGrant error:', e?.message ?? e);
+      throw e;
+    }
+  };
+
+  const getGasEstimationRedelegateWithGrant = async (
+    validatorSrcAddress: string,
+    validatorDstAddress: string,
+    amount: number,
+    validatorAddressList: string[],
+    expirationDate: Date,
+    maxFCT: number
+  ) => {
+    if (isMobileApp || CHAIN_CONFIG.IS_DEFAULT_GAS) return getDefaultGas(isLedger, isMobileApp);
+
+    const { wallet, denom, redelegateMsg, grantMsg } = await buildRedelegateAndGrantMsgs(
+      validatorSrcAddress,
+      validatorDstAddress,
+      amount,
+      validatorAddressList,
+      expirationDate,
+      maxFCT
+    );
+
+    const client = new AuthzTxClient(wallet, CHAIN_CONFIG.FIRMACHAIN_CONFIG.rpcAddress);
+    const txRaw = await client.sign(
+      [redelegateMsg as any, grantMsg as any],
+      getSignAndBroadcastOption(denom, { gas: 0, fee: 0 }),
+      true
+    );
+
+    return await FirmaUtil.estimateGas(txRaw);
+  };
+
   return {
     getSDK,
     showAddressOnDevice,
@@ -912,6 +1037,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     cancelProposal,
     grantStakeAuthorizationDelegate,
     revokeStakeAuthorizationDelegate,
+    redelegateWithGrant,
 
     getGasEstimationSend,
     getGasEstimationSendToken,
@@ -932,7 +1058,8 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
     getGasEstimationSubmitGovParamsUpdateProposal,
     getGasEstimationCancelProposal,
     getGasEstimationGrantStakeAuthorizationDelegate,
-    getGasEstimationRevokeStakeAuthorizationDelegate
+    getGasEstimationRevokeStakeAuthorizationDelegate,
+    getGasEstimationRedelegateWithGrant
   };
 };
 
