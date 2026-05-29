@@ -39,7 +39,7 @@ const Row = ({ data, index, style }: any) => {
       }
     } catch (e) {}
 
-    return <HistoryTypeBox baseColor={targetTheme.tagTheme}>{targetTheme.tagDisplay}</HistoryTypeBox>;
+    return <HistoryTypeBox $baseColor={targetTheme.tagTheme}>{targetTheme.tagDisplay}</HistoryTypeBox>;
   };
 
   const getHash = (hash: string) => {
