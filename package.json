@@ -8,7 +8,7 @@
     "@apollo/client": "^4.2.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@firmachain/firma-js": "0.4.2",
+    "@firmachain/firma-js": "0.4.3-beta1",
     "@ledgerhq/hw-transport-webhid": "^6.35.2",
     "@mui/icons-material": "^5.0.5",
     "@mui/material": "^5.0.6",
