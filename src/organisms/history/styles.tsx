@@ -73,13 +73,13 @@ export const HeaderColumn = styled(Column)`
   color: #ddd;
 `;
 
-export const HistoryTypeBox = styled.div<{ baseColor: string }>`
+export const HistoryTypeBox = styled.div<{ $baseColor: string }>`
   width: auto;
   height: 20px;
   line-height: 20px;
   padding: 5px 8px 5px 8px;
   border-radius: 4px;
   font-size: ${({ theme }) => theme.sizes.modal15};
-  background-color: ${(props) => props.baseColor}35;
-  color: ${(props) => props.baseColor};
+  background-color: ${(props) => props.$baseColor}35;
+  color: ${(props) => props.$baseColor};
 `;
