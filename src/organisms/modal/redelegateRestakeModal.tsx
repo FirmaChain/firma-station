@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip';
 import styled from 'styled-components';
 
 import useFirma from '../../utils/wallet';
+import { getAvatarInfo } from '../../utils/avatar';
 import { rootState } from '../../redux/reducers';
 import {
   convertNumber,
@@ -74,9 +75,32 @@ const ValidatorCard = styled.div`
 const ValidatorCardHeader = styled.label<{ $disabled?: boolean }>`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   min-width: 0;
   cursor: ${(p) => (p.$disabled ? 'not-allowed' : 'pointer')};
+`;
+
+const CardIdentity = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+`;
+
+const ValidatorAvatar = styled.div<{ $src?: string }>`
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #555;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  ${(p) =>
+    p.$src
+      ? `background-image: url('${p.$src}');`
+      : `background-image: url('${p.theme.urls.profile}');`}
 `;
 
 const RoleLabel = styled.span<{ $variant: 'source' | 'dest' }>`
@@ -100,7 +124,6 @@ const CardMoniker = styled.span`
 `;
 
 const RestakeToggleHint = styled.span`
-  margin-left: auto;
   color: #888;
   font-size: 1.1rem;
   font-style: italic;
@@ -139,6 +162,7 @@ const RedelegateRestakeModal = () => {
   const modalData = useSelector((state: rootState) => state.modal.data);
   const { balance } = useSelector((state: rootState) => state.user);
   const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+  const { avatarList } = useSelector((state: rootState) => state.avatar);
   const { enqueueSnackbar } = useSnackbar();
 
   const {
@@ -362,6 +386,8 @@ const RedelegateRestakeModal = () => {
     (!dstAlreadyInRestake && includeDstInRestake) ||
     (dstAlreadyInRestake && removeDstFromRestake) ||
     (srcInRestake && removeSrcFromRestake);
+  const sourceAvatar = getAvatarInfo(avatarList, ctx.sourceValidator);
+  const destAvatar = getAvatarInfo(avatarList, ctx.targetValidator);
 
   return (
     <Modal
@@ -416,9 +442,18 @@ const RedelegateRestakeModal = () => {
                   disabled={!srcInRestake}
                   onChange={(e) => setRemoveSrcFromRestake(!e.target.checked)}
                 />
-                <RoleLabel $variant='source'>Source</RoleLabel>
-                <CardMoniker title={ctx.sourceValidatorMoniker}>{ctx.sourceValidatorMoniker}</CardMoniker>
-                {!srcInRestake && <RestakeToggleHint>not in Restake list</RestakeToggleHint>}
+                <ValidatorAvatar $src={sourceAvatar.avatarURL} />
+                <CardIdentity>
+                  <RoleLabel $variant='source'>Source</RoleLabel>
+                  <CardMoniker title={ctx.sourceValidatorMoniker}>{ctx.sourceValidatorMoniker}</CardMoniker>
+                  <RestakeToggleHint>
+                    {srcInRestake
+                      ? removeSrcFromRestake
+                        ? 'will be removed from Restake list'
+                        : 'in Restake list'
+                      : 'not in Restake list'}
+                  </RestakeToggleHint>
+                </CardIdentity>
               </ValidatorCardHeader>
               <InfoRow>
                 <span>Redelegate amount</span>
@@ -447,11 +482,20 @@ const RedelegateRestakeModal = () => {
                     else setIncludeDstInRestake(e.target.checked);
                   }}
                 />
-                <RoleLabel $variant='dest'>Destination</RoleLabel>
-                <CardMoniker title={ctx.targetValidatorMoniker}>{ctx.targetValidatorMoniker}</CardMoniker>
-                {dstAlreadyInRestake && !removeDstFromRestake && (
-                  <RestakeToggleHint>already in Restake list</RestakeToggleHint>
-                )}
+                <ValidatorAvatar $src={destAvatar.avatarURL} />
+                <CardIdentity>
+                  <RoleLabel $variant='dest'>Destination</RoleLabel>
+                  <CardMoniker title={ctx.targetValidatorMoniker}>{ctx.targetValidatorMoniker}</CardMoniker>
+                  <RestakeToggleHint>
+                    {dstAlreadyInRestake
+                      ? removeDstFromRestake
+                        ? 'will be removed from Restake list'
+                        : 'already in Restake list'
+                      : includeDstInRestake
+                      ? 'will be added to Restake list'
+                      : 'not in Restake list'}
+                  </RestakeToggleHint>
+                </CardIdentity>
               </ValidatorCardHeader>
               <InfoRow>
                 <span>Receive amount</span>
