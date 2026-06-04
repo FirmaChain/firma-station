@@ -31,6 +31,7 @@ const ValidatorCell: React.CSSProperties = {
 
 const NumericCell: React.CSSProperties = {
   flex: '0 0 160px',
+  textAlign: 'right',
 };
 
 const TimeCell: React.CSSProperties = {
@@ -120,9 +121,13 @@ const RedelegatorRow = ({ data, index, style }: any) => {
           {item.delegatorAddress}
         </Link>
       </ItemColumn>
-      <ItemColumn style={ValidatorCell}>
+      <ItemColumn $avatar>
         <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
           <ProfileImage2 $src={item.dstAvatarURL} />
+        </Link>
+      </ItemColumn>
+      <ItemColumn style={ValidatorCell}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
           {`${item.dstMoniker}`}
         </Link>
       </ItemColumn>
@@ -274,6 +279,7 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
                 <>
                   <HeaderWrapper style={{ width }}>
                     <HeaderColumn style={WalletCell}>Wallet</HeaderColumn>
+                    <HeaderColumn $avatar></HeaderColumn>
                     <HeaderColumn style={ValidatorCell}>To</HeaderColumn>
                     <HeaderColumn style={NumericCell}>Amount</HeaderColumn>
                     <HeaderColumn style={TimeCell}>Linked Until</HeaderColumn>
