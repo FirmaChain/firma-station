@@ -34,17 +34,18 @@ const initialState: IUserState = {
   tokenList: [],
 };
 
-export default createReducer(initialState, {
-  [HANDLE_USER_BALANCE]: (state: IUserState, { balance }) => {
-    state.balance = balance;
-  },
-  [HANDLE_USER_VESTING]: (state: IUserState, { vesting }) => {
-    state.vesting = vesting;
-  },
-  [HANDLE_USER_TOKEN_LIST]: (state: IUserState, { tokenList }) => {
-    state.tokenList = tokenList;
-  },
-  [HANDLE_USER_NFT_LIST]: (state: IUserState, { nftList }) => {
-    state.nftList = nftList;
-  },
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(HANDLE_USER_BALANCE, (state, { balance }: any) => {
+      state.balance = balance;
+    })
+    .addCase(HANDLE_USER_VESTING, (state, { vesting }: any) => {
+      state.vesting = vesting;
+    })
+    .addCase(HANDLE_USER_TOKEN_LIST, (state, { tokenList }: any) => {
+      state.tokenList = tokenList;
+    })
+    .addCase(HANDLE_USER_NFT_LIST, (state, { nftList }: any) => {
+      state.nftList = nftList;
+    });
 });

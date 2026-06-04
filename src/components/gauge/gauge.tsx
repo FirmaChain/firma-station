@@ -11,7 +11,7 @@ interface IProps {
 const Gauge = ({ percent, bgColor = theme.colors.mainblue }: IProps) => {
   return (
     <GaugeWrapper $bgColor={bgColor}>
-      <GaugePercent percent={percent} $bgColor={bgColor} />
+      <GaugePercent $percent={percent} $bgColor={bgColor} />
     </GaugeWrapper>
   );
 };

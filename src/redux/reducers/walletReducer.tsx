@@ -29,32 +29,33 @@ const initialState = {
   balance: '0',
 };
 
-export default createReducer(initialState, {
-  [HANDLE_WALLET_ADDRESS]: (state: IWalletState, { address }) => {
-    state.address = address;
-  },
-  [HANDLE_WALLET_TIMEKEY]: (state: IWalletState, { timeKey }) => {
-    state.timeKey = timeKey;
-  },
-  [HANDLE_WALLET_INIT]: (state: IWalletState, { isInit }) => {
-    state.isInit = isInit;
-  },
-  [HANDLE_WALLET_LEDGER]: (state: IWalletState, { isLedger }) => {
-    state.isLedger = isLedger;
-  },
-  [HANDLE_WALLET_APP]: (state: IWalletState, { isMobileApp }) => {
-    state.isMobileApp = isMobileApp;
-  },
-  [HANDLE_WALLET_NAME]: (state: IWalletState, { walletName }) => {
-    state.walletName = walletName;
-  },
-  [RESET_WALLET]: (state: IWalletState) => {
-    state.address = '';
-    state.timeKey = '';
-    state.isInit = false;
-    state.isLedger = false;
-    state.isMobileApp = false;
-    state.walletName = '';
-    state.balance = '0';
-  },
+export default createReducer(initialState, (builder) => {
+  builder
+    .addCase(HANDLE_WALLET_ADDRESS, (state, { address }: any) => {
+      state.address = address;
+    })
+    .addCase(HANDLE_WALLET_TIMEKEY, (state, { timeKey }: any) => {
+      state.timeKey = timeKey;
+    })
+    .addCase(HANDLE_WALLET_INIT, (state, { isInit }: any) => {
+      state.isInit = isInit;
+    })
+    .addCase(HANDLE_WALLET_LEDGER, (state, { isLedger }: any) => {
+      state.isLedger = isLedger;
+    })
+    .addCase(HANDLE_WALLET_APP, (state, { isMobileApp }: any) => {
+      state.isMobileApp = isMobileApp;
+    })
+    .addCase(HANDLE_WALLET_NAME, (state, { walletName }: any) => {
+      state.walletName = walletName;
+    })
+    .addCase(RESET_WALLET, (state) => {
+      state.address = '';
+      state.timeKey = '';
+      state.isInit = false;
+      state.isLedger = false;
+      state.isMobileApp = false;
+      state.walletName = '';
+      state.balance = '0';
+    });
 });
