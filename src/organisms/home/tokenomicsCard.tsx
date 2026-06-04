@@ -31,9 +31,13 @@ interface IProps {
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
+    // recharts v3 flattened the Pie tooltip payload from payload[0].payload.payload
+    // to payload[0].payload; fall back across both shapes for safety.
+    const item = payload[0].payload?.payload ?? payload[0].payload;
+
     return (
       <CustomTooltipContainer>
-        <CustomTooltipTypo>{payload[0].payload.payload.legendKey}</CustomTooltipTypo>
+        <CustomTooltipTypo>{item?.legendKey}</CustomTooltipTypo>
         <CustomTooltipTypo>{`${convertNumberFormat(payload[0].value, 0)} ${
           CHAIN_CONFIG.PARAMS.SYMBOL
         }`}</CustomTooltipTypo>
