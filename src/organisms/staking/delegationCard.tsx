@@ -75,7 +75,7 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
   };
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 20 ? `${moniker.substring(0, 20)}...` : moniker;
+    return moniker.length > 30 ? `${moniker.substring(0, 30)}...` : moniker;
   };
 
   return (
@@ -96,7 +96,7 @@ const RedelegationRow = ({ data, index, style }: any) => {
   const validatorInfo = data[index];
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 15 ? `${moniker.substring(0, 15)}...` : moniker;
+    return moniker.length > 30 ? `${moniker.substring(0, 30)}...` : moniker;
   };
 
   return (
@@ -144,7 +144,7 @@ const RestakeRow = ({ data, index, style, totalStakingState }: any) => {
   const restakeInfo: IRestakeState = data[index];
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 12 ? `${moniker.substring(0, 12)}...` : moniker;
+    return moniker.length > 30 ? `${moniker.substring(0, 30)}...` : moniker;
   };
 
   return (
