@@ -115,25 +115,19 @@ const RedelegatorRow = ({ data, index, style }: any) => {
   const item: IRedelegationList = data[index];
   return (
     <ItemWrapper style={style}>
-        <ItemColumn style={WalletCell} title={item.delegatorAddress}>
-          <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>  
-            {item.delegatorAddress}
-          </Link>
-        </ItemColumn>
-
-      
-      <ItemColumn $avatar>
-        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
-          <ProfileImage2 $src={item.dstAvatarURL} />
+      <ItemColumn style={WalletCell} title={item.delegatorAddress}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
+          {item.delegatorAddress}
         </Link>
       </ItemColumn>
-      <ItemColumn>
+      <ItemColumn style={ValidatorCell}>
         <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
+          <ProfileImage2 $src={item.dstAvatarURL} />
           {`${item.dstMoniker}`}
         </Link>
       </ItemColumn>
-      {/* <ItemColumn style={NumericCell}>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
-      <ItemColumn style={TimeCell}>{getDateTimeFormat(item.completionTime)}</ItemColumn> */}
+      <ItemColumn style={NumericCell}>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
+      <ItemColumn style={TimeCell}>{getDateTimeFormat(item.completionTime)}</ItemColumn>
     </ItemWrapper>
   );
 };
