@@ -18,6 +18,7 @@ export const useTransferHistoryByAddress = () => {
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
   const { address } = useSelector((state: rootState) => state.wallet);
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -191,7 +192,7 @@ export const useTransferHistoryByAddress = () => {
     if (address) {
       loadInitialData();
     }
-  }, [address]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [address, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     transferHistoryByAddressState,

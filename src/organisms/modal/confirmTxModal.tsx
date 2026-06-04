@@ -6,7 +6,7 @@ import useFirma from '../../utils/wallet';
 import { convertToFctString, isValidString, convertNumberFormat, getDefaultFee } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
+import { modalActions, refreshActions } from '../../redux/action';
 import { CHAIN_CONFIG } from '../../config';
 
 import {
@@ -35,7 +35,7 @@ const ConfirmTxModal = () => {
   const { isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { isCorrectPassword } = useFirma();
+  const { isCorrectPassword, setUserData } = useFirma();
 
   const [password, setPassword] = useState('');
   const [actionName, setActionName] = useState('');
@@ -103,7 +103,9 @@ const ConfirmTxModal = () => {
       autoHideDuration: 1000,
     });
     closeConfirmTxModal();
-    setTimeout(() => window.location.reload(), 1000);
+    // Refresh on-chain data in place instead of reloading the whole page.
+    setUserData();
+    refreshActions.handleRefresh();
   };
 
   const onFailed = () => {
@@ -112,7 +114,6 @@ const ConfirmTxModal = () => {
       autoHideDuration: 1000,
     });
     closeConfirmTxModal();
-    setTimeout(() => window.location.reload(), 1000);
   };
 
   return (

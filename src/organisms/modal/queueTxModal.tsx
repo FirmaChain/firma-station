@@ -5,7 +5,7 @@ import GridLoader from 'react-spinners/GridLoader';
 
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
+import { modalActions, refreshActions } from '../../redux/action';
 
 import {
   queueTxModalWidth,
@@ -52,7 +52,8 @@ const QueueTxModal = () => {
       autoHideDuration: 1000,
     });
     closeQueueTxModal();
-    setTimeout(() => window.location.reload(), 1000);
+    // Refresh on-chain data in place instead of reloading the whole page.
+    refreshActions.handleRefresh();
   };
 
   const rejectTx = () => {
@@ -61,7 +62,6 @@ const QueueTxModal = () => {
       autoHideDuration: 1000,
     });
     closeQueueTxModal();
-    setTimeout(() => window.location.reload(), 1000);
   };
 
   const closeQueueTxModal = () => {

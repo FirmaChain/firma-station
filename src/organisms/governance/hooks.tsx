@@ -14,6 +14,8 @@ import { CHAIN_CONFIG } from '../../config';
 import * as lodash from 'lodash';
 
 export const useGovernanceData = () => {
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+
   const [proposalsState, setProposalsState] = useState<IProposalsState>({
     proposals: []
   });
@@ -52,7 +54,7 @@ export const useGovernanceData = () => {
       .catch((error) => {
         console.error('[governance] failed to load proposal list', error);
       });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     proposalsState
@@ -61,6 +63,7 @@ export const useGovernanceData = () => {
 
 export const useProposalData = (proposalId: string, errorCallback?: (e: any) => void) => {
   const { avatarList } = useSelector((state: rootState) => state.avatar);
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const [proposalState, setProposalState] = useState<IProposalDetailState | null>(null);
 
@@ -145,7 +148,7 @@ export const useProposalData = (proposalId: string, errorCallback?: (e: any) => 
       .catch((e) => {
         if (errorCallback) errorCallback(e);
       });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     proposalState
