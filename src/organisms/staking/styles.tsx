@@ -310,6 +310,7 @@ export const RedelegationItemColumn = styled.div`
     flex: 1;
     min-width: 16rem;
     margin-right: 5px;
+    text-align: right;
     font-size: ${({ theme }) => theme.sizes.stakingSmall};
   }
 `;
@@ -380,7 +381,7 @@ export const RestakeItemColumn = styled.div`
     margin-right: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
   }
 `;
 
@@ -412,8 +413,8 @@ export const RestakeHeaderColumn = styled.div`
   }
   &:nth-child(4) {
     width: 180px;
-    margin-right: 15px;
-    text-align: center;
+    margin-right: 20px;
+    text-align: right;
   }
 `;
 

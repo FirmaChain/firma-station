@@ -132,8 +132,8 @@ const RedelegatorRow = ({ data, index, style }: any) => {
           {`${item.dstMoniker}`}
         </Link>
       </ItemColumn>
-      <ItemColumn style={NumericCell}>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
-      <ItemColumn style={TimeCell}>{getDateTimeFormat(item.completionTime)}</ItemColumn>
+      {/* <ItemColumn style={NumericCell}>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
+      <ItemColumn style={TimeCell}>{getDateTimeFormat(item.completionTime)}</ItemColumn> */}
     </ItemWrapper>
   );
 };
