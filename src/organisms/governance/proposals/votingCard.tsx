@@ -85,7 +85,7 @@ const Row = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentVoter.voterAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn>
-          <ProfileImage src={currentVoter.avatarURL} />
+          <ProfileImage $src={currentVoter.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${currentVoter.moniker}`}</ItemColumn>
         <ItemColumn>

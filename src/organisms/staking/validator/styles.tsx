@@ -201,7 +201,7 @@ export const ProfileImageWrap = styled.div`
   width: 100px;
 `;
 
-export const ProfileImage = styled.div<{ src?: string }>`
+export const ProfileImage = styled.div<{ $src?: string }>`
   width: 80px;
   height: 80px;
   border-radius: 40px;
@@ -211,7 +211,7 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-position: center;
   background-repeat: no-repeat;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const DescriptionWrap = styled.div`
   width: 100%;
@@ -306,7 +306,7 @@ export const CopyIconImg = styled(FileCopyIcon)`
   left: 114px;
 `;
 
-export const ProfileImage2 = styled.div<{ src?: string }>`
+export const ProfileImage2 = styled.div<{ $src?: string }>`
   width: 30px;
   min-width: 30px;
   max-width: 30px;
@@ -319,7 +319,7 @@ export const ProfileImage2 = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 
 export const DelegatorMobile = styled.div`

@@ -139,7 +139,7 @@ function HeaderDesktop() {
         <HeaderRightWrapper>
           {isInit && (
             <HeaderLeftWrapper>
-              <ProfileImg src={undefined} />
+              <ProfileImg $src={undefined} />
               <AddressTypo onClick={clipboard}>{address}</AddressTypo>
               <BarDiv />
               {!isExternalConnect(isLedger, isMobileApp) && <LockIconImg onClick={() => checkSession()} />}

@@ -594,7 +594,7 @@ export const ItemColumn = styled.div`
   }
 `;
 
-export const ProfileImage = styled.div<{ src?: string }>`
+export const ProfileImage = styled.div<{ $src?: string }>`
   width: 30px;
   height: 30px;
   border-radius: 15px;
@@ -605,5 +605,5 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;

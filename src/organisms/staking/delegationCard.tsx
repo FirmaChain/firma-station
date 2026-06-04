@@ -82,7 +82,7 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
     <DelegationItemWrapper style={style}>
       <DelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.validatorAddress}` }}>
-          <ProfileImage2 src={validatorInfo.avatarURL} />
+          <ProfileImage2 $src={validatorInfo.avatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
         </Link>
       </DelegationItemColumn>
@@ -103,13 +103,13 @@ const RedelegationRow = ({ data, index, style }: any) => {
     <RedelegationItemWrapper style={style}>
       <RedelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.srcAddress}` }}>
-          <ProfileImage2 src={validatorInfo.srcAvatarURL} />
+          <ProfileImage2 $src={validatorInfo.srcAvatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.srcMoniker)}</MonikerTypo>
         </Link>
       </RedelegationItemColumn>
       <RedelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.dstAddress}` }}>
-          <ProfileImage2 src={validatorInfo.dstAvatarURL} />
+          <ProfileImage2 $src={validatorInfo.dstAvatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.dstMoniker)}</MonikerTypo>
         </Link>
       </RedelegationItemColumn>
@@ -130,7 +130,7 @@ const UndelegationRow = ({ data, index, style }: any) => {
     <UndelegationItemWrapper style={style}>
       <UndelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.validatorAddress}` }}>
-          <ProfileImage2 src={validatorInfo.avatarURL} />
+          <ProfileImage2 $src={validatorInfo.avatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
         </Link>
       </UndelegationItemColumn>
@@ -151,7 +151,7 @@ const RestakeRow = ({ data, index, style, totalStakingState }: any) => {
     <RestakeItemWrapper style={style}>
       <RestakeItemColumn>
         <Link to={{ pathname: `/staking/validators/${restakeInfo.validatorAddress}` }}>
-          <ProfileImage2 src={restakeInfo.validatorAvatar} />
+          <ProfileImage2 $src={restakeInfo.validatorAvatar} />
           <MonikerTypo>{getMoniker(restakeInfo.validatorMoniker)}</MonikerTypo>
         </Link>
       </RestakeItemColumn>
