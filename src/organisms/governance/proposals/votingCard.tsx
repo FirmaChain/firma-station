@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer from '../../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';

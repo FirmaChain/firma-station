@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer from '../../components/autoSizer';
 import { Link } from 'react-router-dom';
 import { FixedSizeList as List } from 'react-window';
 import { ResponsivePie } from '@nivo/pie';
