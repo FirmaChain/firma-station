@@ -31,7 +31,6 @@ const ValidatorCell: React.CSSProperties = {
 
 const NumericCell: React.CSSProperties = {
   flex: '0 0 160px',
-  textAlign: 'right',
 };
 
 const TimeCell: React.CSSProperties = {
