@@ -1189,7 +1189,8 @@ export const GuideStep = styled.div`
 export const GuideIcon = styled.div<{ step: number }>`
   width: 54px;
   height: 54px;
-  background-image: url('${(props) => props.theme.urls['mobileLoginStep' + props.step]}');
+  background-image: url('${(props) =>
+    props.theme.urls[`mobileLoginStep${props.step}` as keyof typeof props.theme.urls]}');
   background-size: contain;
   background-position: center;
   margin-bottom: 10px;
