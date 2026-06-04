@@ -17,6 +17,7 @@ import {
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';
 import { CHAIN_CONFIG } from '../../config';
+import { SEND_COLOR } from '../../constants/transactions';
 
 import {
   redelegateRestakeModalWidth,
@@ -108,7 +109,7 @@ const RoleLabel = styled.span<{ $variant: 'source' | 'dest' }>`
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: 600;
-  color: ${(p) => (p.$variant === 'source' ? '#ff8a8a' : '#7bd17b')};
+  color: ${(p) => (p.$variant === 'source' ? '#ff8a8a' : SEND_COLOR)};
   flex-shrink: 0;
 `;
 
@@ -143,7 +144,7 @@ const InfoValue = styled.span`
 `;
 
 const Delta = styled.span<{ $direction: 'in' | 'out' }>`
-  color: ${(p) => (p.$direction === 'out' ? '#ff8a8a' : '#7bd17b')};
+  color: ${(p) => (p.$direction === 'out' ? '#ff8a8a' : SEND_COLOR)};
   font-variant-numeric: tabular-nums;
 `;
 
@@ -413,7 +414,7 @@ const RedelegateRestakeModal = () => {
             <OptionsHeader>
               Update Restake Options
               <Tooltip
-                title='Check an option to update your Restake validator list along with this redelegation. A single transaction with two messages (Redelegate + Restake update) will be broadcast.'
+                title='Check an option to update your Restake validator list along with this redelegation. A single transaction with two messages (Redelegation + Restake update) will be broadcast.'
                 arrow
                 placement='top'
                 enterTouchDelay={0}
@@ -498,7 +499,7 @@ const RedelegateRestakeModal = () => {
                 </CardIdentity>
               </ValidatorCardHeader>
               <InfoRow>
-                <span>Receive amount</span>
+                <span>Amount to receive</span>
                 <InfoValue>
                   <Delta $direction='in'>
                     +{ctx.amount} {CHAIN_CONFIG.PARAMS.SYMBOL}
@@ -506,7 +507,7 @@ const RedelegateRestakeModal = () => {
                 </InfoValue>
               </InfoRow>
               <InfoRow>
-                <span>Total delegation after redelegate</span>
+                <span>Total delegation after redelegation</span>
                 <InfoValue>
                   {destDelegation === null
                     ? '…'
@@ -521,13 +522,13 @@ const RedelegateRestakeModal = () => {
           <ModalTooltipWrapper>
             <ModalTooltipIcon />
             <ModalTooltipTypo>
-              A single transaction with two messages (Redelegate + Restake update) will be broadcast.
+              A single transaction with two messages (Redelegation + Restake update) will be broadcast.
             </ModalTooltipTypo>
           </ModalTooltipWrapper>
           <ModalTooltipWrapper>
             <ModalTooltipIcon />
             <ModalTooltipTypo>
-              If nothing is changed, Skip will broadcast Redelegate only.
+              If no changes are made, clicking 'Skip' will only broadcast the redelegation.
             </ModalTooltipTypo>
           </ModalTooltipWrapper>
 
