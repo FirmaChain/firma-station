@@ -490,12 +490,12 @@ export const VotingGauge = styled.div`
   position: relative;
 `;
 
-export const Quorum = styled.div<{ percent: string }>`
+export const Quorum = styled.div<{ $percent: string }>`
   width: 100px;
   margin-left: -42px;
   position: absolute;
   top: 30px;
-  left: ${(props) => props.percent}%;
+  left: ${(props) => props.$percent}%;
   text-align: center;
 `;
 
