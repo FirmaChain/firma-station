@@ -490,12 +490,12 @@ export const VotingGauge = styled.div`
   position: relative;
 `;
 
-export const Quorum = styled.div<{ percent: string }>`
+export const Quorum = styled.div<{ $percent: string }>`
   width: 100px;
   margin-left: -42px;
   position: absolute;
   top: 30px;
-  left: ${(props) => props.percent}%;
+  left: ${(props) => props.$percent}%;
   text-align: center;
 `;
 
@@ -594,7 +594,7 @@ export const ItemColumn = styled.div`
   }
 `;
 
-export const ProfileImage = styled.div<{ src?: string }>`
+export const ProfileImage = styled.div<{ $src?: string }>`
   width: 30px;
   height: 30px;
   border-radius: 15px;
@@ -605,5 +605,5 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;

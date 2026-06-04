@@ -60,7 +60,7 @@ const CustomRow = ({ currentValidator, index }: { currentValidator: IValidator; 
       <ItemWrapper>
         <ItemColumn>{index + 1}</ItemColumn>
         <ItemColumn>
-          <ProfileImage src={currentValidator.validatorAvatar} />
+          <ProfileImage $src={currentValidator.validatorAvatar} />
           <MonikerTypo>{currentValidator.validatorMoniker}</MonikerTypo>
         </ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</ItemColumn>
@@ -106,7 +106,7 @@ const CustomSmallRow = ({ currentValidator, index }: { currentValidator: IValida
     <Link to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}>
       <ItemSmallWrapper>
         <ProfileWrapper>
-          <ProfileImageSmall src={currentValidator.validatorAvatar}></ProfileImageSmall>
+          <ProfileImageSmall $src={currentValidator.validatorAvatar}></ProfileImageSmall>
           <Moniker>{currentValidator.validatorMoniker}</Moniker>
           <ArrowIcon>〉</ArrowIcon>
         </ProfileWrapper>

@@ -83,7 +83,7 @@ const DelegatorRow = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn $avatar>
-          <ProfileImage2 src={item.avatarURL} />
+          <ProfileImage2 $src={item.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${item.moniker}`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(convertToFctNumber(item.amount), 3)} ${
@@ -100,7 +100,7 @@ const DelegatorRowMobile = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
-          <ProfileImage2 src={item.avatarURL} />
+          <ProfileImage2 $src={item.avatarURL} />
           <DelegatorInfoMobile>
             <div>{`${item.moniker}`}</div>
             <div>{`${convertNumberFormat(convertToFctNumber(item.amount), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</div>
@@ -115,25 +115,23 @@ const RedelegatorRow = ({ data, index, style }: any) => {
   const item: IRedelegationList = data[index];
   return (
     <ItemWrapper style={style}>
-        <ItemColumn style={WalletCell} title={item.delegatorAddress}>
-          <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>  
-            {item.delegatorAddress}
-          </Link>
-        </ItemColumn>
-
-      
-      <ItemColumn $avatar>
-        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
-          <ProfileImage2 src={item.dstAvatarURL} />
+      <ItemColumn style={WalletCell} title={item.delegatorAddress}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
+          {item.delegatorAddress}
         </Link>
       </ItemColumn>
-      <ItemColumn>
+      <ItemColumn $avatar>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
+          <ProfileImage2 $src={item.dstAvatarURL} />
+        </Link>
+      </ItemColumn>
+      <ItemColumn style={ValidatorCell}>
         <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
           {`${item.dstMoniker}`}
         </Link>
       </ItemColumn>
-      {/* <ItemColumn style={NumericCell}>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
-      <ItemColumn style={TimeCell}>{getDateTimeFormat(item.completionTime)}</ItemColumn> */}
+      <ItemColumn style={NumericCell}>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
+      <ItemColumn style={TimeCell}>{getDateTimeFormat(item.completionTime)}</ItemColumn>
     </ItemWrapper>
   );
 };
@@ -144,7 +142,7 @@ const RedelegatorRowMobile = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.srcAddress}` }}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
-          <ProfileImage2 src={item.dstAvatarURL} />
+          <ProfileImage2 $src={item.dstAvatarURL} />
           <DelegatorInfoMobile>
             <div>{`${item.srcMoniker}`}</div>
             <div>{`${item.dstMoniker}`}</div>
@@ -165,7 +163,7 @@ const UndelegatorRow = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.moniker || item.validatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
         <ItemColumn $avatar>
-          <ProfileImage2 src={item.avatarURL} />
+          <ProfileImage2 $src={item.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${item.moniker || item.validatorAddress}`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
@@ -181,7 +179,7 @@ const UndelegatorRowMobile = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.moniker || item.validatorAddress}` }} target={'_blank'}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
-          <ProfileImage2 src={item.avatarURL} />
+          <ProfileImage2 $src={item.avatarURL} />
           <DelegatorInfoMobile>
             <div>{`${item.moniker || item.validatorAddress}`}</div>
             <div>
@@ -280,6 +278,7 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
                 <>
                   <HeaderWrapper style={{ width }}>
                     <HeaderColumn style={WalletCell}>Wallet</HeaderColumn>
+                    <HeaderColumn $avatar></HeaderColumn>
                     <HeaderColumn style={ValidatorCell}>To</HeaderColumn>
                     <HeaderColumn style={NumericCell}>Amount</HeaderColumn>
                     <HeaderColumn style={TimeCell}>Linked Until</HeaderColumn>

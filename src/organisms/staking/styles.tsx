@@ -139,7 +139,7 @@ export const ListWrapper = styled.div`
   border-radius: 4px;
 `;
 
-export const ProfileImage = styled.div<{ src?: string }>`
+export const ProfileImage = styled.div<{ $src?: string }>`
   width: 30px;
   height: 30px;
   border-radius: 15px;
@@ -150,9 +150,9 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
-export const ProfileImage2 = styled.div<{ src?: string }>`
+export const ProfileImage2 = styled.div<{ $src?: string }>`
   width: 25px;
   height: 25px;
   border-radius: 15px;
@@ -163,7 +163,7 @@ export const ProfileImage2 = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const MonikerTypo = styled.div`
   margin-left: 10px;
@@ -544,7 +544,7 @@ export const ProfileWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-export const ProfileImageSmall = styled.div<{ src?: string }>`
+export const ProfileImageSmall = styled.div<{ $src?: string }>`
   width: 30px;
   min-width: 30px;
   height: 30px;
@@ -555,7 +555,7 @@ export const ProfileImageSmall = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const Moniker = styled.div`
   flex: 1 1 100%;
