@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react-swc';
+import { cjsInterop } from 'vite-plugin-cjs-interop';
 import { defineConfig, loadEnv } from 'vite';
 import vitePluginBundleObfuscator from 'vite-plugin-bundle-obfuscator';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
@@ -40,6 +41,21 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
+      // Vite 8 switched dep optimization to Rolldown, which no longer emits the
+      // `.default` interop for CJS packages whose `__esModule` flag is only set
+      // at runtime (the lazy require facade). That drops the default export to a
+      // module namespace object. Unwrap it at the source import for the affected
+      // CJS deps we default-import.
+      cjsInterop({
+        client: true,
+        dependencies: [
+          '@mui/icons-material/**',
+          'react-spinners/**',
+          'crypto-js',
+          'qrcode',
+          'redux-persist/lib/storage'
+        ]
+      }),
       nodePolyfills({ exclude: ['crypto'] }),
       tsconfigPaths(),
       ...(env.NODE_ENV === 'production' ? [vitePluginBundleObfuscator(minimizeObfuscatorConfig)] : [])
