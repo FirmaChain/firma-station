@@ -73,12 +73,12 @@ const ValidatorCard = styled.div`
   border-radius: 4px;
 `;
 
-const ValidatorCardHeader = styled.label<{ $disabled?: boolean }>`
+const ValidatorCardHeader = styled.label`
   display: flex;
   align-items: center;
   gap: 12px;
   min-width: 0;
-  cursor: ${(p) => (p.$disabled ? 'not-allowed' : 'pointer')};
+  cursor: pointer;
 `;
 
 const CardIdentity = styled.div`
@@ -185,6 +185,7 @@ const RedelegateRestakeModal = () => {
     allowValidatorList: [],
   });
   const [includeDstInRestake, setIncludeDstInRestake] = useState(false);
+  const [includeSrcInRestake, setIncludeSrcInRestake] = useState(false);
   const [removeSrcFromRestake, setRemoveSrcFromRestake] = useState(false);
   const [removeDstFromRestake, setRemoveDstFromRestake] = useState(false);
   const [destDelegation, setDestDelegation] = useState<number | null>(null);
@@ -201,6 +202,7 @@ const RedelegateRestakeModal = () => {
         allowValidatorList: modalData.data.allowValidatorList || [],
       });
       setIncludeDstInRestake(false);
+      setIncludeSrcInRestake(false);
       setRemoveSrcFromRestake(false);
       setRemoveDstFromRestake(false);
       setDestDelegation(null);
@@ -232,12 +234,14 @@ const RedelegateRestakeModal = () => {
   };
 
   // Apply card-header toggles to the existing allow_list:
-  //   - Source card unchecked  → drop sourceValidator
+  //   - Source card checked when not already listed      → add sourceValidator
+  //   - Source card unchecked when already listed         → drop sourceValidator
   //   - Destination card checked when not already listed → add targetValidator
   //   - Destination card unchecked when already listed   → drop targetValidator
   const getCombinedAllowList = () => {
     const set = new Set(ctx.allowValidatorList);
     if (removeSrcFromRestake) set.delete(ctx.sourceValidator);
+    if (includeSrcInRestake) set.add(ctx.sourceValidator);
     if (removeDstFromRestake) set.delete(ctx.targetValidator);
     if (includeDstInRestake) set.add(ctx.targetValidator);
     return Array.from(set);
@@ -386,6 +390,7 @@ const RedelegateRestakeModal = () => {
   const hasPendingChange =
     (!dstAlreadyInRestake && includeDstInRestake) ||
     (dstAlreadyInRestake && removeDstFromRestake) ||
+    (!srcInRestake && includeSrcInRestake) ||
     (srcInRestake && removeSrcFromRestake);
   const sourceAvatar = getAvatarInfo(avatarList, ctx.sourceValidator);
   const destAvatar = getAvatarInfo(avatarList, ctx.targetValidator);
@@ -436,12 +441,14 @@ const RedelegateRestakeModal = () => {
             </OptionsHeader>
 
             <ValidatorCard>
-              <ValidatorCardHeader $disabled={!srcInRestake}>
+              <ValidatorCardHeader>
                 <input
                   type='checkbox'
-                  checked={srcInRestake && !removeSrcFromRestake}
-                  disabled={!srcInRestake}
-                  onChange={(e) => setRemoveSrcFromRestake(!e.target.checked)}
+                  checked={srcInRestake ? !removeSrcFromRestake : includeSrcInRestake}
+                  onChange={(e) => {
+                    if (srcInRestake) setRemoveSrcFromRestake(!e.target.checked);
+                    else setIncludeSrcInRestake(e.target.checked);
+                  }}
                 />
                 <ValidatorAvatar $src={sourceAvatar.avatarURL} />
                 <CardIdentity>
@@ -452,6 +459,8 @@ const RedelegateRestakeModal = () => {
                       ? removeSrcFromRestake
                         ? 'will be removed from Restake list'
                         : 'in Restake list'
+                      : includeSrcInRestake
+                      ? 'will be added to Restake list'
                       : 'not in Restake list'}
                   </RestakeToggleHint>
                 </CardIdentity>
