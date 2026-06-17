@@ -1,4 +1,4 @@
-import axios from 'axios';
+import ky from 'ky';
 import { NOTICE_JSON_URI } from '../config';
 
 export const getNotice = async (): Promise<{
@@ -11,8 +11,10 @@ export const getNotice = async (): Promise<{
     if (!NOTICE_JSON_URI) {
       return null;
     }
-    const response = await axios.get(`${NOTICE_JSON_URI}?t=${new Date().getTime()}`);
-    const maintenance = response.data?.maintenance;
+    const response = await ky
+      .get(`${NOTICE_JSON_URI}?t=${new Date().getTime()}`)
+      .json<{ maintenance?: { isShow: boolean; title: string; content: string; link: string } }>();
+    const maintenance = response.maintenance;
 
     // Ensure maintenance has the required structure
     if (maintenance && typeof maintenance === 'object' && 'isShow' in maintenance) {

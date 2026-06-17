@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import ky from 'ky';
 import AutoSizer from '../../components/autoSizer';
 import { Link } from 'react-router-dom';
 import { FixedSizeList as List } from 'react-window';
@@ -197,9 +197,10 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
 
   useEffect(() => {
     if (isInit && totalStakingState.delegationList.length > 0) {
-      axios
+      ky
         .get(`${CHAIN_CONFIG.RESTAKE.API}/restake/reward/${address}`)
-        .then(({ data }) => {
+        .json<{ validatorAddr: string; rewards: number }[]>()
+        .then((data) => {
           const latestRewardList = data;
           setRestakeList(getParseRestakeDataList(totalStakingState, grantDataState, latestRewardList));
         })
@@ -340,9 +341,10 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
 
   const onClickRestake = () => {
     if (totalStakingState.delegationList.length > 0 && CHAIN_CONFIG.RESTAKE.API) {
-      axios
+      ky
         .get(`${CHAIN_CONFIG.RESTAKE.API}/restake/info`)
-        .then(({ data }) => {
+        .json<{ minimumRewards: number; nextRoundDateTime: string; round: number }>()
+        .then((data) => {
           const minimumRewards = data.minimumRewards;
           const nextRoundTime = data.nextRoundDateTime;
           const round = data.round;

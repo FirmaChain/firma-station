@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
+import ky from 'ky';
 
 import { convertNumber, convertNumberFormat } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
@@ -15,10 +15,11 @@ const AccountCard = () => {
   const [currentUSDPrice, setPrice] = useState(0);
 
   useEffect(() => {
-    axios
+    ky
       .get(`https://api.coingecko.com/api/v3/simple/price?ids=upbit,firmachain&vs_currencies=usd`)
-      .then((res) => {
-        setPrice(res.data.firmachain.usd);
+      .json<{ firmachain: { usd: number } }>()
+      .then((data) => {
+        setPrice(data.firmachain.usd);
       })
       .catch((e) => {});
   }, []);

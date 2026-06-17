@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { isMobile } from 'react-device-detect';
-import axios from 'axios';
+import ky from 'ky';
 import GridLoader from 'react-spinners/GridLoader';
 
 import useFirma from '../../utils/wallet';
@@ -31,8 +31,8 @@ const Contact = () => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .post(`${CHAIN_CONFIG.API_HOST}/status`, { data: encryptData(address) })
+    ky
+      .post(`${CHAIN_CONFIG.API_HOST}/status`, { json: { data: encryptData(address) } })
       .then(() => {})
       .catch(() => {});
     setTimeout(() => {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import ky from 'ky';
 
 import { avatarActions } from '../redux/action';
 import { CHAIN_CONFIG } from '../config';
@@ -100,13 +100,13 @@ const getAvatarRaw = async (): Promise<{ avatarList: IAvatar[]; lastUpdatedTime:
   try {
     if (CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI === '') throw new Error('INVALID');
 
-    const response = await axios.get<{ profileInfos: IAvatar[]; lastUpdatedTime: number }>(
-      `${CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI}?t=${new Date().getTime()}`
-    );
+    const response = await ky
+      .get(`${CHAIN_CONFIG.VALIDATOR_IDENTITY_JSON_URI}?t=${new Date().getTime()}`)
+      .json<{ profileInfos: IAvatar[]; lastUpdatedTime: number }>();
 
     return {
-      avatarList: response.data.profileInfos,
-      lastUpdatedTime: response.data.lastUpdatedTime
+      avatarList: response.profileInfos,
+      lastUpdatedTime: response.lastUpdatedTime
     };
   } catch (error) {
     return null;

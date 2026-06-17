@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import ky from 'ky';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
@@ -18,8 +18,10 @@ const ProposalButtons = () => {
   const isInvalidProposalAddress = async () => {
     try {
       if (CHAIN_CONFIG.PROPOSAL_JSON !== '') {
-        const response = await axios.get(`${CHAIN_CONFIG.PROPOSAL_JSON}?t=${new Date().getTime()}`);
-        const { ignoreProposalAddressList } = response.data;
+        const response = await ky
+          .get(`${CHAIN_CONFIG.PROPOSAL_JSON}?t=${new Date().getTime()}`)
+          .json<{ ignoreProposalAddressList: string[] }>();
+        const { ignoreProposalAddressList } = response;
 
         return ignoreProposalAddressList.includes(address);
       } else {

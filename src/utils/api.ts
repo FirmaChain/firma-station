@@ -1,4 +1,4 @@
-import axios from 'axios';
+import ky from 'ky';
 import { CHAIN_CONFIG } from '../config';
 
 const useAPI = () => {
@@ -27,10 +27,12 @@ const useAPI = () => {
     requestType: string,
     requestBody = {}
   ): Promise<{ requestKey: string; qrcode: string; expire: Date }> => {
-    const response = await axios.post(`${CHAIN_CONFIG.API_HOST}/connect/sign${requestType}`, requestBody);
-    if (response.data.code !== 0) throw new Error('INVALID REQUEST');
+    const response = await ky
+      .post(`${CHAIN_CONFIG.API_HOST}/connect/sign${requestType}`, { json: requestBody })
+      .json<{ code: number; result: { requestKey: string; qrcode: string } }>();
+    if (response.code !== 0) throw new Error('INVALID REQUEST');
 
-    const { requestKey, qrcode } = response.data.result;
+    const { requestKey, qrcode } = response.result;
 
     const expire = new Date();
     expire.setMinutes(expire.getMinutes() + 3);
@@ -43,13 +45,15 @@ const useAPI = () => {
   };
 
   const getRequestStatus = async (requestKey: string) => {
-    const response = await axios.get(`${CHAIN_CONFIG.API_HOST}/connect/requests/${requestKey}`);
+    const response = await ky
+      .get(`${CHAIN_CONFIG.API_HOST}/connect/requests/${requestKey}`)
+      .json<{ code: number; status: number; result: any }>();
 
-    if (response.data.code < 0 || response.data.status === -1) {
+    if (response.code < 0 || response.status === -1) {
       throw new Error('INVALID REQUEST');
     }
 
-    return response.data.result;
+    return response.result;
   };
 
   return {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import ky from 'ky';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -27,8 +27,10 @@ export const useGovernanceData = () => {
 
         try {
           if (CHAIN_CONFIG.PROPOSAL_JSON !== '') {
-            const response = await axios.get(`${CHAIN_CONFIG.PROPOSAL_JSON}?t=${new Date().getTime()}`);
-            const { ignoreProposalIdList } = response.data;
+            const response = await ky
+              .get(`${CHAIN_CONFIG.PROPOSAL_JSON}?t=${new Date().getTime()}`)
+              .json<{ ignoreProposalIdList?: number[] }>();
+            const { ignoreProposalIdList } = response;
             const ignoredProposalIds = Array.isArray(ignoreProposalIdList) ? ignoreProposalIdList : [];
 
             proposals = proposalList

@@ -4621,11 +4621,11 @@ __metadata:
     "@types/styled-components": "npm:^5.1.34"
     "@vitejs/plugin-react-swc": "npm:^4.3.1"
     ajv: "npm:^8.20.0"
-    axios: "npm:^1.16.1"
     crypto-js: "npm:^4.1.1"
     cypress: "npm:^15.16.0"
     graphql: "npm:^16.14.0"
     hamburger-react: "npm:^2.4.1"
+    ky: "npm:^2.0.2"
     lodash: "npm:^4.17.21"
     moment: "npm:^2.29.1"
     notistack: "npm:^3.0.2"
@@ -5656,6 +5656,13 @@ __metadata:
     json-schema: "npm:0.4.0"
     verror: "npm:1.10.0"
   checksum: 10c0/677be2d41df536c92c6d0114a492ef197084018cfbb1a3e10b1fa1aad889564b2e3a7baa6af7949cc2d73678f42368b0be165a26bd4e4de6883a30dd6a24e98d
+  languageName: node
+  linkType: hard
+
+"ky@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "ky@npm:2.0.2"
+  checksum: 10c0/5bac227454193003c819eed5a26b30ae9ac639648be2944547f1aad204a470261ae2a8f7537dac0fd4a6433264bb8f1081b25411bfb49ef5d05a0e21d18b2ab9
   languageName: node
   linkType: hard
 
