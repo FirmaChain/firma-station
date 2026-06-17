@@ -1,3 +1,4 @@
+import { groupBy } from 'es-toolkit/array';
 import ky from 'ky';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -11,7 +12,6 @@ import { IProposalsState, IProposalDetailState } from '../../interfaces/governan
 import { IProposalData } from '../../interfaces/lcd';
 import { IProposalQueryData } from '../../interfaces/gql';
 import { CHAIN_CONFIG } from '../../config';
-import * as lodash from 'lodash';
 
 export const useGovernanceData = () => {
   const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
@@ -77,12 +77,9 @@ export const useProposalData = (proposalId: string, errorCallback?: (e: any) => 
       const depositors = proposal.proposal_deposits;
       const totalVotingPower = proposal.staking_pool_snapshot?.bonded_tokens;
 
-      const latestVotesByVoter = lodash
-        .chain(proposal.proposal_votes)
-        .groupBy('voter_address')
-        .values()
-        .map((votes) => votes[votes.length - 1])
-        .value();
+      const latestVotesByVoter = Object.values(groupBy(proposal.proposal_votes, (vote) => vote.voter_address)).map(
+        (votes) => votes[votes.length - 1]
+      );
 
       const votes = latestVotesByVoter.map((vote) => {
         const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, vote.voter_address);

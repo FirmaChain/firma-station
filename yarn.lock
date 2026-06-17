@@ -2414,13 +2414,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4":
-  version: 4.17.24
-  resolution: "@types/lodash@npm:4.17.24"
-  checksum: 10c0/b72f60d4daacdad1fa643edb3faba204c02a01eb1ac00a83ff73496a6d236fc55e459c06106e8ced42277dba932d087d8fc090f8de4ef590d3f91e6d6f7ce85a
-  languageName: node
-  linkType: hard
-
 "@types/mdast@npm:^4.0.0":
   version: 4.0.4
   resolution: "@types/mdast@npm:4.0.4"
@@ -4271,6 +4264,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"es-toolkit@npm:^1.47.1":
+  version: 1.47.1
+  resolution: "es-toolkit@npm:1.47.1"
+  dependenciesMeta:
+    "@trivago/prettier-plugin-sort-imports@4.3.0":
+      unplugged: true
+    prettier-plugin-sort-re-exports@0.0.1:
+      unplugged: true
+    vitepress-plugin-sandpack@1.1.4:
+      unplugged: true
+  checksum: 10c0/d6dff140a71e15d22209f8482f1ce34bab433f449e569c28b9c535963b18b2c3b89b00d7cf7156b5c74cace4c5f96283f0a5fee3be8802dd2cf7481da90cfe0a
+  languageName: node
+  linkType: hard
+
 "esbuild@npm:^0.27.0":
   version: 0.27.7
   resolution: "esbuild@npm:0.27.7"
@@ -4617,7 +4624,6 @@ __metadata:
     "@pdf-lib/fontkit": "npm:^1.1.1"
     "@reduxjs/toolkit": "npm:^1.9.7"
     "@types/crypto-js": "npm:^4.0.2"
-    "@types/lodash": "npm:^4"
     "@types/node": "npm:^25.9.1"
     "@types/numeral": "npm:^2.0.2"
     "@types/qrcode": "npm:^1.5.0"
@@ -4631,10 +4637,10 @@ __metadata:
     crypto-js: "npm:^4.1.1"
     cypress: "npm:^15.16.0"
     dayjs: "npm:^1.11.21"
+    es-toolkit: "npm:^1.47.1"
     graphql: "npm:^16.14.0"
     hamburger-react: "npm:^2.4.1"
     ky: "npm:^2.0.2"
-    lodash: "npm:^4.17.21"
     notistack: "npm:^3.0.2"
     numeral: "npm:^2.0.6"
     pdf-lib: "npm:^1.17.1"
