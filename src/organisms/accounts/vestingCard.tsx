@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from '../../utils/dayjs';
 import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
 
@@ -29,7 +29,7 @@ const Row = ({ data, index, style }: any) => {
 
   const getTimestamp = (timestamp: number) => {
     return getDateTimeFormat(
-      moment(timestamp * 1000)
+      dayjs(timestamp * 1000)
         .utc()
         .toISOString()
     );

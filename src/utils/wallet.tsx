@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { FirmaUtil, AuthorizationType } from '@firmachain/firma-js';
-import moment from 'moment';
+import dayjs from './dayjs';
 
 import { Wallet } from './types';
 import { CHAIN_CONFIG, IBC_CONFIG, SESSION_TIMOUT } from '../config';
@@ -411,7 +411,7 @@ function useFirma() {
 
                   let status = 0;
 
-                  if (endTimeAcc <= moment().unix()) {
+                  if (endTimeAcc <= dayjs().unix()) {
                     expiredVesting += value.amount[0].amount * 1;
                     status = 1;
                   }

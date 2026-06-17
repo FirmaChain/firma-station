@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from '../../../utils/dayjs';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 
@@ -31,7 +31,7 @@ const DepositCard = ({ proposalState }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const getAddTimeFormat = (startTime: string, second: number) => {
-    return getDateTimeFormat(moment.utc(startTime).add(convertNumber(second), 'seconds').toISOString());
+    return getDateTimeFormat(dayjs.utc(startTime).add(convertNumber(second), 'seconds').toISOString());
   };
 
   //! Deprecated: Sum logic is not correct

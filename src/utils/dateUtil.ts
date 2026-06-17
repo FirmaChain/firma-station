@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from './dayjs';
 
 export const getGMT = () => {
   let date = new Date();
@@ -11,7 +11,7 @@ export const getGMT = () => {
 export const getDateFormat = (date: string, timezone = true) => {
   if (date === '') date = new Date().toISOString();
 
-  const dateFormat = moment(moment.utc(date).toDate()).format('YYYY-MM-DD');
+  const dateFormat = dayjs.utc(date).local().format('YYYY-MM-DD');
 
   if (timezone) {
     return `${dateFormat} (${getGMT()})`;
@@ -23,7 +23,7 @@ export const getDateFormat = (date: string, timezone = true) => {
 export const getDateTimeFormat = (date: string) => {
   if (date === '') date = new Date().toISOString();
 
-  const dateFormat = moment(moment.utc(date).toDate()).format('YYYY-MM-DD HH:mm:ss');
+  const dateFormat = dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss');
 
   return `${dateFormat} (${getGMT()})`;
 };
@@ -31,7 +31,7 @@ export const getDateTimeFormat = (date: string) => {
 export const getTimeFormat = (date: string) => {
   if (date === '') date = new Date().toISOString();
 
-  const dateFormat = moment(moment.utc(date).toDate()).format('HH:mm:ss');
+  const dateFormat = dayjs.utc(date).local().format('HH:mm:ss');
 
   return `${dateFormat} (${getGMT()})`;
 };
