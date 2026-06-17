@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 
 import { getHistoryByAddress } from '../../utils/graphqlQuery';
 import { IHistoryByAddressState } from '../../interfaces/history';
-import { useRefreshStore, useWalletStore } from '../../store';
+import { useWalletStore } from '../../store';
 
 const ITEMS_PER_PAGE = 50;
 
@@ -15,7 +15,6 @@ export const useHistoryByAddress = () => {
 		offset: 0
 	});
 	const { address } = useWalletStore((state) => state);
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const formatHistoryList = (data: any) => {
@@ -88,7 +87,7 @@ export const useHistoryByAddress = () => {
 			});
 			loadHistoryData(0, true);
 		}
-	}, [address, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [address]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		historyByAddressState,

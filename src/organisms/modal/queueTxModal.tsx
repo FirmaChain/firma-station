@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 import { GridLoader } from 'react-spinners';
 
 import { Modal } from '../../components/modal';
-import { modalActions, refreshActions, useModalStore } from '../../store';
+import { modalActions, useModalStore } from '../../store';
 import {
 	AfterTypo,
 	LoadingWrapper,
@@ -49,8 +49,7 @@ const QueueTxModal = () => {
 			autoHideDuration: 1000
 		});
 		closeQueueTxModal();
-		// Refresh on-chain data in place instead of reloading the whole page.
-		refreshActions.handleRefresh();
+		setTimeout(() => window.location.reload(), 1000);
 	};
 
 	const rejectTx = () => {
@@ -59,6 +58,7 @@ const QueueTxModal = () => {
 			autoHideDuration: 1000
 		});
 		closeQueueTxModal();
+		setTimeout(() => window.location.reload(), 1000);
 	};
 
 	const closeQueueTxModal = () => {

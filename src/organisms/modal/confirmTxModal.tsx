@@ -3,7 +3,7 @@ import { useSnackbar } from 'notistack';
 
 import { Modal } from '../../components/modal';
 import { CHAIN_CONFIG } from '../../config';
-import { modalActions, refreshActions, useModalStore, useWalletStore } from '../../store';
+import { modalActions, useModalStore, useWalletStore } from '../../store';
 import { convertNumberFormat, convertToFctString, getDefaultFee, isValidString } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import RequestQR from '../requestQR';
@@ -32,7 +32,7 @@ const ConfirmTxModal = () => {
 	const { isLedger, isMobileApp, address } = useWalletStore((state) => state);
 
 	const { enqueueSnackbar } = useSnackbar();
-	const { isCorrectPassword, setUserData } = useFirma();
+	const { isCorrectPassword } = useFirma();
 
 	const [password, setPassword] = useState('');
 	const [actionName, setActionName] = useState('');
@@ -100,9 +100,7 @@ const ConfirmTxModal = () => {
 			autoHideDuration: 1000
 		});
 		closeConfirmTxModal();
-		// Refresh on-chain data in place instead of reloading the whole page.
-		setUserData();
-		refreshActions.handleRefresh();
+		setTimeout(() => window.location.reload(), 1000);
 	};
 
 	const onFailed = () => {
@@ -111,6 +109,7 @@ const ConfirmTxModal = () => {
 			autoHideDuration: 1000
 		});
 		closeConfirmTxModal();
+		setTimeout(() => window.location.reload(), 1000);
 	};
 
 	return (

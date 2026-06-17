@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import { getHistoryByAddress } from '../../utils/graphqlQuery';
 import { IBC_CONFIG } from '../../config';
 import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
-import { useRefreshStore, useWalletStore } from '../../store';
+import { useWalletStore } from '../../store';
 import { convertNumber } from '../../utils/common';
 import { getTokenData } from '../../utils/lcdQuery';
 
@@ -17,7 +17,6 @@ export const useTransferHistoryByAddress = () => {
 	const [hasMore, setHasMore] = useState(true);
 	const [offset, setOffset] = useState(0);
 	const { address } = useWalletStore((state) => state);
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const { enqueueSnackbar } = useSnackbar();
 
@@ -191,7 +190,7 @@ export const useTransferHistoryByAddress = () => {
 		if (address) {
 			loadInitialData();
 		}
-	}, [address, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [address]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		transferHistoryByAddressState,

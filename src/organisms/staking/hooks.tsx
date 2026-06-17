@@ -16,7 +16,7 @@ import {
 	IValidator,
 	IValidatorsState
 } from '../../interfaces/staking';
-import { useAvatarStore, useRefreshStore, useWalletStore } from '../../store';
+import { useAvatarStore, useWalletStore } from '../../store';
 import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
 import { convertNumber, convertToFctString, makeDecimalPoint } from '../../utils/common';
 import {
@@ -47,8 +47,6 @@ export {
 const useDelegations = () => {
 	const { avatarList } = useAvatarStore((state) => state);
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [delegateState, setDelegateState] = useState<IDelegationState>({
 		self: 0,
@@ -92,7 +90,7 @@ const useDelegations = () => {
 				})
 				.catch(() => {});
 		}
-	}, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		delegateState
@@ -102,8 +100,6 @@ const useDelegations = () => {
 const useRedelegations = () => {
 	const { avatarList } = useAvatarStore((state) => state);
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [redelegateState, setRedelegateState] = useState<IRedelegationState>({
 		self: 0,
@@ -145,7 +141,7 @@ const useRedelegations = () => {
 				});
 			})
 			.catch(() => {});
-	}, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [targetValidator, avatarList]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		redelegateState
@@ -155,8 +151,6 @@ const useRedelegations = () => {
 const useUndelegations = () => {
 	const { avatarList } = useAvatarStore((state) => state);
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [undelegateState, setUndelegateState] = useState<IUndelegationState>({
 		self: 0,
@@ -190,14 +184,13 @@ const useUndelegations = () => {
 				});
 			})
 			.catch(() => {});
-	}, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [targetValidator, avatarList]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return { undelegateState };
 };
 
 const useStakingData = () => {
 	const { isInit } = useWalletStore((state) => state);
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 	const { getStaking } = useFirma();
 
 	const [totalStakingState, setTotalStakingState] = useState<ITotalStakingState>({
@@ -220,7 +213,7 @@ const useStakingData = () => {
 					}
 				})
 				.catch(() => {});
-	}, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		totalStakingState
@@ -230,7 +223,6 @@ const useStakingData = () => {
 const useStakingDataFromTarget = () => {
 	const { getStakingFromValidator } = useFirma();
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
 		available: 0,
@@ -247,7 +239,7 @@ const useStakingDataFromTarget = () => {
 				})
 				.catch((e) => {});
 		}
-	}, [targetValidator, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [targetValidator]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		targetStakingState
@@ -256,7 +248,6 @@ const useStakingDataFromTarget = () => {
 
 const useGrantData = () => {
 	const { isInit } = useWalletStore((state) => state);
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 	const { getStakingGrantDataList } = useFirma();
 
 	const [grantDataState, setGrantDataState] = useState<IGrantsDataState>({
@@ -273,7 +264,7 @@ const useGrantData = () => {
 				}
 			});
 		}
-	}, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		grantDataState
@@ -282,7 +273,6 @@ const useGrantData = () => {
 
 const useValidators = () => {
 	const { avatarList } = useAvatarStore((state) => state);
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
 		totalVotingPower: 0,
@@ -350,7 +340,7 @@ const useValidators = () => {
 			.catch((error) => {
 				console.log(error);
 			});
-	}, [avatarList, refreshKey]);
+	}, [avatarList]);
 
 	return {
 		validatorsState
@@ -360,7 +350,6 @@ const useValidators = () => {
 const useValidatorFromTarget = () => {
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 	const { avatarList } = useAvatarStore((state) => state);
-	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [validatorState, setValidatorState] = useState<IValidator>({
 		validatorAddress: '',
@@ -436,7 +425,7 @@ const useValidatorFromTarget = () => {
 			.catch((error) => {
 				console.log(error);
 			});
-	}, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		validatorState
