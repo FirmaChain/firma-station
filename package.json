@@ -54,7 +54,7 @@
 		"@types/react": "^19.2.3",
 		"@types/react-dom": "^19.2.3",
 		"@types/react-window": "^1.8.5",
-		"@vitejs/plugin-react-swc": "^4.3.1",
+		"@vitejs/plugin-react": "^6.0.2",
 		"cypress": "^15.16.0",
 		"eslint": "^9.15.0",
 		"eslint-config-prettier": "^9.1.0",
@@ -65,11 +65,9 @@
 		"redux-thunk": "^3.1.0",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.15.0",
-		"vite": "^7.3.5",
+		"vite": "^8.0.16",
 		"vite-plugin-bundle-obfuscator": "^1.12.0",
-		"vite-plugin-cjs-interop": "^4.0.2",
 		"vite-plugin-node-polyfills": "^0.28.0",
-		"vite-tsconfig-paths": "^6.1.1",
 		"web-vitals": "^1.0.1"
 	},
 	"scripts": {
@@ -84,19 +82,6 @@
 		"format:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
 		"lint": "eslint \"{src,apps,libs,test}/**/*.+(js|jsx|ts|tsx|html)\" --quiet"
 	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"packageManager": "yarn@4.9.2",
 	"resolutions": {
 		"@mui/styled-engine": "npm:@mui/styled-engine-sc@7.3.9",
 		"axios": "1.16.1",

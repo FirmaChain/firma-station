@@ -1,9 +1,7 @@
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { defineConfig, loadEnv } from 'vite';
 import vitePluginBundleObfuscator from 'vite-plugin-bundle-obfuscator';
-import { cjsInterop } from 'vite-plugin-cjs-interop';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 import packageJson from './package.json';
 
@@ -42,15 +40,8 @@ export default defineConfig(({ mode }) => {
 	return {
 		plugins: [
 			react(),
-			// Keep default imports from legacy CJS packages stable under Vite 7's
-			// dependency optimizer. Unwrap the source import for the affected deps we
-			// default-import in the app.
-			cjsInterop({
-				client: true,
-				dependencies: ['@mui/icons-material/**', 'react-spinners/**', 'crypto-js', 'qrcode']
-			}),
+ 
 			nodePolyfills({ exclude: ['crypto'] }),
-			tsconfigPaths(),
 			...(env.NODE_ENV === 'production' ? [vitePluginBundleObfuscator(minimizeObfuscatorConfig)] : [])
 		],
 
@@ -72,14 +63,10 @@ export default defineConfig(({ mode }) => {
 		},
 
 		resolve: {
+			tsconfigPaths: true,
 			alias: {
 				'@mui/styled-engine': '@mui/styled-engine-sc'
 			},
-			preserveSymlinks: true
-		},
-
-		optimizeDeps: {
-			include: ['@firmachain/firma-js']
 		},
 
 		define: {

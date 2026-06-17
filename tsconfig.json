@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "esnext",
 		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
+		"allowJs": false,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
@@ -10,17 +10,11 @@
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
 		"module": "esnext",
-		"moduleResolution": "node",
-		"baseUrl": ".",
-		"paths": {
-			"@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
-		},
-		"ignoreDeprecations": "6.0",
+		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
-		"types": ["cypress"]
-	},
-	"include": ["src", "cypress"]
+		"ignoreDeprecations": "6.0"
+	}
 }
