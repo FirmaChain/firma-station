@@ -1,3 +1,5 @@
+import { createTheme } from '@mui/material/styles';
+
 const colors = {
   backgroundSideBar: '#1B1C22',
   activeBackground: '#323232',
@@ -130,10 +132,14 @@ const urls = {
   ibc: '/images/ic_ibc.png'
 };
 
-const theme = {
-  colors,
-  sizes,
-  urls
+const theme = createTheme() as ReturnType<typeof createTheme> & {
+  colors: typeof colors;
+  sizes: typeof sizes;
+  urls: typeof urls;
 };
+
+theme.colors = colors;
+theme.sizes = sizes;
+theme.urls = urls;
 
 export default theme;

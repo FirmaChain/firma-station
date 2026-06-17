@@ -76,6 +76,9 @@ export default defineConfig(({ mode }) => {
     },
 
     resolve: {
+      alias: {
+        '@mui/styled-engine': '@mui/styled-engine-sc'
+      },
       preserveSymlinks: true
     },
 

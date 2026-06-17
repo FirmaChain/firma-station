@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
 
 import useFirma from './utils/wallet';
