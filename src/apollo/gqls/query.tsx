@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import {gql} from '@apollo/client';
 import { client } from '../../apollo';
 import { IProposalQueryData, IMessagesByAddress } from '../../interfaces/gql';
 
