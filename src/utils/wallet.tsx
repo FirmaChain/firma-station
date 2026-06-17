@@ -550,7 +550,6 @@ function useFirma() {
     const parseList = delegationList.map((value) => {
       const validatorAddress = value.delegation.validator_address;
       const { moniker, avatarURL } = getAvatarInfo(avatarList, validatorAddress);
-      console.log("value.balance.amount", value.balance.amount);
       return {
         validatorAddress,
         delegatorAddress: value.delegation.delegator_address,
@@ -640,8 +639,7 @@ function useFirma() {
     const address = getAddressInternal();
 
     const undelegationList = await firmaSDK.Staking.getTotalUndelegateInfo(address);
-
-    console.log("undelegationList", undelegationList);
+ 
     let parseList = [];
     for (let undelegation of undelegationList) {
       const validatorAddress = undelegation.validator_address;
