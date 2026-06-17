@@ -10,8 +10,6 @@ import { initializeAvatar } from './utils/avatar';
 import { SessionTimer } from './utils/sessionTimer';
 import useFirma from './utils/wallet';
 
-import './default.css';
-
 const App = () => {
 	const { isInit } = useSelector((state: rootState) => state.wallet);
 	const { lastUpdated } = useSelector((state: rootState) => state.avatar);

@@ -115,8 +115,8 @@ const getValidatorDelegationsFromAddress = async (
 ): Promise<{ delegatorAddress: string; moniker: string; avatarURL: string; amount: number }[]> => {
 	const delegationData = await firmaSDK.Staking.getDelegationListFromValidator(valoperAddress);
 
-	let result: { delegatorAddress: string; moniker: string; avatarURL: string; amount: number }[] = [];
-	for (let delegation of delegationData.dataList) {
+	const result: { delegatorAddress: string; moniker: string; avatarURL: string; amount: number }[] = [];
+	for (const delegation of delegationData.dataList) {
 		result.push({
 			delegatorAddress: delegation.delegation.delegator_address,
 			moniker: delegation.delegation.delegator_address,
@@ -133,9 +133,9 @@ const getValidatorUndelegationsFromAddress = async (
 ): Promise<{ delegatorAddress: string; balance: string; completionTime: string }[]> => {
 	const undelegationData = await firmaSDK.Staking.getUndelegationListFromValidator(valoperAddress);
 
-	let result: { delegatorAddress: string; balance: string; completionTime: string }[] = [];
-	for (let undelegation of undelegationData.dataList) {
-		for (let entry of undelegation.entries) {
+	const result: { delegatorAddress: string; balance: string; completionTime: string }[] = [];
+	for (const undelegation of undelegationData.dataList) {
+		for (const entry of undelegation.entries) {
 			result.push({
 				delegatorAddress: undelegation.delegator_address,
 				balance: entry.balance,
@@ -150,7 +150,7 @@ const getValidatorUndelegationsFromAddress = async (
 const getValidatorList = async (): Promise<IValidatorData[]> => {
 	const firstValidatorList = await firmaSDK.Staking.getValidatorList(StakingValidatorStatus.ALL);
 
-	let dataList: ValidatorDataType[] = firstValidatorList.dataList;
+	const dataList: ValidatorDataType[] = firstValidatorList.dataList;
 	let nextKey: string = firstValidatorList.pagination.next_key;
 
 	while (nextKey !== null) {
@@ -164,8 +164,8 @@ const getValidatorList = async (): Promise<IValidatorData[]> => {
 	const validatorDataList = dataList;
 	const totalVotingPower = await getTotalVotingPower();
 
-	let validatorList: IValidatorData[] = [];
-	for (let validator of validatorDataList) {
+	const validatorList: IValidatorData[] = [];
+	for (const validator of validatorDataList) {
 		validatorList.push(parseValidator(validator, totalVotingPower));
 	}
 
@@ -326,8 +326,8 @@ const getProposalList = async (): Promise<IProposalData[]> => {
 	const proposalList = await firmaSDK.Gov.getAllProposalList(); // v0.3.7 firma-js new function
 	const proposalParams = await firmaSDK.Gov.getParamAsGovParams();
 
-	let result: IProposalData[] = [];
-	for (let proposal of proposalList) {
+	const result: IProposalData[] = [];
+	for (const proposal of proposalList) {
 		const _proposal = proposal as any;
 
 		const proposalId = proposal.id.toString(); // Replaced from proposal.proposal_id

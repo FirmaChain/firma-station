@@ -106,7 +106,7 @@ const VotingCard = ({ proposalState }: IProps) => {
 
 	const getTallyPercent = (proposalState: IProposalDetailState, targetKey: string) => {
 		let currentVoting = 0;
-		for (let value in proposalState.tally) {
+		for (const value in proposalState.tally) {
 			if (value === 'abstain') continue;
 			currentVoting += convertNumber(proposalState.tally[value]);
 		}
@@ -151,7 +151,7 @@ const VotingCard = ({ proposalState }: IProps) => {
 
 	const getCurrentVotingPower = (tally: ITally, totalVotingPower: number) => {
 		let currentVoting = 0;
-		for (let value in tally) {
+		for (const value in tally) {
 			if (value === 'abstain') continue;
 			currentVoting += convertNumber(tally[value]);
 		}
@@ -165,14 +165,14 @@ const VotingCard = ({ proposalState }: IProps) => {
 	};
 
 	const getMultiGaugeList = (proposalState: IProposalDetailState) => {
-		let result = [];
+		const result = [];
 		let currentVoting = 0;
-		for (let value in proposalState.tally) {
+		for (const value in proposalState.tally) {
 			if (value === 'abstain') continue;
 			currentVoting += convertNumber(proposalState.tally[value]);
 		}
 
-		for (let value in votingThemeData) {
+		for (const value in votingThemeData) {
 			if (votingThemeData[value].key === 'abstain') continue;
 			result.push({
 				percent: `${convertNumberFormat((proposalState.tally[votingThemeData[value].key] / currentVoting) * 100, 2)}%`,

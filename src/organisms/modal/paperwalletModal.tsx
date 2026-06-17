@@ -56,7 +56,7 @@ const PaperwalletModal = () => {
 		if (isCorrectPassword(password)) {
 			downloadPaperWallet()
 				.then((uri) => {
-					let a = document.createElement('a');
+					const a = document.createElement('a');
 					a.href = uri;
 					a.download = 'firma-station-paper-wallet.pdf';
 					a.click();

@@ -11,7 +11,7 @@ export const ToggleText = styled.div`
 	height: 24px;
 	line-height: 24px;
 `;
-export const ToggleButtonImage = styled.div<{ $isActive: Boolean }>`
+export const ToggleButtonImage = styled.div<{ $isActive: boolean }>`
 	width: 44px;
 	height: 24px;
 	display: flex;

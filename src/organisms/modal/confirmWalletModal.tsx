@@ -36,13 +36,13 @@ const ConfirmWalletModal = () => {
 
 	useEffect(() => {
 		if (confirmWalletModalState) {
-			let mnemonicArray = mnemonic.split(' ').map((mnemonicWord: string, index: number) => {
+			const mnemonicArray = mnemonic.split(' ').map((mnemonicWord: string, index: number) => {
 				return {
 					index,
 					mnemonic: mnemonicWord
 				};
 			});
-			let inputTargetList = [];
+			const inputTargetList = [];
 			let selectTargetList = [];
 
 			for (let i = 0; i < 2; i++) {
@@ -98,7 +98,7 @@ const ConfirmWalletModal = () => {
 	};
 
 	const putWord = (mnemonic: string) => {
-		let newInputTarget = [...inputTarget];
+		const newInputTarget = [...inputTarget];
 		newInputTarget[currentWordIndex].text = mnemonic;
 
 		setInputTarget(newInputTarget);
@@ -126,7 +126,7 @@ const ConfirmWalletModal = () => {
 
 	const shuffleArray = (array: string[]) => {
 		for (let i = 0; i < array.length; i++) {
-			let j = Math.floor(Math.random() * (i + 1));
+			const j = Math.floor(Math.random() * (i + 1));
 			const x = array[i];
 			array[i] = array[j];
 			array[j] = x;

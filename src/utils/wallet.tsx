@@ -277,9 +277,9 @@ function useFirma() {
 		const firmaSDK = FirmaSDK.getSDK();
 		const tokenList = await firmaSDK.Bank.getTokenBalanceList(address);
 
-		let tokenDataList = [];
+		const tokenDataList = [];
 
-		for (let token of tokenList) {
+		for (const token of tokenList) {
 			try {
 				if (token.denom === CHAIN_CONFIG.PARAMS.DENOM) continue;
 
@@ -391,7 +391,7 @@ function useFirma() {
 			let isChecked = false;
 
 			if (CHAIN_CONFIG.VESTING_ACCOUNTS.length > 0) {
-				for (let account of CHAIN_CONFIG.VESTING_ACCOUNTS) {
+				for (const account of CHAIN_CONFIG.VESTING_ACCOUNTS) {
 					if (account['@type'] === '/cosmos.vesting.v1beta1.PeriodicVestingAccount') {
 						if (account['base_vesting_account']['base_account']['address'] === address) {
 							let endTimeAcc = convertNumber(account['start_time']) * 1;
@@ -564,9 +564,9 @@ function useFirma() {
 
 		const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
 
-		let parseList = [];
+		const parseList = [];
 		for (let i = 0; i < delegationList.length; i++) {
-			let value = delegationList[i].delegation.validator_address;
+			const value = delegationList[i].delegation.validator_address;
 			let amount = delegationList[i].balance.amount;
 			let rewards = '0';
 
@@ -599,12 +599,12 @@ function useFirma() {
 
 		const redelegationInfoList = await firmaSDK.Staking.getTotalRedelegationInfo(address);
 
-		let parseList = [];
-		for (let redelegationInfo of redelegationInfoList) {
+		const parseList = [];
+		for (const redelegationInfo of redelegationInfoList) {
 			const srcValoperAddress = redelegationInfo.redelegation.validator_src_address;
 			const dstvaloperAddress = redelegationInfo.redelegation.validator_dst_address;
 
-			for (let redelegationEntry of redelegationInfo.entries) {
+			for (const redelegationEntry of redelegationInfo.entries) {
 				parseList.push({
 					delegatorAddress: address,
 					delegatorMoniker: '',
@@ -634,12 +634,12 @@ function useFirma() {
 
 		const undelegationList = await firmaSDK.Staking.getTotalUndelegateInfo(address);
 
-		let parseList = [];
-		for (let undelegation of undelegationList) {
+		const parseList = [];
+		for (const undelegation of undelegationList) {
 			const validatorAddress = undelegation.validator_address;
 			const { moniker, avatarURL } = getAvatarInfo(avatarList, validatorAddress);
 
-			for (let entry of undelegation.entries) {
+			for (const entry of undelegation.entries) {
 				const completionTime = entry.completion_time;
 				const balance = entry.balance;
 
@@ -986,7 +986,7 @@ function useFirma() {
 	const getStakingGrantDataList = async () => {
 		try {
 			const firmaSDK = FirmaSDK.getSDK();
-			let address = getAddressInternal();
+			const address = getAddressInternal();
 
 			const grantDataRaw = await firmaSDK.Authz.getStakingGrantData(
 				address,

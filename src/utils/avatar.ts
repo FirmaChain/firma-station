@@ -44,8 +44,8 @@ export const initializeAvatar = (lastUpdated: number) => {
 
 	getValidatorList()
 		.then((validatorList) => {
-			let avatarList: IAvatar[] = [];
-			for (let validator of validatorList) {
+			const avatarList: IAvatar[] = [];
+			for (const validator of validatorList) {
 				avatarList.push({
 					operatorAddress: validator.validatorAddress,
 					moniker: validator.validatorMoniker,
@@ -63,8 +63,8 @@ export const initializeAvatar = (lastUpdated: number) => {
 						// the dispatch entirely when the timestamp hadn't advanced,
 						// which kept a stale avatarList (e.g. mainnet validators) in
 						// persisted Redux after a network switch.
-						for (let avatar of avatarList) {
-							for (let avatarUrlRaw of avatarRaw.avatarList) {
+						for (const avatar of avatarList) {
+							for (const avatarUrlRaw of avatarRaw.avatarList) {
 								if (avatar.operatorAddress === avatarUrlRaw.operatorAddress) {
 									avatar.url = avatarUrlRaw.url;
 								}

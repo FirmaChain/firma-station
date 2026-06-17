@@ -39,7 +39,7 @@ export const makeDecimalPoint = (value: string | number, point: number = 2) => {
 };
 
 export const convertCurrent = (value: number | string) => {
-	var val = value.toString().split('.');
+	const val = value.toString().split('.');
 	val[0] = val[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	return val.join('.');
 };
@@ -112,7 +112,7 @@ export const copyToClipboard = (textToCopy: string) => {
 		if (navigator.clipboard && window.isSecureContext) {
 			return navigator.clipboard.writeText(textToCopy);
 		} else {
-			let textArea = document.createElement('textarea');
+			const textArea = document.createElement('textarea');
 			textArea.value = textToCopy;
 			textArea.style.position = 'fixed';
 			textArea.style.left = '-999999px';

@@ -24,7 +24,7 @@ const StakingCard = ({ totalStakingState }: IProps) => {
 
 	useEffect(() => {
 		if (isValid(totalStakingState)) {
-			let newData = [...stakingData];
+			const newData = [...stakingData];
 			newData[0].value = totalStakingState.available;
 			newData[1].value = totalStakingState.delegated;
 			newData[2].value = totalStakingState.undelegate;

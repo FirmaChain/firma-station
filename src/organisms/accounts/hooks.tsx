@@ -24,7 +24,7 @@ export const useTransferHistoryByAddress = () => {
 
 	const updateTokenData = useCallback(
 		async (data: any) => {
-			for (let message of data.messagesByAddress) {
+			for (const message of data.messagesByAddress) {
 				if (message.transaction.success === false) continue;
 
 				let denom = '';
@@ -57,7 +57,7 @@ export const useTransferHistoryByAddress = () => {
 						}
 
 						setTokenDatas((prev) => {
-							let newData = {
+							const newData = {
 								...prev
 							};
 

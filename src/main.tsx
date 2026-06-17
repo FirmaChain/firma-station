@@ -8,6 +8,7 @@ import App from './App';
 import store from './redux/store';
 
 import './apollo';
+import './main.css';
 
 const persistor = persistStore(store);
 

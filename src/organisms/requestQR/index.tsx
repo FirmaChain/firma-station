@@ -6,9 +6,9 @@ import { QRContainer, QRTimerText, RefreshIconButton } from './styles';
 
 interface IProps {
 	module: string;
-	onSuccess: (requestData: Object) => void;
-	onFailed: (requestData: Object) => void;
-	params?: Object;
+	onSuccess: (requestData: object) => void;
+	onFailed: (requestData: object) => void;
+	params?: object;
 	signer?: string;
 }
 

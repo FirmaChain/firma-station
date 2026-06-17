@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
 	return {
 		plugins: [
 			react(),
- 
+
 			nodePolyfills({ exclude: ['crypto'] }),
 			...(env.NODE_ENV === 'production' ? [vitePluginBundleObfuscator(minimizeObfuscatorConfig)] : [])
 		],
@@ -66,7 +66,7 @@ export default defineConfig(({ mode }) => {
 			tsconfigPaths: true,
 			alias: {
 				'@mui/styled-engine': '@mui/styled-engine-sc'
-			},
+			}
 		},
 
 		define: {

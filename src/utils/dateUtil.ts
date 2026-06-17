@@ -1,7 +1,7 @@
 import dayjs from './dayjs';
 
 export const getGMT = () => {
-	let date = new Date();
+	const date = new Date();
 	const offset = date.getTimezoneOffset();
 	const GMT = offset / 60 < 0 ? '+' + Math.abs(offset / 60) : (offset / 60) * -1;
 

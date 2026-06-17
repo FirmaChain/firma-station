@@ -211,10 +211,10 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
 		grantsDataState: IGrantsDataState,
 		latestReward: { validatorAddr: string; rewards: number }[]
 	) => {
-		let result = [];
-		for (let delegate of totalStakingState.delegationList) {
+		const result = [];
+		for (const delegate of totalStakingState.delegationList) {
 			let grantTarget = null;
-			for (let grant of grantsDataState.allowValidatorList) {
+			for (const grant of grantsDataState.allowValidatorList) {
 				if (delegate.validatorAddress === grant.operatorAddress) {
 					grantTarget = grant;
 					break;
@@ -238,9 +238,9 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
 			});
 		}
 
-		for (let grant of grantsDataState.allowValidatorList) {
+		for (const grant of grantsDataState.allowValidatorList) {
 			let isDuplicate = false;
-			for (let data of result) {
+			for (const data of result) {
 				if (data.validatorAddress === grant.operatorAddress) {
 					isDuplicate = true;
 					break;

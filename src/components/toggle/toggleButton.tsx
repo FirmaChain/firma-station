@@ -4,8 +4,8 @@ import { ToggleButtonImage, ToggleText, ToggleWrapper } from './styles';
 
 interface IProps {
 	toggleText: string;
-	isActive: Boolean;
-	onClickToggle: Function;
+	isActive: boolean;
+	onClickToggle: () => void;
 }
 
 const ToggleButton = ({ toggleText, isActive, onClickToggle }: IProps) => {

@@ -65,7 +65,7 @@ const useDelegations = () => {
 				.then(async (result) => {
 					let self = 0;
 					let totalDelegationAmount = 0;
-					let delegationList: IDelegationList[] = [];
+					const delegationList: IDelegationList[] = [];
 
 					for (const delegate of result) {
 						totalDelegationAmount += delegate.amount;

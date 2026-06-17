@@ -44,7 +44,7 @@ const DepositCard = ({ proposalState }: IProps) => {
 		const latestDepositsByAddress = new Map();
 
 		// Compare timestamps to keep only the latest deposit per wallet
-		for (let deposit of deposits) {
+		for (const deposit of deposits) {
 			const existingDeposit = latestDepositsByAddress.get(deposit.depositor_address);
 
 			if (!existingDeposit || new Date(deposit.timestamp) > new Date(existingDeposit.timestamp)) {
@@ -54,7 +54,7 @@ const DepositCard = ({ proposalState }: IProps) => {
 
 		// Sum the latest values of each wallet
 		let totalDeposit = 0;
-		for (let [address, deposit] of latestDepositsByAddress) {
+		for (const [address, deposit] of latestDepositsByAddress) {
 			totalDeposit += convertNumber(deposit.amount[0].amount);
 		}
 
