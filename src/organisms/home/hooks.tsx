@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { getTransactionCount } from '../../apollo/gqls/query';
+import { getTransactionCount } from '../../utils/graphqlQuery';
 import { IBlockState, ITokenomicsState, IVotingPowerState } from '../../interfaces/home';
 import { convertNumberFormat } from '../../utils/common';
 import { getInflation, getLatestBlock, getStakingPool, getTotalSupply } from '../../utils/lcdQuery';

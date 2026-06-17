@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getValidatorRedelegationsFromIndexer } from '../../apollo/gqls/query';
+import { getValidatorRedelegationsFromIndexer } from '../../utils/graphqlQuery';
 import { CHAIN_CONFIG } from '../../config';
 import { ISigningInfo, IValidatorData } from '../../interfaces/lcd';
 import {

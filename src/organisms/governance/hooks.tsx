@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { groupBy } from 'es-toolkit/array';
 import ky from 'ky';
 
-import { getProposalQueryFromId } from '../../apollo/gqls/query';
+import { getProposalQueryFromId } from '../../utils/graphqlQuery';
 import { CHAIN_CONFIG } from '../../config';
 import { IProposalDetailState, IProposalsState } from '../../interfaces/governance';
 import { IProposalQueryData } from '../../interfaces/gql';

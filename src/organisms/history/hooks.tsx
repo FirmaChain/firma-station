@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 
-import { getHistoryByAddress } from '../../apollo/gqls/query';
+import { getHistoryByAddress } from '../../utils/graphqlQuery';
 import { IHistoryByAddressState } from '../../interfaces/history';
 import { useRefreshStore, useWalletStore } from '../../store';
 

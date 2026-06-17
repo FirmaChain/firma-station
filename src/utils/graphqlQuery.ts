@@ -1,29 +1,52 @@
-import { gql } from '@apollo/client';
+import ky from 'ky';
 
-import { client } from '../../apollo';
-import { IMessagesByAddress, IProposalQueryData } from '../../interfaces/gql';
+import { CHAIN_CONFIG } from '../config';
+import { IMessagesByAddress, IProposalQueryData } from '../interfaces/gql';
+
+interface IGraphQLResponse<T> {
+	data?: T;
+	errors?: { message: string }[];
+}
+
+const requestGraphQL = async <T>(query: string, variables?: Record<string, unknown>): Promise<T> => {
+	const response = await ky
+		.post(CHAIN_CONFIG.GRAPHQL_CONFIG.URI, {
+			json: { query, variables },
+			// Apollo HttpLink used the browser fetch default, which has no app-level timeout.
+			// ky gets an explicit timeout so stalled GraphQL requests can fall back through existing catch handlers.
+			timeout: 30_000
+		})
+		.json<IGraphQLResponse<T>>();
+
+	if (response.errors?.length) {
+		throw new Error(response.errors.map(({ message }) => message).join('\n'));
+	}
+
+	if (!response.data) {
+		throw new Error('Empty GraphQL response');
+	}
+
+	return response.data;
+};
 
 //? Note: do not call it frequently. It is VERY heavy query.
 export const getTransactionCount = async (): Promise<number> => {
 	try {
-		const { data } = await client.query<{
-			block_aggregate: { aggregate: { sum: { num_txs: number } } };
-		}>({
-			query: gql`
-				query {
-					block_aggregate {
-						aggregate {
-							sum {
-								num_txs
-							}
+		const data = await requestGraphQL<{
+			block_aggregate?: { aggregate?: { sum?: { num_txs?: number | null } | null } | null } | null;
+		}>(`
+			query {
+				block_aggregate {
+					aggregate {
+						sum {
+							num_txs
 						}
 					}
 				}
-			`,
-			fetchPolicy: 'no-cache'
-		});
+			}
+		`);
 
-		return data?.block_aggregate.aggregate.sum.num_txs ?? 0;
+		return data.block_aggregate?.aggregate?.sum?.num_txs ?? 0;
 	} catch (error) {
 		return 0;
 	}
@@ -31,27 +54,28 @@ export const getTransactionCount = async (): Promise<number> => {
 
 export const getProposalQueryFromId = async (proposalId: string): Promise<IProposalQueryData | null> => {
 	try {
-		const { data } = await client.query<IProposalQueryData>({
-			query: gql`
-        query {
-          proposal(where: {id: {_eq: ${proposalId}}}) {
-            proposal_deposits {
-              amount
-              depositor_address
-              timestamp
-            }
-            proposal_votes {
-              voter_address
-              option
-            }
-            staking_pool_snapshot {
-              bonded_tokens
-            }
-          }
-        }
-      `,
-			fetchPolicy: 'no-cache'
-		});
+		const data = await requestGraphQL<IProposalQueryData>(
+			`
+				query GetProposalQueryFromId($proposalId: bigint!) {
+					proposal(where: { id: { _eq: $proposalId } }) {
+						proposal_deposits {
+							amount
+							depositor_address
+							timestamp
+						}
+						proposal_votes {
+							voter_address
+							option
+						}
+						staking_pool_snapshot {
+							bonded_tokens
+						}
+					}
+				}
+			`,
+			{ proposalId: Number(proposalId) }
+		);
+
 		return data ?? null;
 	} catch (error) {
 		return null;
@@ -82,23 +106,22 @@ export const getValidatorRedelegationsFromIndexer = async (
 	}[]
 > => {
 	try {
-		const { data } = await client.query<{
-			action_validator_redelegations_from: {
+		const data = await requestGraphQL<{
+			action_validator_redelegations_from?: {
 				redelegations: IIndexerRedelegation[] | null;
-			};
-		}>({
-			query: gql`
+			} | null;
+		}>(
+			`
 				query Q($address: String!) {
 					action_validator_redelegations_from(address: $address, limit: 1000, count_total: false) {
 						redelegations
 					}
 				}
 			`,
-			fetchPolicy: 'no-cache',
-			variables: { address: valoperAddress }
-		});
+			{ address: valoperAddress }
+		);
 
-		const rows = data?.action_validator_redelegations_from?.redelegations ?? [];
+		const rows = data.action_validator_redelegations_from?.redelegations ?? [];
 		const flat: {
 			delegatorAddress: string;
 			srcAddress: string;
@@ -130,8 +153,8 @@ export const getHistoryByAddress = async (
 	offset: number = 0
 ): Promise<IMessagesByAddress | null> => {
 	try {
-		const { data } = await client.query<IMessagesByAddress>({
-			query: gql`
+		const data = await requestGraphQL<IMessagesByAddress>(
+			`
 				query GetMessagesByAddress($address: _text, $limit: bigint = 50, $offset: bigint = 0, $types: _text = "{}") {
 					messagesByAddress: messages_by_address(args: { addresses: $address, types: $types, limit: $limit, offset: $offset }) {
 						transaction {
@@ -148,14 +171,13 @@ export const getHistoryByAddress = async (
 					}
 				}
 			`,
-			fetchPolicy: 'no-cache',
-			variables: {
+			{
 				address: `{${address}}`,
 				types: `{${type}}`,
 				limit,
 				offset
 			}
-		});
+		);
 
 		return data ?? null;
 	} catch (error) {
