@@ -1,14 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { GridLoader } from 'react-spinners';
 
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import { gasEstimationModalWidth, LoadingWrapper, ModalContainer, ModalContent, ModalTitle, ModalTypo } from './styles';
 
 const GasEstimationModal = () => {
-	const gasEstimationModalState = useSelector((state: rootState) => state.modal.gasEstimation);
+	const gasEstimationModalState = useModalStore((state) => state.gasEstimation);
 
 	const closeGasEstimationModal = () => {
 		modalActions.handleModalGasEstimation(false);

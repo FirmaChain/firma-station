@@ -4,7 +4,7 @@ import { FixedSizeList as List } from 'react-window';
 import AutoSizer from '../../components/autoSizer';
 import { BlankCard } from '../../components/card';
 import { CHAIN_CONFIG } from '../../config';
-import { IVesting } from '../../redux/reducers/userReducer';
+import { IVesting } from '../../store';
 import theme from '../../themes';
 import { convertNumberFormat, convertToFctNumber, convertToFctString } from '../../utils/common';
 import { getDateTimeFormat } from '../../utils/dateUtil';

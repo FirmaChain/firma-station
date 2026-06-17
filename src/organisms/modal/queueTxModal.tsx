@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import { GridLoader } from 'react-spinners';
 
 import { Modal } from '../../components/modal';
-import { modalActions, refreshActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, refreshActions, useModalStore } from '../../store';
 import {
 	AfterTypo,
 	LoadingWrapper,
@@ -21,8 +19,8 @@ import {
 } from './styles';
 
 const QueueTxModal = () => {
-	const queueTxModalState = useSelector((state: rootState) => state.modal.queueTx);
-	const modalData = useSelector((state: rootState) => state.modal.data);
+	const queueTxModalState = useModalStore((state) => state.queueTx);
+	const modalData = useModalStore((state) => state.data);
 
 	const { enqueueSnackbar } = useSnackbar();
 	const [depend, setDepend] = useState(false);

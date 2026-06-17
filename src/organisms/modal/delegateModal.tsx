@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { ToggleButton } from '../../components/toggle';
 import { CHAIN_CONFIG, GUIDE_LINK_DELEGATE } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useUserStore, useWalletStore } from '../../store';
 import { convertNumber, convertToFctNumber, convertToFctString, getDefaultFee, getFeesFromGas, makeDecimalPoint } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import {
@@ -32,10 +30,10 @@ import {
 } from './styles';
 
 const DelegateModal = () => {
-	const delegateModalState = useSelector((state: rootState) => state.modal.delegate);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const delegateModalState = useModalStore((state) => state.delegate);
+	const modalData = useModalStore((state) => state.data);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const { delegate, getGasEstimationDelegate, setUserData } = useFirma();

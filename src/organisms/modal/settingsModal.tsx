@@ -1,10 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_WALLET_SETTING } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import useFirma from '../../utils/wallet';
 import {
 	DisconnectButton,
@@ -21,7 +19,7 @@ import {
 } from './styles';
 
 const ExportWalletModal = () => {
-	const exportWalletModalState = useSelector((state: rootState) => state.modal.settings);
+	const exportWalletModalState = useModalStore((state) => state.settings);
 	const { resetWallet } = useFirma();
 
 	const menuList = [

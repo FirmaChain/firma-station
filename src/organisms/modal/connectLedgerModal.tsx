@@ -1,15 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_CONNECT_TO_LEDGER } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import useFirma from '../../utils/wallet';
 import { connectLedgerModalWidth, HelpIcon, ModalContainer, ModalContent, ModalTitle, NextButton } from './styles';
 
 const ConnectLedgerModal = () => {
-	const connectLedgerModalState = useSelector((state: rootState) => state.modal.connectLedger);
+	const connectLedgerModalState = useModalStore((state) => state.connectLedger);
 	const { connectLedger } = useFirma();
 
 	const closeConnectLedgerModal = () => {

@@ -1,12 +1,10 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_CONNECT_TO_LEDGER } from '../../config';
 import RequestQR from '../../organisms/requestQR';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import useFirma from '../../utils/wallet';
 import {
 	connectLedgerModalWidth,
@@ -24,7 +22,7 @@ import {
 } from './styles';
 
 const ConnectAppModal = () => {
-	const connectAppModalState = useSelector((state: rootState) => state.modal.connectApp);
+	const connectAppModalState = useModalStore((state) => state.connectApp);
 	const { enqueueSnackbar } = useSnackbar();
 	const { connectWalletApp } = useFirma();
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { getValidatorRedelegationsFromIndexer } from '../../apollo/gqls/query';
 import { CHAIN_CONFIG } from '../../config';
@@ -17,7 +16,7 @@ import {
 	IValidator,
 	IValidatorsState
 } from '../../interfaces/staking';
-import { rootState } from '../../redux/reducers';
+import { useAvatarStore, useRefreshStore, useWalletStore } from '../../store';
 import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
 import { convertNumber, convertToFctString, makeDecimalPoint } from '../../utils/common';
 import {
@@ -46,10 +45,10 @@ export {
 };
 
 const useDelegations = () => {
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const { avatarList } = useAvatarStore((state) => state);
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [delegateState, setDelegateState] = useState<IDelegationState>({
 		self: 0,
@@ -101,10 +100,10 @@ const useDelegations = () => {
 };
 
 const useRedelegations = () => {
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const { avatarList } = useAvatarStore((state) => state);
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [redelegateState, setRedelegateState] = useState<IRedelegationState>({
 		self: 0,
@@ -154,10 +153,10 @@ const useRedelegations = () => {
 };
 
 const useUndelegations = () => {
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const { avatarList } = useAvatarStore((state) => state);
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [undelegateState, setUndelegateState] = useState<IUndelegationState>({
 		self: 0,
@@ -197,8 +196,8 @@ const useUndelegations = () => {
 };
 
 const useStakingData = () => {
-	const { isInit } = useSelector((state: rootState) => state.wallet);
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { isInit } = useWalletStore((state) => state);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 	const { getStaking } = useFirma();
 
 	const [totalStakingState, setTotalStakingState] = useState<ITotalStakingState>({
@@ -231,7 +230,7 @@ const useStakingData = () => {
 const useStakingDataFromTarget = () => {
 	const { getStakingFromValidator } = useFirma();
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
 		available: 0,
@@ -256,8 +255,8 @@ const useStakingDataFromTarget = () => {
 };
 
 const useGrantData = () => {
-	const { isInit } = useSelector((state: rootState) => state.wallet);
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { isInit } = useWalletStore((state) => state);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 	const { getStakingGrantDataList } = useFirma();
 
 	const [grantDataState, setGrantDataState] = useState<IGrantsDataState>({
@@ -282,8 +281,8 @@ const useGrantData = () => {
 };
 
 const useValidators = () => {
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { avatarList } = useAvatarStore((state) => state);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
 		totalVotingPower: 0,
@@ -360,8 +359,8 @@ const useValidators = () => {
 
 const useValidatorFromTarget = () => {
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { avatarList } = useAvatarStore((state) => state);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [validatorState, setValidatorState] = useState<IValidator>({
 		validatorAddress: '',

@@ -1,11 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_DOWNLOAD_PAPER_WALLET } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import useFirma from '../../utils/wallet';
 import {
 	ButtonWrapper,
@@ -28,7 +26,7 @@ import {
 } from './styles';
 
 const PaperwalletModal = () => {
-	const peperwalletModalState = useSelector((state: rootState) => state.modal.paperwallet);
+	const peperwalletModalState = useModalStore((state) => state.paperwallet);
 	const { enqueueSnackbar } = useSnackbar();
 	const { isCorrectPassword, downloadPaperWallet } = useFirma();
 

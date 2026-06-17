@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { AuthorizationType, FirmaUtil } from '@firmachain/firma-js';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { CHAIN_CONFIG, IBC_CONFIG, SESSION_TIMOUT } from '../config';
 import { ITargetStakingState, ITotalStakingState } from '../interfaces/staking';
 import { FirmaPaperWallet } from '../paperwallet';
-import { modalActions, userActions, walletActions } from '../redux/action';
-import { rootState } from '../redux/reducers';
+import { modalActions, useAvatarStore, userActions, useWalletStore, walletActions } from '../store';
 import { getAvatarInfo } from './avatar';
 import { convertNumber, convertToFctNumber, convertToFctString, convertToTokenString, isValidString } from './common';
 import dayjs from './dayjs';
@@ -17,8 +15,8 @@ import { Wallet } from './types';
 
 function useFirma() {
 	const { enqueueSnackbar } = useSnackbar();
-	const { address, timeKey, isInit, isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const { address, timeKey, isInit, isLedger, isMobileApp } = useWalletStore((state) => state);
+	const { avatarList } = useAvatarStore((state) => state);
 	const [isVesting, setVesting] = useState(true);
 
 	const initializeFirma = () => {

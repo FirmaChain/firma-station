@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { getHistoryByAddress } from '../../apollo/gqls/query';
 import { IBC_CONFIG } from '../../config';
 import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
-import { rootState } from '../../redux/reducers';
+import { useRefreshStore, useWalletStore } from '../../store';
 import { convertNumber } from '../../utils/common';
 import { getTokenData } from '../../utils/lcdQuery';
 
@@ -17,8 +16,8 @@ export const useTransferHistoryByAddress = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
 	const [offset, setOffset] = useState(0);
-	const { address } = useSelector((state: rootState) => state.wallet);
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { address } = useWalletStore((state) => state);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const { enqueueSnackbar } = useSnackbar();
 

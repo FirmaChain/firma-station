@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import styled from 'styled-components';
 
 import { Modal } from '../../components/modal';
 import { CHAIN_CONFIG, GUIDE_LINK_REDELEGATE } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useUserStore, useWalletStore } from '../../store';
 import {
 	convertNumber,
 	convertNumberFormat,
@@ -85,10 +83,10 @@ const customStyles = {
 };
 
 const RedelegateModal = () => {
-	const redelegateModalState = useSelector((state: rootState) => state.modal.redelegate);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const redelegateModalState = useModalStore((state) => state.redelegate);
+	const modalData = useModalStore((state) => state.data);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const { redelegate, getGasEstimationRedelegate, setUserData } = useFirma();

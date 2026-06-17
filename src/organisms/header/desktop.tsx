@@ -1,11 +1,9 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
 import { isMobile, isTablet } from 'react-device-detect';
-import { useSelector } from 'react-redux';
 
 import { CHAIN_CONFIG } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useWalletStore } from '../../store';
 import { copyToClipboard, isExternalConnect } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import {
@@ -58,7 +56,7 @@ import {
 
 function HeaderDesktop() {
 	const { enqueueSnackbar } = useSnackbar();
-	const { isInit, isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
+	const { isInit, isLedger, isMobileApp, address } = useWalletStore((state) => state);
 	const {
 		paperwallet,
 		qrcode,
@@ -85,7 +83,7 @@ function HeaderDesktop() {
 		queueTx,
 		gasEstimation,
 		restake
-	} = useSelector((state: rootState) => state.modal);
+	} = useModalStore((state) => state);
 
 	const { showAddressOnDevice, checkSession } = useFirma();
 

@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { FixedSizeList as List } from 'react-window';
 
 import AutoSizer from '../../components/autoSizer';
 import { BlankCard } from '../../components/card';
 import { CHAIN_CONFIG } from '../../config';
-import { rootState } from '../../redux/reducers';
+import { useUserStore } from '../../store';
 import theme from '../../themes';
 import { convertNumberFormat } from '../../utils/common';
 import { AddressTitleTypo, HeaderColumn, HeaderWrapper, ItemColumn, ItemWrapper, ListWrapper } from './styles';
@@ -22,7 +21,7 @@ const Row = ({ data, index, style }: any) => {
 };
 
 const AssetCard = () => {
-	const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
+	const { balance, tokenList, nftList } = useUserStore((state) => state);
 
 	const assetList = [
 		[`${CHAIN_CONFIG.PARAMS.SYMBOL}`, convertNumberFormat(balance, 3)],

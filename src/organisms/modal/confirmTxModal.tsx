@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { CHAIN_CONFIG } from '../../config';
-import { modalActions, refreshActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, refreshActions, useModalStore, useWalletStore } from '../../store';
 import { convertNumberFormat, convertToFctString, getDefaultFee, isValidString } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import RequestQR from '../requestQR';
@@ -29,9 +27,9 @@ import {
 } from './styles';
 
 const ConfirmTxModal = () => {
-	const confirmTxModalState = useSelector((state: rootState) => state.modal.confirmTx);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
+	const confirmTxModalState = useModalStore((state) => state.confirmTx);
+	const modalData = useModalStore((state) => state.data);
+	const { isLedger, isMobileApp, address } = useWalletStore((state) => state);
 
 	const { enqueueSnackbar } = useSnackbar();
 	const { isCorrectPassword, setUserData } = useFirma();

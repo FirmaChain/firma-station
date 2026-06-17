@@ -1,12 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { QRCode } from 'react-qrcode-logo';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_EXPORT_MNEMONIC } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import theme from '../../themes';
 import { copyToClipboard } from '../../utils/common';
 import useFirma from '../../utils/wallet';
@@ -34,7 +32,7 @@ import {
 } from './styles';
 
 const ExportMnemonicModal = () => {
-	const exportMnemonicModalState = useSelector((state: rootState) => state.modal.exportMnemonic);
+	const exportMnemonicModalState = useModalStore((state) => state.exportMnemonic);
 	const { isCorrectPassword, getDecryptMnemonic } = useFirma();
 	const { enqueueSnackbar } = useSnackbar();
 

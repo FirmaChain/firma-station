@@ -1,12 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { QRCode } from 'react-qrcode-logo';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_EXPORT_PRIVATE_KEY } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import theme from '../../themes';
 import { copyToClipboard } from '../../utils/common';
 import useFirma from '../../utils/wallet';
@@ -31,7 +29,7 @@ import {
 } from './styles';
 
 const ExportPrivatekeyModal = () => {
-	const exportPrivatekeyModalState = useSelector((state: rootState) => state.modal.exportPrivatekey);
+	const exportPrivatekeyModalState = useModalStore((state) => state.exportPrivatekey);
 	const { isCorrectPassword, getDecryptPrivateKey } = useFirma();
 	const { enqueueSnackbar } = useSnackbar();
 

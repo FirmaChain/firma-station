@@ -1,12 +1,10 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { CHAIN_CONFIG } from '../../../config';
 import { PROPOSAL_STATUS_DEPOSIT_PERIOD } from '../../../constants/governance';
 import { IProposalDetailState } from '../../../interfaces/governance';
-import { modalActions } from '../../../redux/action';
-import { rootState } from '../../../redux/reducers';
+import { modalActions, useUserStore, useWalletStore } from '../../../store';
 import { convertNumber, convertNumberFormat, convertToFctNumber, getDefaultFee } from '../../../utils/common';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
 import dayjs from '../../../utils/dayjs';
@@ -17,8 +15,8 @@ interface IProps {
 }
 
 const DepositCard = ({ proposalState }: IProps) => {
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const getAddTimeFormat = (startTime: string, second: number) => {

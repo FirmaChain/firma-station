@@ -1,9 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import useFirma from '../../utils/wallet';
 import {
 	ButtonWrapper,
@@ -19,7 +17,7 @@ import {
 } from './styles';
 
 const DisconnectModal = () => {
-	const disconnectModalState = useSelector((state: rootState) => state.modal.disconnect);
+	const disconnectModalState = useModalStore((state) => state.disconnect);
 	const { resetWallet } = useFirma();
 
 	const closeModal = () => {

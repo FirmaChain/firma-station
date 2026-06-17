@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import {
@@ -11,11 +10,11 @@ import {
 	useValidatorFromTarget
 } from '../organisms/staking/hooks';
 import { DelegatorsCard, ValidatorControlCard, ValidatorInfoCard } from '../organisms/staking/validator';
-import { rootState } from '../redux/reducers';
+import { useWalletStore } from '../store';
 import { ContentContainer } from '../styles/validators';
 
 const Validators = () => {
-	const { isInit } = useSelector((state: rootState) => state.wallet);
+	const { isInit } = useWalletStore((state) => state);
 	const { targetStakingState } = useStakingDataFromTarget();
 	const { validatorState } = useValidatorFromTarget();
 	const { delegateState } = useDelegations();

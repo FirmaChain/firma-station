@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { CHAIN_CONFIG } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useUserStore, useWalletStore } from '../../store';
 import { convertNumber, convertToFctNumber, convertToFctString, getDefaultFee, getFeesFromGas, makeDecimalPoint } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import {
@@ -25,10 +23,10 @@ import {
 } from './styles';
 
 const DepositModal = () => {
-	const depositModalState = useSelector((state: rootState) => state.modal.deposit);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const depositModalState = useModalStore((state) => state.deposit);
+	const modalData = useModalStore((state) => state.data);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const { deposit, getGasEstimationDeposit, setUserData } = useFirma();

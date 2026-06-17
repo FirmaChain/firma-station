@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AuthorizationType } from '@firmachain/firma-js';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { CHAIN_CONFIG } from '../../config';
 import { IRestakeState } from '../../interfaces/staking';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useWalletStore } from '../../store';
 import { convertNumberFormat, convertToFctNumber, getFeesFromGas, getRestakeStatus, getUTCDateFormat } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import {
@@ -40,9 +38,9 @@ import {
 } from './styles';
 
 const RestakeModal = () => {
-	const restakeModalState = useSelector((state: rootState) => state.modal.restake);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { isLedger } = useSelector((state: rootState) => state.wallet);
+	const restakeModalState = useModalStore((state) => state.restake);
+	const modalData = useModalStore((state) => state.data);
+	const { isLedger } = useWalletStore((state) => state);
 
 	const { enqueueSnackbar } = useSnackbar();
 

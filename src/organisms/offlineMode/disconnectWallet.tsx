@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { walletActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { useWalletStore, walletActions } from '../../store';
 import useFirma from '../../utils/wallet';
 
 const Container = styled.div`
@@ -205,8 +203,7 @@ interface DisconnectWalletProps {
 
 const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
 	const { enqueueSnackbar } = useSnackbar();
-	const dispatch = useDispatch();
-	const { address, walletName, balance } = useSelector((state: rootState) => state.wallet);
+	const { address, walletName, balance } = useWalletStore((state) => state);
 	const { disconnectWallet, isValidWallet } = useFirma();
 
 	const [checklist, setChecklist] = useState({
@@ -241,8 +238,8 @@ const DisconnectWallet: React.FC<DisconnectWalletProps> = ({ onBack }) => {
 			// Clear wallet data
 			await disconnectWallet();
 
-			// Clear Redux state
-			dispatch(walletActions.resetWallet());
+			// Clear wallet state
+			walletActions.resetWallet();
 
 			enqueueSnackbar('Wallet disconnected successfully', {
 				variant: 'success',

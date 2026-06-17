@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useUserStore, useWalletStore } from '../../store';
 import { convertNumber, convertToFctNumber, getFeesFromGas } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import {
@@ -20,10 +18,10 @@ import {
 } from './styles';
 
 const VotingModal = () => {
-	const votingModalState = useSelector((state: rootState) => state.modal.voting);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger } = useSelector((state: rootState) => state.wallet);
+	const votingModalState = useModalStore((state) => state.voting);
+	const modalData = useModalStore((state) => state.data);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger } = useWalletStore((state) => state);
 	const [votingType, setVotingType] = useState(0);
 	const { enqueueSnackbar } = useSnackbar();
 

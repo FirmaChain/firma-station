@@ -1,10 +1,9 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { Accounts, Community, Download, Governance, History, Home, OfflineMode, Proposals, Staking, Validators } from '../pages';
-import { rootState } from '../redux/reducers';
+import { useWalletStore } from '../store';
 
 const routePublic = (path: string, component: React.FC) => ({
 	path,
@@ -38,7 +37,7 @@ interface IProps {
 
 const CustomRoute = ({ auth, component: Component }: IProps) => {
 	const { enqueueSnackbar } = useSnackbar();
-	const { address } = useSelector((state: rootState) => state.wallet);
+	const { address } = useWalletStore((state) => state);
 
 	const isUnauthorized = auth && address === '';
 

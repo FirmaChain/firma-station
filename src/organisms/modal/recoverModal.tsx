@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_RECOVER_FROM_MNEMONIC } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import { isValidString } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import Password from './password';
@@ -27,7 +25,7 @@ import {
 } from './styles';
 
 const RecoverModal = () => {
-	const recoverMnemonicModalState = useSelector((state: rootState) => state.modal.recoverMnemonic);
+	const recoverMnemonicModalState = useModalStore((state) => state.recoverMnemonic);
 
 	const { enqueueSnackbar } = useSnackbar();
 	const { storeWalletFromMnemonic, storeWalletFromPrivateKey } = useFirma();

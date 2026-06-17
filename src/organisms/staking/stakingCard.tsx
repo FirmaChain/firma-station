@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { CHAIN_CONFIG } from '../../config';
 import { ITotalStakingState } from '../../interfaces/staking';
-import { rootState } from '../../redux/reducers';
+import { useUserStore } from '../../store';
 import theme from '../../themes';
 import { convertNumberFormat, isValid } from '../../utils/common';
 import { StakingContentTypo, StakingTextWrap, StakingTitleTypo, StakingWrap } from './styles';
@@ -13,7 +12,7 @@ interface IProps {
 }
 
 const StakingCard = ({ totalStakingState }: IProps) => {
-	const { vesting } = useSelector((state: rootState) => state.user);
+	const { vesting } = useUserStore((state) => state);
 
 	const [stakingData, setStakingData] = useState([
 		{ name: 'Available', value: 0, color: theme.colors.mainblue },

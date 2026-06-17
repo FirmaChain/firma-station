@@ -1,13 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { AccountCard, AssetCard, BlockCard, TokenomicsCard, VotingPowerCard } from '../organisms/home';
 import { useDashboard } from '../organisms/home/hooks';
-import { rootState } from '../redux/reducers';
+import { useWalletStore } from '../store';
 import { CardWrap, ContentContainer, LeftCardWrap, RightCardMiddleWrap, RightCardTopWrap, RightCardWrap } from '../styles/home';
 
 const Home = () => {
-	const { isInit } = useSelector((state: rootState) => state.wallet);
+	const { isInit } = useWalletStore((state) => state);
 	const { blockState, tokenomicsState, votingPowerState } = useDashboard();
 
 	return (

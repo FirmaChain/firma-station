@@ -1,15 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { AccountCard, AssetCard, SendCard, TransferHistoryCard, VestingCard } from '../organisms/accounts';
 import { useTransferHistoryByAddress } from '../organisms/accounts/hooks';
-import { rootState } from '../redux/reducers';
+import { useUserStore, useWalletStore } from '../store';
 import { CardWrap, ContentContainer, LeftCardWrap, RightCardBottomWrap, RightCardTopWrap, RightCardWrap } from '../styles/accounts';
 
 const Accounts = () => {
-	const { isInit } = useSelector((state: rootState) => state.wallet);
-	const { vesting } = useSelector((state: rootState) => state.user);
+	const { isInit } = useWalletStore((state) => state);
+	const { vesting } = useUserStore((state) => state);
 	const { transferHistoryByAddressState, tokenDataState, isLoading, hasMore, loadMoreData } = useTransferHistoryByAddress();
 	const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 

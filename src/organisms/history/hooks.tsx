@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { getHistoryByAddress } from '../../apollo/gqls/query';
 import { IHistoryByAddressState } from '../../interfaces/history';
-import { rootState } from '../../redux/reducers';
+import { useRefreshStore, useWalletStore } from '../../store';
 
 const ITEMS_PER_PAGE = 50;
 
@@ -15,8 +14,8 @@ export const useHistoryByAddress = () => {
 		hasMore: true,
 		offset: 0
 	});
-	const { address } = useSelector((state: rootState) => state.wallet);
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { address } = useWalletStore((state) => state);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const formatHistoryList = (data: any) => {

@@ -1,17 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { PROPOSAL_STATUS_DEPOSIT_PERIOD, PROPOSAL_STATUS_VOTING_PERIOD } from '../constants/governance';
 import CancelProposalButton from '../organisms/governance/cancelProposalButton';
 import { useProposalData } from '../organisms/governance/hooks';
 import { DepositCard, ProposalDetailCard, VotingCard } from '../organisms/governance/proposals';
-import { rootState } from '../redux/reducers';
+import { useWalletStore } from '../store';
 import { ContentContainer } from '../styles/governance';
 
 const Proposals = () => {
 	const proposalId = window.location.pathname.replace('/governance/proposals/', '');
 	const { proposalState } = useProposalData(proposalId, () => (window.location.href = '/governance'));
-	const address = useSelector((v: rootState) => v.wallet.address);
+	const address = useWalletStore((state) => state.address);
 
 	return (
 		<ContentContainer>

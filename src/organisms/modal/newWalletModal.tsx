@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_NEW_WALLET } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import { copyToClipboard, isValidString } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import Password from './password';
@@ -25,7 +23,7 @@ import {
 } from './styles';
 
 const NewWalletModal = () => {
-	const newWalletModalState = useSelector((state: rootState) => state.modal.newWallet);
+	const newWalletModalState = useModalStore((state) => state.newWallet);
 	const { enqueueSnackbar } = useSnackbar();
 	const { getNewMnemonic } = useFirma();
 

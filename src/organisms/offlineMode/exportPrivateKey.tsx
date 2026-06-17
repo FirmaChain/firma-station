@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { rootState } from '../../redux/reducers';
+import { useWalletStore } from '../../store';
 import useFirma from '../../utils/wallet';
 
 const Container = styled.div`
@@ -202,7 +201,7 @@ interface ExportPrivateKeyProps {
 
 const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
 	const { enqueueSnackbar } = useSnackbar();
-	const { address, walletName } = useSelector((state: rootState) => state.wallet);
+	const { address, walletName } = useWalletStore((state) => state);
 	const { isCorrectPassword, getPrivateKey, isValidWallet } = useFirma();
 
 	const [password, setPassword] = useState('');

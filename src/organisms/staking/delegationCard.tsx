@@ -2,15 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ResponsivePie } from '@nivo/pie';
 import ky from 'ky';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router';
 import { FixedSizeList as List } from 'react-window';
 
 import AutoSizer from '../../components/autoSizer';
 import { CHAIN_CONFIG } from '../../config';
 import { IGrantsDataState, IRestakeState, ITotalStakingState } from '../../interfaces/staking';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useUserStore, useWalletStore } from '../../store';
 import {
 	convertNumber,
 	convertNumberFormat,
@@ -183,8 +181,8 @@ const GetDelegatePieData = (totalStakingState: ITotalStakingState) => {
 
 const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
 	const { enqueueSnackbar } = useSnackbar();
-	const { isInit, address, isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
-	const { balance } = useSelector((state: rootState) => state.user);
+	const { isInit, address, isLedger, isMobileApp } = useWalletStore((state) => state);
+	const { balance } = useUserStore((state) => state);
 	const { withdrawAllValidator, getGasEstimationWithdrawAllValidator } = useFirma();
 
 	const pieData = useMemo(() => GetDelegatePieData(totalStakingState), [totalStakingState]);

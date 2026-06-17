@@ -2,8 +2,7 @@ import { FirmaUtil } from '@firmachain/firma-js';
 import ky from 'ky';
 
 import { CHAIN_CONFIG } from '../config';
-import { avatarActions } from '../redux/action';
-import { IAvatar } from '../redux/reducers/avatarReducer';
+import { avatarActions, IAvatar } from '../store';
 import { getValidatorList } from './lcdQuery';
 
 export const getAvatarInfo = (avatarList: IAvatar[], operatorAddress: string): { moniker: string; avatarURL: string } => {
@@ -60,9 +59,9 @@ export const initializeAvatar = (lastUpdated: number) => {
 
 						// Always merge URLs from the crawler into the freshly-fetched
 						// chain validator list. The previous lastUpdated guard skipped
-						// the dispatch entirely when the timestamp hadn't advanced,
+						// the update entirely when the timestamp hadn't advanced,
 						// which kept a stale avatarList (e.g. mainnet validators) in
-						// persisted Redux after a network switch.
+						// persisted app state after a network switch.
 						for (const avatar of avatarList) {
 							for (const avatarUrlRaw of avatarRaw.avatarList) {
 								if (avatar.operatorAddress === avatarUrlRaw.operatorAddress) {

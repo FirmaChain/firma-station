@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { CHAIN_CONFIG, GUIDE_LINK_UNDELEGATE } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useUserStore, useWalletStore } from '../../store';
 import {
 	convertNumber,
 	convertNumberFormat,
@@ -39,10 +37,10 @@ import {
 } from './styles';
 
 const UndelegateModal = () => {
-	const undelegateModalState = useSelector((state: rootState) => state.modal.undelegate);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const undelegateModalState = useModalStore((state) => state.undelegate);
+	const modalData = useModalStore((state) => state.data);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 	const { undelegate, getGasEstimationUndelegate, setUserData } = useFirma();
 

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { rootState } from '../../redux/reducers';
+import { useWalletStore } from '../../store';
 import useFirma from '../../utils/wallet';
 
 const Container = styled.div`
@@ -189,7 +188,7 @@ interface ExportMnemonicProps {
 
 const ExportMnemonic: React.FC<ExportMnemonicProps> = ({ onBack }) => {
 	const { enqueueSnackbar } = useSnackbar();
-	const { address } = useSelector((state: rootState) => state.wallet);
+	const { address } = useWalletStore((state) => state);
 	const { isCorrectPassword, getMnemonic, isValidWallet } = useFirma();
 
 	const [password, setPassword] = useState('');

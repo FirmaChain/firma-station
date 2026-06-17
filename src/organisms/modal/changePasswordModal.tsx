@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import Password from './password';
 import {
 	ButtonWrapper,
@@ -20,7 +18,7 @@ import {
 } from './styles';
 
 const ChangePasswordModal = () => {
-	const changePasswordModalState = useSelector((state: rootState) => state.modal.changePassword);
+	const changePasswordModalState = useModalStore((state) => state.changePassword);
 
 	const [password, setPassword] = useState('');
 	const inputRef = useRef(null);

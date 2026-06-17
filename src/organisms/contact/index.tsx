@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import ky from 'ky';
 import { isMobile } from 'react-device-detect';
-import { useSelector } from 'react-redux';
 import { GridLoader } from 'react-spinners';
 
 import { CHAIN_CONFIG } from '../../config';
-import { rootState } from '../../redux/reducers';
+import { useWalletStore } from '../../store';
 import { encryptData } from '../../utils/keystore';
 import useFirma from '../../utils/wallet';
 import {
@@ -24,7 +23,7 @@ import {
 } from './styles';
 
 const Contact = () => {
-	const { address } = useSelector((state: rootState) => state.wallet);
+	const { address } = useWalletStore((state) => state);
 	const { resetWallet } = useFirma();
 
 	const [isLoading, setLoading] = useState(true);

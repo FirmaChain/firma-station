@@ -1,17 +1,15 @@
 import React from 'react';
 import ky from 'ky';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { CHAIN_CONFIG } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useUserStore, useWalletStore } from '../../store';
 import { convertNumber, convertToFctNumber, getDefaultFee } from '../../utils/common';
 import { Button, ButtonWrapper } from './styles';
 
 const ProposalButtons = () => {
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp, address } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const isInvalidProposalAddress = async () => {

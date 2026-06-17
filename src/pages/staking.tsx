@@ -1,14 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { DelegationCard, StakingCard, ValidatorsCard } from '../organisms/staking';
 import { useGrantData, useStakingData, useValidators } from '../organisms/staking/hooks';
-import { rootState } from '../redux/reducers';
+import { useWalletStore } from '../store';
 import { ContentContainer } from '../styles/staking';
 
 const Staking = () => {
-	const { isInit } = useSelector((state: rootState) => state.wallet);
+	const { isInit } = useWalletStore((state) => state);
 	const { totalStakingState } = useStakingData();
 	const { validatorsState } = useValidators();
 	const { grantDataState } = useGrantData();

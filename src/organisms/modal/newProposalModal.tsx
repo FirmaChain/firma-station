@@ -3,13 +3,11 @@ import { FirmaUtil } from '@firmachain/firma-js';
 import { Params as GovParams } from '@kintsugi-tech/cosmjs-types/cosmos/gov/v1/gov';
 import { Params as StakingParams } from '@kintsugi-tech/cosmjs-types/cosmos/staking/v1beta1/staking';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import Select from 'react-select';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_NEW_PROPOSAL } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useUserStore, useWalletStore } from '../../store';
 import { convertNumber, convertToFctNumber, getDefaultFee, getFeesFromGas, makeDecimalPoint } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import {
@@ -82,11 +80,11 @@ const customStyles = {
 type ProposalParams = Partial<GovParams & StakingParams>;
 
 const NewProposalModal = () => {
-	const newProposalState = useSelector((state: rootState) => state.modal.newProposal);
+	const newProposalState = useModalStore((state) => state.newProposal);
 	const selectInputRef = useRef<any>(null);
 	const { enqueueSnackbar } = useSnackbar();
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 
 	const [proposalType, setProposalType] = useState('');
 	const [title, setTitle] = useState('');

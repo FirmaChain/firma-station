@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_CONFIRM_WALLET } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import useFirma from '../../utils/wallet';
 import {
 	confirmWalletModalWidth,
@@ -24,8 +22,8 @@ import {
 } from './styles';
 
 const ConfirmWalletModal = () => {
-	const confirmWalletModalState = useSelector((state: rootState) => state.modal.confirmWallet);
-	const { mnemonic, password } = useSelector((state: rootState) => state.modal.data);
+	const confirmWalletModalState = useModalStore((state) => state.confirmWallet);
+	const { mnemonic, password } = useModalStore((state) => state.data);
 	const { enqueueSnackbar } = useSnackbar();
 	const { storeWalletFromMnemonic } = useFirma();
 

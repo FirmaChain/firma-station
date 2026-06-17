@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import ky from 'ky';
-import { useSelector } from 'react-redux';
 
 import { BlankCard } from '../../components/card';
 import { CHAIN_CONFIG } from '../../config';
-import { rootState } from '../../redux/reducers';
+import { useUserStore } from '../../store';
 import theme from '../../themes';
 import { convertNumber, convertNumberFormat } from '../../utils/common';
 import { AddressTitleTypo, PriceTypo, UsdTypo, UserBalanceTypo } from './styles';
 
 const AccountCard = () => {
-	const { balance } = useSelector((state: rootState) => state.user);
+	const { balance } = useUserStore((state) => state);
 	const [currentUSDPrice, setPrice] = useState(0.0);
 
 	useEffect(() => {

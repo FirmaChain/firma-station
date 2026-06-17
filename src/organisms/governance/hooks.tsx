@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { groupBy } from 'es-toolkit/array';
 import ky from 'ky';
-import { useSelector } from 'react-redux';
 
 import { getProposalQueryFromId } from '../../apollo/gqls/query';
 import { CHAIN_CONFIG } from '../../config';
 import { IProposalDetailState, IProposalsState } from '../../interfaces/governance';
 import { IProposalQueryData } from '../../interfaces/gql';
 import { IProposalData } from '../../interfaces/lcd';
-import { rootState } from '../../redux/reducers';
+import { useAvatarStore, useRefreshStore } from '../../store';
 import { getAvatarInfoFromAcc } from '../../utils/avatar';
 import { getProposalFromId, getProposalList } from '../../utils/lcdQuery';
 
 export const useGovernanceData = () => {
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [proposalsState, setProposalsState] = useState<IProposalsState>({
 		proposals: []
@@ -63,8 +62,8 @@ export const useGovernanceData = () => {
 };
 
 export const useProposalData = (proposalId: string, errorCallback?: (e: any) => void) => {
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
-	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { avatarList } = useAvatarStore((state) => state);
+	const refreshKey = useRefreshStore((state) => state.refreshKey);
 
 	const [proposalState, setProposalState] = useState<IProposalDetailState | null>(null);
 

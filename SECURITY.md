@@ -50,7 +50,7 @@ credit you in the published advisory if you wish.
 - This repository (`FirmaChain/firma-station`) — the Firma Station web wallet
 - Wallet flows: key generation, mnemonic / private key / Ledger recovery,
   transaction signing, fee/gas handling, broadcast
-- Persistence and local state (keystore, Redux-persist)
+- Persistence and local state (keystore, Zustand app state)
 - Build-time supply-chain issues that affect the published bundle
 - Anything that can lead to loss of user funds, exposure of keys or mnemonics,
   transaction forgery, or unauthorized actions on behalf of a user

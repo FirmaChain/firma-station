@@ -1,14 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 import { ProposalButtons, ProposalCard } from '../organisms/governance';
 import { useGovernanceData } from '../organisms/governance/hooks';
-import { rootState } from '../redux/reducers';
+import { useWalletStore } from '../store';
 import { ContentContainer } from '../styles/governance';
 
 const Governance = () => {
-	const { isInit } = useSelector((state: rootState) => state.wallet);
+	const { isInit } = useWalletStore((state) => state);
 	const { proposalsState } = useGovernanceData();
 	const isMobile = useMediaQuery({ query: '(min-width:0px) and (max-width:599px)' });
 

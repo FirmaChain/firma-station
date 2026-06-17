@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router';
 import { FixedSizeList as List } from 'react-window';
@@ -9,8 +8,7 @@ import AutoSizer from '../../../components/autoSizer';
 import { MultiGauge } from '../../../components/gauge';
 import { CHAIN_CONFIG } from '../../../config';
 import { IProposalDetailState, ITally } from '../../../interfaces/governance';
-import { modalActions } from '../../../redux/action';
-import { rootState } from '../../../redux/reducers';
+import { modalActions, useUserStore, useWalletStore } from '../../../store';
 import { convertNumber, convertNumberFormat, convertToFctNumber, getDefaultFee } from '../../../utils/common';
 import { getDateTimeFormat } from '../../../utils/dateUtil';
 import {
@@ -98,8 +96,8 @@ const Row = ({ data, index, style }: any) => {
 
 const VotingCard = ({ proposalState }: IProps) => {
 	const [currentVotingTab, setVotingTab] = useState(0);
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const isSmall = useMediaQuery({ query: '(max-width: 900px)' });

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { rootState } from '../../redux/reducers';
+import { useWalletStore } from '../../store';
 import useFirma from '../../utils/wallet';
 import { SamplePaperWallet } from '../modal/styles';
 
@@ -173,7 +172,7 @@ interface DownloadPaperWalletProps {
 
 const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => {
 	const { enqueueSnackbar } = useSnackbar();
-	const { address, walletName } = useSelector((state: rootState) => state.wallet);
+	const { address, walletName } = useWalletStore((state) => state);
 	const { isCorrectPassword, downloadPaperWallet, isValidWallet } = useFirma();
 
 	const [password, setPassword] = useState('');

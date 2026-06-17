@@ -1,17 +1,15 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { BlankCard } from '../../components/card';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useUserStore, useWalletStore } from '../../store';
 import theme from '../../themes';
 import { convertNumber, convertToFctNumber, getDefaultFee } from '../../utils/common';
 import { NextButton, TitleTypo } from './styles';
 
 const SendCard = () => {
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	return (

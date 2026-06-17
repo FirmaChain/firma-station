@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 
 import Contact from './organisms/contact';
@@ -8,14 +7,14 @@ import Header from './organisms/header';
 import LoginCard from './organisms/login';
 import Notice from './organisms/notice';
 import Sidebar from './organisms/sidebar';
-import { rootState } from './redux/reducers';
 import Routes from './routes';
+import { useWalletStore } from './store';
 import { MainContainer, RightContainer } from './styles/common';
 import { getContactAddressList, getNotice } from './utils/externalData';
 import useFirma from './utils/wallet';
 
 const AppLayout = () => {
-	const { address } = useSelector((state: rootState) => state.wallet);
+	const { address } = useWalletStore((state) => state);
 	const { isValidWallet } = useFirma();
 	const location = useLocation();
 

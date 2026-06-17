@@ -1,16 +1,14 @@
 import React from 'react';
 import { QRCode } from 'react-qrcode-logo';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useWalletStore } from '../../store';
 import theme from '../../themes';
 import { AddressTypo, ButtonWrapper, CancelButton, ModalContainer, ModalTitle, qrCodeModalWidth, QRCodeWrap, QRContent } from './styles';
 
 const QRCodeModal = () => {
-	const qrCodeModalState = useSelector((state: rootState) => state.modal.qrcode);
-	const { address } = useSelector((state: rootState) => state.wallet);
+	const qrCodeModalState = useModalStore((state) => state.qrcode);
+	const { address } = useWalletStore((state) => state);
 
 	const closeQRCodeModal = () => {
 		modalActions.handleModalQRCode(false);

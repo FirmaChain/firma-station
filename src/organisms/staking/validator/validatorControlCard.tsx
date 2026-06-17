@@ -1,11 +1,9 @@
 import React from 'react';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 
 import { CHAIN_CONFIG } from '../../../config';
 import { IGrantsDataState, ITargetStakingState } from '../../../interfaces/staking';
-import { modalActions } from '../../../redux/action';
-import { rootState } from '../../../redux/reducers';
+import { modalActions, useAvatarStore, useUserStore, useWalletStore } from '../../../store';
 import { convertNumber, convertNumberFormat, convertToFctNumber, getDefaultFee, getFeesFromGas } from '../../../utils/common';
 import useFirma from '../../../utils/wallet';
 import { Button, Buttons, CardWrapper, Content, InnerWrapper, Title } from './styles';
@@ -17,9 +15,9 @@ interface IProps {
 
 const DelegationCard = ({ targetStakingState, grantDataState }: IProps) => {
 	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
+	const { avatarList } = useAvatarStore((state) => state);
 	const { getDelegationList, getDelegation, withdraw, getGasEstimationWithdraw, getUndelegationList } = useFirma();
 
 	const { enqueueSnackbar } = useSnackbar();

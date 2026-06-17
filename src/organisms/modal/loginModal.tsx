@@ -1,10 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Modal } from '../../components/modal';
 import { GUIDE_LINK_LOGIN_WALLET } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore } from '../../store';
 import {
 	ContactUsLeftTypo,
 	ContactUsRightTypo,
@@ -31,7 +29,7 @@ const menuList = [
 ];
 
 const LoginModal = () => {
-	const loginModalState = useSelector((state: rootState) => state.modal.login);
+	const loginModalState = useModalStore((state) => state.login);
 
 	const closeLoginModal = () => {
 		modalActions.handleModalLogin(false);

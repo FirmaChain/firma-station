@@ -2,14 +2,12 @@ import React, { useEffect, useState } from 'react';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Tooltip from '@mui/material/Tooltip';
 import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { Modal } from '../../components/modal';
 import { CHAIN_CONFIG } from '../../config';
 import { SEND_COLOR } from '../../constants/transactions';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useAvatarStore, useModalStore, useUserStore, useWalletStore } from '../../store';
 import { getAvatarInfo } from '../../utils/avatar';
 import { convertNumber, convertNumberFormat, convertToFctNumber, getFeesFromGas } from '../../utils/common';
 import useFirma from '../../utils/wallet';
@@ -150,11 +148,11 @@ interface IRedelegateRestakeData {
 }
 
 const RedelegateRestakeModal = () => {
-	const redelegateRestakeModalState = useSelector((state: rootState) => state.modal.redelegateRestake);
-	const modalData = useSelector((state: rootState) => state.modal.data);
-	const { balance } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
-	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const redelegateRestakeModalState = useModalStore((state) => state.redelegateRestake);
+	const modalData = useModalStore((state) => state.data);
+	const { balance } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
+	const { avatarList } = useAvatarStore((state) => state);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const { redelegate, redelegateWithGrant, getGasEstimationRedelegate, getGasEstimationRedelegateWithGrant, getDelegation, setUserData } =

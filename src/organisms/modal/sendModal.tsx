@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Select from 'react-select';
 import styled from 'styled-components';
 
 import { Modal } from '../../components/modal';
 import { ToggleButton } from '../../components/toggle';
 import { CHAIN_CONFIG, GUIDE_LINK_SEND } from '../../config';
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useModalStore, useUserStore, useWalletStore } from '../../store';
 import { convertNumber, convertToFctNumber, convertToFctString, getDefaultFee, getFeesFromGas, makeDecimalPoint } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 import {
@@ -84,9 +82,9 @@ const customStyles = {
 };
 
 const SendModal = () => {
-	const sendModalState = useSelector((state: rootState) => state.modal.send);
-	const { balance, tokenList } = useSelector((state: rootState) => state.user);
-	const { isLedger, isMobileApp } = useSelector((state: rootState) => state.wallet);
+	const sendModalState = useModalStore((state) => state.send);
+	const { balance, tokenList } = useUserStore((state) => state);
+	const { isLedger, isMobileApp } = useWalletStore((state) => state);
 
 	const {
 		sendFCT,

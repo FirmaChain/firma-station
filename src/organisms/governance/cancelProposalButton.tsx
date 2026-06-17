@@ -1,8 +1,6 @@
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { modalActions } from '../../redux/action';
-import { rootState } from '../../redux/reducers';
+import { modalActions, useWalletStore } from '../../store';
 import { getFeesFromGas } from '../../utils/common';
 import useFirma from '../../utils/wallet';
 
@@ -30,7 +28,7 @@ const ButtonText = styled.span`
 `;
 
 const CancelProposalButton = ({ proposalId }: { proposalId: string }) => {
-	const { isLedger } = useSelector((state: rootState) => state.wallet);
+	const { isLedger } = useWalletStore((state) => state);
 	const { cancelProposal, getGasEstimationCancelProposal } = useFirma();
 
 	const cancelProposalTx = (resolveTx: () => void, rejectTx: () => void, gas = 0) =>
