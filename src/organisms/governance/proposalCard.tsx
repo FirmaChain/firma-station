@@ -1,7 +1,7 @@
 import React from 'react';
 import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useMediaQuery } from 'react-responsive';
 
 import { PROPOSAL_STATUS } from '../../constants/governance';

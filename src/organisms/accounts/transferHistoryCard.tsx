@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { CHAIN_CONFIG, OSMOSIS_EXPLORER } from '../../config';
 import { getDateFormat, getTimeFormat } from '../../utils/dateUtil';

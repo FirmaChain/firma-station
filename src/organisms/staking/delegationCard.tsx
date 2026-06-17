@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import ky from 'ky';
 import AutoSizer from '../../components/autoSizer';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { FixedSizeList as List } from 'react-window';
 import { ResponsivePie } from '@nivo/pie';
 import { useSelector } from 'react-redux';

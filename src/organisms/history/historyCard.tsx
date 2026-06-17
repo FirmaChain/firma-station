@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { CHAIN_CONFIG } from '../../config';
 import { TRANSACTION_TYPE_MODEL } from '../../constants/transactions';

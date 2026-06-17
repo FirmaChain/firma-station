@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import AutoSizer from '../../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useMediaQuery } from 'react-responsive';

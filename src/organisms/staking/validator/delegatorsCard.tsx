@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import AutoSizer from '../../../components/autoSizer';
 import { useMediaQuery } from 'react-responsive';
 import { FixedSizeList as List } from 'react-window';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 
 const InlineValidator = styled.div`

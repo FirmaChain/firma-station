@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Drawer from '@mui/material/Drawer';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export const DrawerStyled = styled(Drawer)`
   & .MuiDrawer-paper {

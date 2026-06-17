@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 import { rootState } from '../redux/reducers';
 
 import {
@@ -44,12 +44,10 @@ const routes = {
 
 interface IProps {
   auth: boolean;
-  exact: boolean;
-  path: string;
   component: React.FC;
 }
 
-const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
+const CustomRoute = ({ auth, component: Component }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const { address } = useSelector((state: rootState) => state.wallet);
 
@@ -64,24 +62,20 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
     }
   }, [isUnauthorized, enqueueSnackbar]);
 
-  const renderFunc = (props: any) => {
-    if (isUnauthorized) {
-      return <Redirect to={{ pathname: '/' }} />;
-    }
+  if (isUnauthorized) {
+    return <Navigate to="/" replace />;
+  }
 
-    return <Component {...props} />;
-  };
-
-  return <Route {...p} render={renderFunc} />;
+  return <Component />;
 };
 
 const route = () => (
-  <Switch>
+  <Routes>
     {Object.values(routes).map((x, i) => (
-      <CustomRoute key={i} exact path={x.path} component={x.component} auth={x.auth} />
+      <Route key={i} path={x.path} element={<CustomRoute component={x.component} auth={x.auth} />} />
     ))}
-    <Route render={() => <Redirect to="/" />} />
-  </Switch>
+    <Route path="*" element={<Navigate to="/" replace />} />
+  </Routes>
 );
 
 export default route;

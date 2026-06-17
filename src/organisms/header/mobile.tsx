@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Hamburger from 'hamburger-react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { CHAIN_CONFIG } from '../../config';
 

@@ -5,7 +5,7 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LockIcon from '@mui/icons-material/Lock';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export const HeaderContainer = styled.div`
   width: calc(100% - 80px);
