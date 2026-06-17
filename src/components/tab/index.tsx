@@ -1,3 +1,3 @@
-import CustomTabs from "./customTab";
+import CustomTabs from './customTab';
 
 export { CustomTabs };

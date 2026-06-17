@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { AutoSizer as AutoSizerBase } from 'react-virtualized-auto-sizer';
 
 interface IProps {
-  children: (size: { width: number; height: number }) => ReactNode;
+	children: (size: { width: number; height: number }) => ReactNode;
 }
 
 // react-virtualized-auto-sizer v2 dropped the children render-function API in
@@ -17,14 +17,12 @@ interface IProps {
 // style, letting wide content grow the parent on every measure (runaway width).
 // Restore it explicitly.
 const AutoSizer = ({ children }: IProps) => {
-  return (
-    <AutoSizerBase
-      style={{ overflow: 'visible', height: 0, width: 0 }}
-      renderProp={({ width, height }) =>
-        width === undefined || height === undefined ? null : children({ width, height })
-      }
-    />
-  );
+	return (
+		<AutoSizerBase
+			style={{ overflow: 'visible', height: 0, width: 0 }}
+			renderProp={({ width, height }) => (width === undefined || height === undefined ? null : children({ width, height }))}
+		/>
+	);
 };
 
 export default AutoSizer;

@@ -1,3 +1,3 @@
-import AessetTable from "./aessetTable";
+import AessetTable from './aessetTable';
 
 export { AessetTable };

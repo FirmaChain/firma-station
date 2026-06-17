@@ -1,194 +1,192 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { isMobile, isTablet } from 'react-device-detect';
+import { useSelector } from 'react-redux';
 
-import useFirma from '../../utils/wallet';
-import { copyToClipboard, isExternalConnect } from '../../utils/common';
 import { CHAIN_CONFIG } from '../../config';
 import { modalActions } from '../../redux/action';
 import { rootState } from '../../redux/reducers';
-
+import { copyToClipboard, isExternalConnect } from '../../utils/common';
+import useFirma from '../../utils/wallet';
 import {
-  PaperwalletModal,
-  QRCodeModal,
-  LoginModal,
-  SettingsModal,
-  NewWalletModal,
-  ConfirmWalletModal,
-  RecoverModal,
-  ExportPrivatekeyModal,
-  ExportMnemonicModal,
-  ChangePasswordModal,
-  ConnectLedgerModal,
-  ConnectAppModal,
-  DelegateModal,
-  RedelegateModal,
-  RedelegateRestakeModal,
-  UndelegateModal,
-  DepositModal,
-  VotingModal,
-  NewProposalModal,
-  SendModal,
-  ConfirmTxModal,
-  QueueTxModal,
-  GasEstimationModal,
-  RestakeModal,
-  DisconnectModal,
+	ChangePasswordModal,
+	ConfirmTxModal,
+	ConfirmWalletModal,
+	ConnectAppModal,
+	ConnectLedgerModal,
+	DelegateModal,
+	DepositModal,
+	DisconnectModal,
+	ExportMnemonicModal,
+	ExportPrivatekeyModal,
+	GasEstimationModal,
+	LoginModal,
+	NewProposalModal,
+	NewWalletModal,
+	PaperwalletModal,
+	QRCodeModal,
+	QueueTxModal,
+	RecoverModal,
+	RedelegateModal,
+	RedelegateRestakeModal,
+	RestakeModal,
+	SendModal,
+	SettingsModal,
+	UndelegateModal,
+	VotingModal
 } from '../modal';
-
 import {
-  HeaderContainer,
-  HeaderRightWrapper,
-  HeaderLeftWrapper,
-  NetworkButton,
-  NetworkText,
-  NetworkStatus,
-  AddressTypo,
-  CopyIconImg,
-  SettingIconImg,
-  LoginWrap,
-  HeaderTypo,
-  LoginIconImg,
-  ProfileImg,
-  BarDiv,
-  LedgerIconImg,
-  QrIconImg,
-  LockIconImg,
-  LogoutImg,
+	AddressTypo,
+	BarDiv,
+	CopyIconImg,
+	HeaderContainer,
+	HeaderLeftWrapper,
+	HeaderRightWrapper,
+	HeaderTypo,
+	LedgerIconImg,
+	LockIconImg,
+	LoginIconImg,
+	LoginWrap,
+	LogoutImg,
+	NetworkButton,
+	NetworkStatus,
+	NetworkText,
+	ProfileImg,
+	QrIconImg,
+	SettingIconImg
 } from './styles';
 
 function HeaderDesktop() {
-  const { enqueueSnackbar } = useSnackbar();
-  const { isInit, isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
-  const {
-    paperwallet,
-    qrcode,
-    login,
-    settings,
-    disconnect,
-    newWallet,
-    confirmWallet,
-    recoverMnemonic,
-    exportPrivatekey,
-    exportMnemonic,
-    changePassword,
-    connectLedger,
-    connectApp,
-    delegate,
-    redelegate,
-    redelegateRestake,
-    undelegate,
-    deposit,
-    voting,
-    newProposal,
-    send,
-    confirmTx,
-    queueTx,
-    gasEstimation,
-    restake,
-  } = useSelector((state: rootState) => state.modal);
+	const { enqueueSnackbar } = useSnackbar();
+	const { isInit, isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
+	const {
+		paperwallet,
+		qrcode,
+		login,
+		settings,
+		disconnect,
+		newWallet,
+		confirmWallet,
+		recoverMnemonic,
+		exportPrivatekey,
+		exportMnemonic,
+		changePassword,
+		connectLedger,
+		connectApp,
+		delegate,
+		redelegate,
+		redelegateRestake,
+		undelegate,
+		deposit,
+		voting,
+		newProposal,
+		send,
+		confirmTx,
+		queueTx,
+		gasEstimation,
+		restake
+	} = useSelector((state: rootState) => state.modal);
 
-  const { showAddressOnDevice, checkSession } = useFirma();
+	const { showAddressOnDevice, checkSession } = useFirma();
 
-  const onLogin = () => {
-    modalActions.handleModalLogin(true);
-  };
+	const onLogin = () => {
+		modalActions.handleModalLogin(true);
+	};
 
-  const clipboard = () => {
-    copyToClipboard(address);
+	const clipboard = () => {
+		copyToClipboard(address);
 
-    enqueueSnackbar('Copied', {
-      variant: 'success',
-      autoHideDuration: 1000,
-    });
-  };
+		enqueueSnackbar('Copied', {
+			variant: 'success',
+			autoHideDuration: 1000
+		});
+	};
 
-  const onSettings = () => {
-    modalActions.handleModalSettings(true);
-  };
+	const onSettings = () => {
+		modalActions.handleModalSettings(true);
+	};
 
-  const onDisconnect = () => {
-    modalActions.handleModalDisconnect(true);
-  };
+	const onDisconnect = () => {
+		modalActions.handleModalDisconnect(true);
+	};
 
-  const onClickLedger = () => {
-    showAddressOnDevice()
-      .then(() => {})
-      .catch(() => {
-        enqueueSnackbar('Failed connect ledger', {
-          variant: 'success',
-          autoHideDuration: 2000,
-        });
-      });
-  };
+	const onClickLedger = () => {
+		showAddressOnDevice()
+			.then(() => {})
+			.catch(() => {
+				enqueueSnackbar('Failed connect ledger', {
+					variant: 'success',
+					autoHideDuration: 2000
+				});
+			});
+	};
 
-  const onClickQR = () => {
-    modalActions.handleModalQRCode(true);
-  };
+	const onClickQR = () => {
+		modalActions.handleModalQRCode(true);
+	};
 
-  return (
-    <HeaderContainer>
-      <HeaderLeftWrapper>
-        <NetworkButton>
-          <NetworkStatus />
-          <NetworkText>{CHAIN_CONFIG.FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
-        </NetworkButton>
-      </HeaderLeftWrapper>
-      {(isMobile || isTablet) === false && (
-        <HeaderRightWrapper>
-          {isInit && (
-            <HeaderLeftWrapper>
-              <ProfileImg $src={undefined} />
-              <AddressTypo onClick={clipboard}>{address}</AddressTypo>
-              <BarDiv />
-              {!isExternalConnect(isLedger, isMobileApp) && <LockIconImg onClick={() => checkSession()} />}
-              {isLedger && <LedgerIconImg onClick={onClickLedger} />}
-              <QrIconImg onClick={onClickQR} />
-              <CopyIconImg onClick={clipboard} />
-              {isExternalConnect(isLedger, isMobileApp) ? (
-                <LogoutImg onClick={onDisconnect} />
-              ) : (
-                <SettingIconImg onClick={onSettings} />
-              )}
-            </HeaderLeftWrapper>
-          )}
-          {isInit === false && (
-            <LoginWrap onClick={onLogin} data-testid="header-login-button">
-              <LoginIconImg />
-              <HeaderTypo>Login</HeaderTypo>
-            </LoginWrap>
-          )}
-        </HeaderRightWrapper>
-      )}
+	return (
+		<HeaderContainer>
+			<HeaderLeftWrapper>
+				<NetworkButton>
+					<NetworkStatus />
+					<NetworkText>{CHAIN_CONFIG.FIRMACHAIN_CONFIG.chainID.toUpperCase()}</NetworkText>
+				</NetworkButton>
+			</HeaderLeftWrapper>
+			{(isMobile || isTablet) === false && (
+				<HeaderRightWrapper>
+					{isInit && (
+						<HeaderLeftWrapper>
+							<ProfileImg $src={undefined} />
+							<AddressTypo onClick={clipboard}>{address}</AddressTypo>
+							<BarDiv />
+							{!isExternalConnect(isLedger, isMobileApp) && <LockIconImg onClick={() => checkSession()} />}
+							{isLedger && <LedgerIconImg onClick={onClickLedger} />}
+							<QrIconImg onClick={onClickQR} />
+							<CopyIconImg onClick={clipboard} />
+							{isExternalConnect(isLedger, isMobileApp) ? (
+								<LogoutImg onClick={onDisconnect} />
+							) : (
+								<SettingIconImg onClick={onSettings} />
+							)}
+						</HeaderLeftWrapper>
+					)}
+					{isInit === false && (
+						<LoginWrap onClick={onLogin} data-testid="header-login-button">
+							<LoginIconImg />
+							<HeaderTypo>Login</HeaderTypo>
+						</LoginWrap>
+					)}
+				</HeaderRightWrapper>
+			)}
 
-      {paperwallet && <PaperwalletModal />}
-      {qrcode && <QRCodeModal />}
-      {login && <LoginModal />}
-      {settings && <SettingsModal />}
-      {newWallet && <NewWalletModal />}
-      {confirmWallet && <ConfirmWalletModal />}
-      {recoverMnemonic && <RecoverModal />}
-      {exportPrivatekey && <ExportPrivatekeyModal />}
-      {exportMnemonic && <ExportMnemonicModal />}
-      {changePassword && <ChangePasswordModal />}
-      {connectLedger && <ConnectLedgerModal />}
-      {connectApp && <ConnectAppModal />}
-      {disconnect && <DisconnectModal />}
-      {delegate && <DelegateModal />}
-      {redelegate && <RedelegateModal />}
-      {redelegateRestake && <RedelegateRestakeModal />}
-      {undelegate && <UndelegateModal />}
-      {deposit && <DepositModal />}
-      {voting && <VotingModal />}
-      {newProposal && <NewProposalModal />}
-      {send && <SendModal />}
-      {confirmTx && <ConfirmTxModal />}
-      {queueTx && <QueueTxModal />}
-      {gasEstimation && <GasEstimationModal />}
-      {restake && <RestakeModal />}
-    </HeaderContainer>
-  );
+			{paperwallet && <PaperwalletModal />}
+			{qrcode && <QRCodeModal />}
+			{login && <LoginModal />}
+			{settings && <SettingsModal />}
+			{newWallet && <NewWalletModal />}
+			{confirmWallet && <ConfirmWalletModal />}
+			{recoverMnemonic && <RecoverModal />}
+			{exportPrivatekey && <ExportPrivatekeyModal />}
+			{exportMnemonic && <ExportMnemonicModal />}
+			{changePassword && <ChangePasswordModal />}
+			{connectLedger && <ConnectLedgerModal />}
+			{connectApp && <ConnectAppModal />}
+			{disconnect && <DisconnectModal />}
+			{delegate && <DelegateModal />}
+			{redelegate && <RedelegateModal />}
+			{redelegateRestake && <RedelegateRestakeModal />}
+			{undelegate && <UndelegateModal />}
+			{deposit && <DepositModal />}
+			{voting && <VotingModal />}
+			{newProposal && <NewProposalModal />}
+			{send && <SendModal />}
+			{confirmTx && <ConfirmTxModal />}
+			{queueTx && <QueueTxModal />}
+			{gasEstimation && <GasEstimationModal />}
+			{restake && <RestakeModal />}
+		</HeaderContainer>
+	);
 }
 
 export default React.memo(HeaderDesktop);

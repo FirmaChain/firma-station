@@ -1,112 +1,112 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router';
 
-import { mainMenuList, subMenuList, bottomMenuList } from '../../constants/sidebar';
+import { bottomMenuList, mainMenuList, subMenuList } from '../../constants/sidebar';
 import {
-  DrawerStyled,
-  LogoImg,
-  MainMenuWrapper,
-  MainMenuList,
-  MainMenuItem,
-  MainMenuIcon,
-  MainMenuLabel,
-  SubMenuWrapper,
-  SubMenuList,
-  SubMenuItem,
-  SubMenuIcon,
-  SubMenuLabel,
-  BottomMenuWrapper,
-  BottomMenuList,
-  BottomMenuItem,
-  BottomMenuLabel,
-  MenuDivider,
-  LinkIcon,
+	BottomMenuItem,
+	BottomMenuLabel,
+	BottomMenuList,
+	BottomMenuWrapper,
+	DrawerStyled,
+	LinkIcon,
+	LogoImg,
+	MainMenuIcon,
+	MainMenuItem,
+	MainMenuLabel,
+	MainMenuList,
+	MainMenuWrapper,
+	MenuDivider,
+	SubMenuIcon,
+	SubMenuItem,
+	SubMenuLabel,
+	SubMenuList,
+	SubMenuWrapper
 } from './styles';
 
 function Sidebar() {
-  const location = useLocation();
+	const location = useLocation();
 
-  const linkTo = (e: any, externalLink: string) => {
-    if (externalLink !== '') {
-      e.preventDefault();
-      window.open(externalLink);
-    }
-  };
-  return (
-    <DrawerStyled variant='permanent' anchor='left' data-testid="sidebar-navigation">
-      <Link to={{ pathname: `/` }} data-testid="sidebar-logo">
-        <LogoImg />
-      </Link>
+	const linkTo = (e: any, externalLink: string) => {
+		if (externalLink !== '') {
+			e.preventDefault();
+			window.open(externalLink);
+		}
+	};
+	return (
+		<DrawerStyled variant="permanent" anchor="left" data-testid="sidebar-navigation">
+			<Link to={{ pathname: `/` }} data-testid="sidebar-logo">
+				<LogoImg />
+			</Link>
 
-      <MainMenuWrapper>
-        <MainMenuList>
-          {mainMenuList.map((menu, index) => {
-            return (
-              <MainMenuItem
-                key={index}
-                selected={'/' + location.pathname.split('/')[1] === menu.path}
-                onClick={(e) => linkTo(e, menu.externalLink)}
-                to={{ pathname: menu.path }}
-                data-testid={`sidebar-main-${menu.name.toLowerCase()}`}
-              >
-                <MainMenuIcon>
-                  <menu.icon />
-                </MainMenuIcon>
-                <MainMenuLabel>{menu.name}</MainMenuLabel>
-              </MainMenuItem>
-            );
-          })}
-        </MainMenuList>
-      </MainMenuWrapper>
+			<MainMenuWrapper>
+				<MainMenuList>
+					{mainMenuList.map((menu, index) => {
+						return (
+							<MainMenuItem
+								key={index}
+								selected={'/' + location.pathname.split('/')[1] === menu.path}
+								onClick={(e) => linkTo(e, menu.externalLink)}
+								to={{ pathname: menu.path }}
+								data-testid={`sidebar-main-${menu.name.toLowerCase()}`}
+							>
+								<MainMenuIcon>
+									<menu.icon />
+								</MainMenuIcon>
+								<MainMenuLabel>{menu.name}</MainMenuLabel>
+							</MainMenuItem>
+						);
+					})}
+				</MainMenuList>
+			</MainMenuWrapper>
 
-      <MenuDivider>&nbsp;</MenuDivider>
+			<MenuDivider>&nbsp;</MenuDivider>
 
-      <SubMenuWrapper>
-        <SubMenuList>
-          {subMenuList.map((menu, index) => {
-            return (
-              <SubMenuItem 
-                key={index} 
-                onClick={(e) => linkTo(e, menu.externalLink)} 
-                to={{ pathname: menu.path }}
-                data-testid={`sidebar-sub-${menu.name.toLowerCase().replace(/\s+/g, '-')}`}
-              >
-                <SubMenuIcon>
-                  <menu.icon />
-                </SubMenuIcon>
-                <SubMenuLabel>
-                  {menu.name}
-                  <LinkIcon />
-                </SubMenuLabel>
-              </SubMenuItem>
-            );
-          })}
-        </SubMenuList>
-      </SubMenuWrapper>
+			<SubMenuWrapper>
+				<SubMenuList>
+					{subMenuList.map((menu, index) => {
+						return (
+							<SubMenuItem
+								key={index}
+								onClick={(e) => linkTo(e, menu.externalLink)}
+								to={{ pathname: menu.path }}
+								data-testid={`sidebar-sub-${menu.name.toLowerCase().replace(/\s+/g, '-')}`}
+							>
+								<SubMenuIcon>
+									<menu.icon />
+								</SubMenuIcon>
+								<SubMenuLabel>
+									{menu.name}
+									<LinkIcon />
+								</SubMenuLabel>
+							</SubMenuItem>
+						);
+					})}
+				</SubMenuList>
+			</SubMenuWrapper>
 
-      <MenuDivider>&nbsp;</MenuDivider>
+			<MenuDivider>&nbsp;</MenuDivider>
 
-      <BottomMenuWrapper>
-        <BottomMenuList>
-          {bottomMenuList.map((menu, index) => {
-            return (
-              <BottomMenuItem 
-                key={index} 
-                onClick={(e) => linkTo(e, menu.externalLink)} 
-                to={{ pathname: menu.path }}
-                data-testid={`sidebar-bottom-${menu.name.toLowerCase()}`}
-              >
-                <BottomMenuLabel>
-                  {menu.name}
-                  <LinkIcon />
-                </BottomMenuLabel>
-              </BottomMenuItem>
-            );
-          })}
-        </BottomMenuList>
-      </BottomMenuWrapper>
-    </DrawerStyled>
-  );
+			<BottomMenuWrapper>
+				<BottomMenuList>
+					{bottomMenuList.map((menu, index) => {
+						return (
+							<BottomMenuItem
+								key={index}
+								onClick={(e) => linkTo(e, menu.externalLink)}
+								to={{ pathname: menu.path }}
+								data-testid={`sidebar-bottom-${menu.name.toLowerCase()}`}
+							>
+								<BottomMenuLabel>
+									{menu.name}
+									<LinkIcon />
+								</BottomMenuLabel>
+							</BottomMenuItem>
+						);
+					})}
+				</BottomMenuList>
+			</BottomMenuWrapper>
+		</DrawerStyled>
+	);
 }
 
 export default React.memo(Sidebar);

@@ -1,8 +1,31 @@
 {
   "bracketSpacing": true,
-  "printWidth": 120,
+  "printWidth": 140,
   "singleQuote": true,
   "trailingComma": "none",
-  "tabWidth": 2,
-  "useTabs": false
+  "tabWidth": 4,
+  "useTabs": true,
+  "importOrder": [
+    "^node:$",
+    "",
+    "^(react/(.*)$)|^(react$)",
+    "^(next/(.*)$)|^(next$)",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/types$",
+    "^@/types/(.*)$",
+    "^@/config$",
+    "^@/config/(.*)$",
+    "^@/paths$",
+    "^@/data/(.*)$",
+    "^@/lib/(.*)$",
+    "^@/actions/(.*)$",
+    "^@/contexts/(.*)$",
+    "^@/hooks/(.*)$",
+    "^@/components/(.*)$",
+    "^@/styles/(.*)$",
+    "",
+    "^[./]"
+  ],
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"]
 }

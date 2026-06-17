@@ -1,5 +1,5 @@
-import ProposalDetailCard from "./proposalDetailCard";
-import VotingCard from "./votingCard";
-import DepositCard from "./depositCard";
+import DepositCard from './depositCard';
+import ProposalDetailCard from './proposalDetailCard';
+import VotingCard from './votingCard';
 
 export { ProposalDetailCard, VotingCard, DepositCard };

@@ -1,87 +1,87 @@
 export interface IValidatorData {
-  validatorAddress: string;
-  validatorMoniker: string;
-  validatorAvatar: string;
-  validatorDetail: string;
-  validatorWebsite: string;
-  selfDelegateAddress: string;
-  valconsAddress: string;
-  votingPower: number;
-  votingPowerPercent: string;
-  commission: number;
-  status: string;
-  jailed: boolean;
+	validatorAddress: string;
+	validatorMoniker: string;
+	validatorAvatar: string;
+	validatorDetail: string;
+	validatorWebsite: string;
+	selfDelegateAddress: string;
+	valconsAddress: string;
+	votingPower: number;
+	votingPowerPercent: string;
+	commission: number;
+	status: string;
+	jailed: boolean;
 }
 
 export interface ISigningInfo {
-  address: string;
-  start_height: string;
-  index_offset: string;
-  jailed_until: string;
-  tombstoned: boolean;
-  missed_blocks_counter: string;
+	address: string;
+	start_height: string;
+	index_offset: string;
+	jailed_until: string;
+	tombstoned: boolean;
+	missed_blocks_counter: string;
 }
 
 export interface IProposalData {
-  proposalId: string;
-  status: string;
-  title: string;
-  description: string;
-  proposalTypeSummary: string[];
-  submitTime: string;
-  votingStartTime: string;
-  votingEndTime: string;
-  paramQuorum: number;
-  paramMinDepositAmount: number;
-  periodDeposit: number;
-  extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | IAuthzExec | IMsgSend | null;
-  messages: IProposalMessageItem[];
-  proposer: string;
-  tally: {
-    yes: number;
-    no: number;
-    noWithVeto: number;
-    abstain: number;
-    [key: string]: number;
-  };
+	proposalId: string;
+	status: string;
+	title: string;
+	description: string;
+	proposalTypeSummary: string[];
+	submitTime: string;
+	votingStartTime: string;
+	votingEndTime: string;
+	paramQuorum: number;
+	paramMinDepositAmount: number;
+	periodDeposit: number;
+	extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | IAuthzExec | IMsgSend | null;
+	messages: IProposalMessageItem[];
+	proposer: string;
+	tally: {
+		yes: number;
+		no: number;
+		noWithVeto: number;
+		abstain: number;
+		[key: string]: number;
+	};
 }
 
 interface ISoftwareUpgrade {
-  height: string;
-  name: string;
-  info: string;
+	height: string;
+	name: string;
+	info: string;
 }
 
 interface ICommunityPoolSpend {
-  recipient: string;
-  amount: string;
-  amounts?: ITokenAmount[];
+	recipient: string;
+	amount: string;
+	amounts?: ITokenAmount[];
 }
 
 interface IParamChange {
-  changes?: { subspace: string; key: string; value: string }[];
-  params?: Record<string, any>;
+	changes?: { subspace: string; key: string; value: string }[];
+	params?: Record<string, any>;
 }
 
 interface IAuthzExec {
-  grantee: string;
-  sends: IMsgSend[];
+	grantee: string;
+	sends: IMsgSend[];
 }
 
 interface IMsgSend {
-  fromAddress: string;
-  toAddress: string;
-  amounts: ITokenAmount[];
+	fromAddress: string;
+	toAddress: string;
+	amounts: ITokenAmount[];
 }
 
 interface ITokenAmount {
-  denom: string;
-  amount: string;
+	denom: string;
+	amount: string;
 }
 
 export interface IProposalMessageItem {
-  typeRaw: string;
-  typeLabel: string;
-  extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | IAuthzExec | IMsgSend | null;
-  raw: any;
+	typeRaw: string;
+	typeLabel: string;
+	extraData: ISoftwareUpgrade | ICommunityPoolSpend | IParamChange | IAuthzExec | IMsgSend | null;
+	raw: any;
 }

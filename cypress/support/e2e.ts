@@ -5,7 +5,7 @@
 // For example, you can add custom commands or import additional support files here.
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

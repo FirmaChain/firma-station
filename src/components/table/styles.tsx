@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import styled from 'styled-components';
 
 export const TableContainerStyled = styled(TableContainer)`
-  background-color: ${({ theme }) => theme.colors.backgroundSideBar} !important;
-  box-shadow: 0 !important;
-  & * {
-    color: ${({ theme }) => theme.colors.defaultDarkGray} !important;
-    border-bottom: 1px solid ${({ theme }) => theme.colors.borderLine} !important;
-  }
+	background-color: ${({ theme }) => theme.colors.backgroundSideBar} !important;
+	box-shadow: 0 !important;
+	& * {
+		color: ${({ theme }) => theme.colors.defaultDarkGray} !important;
+		border-bottom: 1px solid ${({ theme }) => theme.colors.borderLine} !important;
+	}
 `;
 
 export const TableStyled = styled(Table)``;

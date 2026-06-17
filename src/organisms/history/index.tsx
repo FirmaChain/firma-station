@@ -1,3 +1,3 @@
-import HistoryCard from "./historyCard";
+import HistoryCard from './historyCard';
 
 export { HistoryCard };

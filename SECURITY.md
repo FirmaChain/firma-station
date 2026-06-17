@@ -60,7 +60,7 @@ credit you in the published advisory if you wish.
 - FirmaChain core node software — report to its own repository
 - Third-party validators, RPC providers, or block explorers
 - Social engineering of FirmaChain staff or users
-- Issues affecting unsupported versions (see *Supported Versions*)
+- Issues affecting unsupported versions (see _Supported Versions_)
 - Theoretical findings without a demonstrable impact path
 - Best-practice / informational findings without a concrete vulnerability
   (style, performance, missing security headers on non-sensitive routes, etc.)

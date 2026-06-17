@@ -1,10 +1,10 @@
 export interface Key {
-  address: string;
-  wallet: string;
+	address: string;
+	wallet: string;
 }
 
 export interface Wallet {
-  mnemonic: string;
-  privateKey: string;
-  address: string;
+	mnemonic: string;
+	privateKey: string;
+	address: string;
 }

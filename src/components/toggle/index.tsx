@@ -1,3 +1,3 @@
-import ToggleButton from "./toggleButton";
+import ToggleButton from './toggleButton';
 
 export { ToggleButton };

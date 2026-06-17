@@ -79,11 +79,11 @@ time,
 mark,
 audio,
 video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font: inherit;
-  vertical-align: baseline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	vertical-align: baseline;
 }
 
 article,
@@ -97,104 +97,104 @@ hgroup,
 menu,
 nav,
 section {
-  display: block;
+	display: block;
 }
 
 body {
-  width: 100vw;
-  line-height: 1;
+	width: 100vw;
+	line-height: 1;
 }
 
 ol,
 ul {
-  list-style: none;
+	list-style: none;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 blockquote,
 q {
-  quotes: none;
+	quotes: none;
 }
 
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
-  content: none;
+	content: '';
+	content: none;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 html,
 body {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
 }
 
 a {
-  text-decoration: none;
-  outline: none;
+	text-decoration: none;
+	outline: none;
 }
 
 a:hover,
 a:active {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-  background: #252525;
+	width: 6px;
+	height: 6px;
+	background: #252525;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #404040;
-  border-radius: 2px;
+	background: #404040;
+	border-radius: 2px;
 }
 
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner,
 ::-webkit-resizer {
-  background: #252525;
+	background: #252525;
 }
 
 * {
-  font-family: "Lato" !important;
+	font-family: 'Lato' !important;
 }
 
 body {
-  min-height: 100vh;
+	min-height: 100vh;
 }
 
-body>#root>div {
-  min-height: 100vh;
+body > #root > div {
+	min-height: 100vh;
 }
 
 @font-face {
-  src: url("./styles/fonts/Metropolis-SemiBold.woff") format("woff");
-  font-family: "Metropolis-SemiBold";
+	src: url('./styles/fonts/Metropolis-SemiBold.woff') format('woff');
+	font-family: 'Metropolis-SemiBold';
 }
 
 html {
-  font-size: 62.5%;
+	font-size: 62.5%;
 }
 
 .clamp-single-line {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  word-break: break-all;
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	word-break: break-all;
 
-  white-space: unset !important;
+	white-space: unset !important;
 }

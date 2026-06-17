@@ -1,26 +1,25 @@
-import { clearKeys, storeKey, getStoredWallet, invalidateWallet } from "./localStorage";
+import { clearKeys, getStoredWallet, invalidateWallet, storeKey } from './localStorage';
+import { Wallet } from './types';
 
-import { Wallet } from "./types";
-
-const USER_STORE = "USER_STORE";
-const FIRMA_STORE = "FIRMA_STORE";
+const USER_STORE = 'USER_STORE';
+const FIRMA_STORE = 'FIRMA_STORE';
 
 export const getRandomKey = () => {
-  return new Date().getTime().toString();
+	return new Date().getTime().toString();
 };
 
 export const clearKey = () => {
-  clearKeys();
+	clearKeys();
 };
 
 export const storeWallet = (key: string, wallet: Wallet, isFirma = false) => {
-  storeKey(isFirma ? FIRMA_STORE : USER_STORE, key, wallet);
+	storeKey(isFirma ? FIRMA_STORE : USER_STORE, key, wallet);
 };
 
 export const isInvalidWallet = () => {
-  return invalidateWallet(FIRMA_STORE);
+	return invalidateWallet(FIRMA_STORE);
 };
 
 export const restoreWallet = (key: string, isFirma = false) => {
-  return getStoredWallet(isFirma ? FIRMA_STORE : USER_STORE, key);
+	return getStoredWallet(isFirma ? FIRMA_STORE : USER_STORE, key);
 };

@@ -1,449 +1,445 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { rootState } from '../../redux/reducers';
-import useFirma from '../../utils/wallet';
-import { CHAIN_CONFIG } from '../../config';
-import { convertNumber, convertToFctString, makeDecimalPoint } from '../../utils/common';
-import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
-import {
-  IDelegationState,
-  IDelegationList,
-  ITotalStakingState,
-  ITargetStakingState,
-  IValidatorsState,
-  IValidator,
-  IGrantsDataState,
-  IUndelegationList,
-  IRedelegationList,
-  IRedelegationState,
-  IUndelegationState,
-} from '../../interfaces/staking';
-import { ISigningInfo, IValidatorData } from '../../interfaces/lcd';
-
-import {
-  getValidatorList,
-  getInflation,
-  getTotalSupply,
-  getTotalVotingPower,
-  getSignedBlocksWindow,
-  getValidatorFromAddress,
-  getValidatorDelegationsFromAddress,
-  getValidatorUndelegationsFromAddress,
-  getAccAddressFromValOperAddress,
-  getSigningInfos,
-} from '../../utils/lcdQuery';
 import { getValidatorRedelegationsFromIndexer } from '../../apollo/gqls/query';
+import { CHAIN_CONFIG } from '../../config';
+import { ISigningInfo, IValidatorData } from '../../interfaces/lcd';
+import {
+	IDelegationList,
+	IDelegationState,
+	IGrantsDataState,
+	IRedelegationList,
+	IRedelegationState,
+	ITargetStakingState,
+	ITotalStakingState,
+	IUndelegationList,
+	IUndelegationState,
+	IValidator,
+	IValidatorsState
+} from '../../interfaces/staking';
+import { rootState } from '../../redux/reducers';
+import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
+import { convertNumber, convertToFctString, makeDecimalPoint } from '../../utils/common';
+import {
+	getAccAddressFromValOperAddress,
+	getInflation,
+	getSignedBlocksWindow,
+	getSigningInfos,
+	getTotalSupply,
+	getTotalVotingPower,
+	getValidatorDelegationsFromAddress,
+	getValidatorFromAddress,
+	getValidatorList,
+	getValidatorUndelegationsFromAddress
+} from '../../utils/lcdQuery';
+import useFirma from '../../utils/wallet';
 
 export {
-  useDelegations,
-  useUndelegations,
-  useRedelegations,
-  useStakingData,
-  useStakingDataFromTarget,
-  useGrantData,
-  useValidators,
-  useValidatorFromTarget,
+	useDelegations,
+	useUndelegations,
+	useRedelegations,
+	useStakingData,
+	useStakingDataFromTarget,
+	useGrantData,
+	useValidators,
+	useValidatorFromTarget
 };
 
 const useDelegations = () => {
-  const { avatarList } = useSelector((state: rootState) => state.avatar);
-  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
-  const [delegateState, setDelegateState] = useState<IDelegationState>({
-    self: 0,
-    selfPercent: 0,
-    delegationList: [],
-  });
+	const [delegateState, setDelegateState] = useState<IDelegationState>({
+		self: 0,
+		selfPercent: 0,
+		delegationList: []
+	});
 
-  useEffect(() => {
-    if (targetValidator !== '') {
-      const selfDelegateAddress = getAccAddressFromValOperAddress(targetValidator);
+	useEffect(() => {
+		if (targetValidator !== '') {
+			const selfDelegateAddress = getAccAddressFromValOperAddress(targetValidator);
 
-      getValidatorDelegationsFromAddress(targetValidator)
-        .then(async (result) => {
-          let self = 0;
-          let totalDelegationAmount = 0;
-          let delegationList: IDelegationList[] = [];
+			getValidatorDelegationsFromAddress(targetValidator)
+				.then(async (result) => {
+					let self = 0;
+					let totalDelegationAmount = 0;
+					let delegationList: IDelegationList[] = [];
 
-          for (const delegate of result) {
-            totalDelegationAmount += delegate.amount;
-            if (delegate.delegatorAddress === selfDelegateAddress) {
-              self = delegate.amount;
-            }
+					for (const delegate of result) {
+						totalDelegationAmount += delegate.amount;
+						if (delegate.delegatorAddress === selfDelegateAddress) {
+							self = delegate.amount;
+						}
 
-            const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
+						const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, delegate.delegatorAddress);
 
-            delegationList.push({
-              ...delegate,
-              validatorAddress: targetValidator,
-              moniker,
-              avatarURL,
-            });
-          }
+						delegationList.push({
+							...delegate,
+							validatorAddress: targetValidator,
+							moniker,
+							avatarURL
+						});
+					}
 
-          const selfPercent = (self / totalDelegationAmount) * 100;
+					const selfPercent = (self / totalDelegationAmount) * 100;
 
-          setDelegateState({
-            self,
-            selfPercent,
-            delegationList,
-          });
-        })
-        .catch(() => {});
-    }
-  }, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+					setDelegateState({
+						self,
+						selfPercent,
+						delegationList
+					});
+				})
+				.catch(() => {});
+		}
+	}, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return {
-    delegateState,
-  };
+	return {
+		delegateState
+	};
 };
 
 const useRedelegations = () => {
-  const { avatarList } = useSelector((state: rootState) => state.avatar);
-  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
-  const [redelegateState, setRedelegateState] = useState<IRedelegationState>({
-    self: 0,
-    selfPercent: 0,
-    redelegationList: [],
-  });
+	const [redelegateState, setRedelegateState] = useState<IRedelegationState>({
+		self: 0,
+		selfPercent: 0,
+		redelegationList: []
+	});
 
-  useEffect(() => {
-    if (targetValidator === '') {
-      setRedelegateState({ self: 0, selfPercent: 0, redelegationList: [] });
-      return;
-    }
+	useEffect(() => {
+		if (targetValidator === '') {
+			setRedelegateState({ self: 0, selfPercent: 0, redelegationList: [] });
+			return;
+		}
 
-    getValidatorRedelegationsFromIndexer(targetValidator)
-      .then((list) => {
-        const redelegationList: IRedelegationList[] = list.map((r) => {
-          const delegatorAvatar = getAvatarInfoFromAcc(avatarList, r.delegatorAddress);
-          const srcAvatar = getAvatarInfo(avatarList, r.srcAddress);
-          const dstAvatar = getAvatarInfo(avatarList, r.dstAddress);
-          return {
-            delegatorAddress: r.delegatorAddress,
-            delegatorMoniker: delegatorAvatar.moniker,
-            delegatorAvatarURL: delegatorAvatar.avatarURL,
-            balance: r.balance,
-            completionTime: r.completionTime,
-            srcAddress: r.srcAddress,
-            srcMoniker: srcAvatar.moniker,
-            srcAvatarURL: srcAvatar.avatarURL,
-            dstAddress: r.dstAddress,
-            dstMoniker: dstAvatar.moniker,
-            dstAvatarURL: dstAvatar.avatarURL,
-          };
-        });
+		getValidatorRedelegationsFromIndexer(targetValidator)
+			.then((list) => {
+				const redelegationList: IRedelegationList[] = list.map((r) => {
+					const delegatorAvatar = getAvatarInfoFromAcc(avatarList, r.delegatorAddress);
+					const srcAvatar = getAvatarInfo(avatarList, r.srcAddress);
+					const dstAvatar = getAvatarInfo(avatarList, r.dstAddress);
+					return {
+						delegatorAddress: r.delegatorAddress,
+						delegatorMoniker: delegatorAvatar.moniker,
+						delegatorAvatarURL: delegatorAvatar.avatarURL,
+						balance: r.balance,
+						completionTime: r.completionTime,
+						srcAddress: r.srcAddress,
+						srcMoniker: srcAvatar.moniker,
+						srcAvatarURL: srcAvatar.avatarURL,
+						dstAddress: r.dstAddress,
+						dstMoniker: dstAvatar.moniker,
+						dstAvatarURL: dstAvatar.avatarURL
+					};
+				});
 
-        setRedelegateState({
-          self: 0,
-          selfPercent: 0,
-          redelegationList,
-        });
-      })
-      .catch(() => {});
-  }, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+				setRedelegateState({
+					self: 0,
+					selfPercent: 0,
+					redelegationList
+				});
+			})
+			.catch(() => {});
+	}, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return {
-    redelegateState
-  };
+	return {
+		redelegateState
+	};
 };
 
 const useUndelegations = () => {
-  const { avatarList } = useSelector((state: rootState) => state.avatar);
-  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
 
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
-  const [undelegateState, setUndelegateState] = useState<IUndelegationState>({
-    self: 0,
-    selfPercent: 0,
-    undelegationList: [],
-  });
+	const [undelegateState, setUndelegateState] = useState<IUndelegationState>({
+		self: 0,
+		selfPercent: 0,
+		undelegationList: []
+	});
 
-  useEffect(() => {
-    if (targetValidator === '') {
-      setUndelegateState({ self: 0, selfPercent: 0, undelegationList: [] });
-      return;
-    }
+	useEffect(() => {
+		if (targetValidator === '') {
+			setUndelegateState({ self: 0, selfPercent: 0, undelegationList: [] });
+			return;
+		}
 
-    getValidatorUndelegationsFromAddress(targetValidator)
-      .then((list) => {
-        const undelegationList: IUndelegationList[] = list.map((entry) => {
-          const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, entry.delegatorAddress);
-          return {
-            validatorAddress: targetValidator,
-            moniker: moniker || entry.delegatorAddress,
-            avatarURL,
-            balance: entry.balance,
-            completionTime: entry.completionTime,
-          };
-        });
+		getValidatorUndelegationsFromAddress(targetValidator)
+			.then((list) => {
+				const undelegationList: IUndelegationList[] = list.map((entry) => {
+					const { moniker, avatarURL } = getAvatarInfoFromAcc(avatarList, entry.delegatorAddress);
+					return {
+						validatorAddress: targetValidator,
+						moniker: moniker || entry.delegatorAddress,
+						avatarURL,
+						balance: entry.balance,
+						completionTime: entry.completionTime
+					};
+				});
 
-        setUndelegateState({
-          self: 0,
-          selfPercent: 0,
-          undelegationList,
-        });
-      })
-      .catch(() => {});
-  }, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+				setUndelegateState({
+					self: 0,
+					selfPercent: 0,
+					undelegationList
+				});
+			})
+			.catch(() => {});
+	}, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { undelegateState };
+	return { undelegateState };
 };
 
 const useStakingData = () => {
-  const { isInit } = useSelector((state: rootState) => state.wallet);
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
-  const { getStaking } = useFirma();
+	const { isInit } = useSelector((state: rootState) => state.wallet);
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { getStaking } = useFirma();
 
-  const [totalStakingState, setTotalStakingState] = useState<ITotalStakingState>({
-    available: 0,
-    delegated: 0,
-    undelegate: 0,
-    stakingReward: 0,
-    stakingRewardList: [],
-    delegationList: [],
-    redelegationList: [],
-    undelegationList: [],
-  });
+	const [totalStakingState, setTotalStakingState] = useState<ITotalStakingState>({
+		available: 0,
+		delegated: 0,
+		undelegate: 0,
+		stakingReward: 0,
+		stakingRewardList: [],
+		delegationList: [],
+		redelegationList: [],
+		undelegationList: []
+	});
 
-  useEffect(() => {
-    isInit &&
-      getStaking()
-        .then(async (result: ITotalStakingState | undefined) => {
-          if (result) {
-            setTotalStakingState(result);
-          }
-        })
-        .catch(() => {});
-  }, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		isInit &&
+			getStaking()
+				.then(async (result: ITotalStakingState | undefined) => {
+					if (result) {
+						setTotalStakingState(result);
+					}
+				})
+				.catch(() => {});
+	}, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return {
-    totalStakingState,
-  };
+	return {
+		totalStakingState
+	};
 };
 
 const useStakingDataFromTarget = () => {
-  const { getStakingFromValidator } = useFirma();
-  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { getStakingFromValidator } = useFirma();
+	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
-  const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
-    available: 0,
-    delegated: 0,
-    undelegate: 0,
-    stakingReward: 0,
-  });
+	const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
+		available: 0,
+		delegated: 0,
+		undelegate: 0,
+		stakingReward: 0
+	});
 
-  useEffect(() => {
-    if (targetValidator !== '') {
-      getStakingFromValidator(targetValidator)
-        .then((result: ITargetStakingState | undefined) => {
-          if (result) setTargetStakingState(result);
-        })
-        .catch((e) => {});
-    }
-  }, [targetValidator, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		if (targetValidator !== '') {
+			getStakingFromValidator(targetValidator)
+				.then((result: ITargetStakingState | undefined) => {
+					if (result) setTargetStakingState(result);
+				})
+				.catch((e) => {});
+		}
+	}, [targetValidator, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return {
-    targetStakingState,
-  };
+	return {
+		targetStakingState
+	};
 };
 
 const useGrantData = () => {
-  const { isInit } = useSelector((state: rootState) => state.wallet);
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
-  const { getStakingGrantDataList } = useFirma();
+	const { isInit } = useSelector((state: rootState) => state.wallet);
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { getStakingGrantDataList } = useFirma();
 
-  const [grantDataState, setGrantDataState] = useState<IGrantsDataState>({
-    maxFCT: '0',
-    expiration: '',
-    allowValidatorList: [],
-  });
+	const [grantDataState, setGrantDataState] = useState<IGrantsDataState>({
+		maxFCT: '0',
+		expiration: '',
+		allowValidatorList: []
+	});
 
-  useEffect(() => {
-    if (CHAIN_CONFIG.RESTAKE.ADDRESS) {
-      getStakingGrantDataList().then((grantData) => {
-        if (grantData) {
-          setGrantDataState(grantData);
-        }
-      });
-    }
-  }, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+	useEffect(() => {
+		if (CHAIN_CONFIG.RESTAKE.ADDRESS) {
+			getStakingGrantDataList().then((grantData) => {
+				if (grantData) {
+					setGrantDataState(grantData);
+				}
+			});
+		}
+	}, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return {
-    grantDataState,
-  };
+	return {
+		grantDataState
+	};
 };
 
 const useValidators = () => {
-  const { avatarList } = useSelector((state: rootState) => state.avatar);
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
-  const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
-    totalVotingPower: 0,
-    validators: [],
-  });
+	const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
+		totalVotingPower: 0,
+		validators: []
+	});
 
-  useEffect(() => {
-    getValidatorList()
-      .then(async (validatorList: IValidatorData[]) => {
-        const [totalSupply, inflation, totalVotingPower, signedBlocksWindow]: any = await Promise.all([
-          getTotalSupply(),
-          getInflation(),
-          getTotalVotingPower(),
-          getSignedBlocksWindow(),
-        ]);
+	useEffect(() => {
+		getValidatorList()
+			.then(async (validatorList: IValidatorData[]) => {
+				const [totalSupply, inflation, totalVotingPower, signedBlocksWindow]: any = await Promise.all([
+					getTotalSupply(),
+					getInflation(),
+					getTotalVotingPower(),
+					getSignedBlocksWindow()
+				]);
 
-        const validatorSigningInfoList = await getSigningInfos();
-        const mintCoinPerDay =
-          (86400 / CHAIN_CONFIG.PARAMS.AVERAGE_BLOCK_TIME) *
-          ((inflation * totalSupply) / CHAIN_CONFIG.PARAMS.BLOCKS_PER_YEAR);
-        const mintCoinPerYear = mintCoinPerDay * 365;
+				const validatorSigningInfoList = await getSigningInfos();
+				const mintCoinPerDay =
+					(86400 / CHAIN_CONFIG.PARAMS.AVERAGE_BLOCK_TIME) * ((inflation * totalSupply) / CHAIN_CONFIG.PARAMS.BLOCKS_PER_YEAR);
+				const mintCoinPerYear = mintCoinPerDay * 365;
 
-        const parseValidatorList: IValidator[] = validatorList
-          .filter((validator) => {
-            return validator.jailed === false && validator.status === 'BOND_STATUS_BONDED';
-          })
-          .map((validator) => {
-            const signingInfo = validatorSigningInfoList.find(
-              (signingInfo: ISigningInfo) => signingInfo.address === validator.valconsAddress
-            );
-            const condition = signingInfo
-              ? (1 - convertNumber(signingInfo.missed_blocks_counter) / signedBlocksWindow) * 100
-              : 0;
+				const parseValidatorList: IValidator[] = validatorList
+					.filter((validator) => {
+						return validator.jailed === false && validator.status === 'BOND_STATUS_BONDED';
+					})
+					.map((validator) => {
+						const signingInfo = validatorSigningInfoList.find(
+							(signingInfo: ISigningInfo) => signingInfo.address === validator.valconsAddress
+						);
+						const condition = signingInfo
+							? (1 - convertNumber(signingInfo.missed_blocks_counter) / signedBlocksWindow) * 100
+							: 0;
 
-            const rewardPerYear =
-              mintCoinPerYear *
-              (validator.votingPower / totalVotingPower) *
-              (1 - CHAIN_CONFIG.PARAMS.COMMUNITY_POOL) *
-              (1 - validator.commission);
-            const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
-            const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
+						const rewardPerYear =
+							mintCoinPerYear *
+							(validator.votingPower / totalVotingPower) *
+							(1 - CHAIN_CONFIG.PARAMS.COMMUNITY_POOL) *
+							(1 - validator.commission);
+						const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
+						const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
 
-            const { moniker, avatarURL } = getAvatarInfo(avatarList, validator.validatorAddress);
-            const validatorMoniker = moniker;
-            const validatorAvatar = avatarURL;
-            const tombstoned = signingInfo ? signingInfo.tombstoned : false;
+						const { moniker, avatarURL } = getAvatarInfo(avatarList, validator.validatorAddress);
+						const validatorMoniker = moniker;
+						const validatorAvatar = avatarURL;
+						const tombstoned = signingInfo ? signingInfo.tombstoned : false;
 
-            return {
-              ...validator,
-              validatorMoniker,
-              validatorAvatar,
-              condition,
-              APR,
-              APY,
-              tombstoned,
-            };
-          });
+						return {
+							...validator,
+							validatorMoniker,
+							validatorAvatar,
+							condition,
+							APR,
+							APY,
+							tombstoned
+						};
+					});
 
-        parseValidatorList.sort((a: any, b: any) => b.votingPower - a.votingPower);
+				parseValidatorList.sort((a: any, b: any) => b.votingPower - a.votingPower);
 
-        setValidatorsState({
-          totalVotingPower,
-          validators: parseValidatorList,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [avatarList, refreshKey]);
+				setValidatorsState({
+					totalVotingPower,
+					validators: parseValidatorList
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, [avatarList, refreshKey]);
 
-  return {
-    validatorsState,
-  };
+	return {
+		validatorsState
+	};
 };
 
 const useValidatorFromTarget = () => {
-  const targetValidator = window.location.pathname.replace('/staking/validators/', '');
-  const { avatarList } = useSelector((state: rootState) => state.avatar);
-  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
+	const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+	const { avatarList } = useSelector((state: rootState) => state.avatar);
+	const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
-  const [validatorState, setValidatorState] = useState<IValidator>({
-    validatorAddress: '',
-    validatorMoniker: '',
-    validatorAvatar: '',
-    validatorDetail: '',
-    validatorWebsite: '',
-    selfDelegateAddress: '',
-    votingPower: 0,
-    votingPowerPercent: '',
-    commission: 0,
-    condition: 0,
-    status: '',
-    jailed: false,
-    APR: 0,
-    APY: 0,
-    tombstoned: false,
-  });
+	const [validatorState, setValidatorState] = useState<IValidator>({
+		validatorAddress: '',
+		validatorMoniker: '',
+		validatorAvatar: '',
+		validatorDetail: '',
+		validatorWebsite: '',
+		selfDelegateAddress: '',
+		votingPower: 0,
+		votingPowerPercent: '',
+		commission: 0,
+		condition: 0,
+		status: '',
+		jailed: false,
+		APR: 0,
+		APY: 0,
+		tombstoned: false
+	});
 
-  useEffect(() => {
-    getValidatorFromAddress(targetValidator)
-      .then(async (validator: IValidatorData) => {
-        try {
-          const [totalSupply, inflation, totalVotingPower, signedBlocksWindow]: any = await Promise.all([
-            getTotalSupply(),
-            getInflation(),
-            getTotalVotingPower(),
-            getSignedBlocksWindow(),
-          ]);
+	useEffect(() => {
+		getValidatorFromAddress(targetValidator)
+			.then(async (validator: IValidatorData) => {
+				try {
+					const [totalSupply, inflation, totalVotingPower, signedBlocksWindow]: any = await Promise.all([
+						getTotalSupply(),
+						getInflation(),
+						getTotalVotingPower(),
+						getSignedBlocksWindow()
+					]);
 
-          const validatorSigningInfoList = await getSigningInfos();
-          const signingInfo = validatorSigningInfoList.find(
-            (signingInfo: ISigningInfo) => signingInfo.address === validator.valconsAddress
-          );
-          const condition = signingInfo
-            ? (1 - convertNumber(signingInfo.missed_blocks_counter) / signedBlocksWindow) * 100
-            : 0;
+					const validatorSigningInfoList = await getSigningInfos();
+					const signingInfo = validatorSigningInfoList.find(
+						(signingInfo: ISigningInfo) => signingInfo.address === validator.valconsAddress
+					);
+					const condition = signingInfo ? (1 - convertNumber(signingInfo.missed_blocks_counter) / signedBlocksWindow) * 100 : 0;
 
-          const mintCoinPerDay =
-            (86400 / CHAIN_CONFIG.PARAMS.AVERAGE_BLOCK_TIME) *
-            ((inflation * totalSupply) / CHAIN_CONFIG.PARAMS.BLOCKS_PER_YEAR);
-          const mintCoinPerYear = mintCoinPerDay * 365;
-          const rewardPerYear =
-            mintCoinPerYear *
-            (validator.votingPower / totalVotingPower) *
-            (1 - CHAIN_CONFIG.PARAMS.COMMUNITY_POOL) *
-            (1 - validator.commission);
-          const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
-          const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
+					const mintCoinPerDay =
+						(86400 / CHAIN_CONFIG.PARAMS.AVERAGE_BLOCK_TIME) *
+						((inflation * totalSupply) / CHAIN_CONFIG.PARAMS.BLOCKS_PER_YEAR);
+					const mintCoinPerYear = mintCoinPerDay * 365;
+					const rewardPerYear =
+						mintCoinPerYear *
+						(validator.votingPower / totalVotingPower) *
+						(1 - CHAIN_CONFIG.PARAMS.COMMUNITY_POOL) *
+						(1 - validator.commission);
+					const APR = isNaN(rewardPerYear / validator.votingPower) ? 0 : rewardPerYear / validator.votingPower;
+					const APY = convertNumber(makeDecimalPoint((1 + APR / 365) ** 365 - 1, 2));
 
-          const { moniker, avatarURL } = getAvatarInfo(avatarList, validator.validatorAddress);
-          const validatorMoniker = moniker;
-          const validatorAvatar = avatarURL;
-          const tombstoned = signingInfo ? signingInfo.tombstoned : false;
+					const { moniker, avatarURL } = getAvatarInfo(avatarList, validator.validatorAddress);
+					const validatorMoniker = moniker;
+					const validatorAvatar = avatarURL;
+					const tombstoned = signingInfo ? signingInfo.tombstoned : false;
 
-          setValidatorState({
-            ...validator,
-            validatorMoniker,
-            validatorAvatar,
-            condition,
-            tombstoned,
-            APR,
-            APY,
-          });
-        } catch (error) {
-          setValidatorState({
-            ...validator,
-            condition: null,
-            tombstoned: false,
-            APR: null,
-            APY: null,
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
+					setValidatorState({
+						...validator,
+						validatorMoniker,
+						validatorAvatar,
+						condition,
+						tombstoned,
+						APR,
+						APY
+					});
+				} catch (error) {
+					setValidatorState({
+						...validator,
+						condition: null,
+						tombstoned: false,
+						APR: null,
+						APY: null
+					});
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return {
-    validatorState,
-  };
+	return {
+		validatorState
+	};
 };

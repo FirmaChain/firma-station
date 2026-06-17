@@ -1,4 +1,5 @@
 import { FirmaUtil } from '@firmachain/firma-js';
+
 import { CHAIN_CONFIG } from '../config';
 
 /**
@@ -13,183 +14,181 @@ import { CHAIN_CONFIG } from '../config';
  *      thing we care about, and that is what `window.electron` signals.
  */
 export const isElectron =
-  typeof window !== 'undefined' &&
-  typeof (window as any).electron !== 'undefined' &&
-  typeof (window as any).electron.sendSync === 'function';
+	typeof window !== 'undefined' &&
+	typeof (window as any).electron !== 'undefined' &&
+	typeof (window as any).electron.sendSync === 'function';
 
 export const isExternalConnect = (isLedger: boolean, isMobileApp: boolean) => {
-  return isLedger || isMobileApp;
+	return isLedger || isMobileApp;
 };
 
 export const convertNumberFormat = (value: string | number, point: number = 2): string => {
-  return convertCurrent(makeDecimalPoint(value, point));
+	return convertCurrent(makeDecimalPoint(value, point));
 };
 
 export const makeDecimalPoint = (value: string | number, point: number = 2) => {
-  if (value === undefined) return '0';
-  const val = convertNumber(value).toString();
-  const pointPos = val.indexOf('.');
+	if (value === undefined) return '0';
+	const val = convertNumber(value).toString();
+	const pointPos = val.indexOf('.');
 
-  if (pointPos === -1) return Number(val).toFixed(point);
+	if (pointPos === -1) return Number(val).toFixed(point);
 
-  const splitValue = val.split('.');
-  const belowDecimal = splitValue[1].substring(0, point);
-  return Number(`${splitValue[0]}.${belowDecimal}`).toFixed(point);
+	const splitValue = val.split('.');
+	const belowDecimal = splitValue[1].substring(0, point);
+	return Number(`${splitValue[0]}.${belowDecimal}`).toFixed(point);
 };
 
 export const convertCurrent = (value: number | string) => {
-  var val = value.toString().split('.');
-  val[0] = val[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return val.join('.');
+	var val = value.toString().split('.');
+	val[0] = val[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	return val.join('.');
 };
 
 export const getFeesFromGas = (estimatedGas: number, skipFloor = false) => {
-  const fee = Math.ceil(estimatedGas * 0.1);
+	const fee = Math.ceil(estimatedGas * 0.1);
 
-  if (skipFloor) return fee;
-  return Math.max(fee, CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
+	if (skipFloor) return fee;
+	return Math.max(fee, CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee);
 };
 
 export const getDefaultFee = (_isLedger: boolean, isMobileApp: boolean): number => {
-  if (isMobileApp) return CHAIN_CONFIG.MOBILE_FEE;
-  return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee;
+	if (isMobileApp) return CHAIN_CONFIG.MOBILE_FEE;
+	return CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultFee;
 };
 
 export const getDefaultGas = (isLedger: boolean, isMobileApp: boolean) => {
-  return isLedger || isMobileApp ? CHAIN_CONFIG.MOBILE_GAS : CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
+	return isLedger || isMobileApp ? CHAIN_CONFIG.MOBILE_GAS : CHAIN_CONFIG.FIRMACHAIN_CONFIG.defaultGas;
 };
 
 export const isValid = (data: any) => {
-  if (data === null) return false;
-  if (data === undefined) return false;
-  if (Object.keys(data).length === 0) return false;
+	if (data === null) return false;
+	if (data === undefined) return false;
+	if (Object.keys(data).length === 0) return false;
 
-  return true;
+	return true;
 };
 
 export const isValidString = (data: any) => {
-  if (data === null) return false;
-  if (data === undefined) return false;
-  if (data === '') return false;
+	if (data === null) return false;
+	if (data === undefined) return false;
+	if (data === '') return false;
 
-  return true;
+	return true;
 };
 
 export const getValidDefaultValue = (data: any, defaultValue: any) => {
-  if (isValid(data)) return data;
-  else return defaultValue;
+	if (isValid(data)) return data;
+	else return defaultValue;
 };
 
 export const convertNumber = (value: string | number | undefined) => {
-  if (isNaN(Number(value))) return 0;
+	if (isNaN(Number(value))) return 0;
 
-  return Number(value);
+	return Number(value);
 };
 
 export const convertToTokenString = (amount: string | number, decimal: number) => {
-  return FirmaUtil.getTokenStringFromUToken(convertNumber(amount), convertNumber(decimal));
+	return FirmaUtil.getTokenStringFromUToken(convertNumber(amount), convertNumber(decimal));
 };
 
 export const convertToUTokenStringFromToken = (amount: string | number, decimal: number) => {
-  return FirmaUtil.getUTokenStringFromToken(convertNumber(amount), convertNumber(decimal));
+	return FirmaUtil.getUTokenStringFromToken(convertNumber(amount), convertNumber(decimal));
 };
 
 export const convertToTokenNumber = (amount: number | string, decimal: string) => {
-  return convertNumber(FirmaUtil.getTokenStringFromUToken(convertNumber(amount), convertNumber(decimal)));
+	return convertNumber(FirmaUtil.getTokenStringFromUToken(convertNumber(amount), convertNumber(decimal)));
 };
 
 export const convertToFctString = (uFctAmount: string) => {
-  return FirmaUtil.getFCTStringFromUFCTStr(uFctAmount);
+	return FirmaUtil.getFCTStringFromUFCTStr(uFctAmount);
 };
 
 export const convertToFctNumber = (uFctAmount: number | string) => {
-  return convertNumber(FirmaUtil.getFCTStringFromUFCTStr(uFctAmount.toString()));
+	return convertNumber(FirmaUtil.getFCTStringFromUFCTStr(uFctAmount.toString()));
 };
 
 export const copyToClipboard = (textToCopy: string) => {
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      return navigator.clipboard.writeText(textToCopy);
-    } else {
-      let textArea = document.createElement('textarea');
-      textArea.value = textToCopy;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      textArea.style.position = 'absolute';
-      textArea.style.opacity = '0';
+	try {
+		if (navigator.clipboard && window.isSecureContext) {
+			return navigator.clipboard.writeText(textToCopy);
+		} else {
+			let textArea = document.createElement('textarea');
+			textArea.value = textToCopy;
+			textArea.style.position = 'fixed';
+			textArea.style.left = '-999999px';
+			textArea.style.top = '-999999px';
+			textArea.style.position = 'absolute';
+			textArea.style.opacity = '0';
 
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
+			document.body.appendChild(textArea);
+			textArea.focus();
+			textArea.select();
 
-      return new Promise((res: any, rej: any) => {
-        document.execCommand('copy') ? res() : rej();
-        textArea.remove();
-      });
-    }
-  } catch (error) {}
+			return new Promise((res: any, rej: any) => {
+				document.execCommand('copy') ? res() : rej();
+				textArea.remove();
+			});
+		}
+	} catch (error) {}
 };
 
 export const getUTCDateFormat = (date: Date) => {
-  return `${date.getUTCFullYear()}-${('00' + (date.getUTCMonth() + 1)).slice(-2)}-${('00' + date.getUTCDate()).slice(
-    -2
-  )}`;
+	return `${date.getUTCFullYear()}-${('00' + (date.getUTCMonth() + 1)).slice(-2)}-${('00' + date.getUTCDate()).slice(-2)}`;
 };
 
 export const getRestakeStatus = (status: number, isLedger = false) => {
-  if (isLedger) return 'Not supported';
+	if (isLedger) return 'Not supported';
 
-  switch (status) {
-    case -1:
-      return 'Maintenance';
-    case 0:
-      return 'Inactive';
-    case 1:
-      return 'Active';
-    case 2:
-      return 'Not yet delegated';
-  }
+	switch (status) {
+		case -1:
+			return 'Maintenance';
+		case 0:
+			return 'Inactive';
+		case 1:
+			return 'Active';
+		case 2:
+			return 'Not yet delegated';
+	}
 };
 
 export const getRestakeStatusColor = (status: number, isLedger = false) => {
-  if (isLedger) return '#888888';
+	if (isLedger) return '#888888';
 
-  switch (status) {
-    case -1:
-      return '#D89614';
-    case 0:
-      return '#b08dff';
-    case 1:
-      return '#48b495';
-    case 2:
-      return '#888888';
-  }
+	switch (status) {
+		case -1:
+			return '#D89614';
+		case 0:
+			return '#b08dff';
+		case 1:
+			return '#48b495';
+		case 2:
+			return '#888888';
+	}
 };
 
 export const isValidMnemonic = (mnemonic: string): boolean => {
-  if (!mnemonic || typeof mnemonic !== 'string') return false;
+	if (!mnemonic || typeof mnemonic !== 'string') return false;
 
-  // Clean the mnemonic - trim and normalize whitespace
-  const cleanedMnemonic = mnemonic.trim().toLowerCase().replace(/\s+/g, ' ');
-  const words = cleanedMnemonic.split(' ');
+	// Clean the mnemonic - trim and normalize whitespace
+	const cleanedMnemonic = mnemonic.trim().toLowerCase().replace(/\s+/g, ' ');
+	const words = cleanedMnemonic.split(' ');
 
-  // Check if mnemonic has valid word count (12, 15, 18, 21, or 24 words)
-  const validWordCounts = [12, 15, 18, 21, 24];
-  if (!validWordCounts.includes(words.length)) return false;
+	// Check if mnemonic has valid word count (12, 15, 18, 21, or 24 words)
+	const validWordCounts = [12, 15, 18, 21, 24];
+	if (!validWordCounts.includes(words.length)) return false;
 
-  // Check if all words are non-empty and contain only lowercase letters
-  const validWordPattern = /^[a-z]+$/;
-  return words.every(word => word.length > 0 && validWordPattern.test(word));
+	// Check if all words are non-empty and contain only lowercase letters
+	const validWordPattern = /^[a-z]+$/;
+	return words.every((word) => word.length > 0 && validWordPattern.test(word));
 };
 
 export const isValidPrivateKey = (privateKey: string): boolean => {
-  if (!privateKey || typeof privateKey !== 'string') return false;
+	if (!privateKey || typeof privateKey !== 'string') return false;
 
-  // Remove any whitespace
-  const cleanKey = privateKey.trim().replace(/\s/g, '');
+	// Remove any whitespace
+	const cleanKey = privateKey.trim().replace(/\s/g, '');
 
-  // Check if it's a valid hex string (64 characters for secp256k1)
-  const hexRegex = /^[0-9a-fA-F]{64}$/;
-  return hexRegex.test(cleanKey);
+	// Check if it's a valid hex string (64 characters for secp256k1)
+	const hexRegex = /^[0-9a-fA-F]{64}$/;
+	return hexRegex.test(cleanKey);
 };

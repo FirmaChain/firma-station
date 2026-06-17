@@ -1,5 +1,5 @@
-import ValidatorInfoCard from "./validatorInfoCard";
-import ValidatorControlCard from "./validatorControlCard";
-import DelegatorsCard from "./delegatorsCard";
+import DelegatorsCard from './delegatorsCard';
+import ValidatorControlCard from './validatorControlCard';
+import ValidatorInfoCard from './validatorInfoCard';
 
 export { ValidatorInfoCard, ValidatorControlCard, DelegatorsCard };

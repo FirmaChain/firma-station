@@ -1,70 +1,63 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
 
-import { rootState } from '../../redux/reducers';
-
-import theme from '../../themes';
-import { CHAIN_CONFIG } from '../../config';
+import AutoSizer from '../../components/autoSizer';
 import { BlankCard } from '../../components/card';
-import { AddressTitleTypo, ListWrapper2, HeaderWrapper2, HeaderColumn2, ItemWrapper2, ItemColumn2 } from './styles';
+import { CHAIN_CONFIG } from '../../config';
+import { rootState } from '../../redux/reducers';
+import theme from '../../themes';
 import { convertNumberFormat } from '../../utils/common';
+import { AddressTitleTypo, HeaderColumn2, HeaderWrapper2, ItemColumn2, ItemWrapper2, ListWrapper2 } from './styles';
 
 const Row = ({ data, index, style }: any) => {
-  const currentAsset = data[index];
+	const currentAsset = data[index];
 
-  return (
-    <ItemWrapper2 style={style}>
-      <ItemColumn2>{currentAsset[0]}</ItemColumn2>
-      <ItemColumn2>{currentAsset[1]}</ItemColumn2>
-    </ItemWrapper2>
-  );
+	return (
+		<ItemWrapper2 style={style}>
+			<ItemColumn2>{currentAsset[0]}</ItemColumn2>
+			<ItemColumn2>{currentAsset[1]}</ItemColumn2>
+		</ItemWrapper2>
+	);
 };
 
 const AssetCard = () => {
-  const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
+	const { balance, tokenList, nftList } = useSelector((state: rootState) => state.user);
 
-  const assetList = [
-    [`${CHAIN_CONFIG.PARAMS.SYMBOL}`, convertNumberFormat(balance, 3)],
-    ...tokenList.map((data) => {
-      let symbol = data.symbol;
-      if (data.symbol.length > 10) {
-        symbol = data.symbol.substring(0, 10) + '...';
-      }
-      return [symbol, convertNumberFormat(data.balance, 3)];
-    }),
-    ...nftList.map((data) => {
-      return [`NFT #${data.id}`, '1'];
-    }),
-  ];
+	const assetList = [
+		[`${CHAIN_CONFIG.PARAMS.SYMBOL}`, convertNumberFormat(balance, 3)],
+		...tokenList.map((data) => {
+			let symbol = data.symbol;
+			if (data.symbol.length > 10) {
+				symbol = data.symbol.substring(0, 10) + '...';
+			}
+			return [symbol, convertNumberFormat(data.balance, 3)];
+		}),
+		...nftList.map((data) => {
+			return [`NFT #${data.id}`, '1'];
+		})
+	];
 
-  return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} height='100%'>
-      <AddressTitleTypo>Assets</AddressTitleTypo>
-      <ListWrapper2>
-        <AutoSizer>
-          {({ height, width }: any) => (
-            <>
-              <HeaderWrapper2 style={{ width }}>
-                <HeaderColumn2>Name</HeaderColumn2>
-                <HeaderColumn2>Balance</HeaderColumn2>
-              </HeaderWrapper2>
-              <List
-                width={width}
-                height={height - 210 - 50}
-                itemCount={assetList.length}
-                itemSize={50}
-                itemData={assetList}
-              >
-                {(props) => Row({ ...props })}
-              </List>
-            </>
-          )}
-        </AutoSizer>
-      </ListWrapper2>
-    </BlankCard>
-  );
+	return (
+		<BlankCard bgColor={theme.colors.backgroundSideBar} height="100%">
+			<AddressTitleTypo>Assets</AddressTitleTypo>
+			<ListWrapper2>
+				<AutoSizer>
+					{({ height, width }: any) => (
+						<>
+							<HeaderWrapper2 style={{ width }}>
+								<HeaderColumn2>Name</HeaderColumn2>
+								<HeaderColumn2>Balance</HeaderColumn2>
+							</HeaderWrapper2>
+							<List width={width} height={height - 210 - 50} itemCount={assetList.length} itemSize={50} itemData={assetList}>
+								{(props) => Row({ ...props })}
+							</List>
+						</>
+					)}
+				</AutoSizer>
+			</ListWrapper2>
+		</BlankCard>
+	);
 };
 
 export default React.memo(AssetCard);

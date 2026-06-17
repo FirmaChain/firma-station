@@ -1,3 +1,3 @@
-import ComingDiv from "./comingDiv";
+import ComingDiv from './comingDiv';
 
 export { ComingDiv };

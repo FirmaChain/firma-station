@@ -1,181 +1,172 @@
-import React, { useMemo, useCallback } from 'react';
-import AutoSizer from '../../components/autoSizer';
-import { FixedSizeList as List } from 'react-window';
+import React, { useCallback, useMemo } from 'react';
 import { Link } from 'react-router';
+import { FixedSizeList as List } from 'react-window';
 
-import { CHAIN_CONFIG, OSMOSIS_EXPLORER } from '../../config';
-import { getDateFormat, getTimeFormat } from '../../utils/dateUtil';
-import { convertNumberFormat } from '../../utils/common';
-import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
-
-import theme from '../../themes';
+import AutoSizer from '../../components/autoSizer';
 import { BlankCard } from '../../components/card';
-import { ListWrapper, ItemWrapper, ItemColumn, HeaderWrapper, HeaderColumn, TitleTypo } from './styles';
+import { CHAIN_CONFIG, OSMOSIS_EXPLORER } from '../../config';
+import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
+import theme from '../../themes';
+import { convertNumberFormat } from '../../utils/common';
+import { getDateFormat, getTimeFormat } from '../../utils/dateUtil';
+import { HeaderColumn, HeaderWrapper, ItemColumn, ItemWrapper, ListWrapper, TitleTypo } from './styles';
 
 interface IProps {
-  transferHistoryByAddressState: ITransferHistoryByAddressState;
-  tokenDataState: ITokensState;
-  isLoading: boolean;
-  hasMore: boolean;
-  loadMoreData: () => Promise<void>;
+	transferHistoryByAddressState: ITransferHistoryByAddressState;
+	tokenDataState: ITokensState;
+	isLoading: boolean;
+	hasMore: boolean;
+	loadMoreData: () => Promise<void>;
 }
 
 const Row = ({ data, index, style, tokenDataState }: any) => {
-  const currentHistory = data[index];
+	const currentHistory = data[index];
 
-  const getHash = (hash: string) => {
-    return '0x' + hash.substr(0, 4) + '...';
-  };
+	const getHash = (hash: string) => {
+		return '0x' + hash.substr(0, 4) + '...';
+	};
 
-  const getAddress = (address: string) => {
-    return address.substr(0, 10) + '...';
-  };
+	const getAddress = (address: string) => {
+		return address.substr(0, 10) + '...';
+	};
 
-  const getAmount = (denom: string, amount: number) => {
-    if (tokenDataState[denom] !== undefined) {
-      return `${convertNumberFormat(amount / 10 ** tokenDataState[denom].decimal, 3)} ${tokenDataState[denom].symbol}`;
-    } else {
-      return amount;
-    }
-  };
+	const getAmount = (denom: string, amount: number) => {
+		if (tokenDataState[denom] !== undefined) {
+			return `${convertNumberFormat(amount / 10 ** tokenDataState[denom].decimal, 3)} ${tokenDataState[denom].symbol}`;
+		} else {
+			return amount;
+		}
+	};
 
-  const getResult = (result: boolean) => {
-    return result ? 'SUCCESS' : 'FAILED';
-  };
+	const getResult = (result: boolean) => {
+		return result ? 'SUCCESS' : 'FAILED';
+	};
 
-  const getTimestamp = (timestamp: string) => {
-    return (
-      <>
-        <div>{getDateFormat(timestamp, false)}</div>
-        <div>{getTimeFormat(timestamp)}</div>
-      </>
-    );
-  };
+	const getTimestamp = (timestamp: string) => {
+		return (
+			<>
+				<div>{getDateFormat(timestamp, false)}</div>
+				<div>{getTimeFormat(timestamp)}</div>
+			</>
+		);
+	};
 
-  const getMemo = (memo: string) => {
-    if (memo.length > 30) return memo.substr(0, 30) + '...';
-    else return memo;
-  };
+	const getMemo = (memo: string) => {
+		if (memo.length > 30) return memo.substr(0, 30) + '...';
+		else return memo;
+	};
 
-  const fromURL = useMemo(() => {
-    if (currentHistory.from.includes('osmo')) {
-      return `${OSMOSIS_EXPLORER}/address/${currentHistory.from}`;
-    } else {
-      return `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.from}`;
-    }
-  }, [currentHistory]);
+	const fromURL = useMemo(() => {
+		if (currentHistory.from.includes('osmo')) {
+			return `${OSMOSIS_EXPLORER}/address/${currentHistory.from}`;
+		} else {
+			return `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.from}`;
+		}
+	}, [currentHistory]);
 
-  const toURL = useMemo(() => {
-    if (currentHistory.to.includes('osmo')) {
-      return `${OSMOSIS_EXPLORER}/address/${currentHistory.to}`;
-    } else {
-      return `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.to}`;
-    }
-  }, [currentHistory]);
+	const toURL = useMemo(() => {
+		if (currentHistory.to.includes('osmo')) {
+			return `${OSMOSIS_EXPLORER}/address/${currentHistory.to}`;
+		} else {
+			return `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${currentHistory.to}`;
+		}
+	}, [currentHistory]);
 
-  return (
-    <ItemWrapper style={style} data-testid={`send-history-item-${index}`}>
-      <ItemColumn data-testid={`send-history-hash-${index}`}>
-        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
-          {getHash(currentHistory.hash)}
-        </Link>
-      </ItemColumn>
-      <ItemColumn data-testid={`send-history-from-${index}`}>
-        <Link to={{ pathname: fromURL }} target={'_blank'}>
-          {getAddress(currentHistory.from)}
-        </Link>
-      </ItemColumn>
-      <ItemColumn data-testid={`send-history-to-${index}`}>
-        <Link to={{ pathname: toURL }} target={'_blank'}>
-          {getAddress(currentHistory.to)}
-        </Link>
-      </ItemColumn>
-      <ItemColumn data-testid={`send-history-amount-${index}`}>{getAmount(currentHistory.denom, currentHistory.amount)}</ItemColumn>
-      <ItemColumn data-testid={`send-history-result-${index}`}>{getResult(currentHistory.success)}</ItemColumn>
-      <ItemColumn data-testid={`send-history-memo-${index}`}>{getMemo(currentHistory.memo)}</ItemColumn>
-      <ItemColumn data-testid={`send-history-time-${index}`}>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
-    </ItemWrapper>
-  );
+	return (
+		<ItemWrapper style={style} data-testid={`send-history-item-${index}`}>
+			<ItemColumn data-testid={`send-history-hash-${index}`}>
+				<Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/transactions/${currentHistory.hash}` }} target={'_blank'}>
+					{getHash(currentHistory.hash)}
+				</Link>
+			</ItemColumn>
+			<ItemColumn data-testid={`send-history-from-${index}`}>
+				<Link to={{ pathname: fromURL }} target={'_blank'}>
+					{getAddress(currentHistory.from)}
+				</Link>
+			</ItemColumn>
+			<ItemColumn data-testid={`send-history-to-${index}`}>
+				<Link to={{ pathname: toURL }} target={'_blank'}>
+					{getAddress(currentHistory.to)}
+				</Link>
+			</ItemColumn>
+			<ItemColumn data-testid={`send-history-amount-${index}`}>{getAmount(currentHistory.denom, currentHistory.amount)}</ItemColumn>
+			<ItemColumn data-testid={`send-history-result-${index}`}>{getResult(currentHistory.success)}</ItemColumn>
+			<ItemColumn data-testid={`send-history-memo-${index}`}>{getMemo(currentHistory.memo)}</ItemColumn>
+			<ItemColumn data-testid={`send-history-time-${index}`}>{getTimestamp(currentHistory.timestamp)}</ItemColumn>
+		</ItemWrapper>
+	);
 };
 
 const LoadingRow = ({ style }: any) => {
-  return (
-    <ItemWrapper style={style}>
-      <ItemColumn style={{ textAlign: 'center', color: theme.colors.defaultGray2, width: '100%' }}>
-        Loading more...
-      </ItemColumn>
-    </ItemWrapper>
-  );
+	return (
+		<ItemWrapper style={style}>
+			<ItemColumn style={{ textAlign: 'center', color: theme.colors.defaultGray2, width: '100%' }}>Loading more...</ItemColumn>
+		</ItemWrapper>
+	);
 };
 
-const TransferHistoryCard = ({
-  transferHistoryByAddressState,
-  tokenDataState,
-  isLoading,
-  hasMore,
-  loadMoreData
-}: IProps) => {
-  const handleItemsRendered = useCallback(
-    ({ visibleStopIndex }: { visibleStopIndex: number }) => {
-      const totalItems = transferHistoryByAddressState.historyList.length;
-      // Block runing load more if the list length is less than 50
-      if (totalItems < 10) return;
-      // Load more when reached last 5 items
-      if (visibleStopIndex >= totalItems - 5 && hasMore && !isLoading) {
-        loadMoreData();
-      }
-    },
-    [transferHistoryByAddressState.historyList.length, hasMore, isLoading, loadMoreData]
-  );
+const TransferHistoryCard = ({ transferHistoryByAddressState, tokenDataState, isLoading, hasMore, loadMoreData }: IProps) => {
+	const handleItemsRendered = useCallback(
+		({ visibleStopIndex }: { visibleStopIndex: number }) => {
+			const totalItems = transferHistoryByAddressState.historyList.length;
+			// Block runing load more if the list length is less than 50
+			if (totalItems < 10) return;
+			// Load more when reached last 5 items
+			if (visibleStopIndex >= totalItems - 5 && hasMore && !isLoading) {
+				loadMoreData();
+			}
+		},
+		[transferHistoryByAddressState.historyList.length, hasMore, isLoading, loadMoreData]
+	);
 
-  const itemCount = transferHistoryByAddressState.historyList.length + (hasMore ? 1 : 0);
+	const itemCount = transferHistoryByAddressState.historyList.length + (hasMore ? 1 : 0);
 
-  const ItemRenderer = useCallback(
-    (props: any) => {
-      const { index } = props;
-      const isLoadingItem = index === transferHistoryByAddressState.historyList.length;
+	const ItemRenderer = useCallback(
+		(props: any) => {
+			const { index } = props;
+			const isLoadingItem = index === transferHistoryByAddressState.historyList.length;
 
-      if (isLoadingItem) {
-        return <LoadingRow {...props} />;
-      }
+			if (isLoadingItem) {
+				return <LoadingRow {...props} />;
+			}
 
-      return Row({ ...props, tokenDataState });
-    },
-    [transferHistoryByAddressState.historyList.length, tokenDataState]
-  );
+			return Row({ ...props, tokenDataState });
+		},
+		[transferHistoryByAddressState.historyList.length, tokenDataState]
+	);
 
-  return (
-    <BlankCard bgColor={theme.colors.backgroundSideBar} data-testid="send-history-card">
-      <TitleTypo data-testid="send-history-title">Send History</TitleTypo>
-      <ListWrapper data-testid="send-history-list">
-        <AutoSizer>
-          {({ height, width }: any) => (
-            <>
-              <HeaderWrapper style={{ width }} data-testid="send-history-header">
-                <HeaderColumn>Hash</HeaderColumn>
-                <HeaderColumn>From</HeaderColumn>
-                <HeaderColumn>To</HeaderColumn>
-                <HeaderColumn>Amount</HeaderColumn>
-                <HeaderColumn>Result</HeaderColumn>
-                <HeaderColumn>Memo</HeaderColumn>
-                <HeaderColumn>Time</HeaderColumn>
-              </HeaderWrapper>
-              <List
-                width={width}
-                height={height - 90}
-                itemCount={itemCount}
-                itemSize={50}
-                itemData={transferHistoryByAddressState.historyList}
-                onItemsRendered={handleItemsRendered}
-              >
-                {ItemRenderer}
-              </List>
-            </>
-          )}
-        </AutoSizer>
-      </ListWrapper>
-    </BlankCard>
-  );
+	return (
+		<BlankCard bgColor={theme.colors.backgroundSideBar} data-testid="send-history-card">
+			<TitleTypo data-testid="send-history-title">Send History</TitleTypo>
+			<ListWrapper data-testid="send-history-list">
+				<AutoSizer>
+					{({ height, width }: any) => (
+						<>
+							<HeaderWrapper style={{ width }} data-testid="send-history-header">
+								<HeaderColumn>Hash</HeaderColumn>
+								<HeaderColumn>From</HeaderColumn>
+								<HeaderColumn>To</HeaderColumn>
+								<HeaderColumn>Amount</HeaderColumn>
+								<HeaderColumn>Result</HeaderColumn>
+								<HeaderColumn>Memo</HeaderColumn>
+								<HeaderColumn>Time</HeaderColumn>
+							</HeaderWrapper>
+							<List
+								width={width}
+								height={height - 90}
+								itemCount={itemCount}
+								itemSize={50}
+								itemData={transferHistoryByAddressState.historyList}
+								onItemsRendered={handleItemsRendered}
+							>
+								{ItemRenderer}
+							</List>
+						</>
+					)}
+				</AutoSizer>
+			</ListWrapper>
+		</BlankCard>
+	);
 };
 
 export default React.memo(TransferHistoryCard);

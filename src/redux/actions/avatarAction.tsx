@@ -1,5 +1,5 @@
 import { IAvatar } from '../reducers/avatarReducer';
-import { HANDLE_AVATAR_LIST, HANDLE_AVATAR_LAST_UPDATED } from '../types';
+import { HANDLE_AVATAR_LAST_UPDATED, HANDLE_AVATAR_LIST } from '../types';
 
 export const handleAvatarList = (avatarList: IAvatar[]) => ({ type: HANDLE_AVATAR_LIST, avatarList });
 export const handleAvatarLastupdated = (lastUpdated: number) => ({ type: HANDLE_AVATAR_LAST_UPDATED, lastUpdated });

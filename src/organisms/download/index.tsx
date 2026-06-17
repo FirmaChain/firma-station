@@ -1,4 +1,4 @@
-import DownloadList from "./downloadList";
-import TopCard from "./topCard";
+import DownloadList from './downloadList';
+import TopCard from './topCard';
 
 export { DownloadList, TopCard };

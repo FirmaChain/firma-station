@@ -1,188 +1,187 @@
-import React, { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useRef, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { QRCode } from 'react-qrcode-logo';
+import { useSelector } from 'react-redux';
 
-import useFirma from '../../utils/wallet';
-import { copyToClipboard } from '../../utils/common';
-import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
 import { GUIDE_LINK_EXPORT_MNEMONIC } from '../../config';
-
-import {
-  exportMnemonicModalWidth,
-  ModalContainer,
-  ModalTitle,
-  ModalContent,
-  ModalLabel,
-  ModalInput,
-  ModalInputWrap,
-  ExportPasswordWrapper,
-  InputBoxDefault,
-  ExportButton,
-  CopyIcon,
-  HelpIcon,
-  ButtonWrapper,
-  CancelButton,
-  MnemonicBox,
-  MnemonicTable,
-  MnemonicRow,
-  MnemonicCell,
-  ExportQRContainer,
-  QRWrapper
-} from './styles';
+import { modalActions } from '../../redux/action';
+import { rootState } from '../../redux/reducers';
 import theme from '../../themes';
+import { copyToClipboard } from '../../utils/common';
+import useFirma from '../../utils/wallet';
+import {
+	ButtonWrapper,
+	CancelButton,
+	CopyIcon,
+	ExportButton,
+	exportMnemonicModalWidth,
+	ExportPasswordWrapper,
+	ExportQRContainer,
+	HelpIcon,
+	InputBoxDefault,
+	MnemonicBox,
+	MnemonicCell,
+	MnemonicRow,
+	MnemonicTable,
+	ModalContainer,
+	ModalContent,
+	ModalInput,
+	ModalInputWrap,
+	ModalLabel,
+	ModalTitle,
+	QRWrapper
+} from './styles';
 
 const ExportMnemonicModal = () => {
-  const exportMnemonicModalState = useSelector((state: rootState) => state.modal.exportMnemonic);
-  const { isCorrectPassword, getDecryptMnemonic } = useFirma();
-  const { enqueueSnackbar } = useSnackbar();
+	const exportMnemonicModalState = useSelector((state: rootState) => state.modal.exportMnemonic);
+	const { isCorrectPassword, getDecryptMnemonic } = useFirma();
+	const { enqueueSnackbar } = useSnackbar();
 
-  const [password, setPassword] = useState('');
-  const [mnemonic, setMnemonic] = useState('');
-  const inputRef = useRef(null);
+	const [password, setPassword] = useState('');
+	const [mnemonic, setMnemonic] = useState('');
+	const inputRef = useRef(null);
 
-  const groupMnemonicWords = (mnemonic: string) => {
-    const words = mnemonic.split(' ');
-    const groups = [];
-    for (let i = 0; i < words.length; i += 4) {
-      groups.push(words.slice(i, i + 4));
-    }
-    return groups;
-  };
+	const groupMnemonicWords = (mnemonic: string) => {
+		const words = mnemonic.split(' ');
+		const groups = [];
+		for (let i = 0; i < words.length; i += 4) {
+			groups.push(words.slice(i, i + 4));
+		}
+		return groups;
+	};
 
-  const exportWallet = () => {
-    if (isCorrectPassword(password)) {
-      const mnemonic = getDecryptMnemonic();
+	const exportWallet = () => {
+		if (isCorrectPassword(password)) {
+			const mnemonic = getDecryptMnemonic();
 
-      if (mnemonic === '') {
-        enqueueSnackbar('Faild get Mnemonic (Private Key User)', {
-          variant: 'error',
-          autoHideDuration: 2000
-        });
-      }
-      setMnemonic(getDecryptMnemonic());
-    } else {
-      enqueueSnackbar('Invalid Password', {
-        variant: 'error',
-        autoHideDuration: 2000
-      });
-    }
-  };
+			if (mnemonic === '') {
+				enqueueSnackbar('Faild get Mnemonic (Private Key User)', {
+					variant: 'error',
+					autoHideDuration: 2000
+				});
+			}
+			setMnemonic(getDecryptMnemonic());
+		} else {
+			enqueueSnackbar('Invalid Password', {
+				variant: 'error',
+				autoHideDuration: 2000
+			});
+		}
+	};
 
-  const clipboard = () => {
-    copyToClipboard(mnemonic);
+	const clipboard = () => {
+		copyToClipboard(mnemonic);
 
-    enqueueSnackbar('Copied', {
-      variant: 'success',
-      autoHideDuration: 1000
-    });
-  };
+		enqueueSnackbar('Copied', {
+			variant: 'success',
+			autoHideDuration: 1000
+		});
+	};
 
-  const closeModal = () => {
-    modalActions.handleModalExportMnemonic(false);
-  };
+	const closeModal = () => {
+		modalActions.handleModalExportMnemonic(false);
+	};
 
-  const onChangePassword = (e: any) => {
-    if (e === null) return;
-    setPassword(e.target.value);
-  };
+	const onChangePassword = (e: any) => {
+		if (e === null) return;
+		setPassword(e.target.value);
+	};
 
-  const onKeyDownPassword = (e: any) => {
-    if (e.key === 'Enter') {
-      if (password.length >= 8) exportWallet();
-    }
-  };
-  return (
-    <Modal
-      visible={exportMnemonicModalState}
-      closable={true}
-      visibleClose={false}
-      onClose={closeModal}
-      width={exportMnemonicModalWidth}
-    >
-      <ModalContainer>
-        <ModalTitle>
-          Export Mnemonic
-          <HelpIcon onClick={() => window.open(GUIDE_LINK_EXPORT_MNEMONIC)} />
-        </ModalTitle>
-        <ModalContent>
-          {mnemonic === '' ? (
-            <>
-              <ModalInputWrap>
-                <ModalLabel>Password</ModalLabel>
-                <ExportPasswordWrapper>
-                  <InputBoxDefault
-                    ref={inputRef}
-                    placeholder="Enter Password"
-                    type="password"
-                    value={password}
-                    onChange={onChangePassword}
-                    onKeyDown={onKeyDownPassword}
-                    autoFocus={true}
-                  />
-                </ExportPasswordWrapper>
-              </ModalInputWrap>
-              <ButtonWrapper>
-                <CancelButton onClick={() => closeModal()} $status={1}>
-                  Cancel
-                </CancelButton>
+	const onKeyDownPassword = (e: any) => {
+		if (e.key === 'Enter') {
+			if (password.length >= 8) exportWallet();
+		}
+	};
+	return (
+		<Modal
+			visible={exportMnemonicModalState}
+			closable={true}
+			visibleClose={false}
+			onClose={closeModal}
+			width={exportMnemonicModalWidth}
+		>
+			<ModalContainer>
+				<ModalTitle>
+					Export Mnemonic
+					<HelpIcon onClick={() => window.open(GUIDE_LINK_EXPORT_MNEMONIC)} />
+				</ModalTitle>
+				<ModalContent>
+					{mnemonic === '' ? (
+						<>
+							<ModalInputWrap>
+								<ModalLabel>Password</ModalLabel>
+								<ExportPasswordWrapper>
+									<InputBoxDefault
+										ref={inputRef}
+										placeholder="Enter Password"
+										type="password"
+										value={password}
+										onChange={onChangePassword}
+										onKeyDown={onKeyDownPassword}
+										autoFocus={true}
+									/>
+								</ExportPasswordWrapper>
+							</ModalInputWrap>
+							<ButtonWrapper>
+								<CancelButton onClick={() => closeModal()} $status={1}>
+									Cancel
+								</CancelButton>
 
-                <ExportButton
-                  $status={password.length >= 8 ? 0 : 2}
-                  onClick={() => {
-                    if (password.length >= 8) exportWallet();
-                  }}
-                >
-                  Export
-                </ExportButton>
-              </ButtonWrapper>
-            </>
-          ) : (
-            <>
-              <ModalInputWrap>
-                <ModalLabel>Mnemonic</ModalLabel>
-                <ModalInput>
-                  <MnemonicBox>
-                    <MnemonicTable>
-                      <tbody>
-                        {groupMnemonicWords(mnemonic).map((group, index) => (
-                          <MnemonicRow key={index}>
-                            {group.map((word, wordIndex) => (
-                              <MnemonicCell key={wordIndex}>{word}</MnemonicCell>
-                            ))}
-                          </MnemonicRow>
-                        ))}
-                      </tbody>
-                    </MnemonicTable>
-                  </MnemonicBox>
-                  <CopyIcon onClick={clipboard} />
-                </ModalInput>
-              </ModalInputWrap>
-              <ExportQRContainer>
-                <QRWrapper>
-                  <QRCode
-                    value={mnemonic}
-                    quietZone={0}
-                    logoImage={theme.urls.qrIcon}
-                    logoWidth={60}
-                    logoHeight={60}
-                    size={200}
-                  />
-                </QRWrapper>
-              </ExportQRContainer>
-              <ButtonWrapper>
-                <CancelButton onClick={() => closeModal()} $status={1}>
-                  Close
-                </CancelButton>
-              </ButtonWrapper>
-            </>
-          )}
-        </ModalContent>
-      </ModalContainer>
-    </Modal>
-  );
+								<ExportButton
+									$status={password.length >= 8 ? 0 : 2}
+									onClick={() => {
+										if (password.length >= 8) exportWallet();
+									}}
+								>
+									Export
+								</ExportButton>
+							</ButtonWrapper>
+						</>
+					) : (
+						<>
+							<ModalInputWrap>
+								<ModalLabel>Mnemonic</ModalLabel>
+								<ModalInput>
+									<MnemonicBox>
+										<MnemonicTable>
+											<tbody>
+												{groupMnemonicWords(mnemonic).map((group, index) => (
+													<MnemonicRow key={index}>
+														{group.map((word, wordIndex) => (
+															<MnemonicCell key={wordIndex}>{word}</MnemonicCell>
+														))}
+													</MnemonicRow>
+												))}
+											</tbody>
+										</MnemonicTable>
+									</MnemonicBox>
+									<CopyIcon onClick={clipboard} />
+								</ModalInput>
+							</ModalInputWrap>
+							<ExportQRContainer>
+								<QRWrapper>
+									<QRCode
+										value={mnemonic}
+										quietZone={0}
+										logoImage={theme.urls.qrIcon}
+										logoWidth={60}
+										logoHeight={60}
+										size={200}
+									/>
+								</QRWrapper>
+							</ExportQRContainer>
+							<ButtonWrapper>
+								<CancelButton onClick={() => closeModal()} $status={1}>
+									Close
+								</CancelButton>
+							</ButtonWrapper>
+						</>
+					)}
+				</ModalContent>
+			</ModalContainer>
+		</Modal>
+	);
 };
 
 export default React.memo(ExportMnemonicModal);

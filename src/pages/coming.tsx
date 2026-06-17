@@ -1,13 +1,14 @@
-import React from "react";
-import { ContentContainer } from "../styles/home";
-import { ComingDiv } from "../organisms/coming";
+import React from 'react';
+
+import { ComingDiv } from '../organisms/coming';
+import { ContentContainer } from '../styles/home';
 
 const Coming = () => {
-  return (
-    <ContentContainer>
-      <ComingDiv />
-    </ContentContainer>
-  );
+	return (
+		<ContentContainer>
+			<ComingDiv />
+		</ContentContainer>
+	);
 };
 
 export default React.memo(Coming);

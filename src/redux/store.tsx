@@ -1,14 +1,14 @@
-import { createStore, applyMiddleware } from "redux";
-import { persistReducer } from "redux-persist";
-import { thunk } from "redux-thunk";
-import storage from "redux-persist/es/storage";
+import { applyMiddleware, createStore } from 'redux';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/es/storage';
+import { thunk } from 'redux-thunk';
 
-import reducers from "./reducers";
+import reducers from './reducers';
 
 const persistConfig = {
-  key: "root",
-  storage,
-  blacklist: ["modal"],
+	key: 'root',
+	storage,
+	blacklist: ['modal']
 };
 
 export default createStore(persistReducer(persistConfig, reducers), applyMiddleware(thunk));

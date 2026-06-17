@@ -1,34 +1,34 @@
 interface IKeyValue {
-  [key: string]: string;
+	[key: string]: string;
 }
 
 export const PROPOSAL_STATUS: IKeyValue = {
-  PROPOSAL_STATUS_DEPOSIT_PERIOD: 'DEPOSIT',
-  PROPOSAL_STATUS_VOTING_PERIOD: 'VOTING',
-  PROPOSAL_STATUS_PASSED: 'PASSED',
-  PROPOSAL_STATUS_REJECTED: 'REJECTED',
-  PROPOSAL_STATUS_FAILED: 'FAILED',
-  PROPOSAL_STATUS_INVALID: 'INVALID'
+	PROPOSAL_STATUS_DEPOSIT_PERIOD: 'DEPOSIT',
+	PROPOSAL_STATUS_VOTING_PERIOD: 'VOTING',
+	PROPOSAL_STATUS_PASSED: 'PASSED',
+	PROPOSAL_STATUS_REJECTED: 'REJECTED',
+	PROPOSAL_STATUS_FAILED: 'FAILED',
+	PROPOSAL_STATUS_INVALID: 'INVALID'
 };
 
 export const PROPOSAL_MESSAGE_TYPE: IKeyValue = {
-  '/cosmos.gov.v1beta1.TextProposal': 'Text',
-  '/cosmos.gov.v1.MsgCancelProposal': 'CancelProposal', // New
+	'/cosmos.gov.v1beta1.TextProposal': 'Text',
+	'/cosmos.gov.v1.MsgCancelProposal': 'CancelProposal', // New
 
-  '/cosmos.params.v1beta1.ParameterChangeProposal': 'ParameterChange',
-  '/cosmos.gov.v1.MsgUpdateParams': 'GovParameterChange', // New
-  '/cosmos.staking.v1beta1.MsgUpdateParams': 'StakingParameterChange', // New
-  '/cosmos.staking.v1.MsgUpdateParams': 'StakingParameterChange', // New
+	'/cosmos.params.v1beta1.ParameterChangeProposal': 'ParameterChange',
+	'/cosmos.gov.v1.MsgUpdateParams': 'GovParameterChange', // New
+	'/cosmos.staking.v1beta1.MsgUpdateParams': 'StakingParameterChange', // New
+	'/cosmos.staking.v1.MsgUpdateParams': 'StakingParameterChange', // New
 
-  '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal': 'CommunityPoolSpend',
-  '/cosmos.distribution.v1beta1.MsgCommunityPoolSpend': 'CommunityPoolSpend', // New
+	'/cosmos.distribution.v1beta1.CommunityPoolSpendProposal': 'CommunityPoolSpend',
+	'/cosmos.distribution.v1beta1.MsgCommunityPoolSpend': 'CommunityPoolSpend', // New
 
-  '/cosmos.authz.v1beta1.MsgExec': 'AuthzExec',
-  '/cosmos.bank.v1beta1.MsgSend': 'Send',
+	'/cosmos.authz.v1beta1.MsgExec': 'AuthzExec',
+	'/cosmos.bank.v1beta1.MsgSend': 'Send',
 
-  '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal': 'SoftwareUpgrade',
-  '/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade': 'SoftwareUpgrade', // New
-  '/cosmos.upgrade.v1.MsgSoftwareUpgrade': 'SoftwareUpgrade' // New
+	'/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal': 'SoftwareUpgrade',
+	'/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade': 'SoftwareUpgrade', // New
+	'/cosmos.upgrade.v1.MsgSoftwareUpgrade': 'SoftwareUpgrade' // New
 };
 
 export const PROPOSAL_MESSAGE_TYPE_TEXT = 'Text';

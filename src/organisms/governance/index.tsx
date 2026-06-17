@@ -1,4 +1,4 @@
-import ProposalCard from "./proposalCard";
-import ProposalButtons from "./proposalButtons";
+import ProposalButtons from './proposalButtons';
+import ProposalCard from './proposalCard';
 
 export { ProposalCard, ProposalButtons };

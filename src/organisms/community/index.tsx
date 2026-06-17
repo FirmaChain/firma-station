@@ -1,4 +1,4 @@
-import CommunityList from "./communityList";
-import TopCard from "./topCard";
+import CommunityList from './communityList';
+import TopCard from './topCard';
 
 export { CommunityList, TopCard };

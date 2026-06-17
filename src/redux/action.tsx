@@ -1,11 +1,10 @@
 import { bindActionCreators } from 'redux';
 
-import * as modalAction from './actions/modalAction';
-import * as walletAction from './actions/walletAction';
-import * as userAction from './actions/userAction';
 import * as avatarAction from './actions/avatarAction';
+import * as modalAction from './actions/modalAction';
 import * as refreshAction from './actions/refreshAction';
-
+import * as userAction from './actions/userAction';
+import * as walletAction from './actions/walletAction';
 import store from './store';
 
 const { dispatch } = store;
