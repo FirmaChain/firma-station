@@ -6,7 +6,7 @@
 	"homepage": "./",
 	"dependencies": {
 		"@firmachain/firma-js": "0.4.3-beta1",
-		"@ledgerhq/hw-transport-webhid": "^6.35.2",
+		"@ledgerhq/hw-transport-webhid": "^6.35.4",
 		"@mui/icons-material": "^6.5.0",
 		"@mui/material": "7.3.9",
 		"@mui/styled-engine-sc": "7.3.9",
@@ -23,7 +23,7 @@
 		"react": "^19.2.7",
 		"react-device-detect": "^2.2.2",
 		"react-dom": "^19.2.7",
-		"react-idle-timer": "^4.6.4",
+		"react-idle-timer": "^5.7.3",
 		"react-markdown": "^10.1.0",
 		"react-qrcode-logo": "^4.1.0",
 		"react-responsive": "^10.0.1",
@@ -41,14 +41,14 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@ianvs/prettier-plugin-sort-imports": "^4.4.0",
-		"@types/node": "^25.9.1",
+		"@types/node": "^25.9.3",
 		"@types/numeral": "^2.0.2",
 		"@types/qrcode": "^1.5.0",
-		"@types/react": "^19.2.3",
+		"@types/react": "^19.2.17",
 		"@types/react-dom": "^19.2.3",
 		"@types/react-window": "^1.8.5",
 		"@vitejs/plugin-react": "^6.0.2",
-		"cypress": "^15.16.0",
+		"cypress": "^15.17.0",
 		"eslint": "^9.15.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-react-hooks": "^7.1.1",
@@ -60,7 +60,7 @@
 		"vite": "^8.0.16",
 		"vite-plugin-bundle-obfuscator": "^1.12.0",
 		"vite-plugin-node-polyfills": "^0.28.0",
-		"web-vitals": "^1.0.1"
+		"web-vitals": "^5.3.0"
 	},
 	"scripts": {
 		"dev": "vite dev",

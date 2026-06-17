@@ -969,7 +969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ledgerhq/hw-transport-webhid@npm:^6.29.4, @ledgerhq/hw-transport-webhid@npm:^6.35.2":
+"@ledgerhq/hw-transport-webhid@npm:^6.29.4, @ledgerhq/hw-transport-webhid@npm:^6.35.4":
   version: 6.35.4
   resolution: "@ledgerhq/hw-transport-webhid@npm:6.35.4"
   dependencies:
@@ -1880,7 +1880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=13.7.0, @types/node@npm:^25.9.1":
+"@types/node@npm:*, @types/node@npm:>=13.7.0, @types/node@npm:^25.9.3":
   version: 25.9.3
   resolution: "@types/node@npm:25.9.3"
   dependencies:
@@ -1953,7 +1953,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^19.2.3":
+"@types/react@npm:*, @types/react@npm:^19.2.17":
   version: 19.2.17
   resolution: "@types/react@npm:19.2.17"
   dependencies:
@@ -3324,7 +3324,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^15.16.0":
+"cypress@npm:^15.17.0":
   version: 15.17.0
   resolution: "cypress@npm:15.17.0"
   dependencies:
@@ -4193,21 +4193,21 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@firmachain/firma-js": "npm:0.4.3-beta1"
     "@ianvs/prettier-plugin-sort-imports": "npm:^4.4.0"
-    "@ledgerhq/hw-transport-webhid": "npm:^6.35.2"
+    "@ledgerhq/hw-transport-webhid": "npm:^6.35.4"
     "@mui/icons-material": "npm:^6.5.0"
     "@mui/material": "npm:7.3.9"
     "@mui/styled-engine-sc": "npm:7.3.9"
     "@nivo/core": "npm:^0.99.0"
     "@nivo/pie": "npm:^0.99.0"
     "@pdf-lib/fontkit": "npm:^1.1.1"
-    "@types/node": "npm:^25.9.1"
+    "@types/node": "npm:^25.9.3"
     "@types/numeral": "npm:^2.0.2"
     "@types/qrcode": "npm:^1.5.0"
-    "@types/react": "npm:^19.2.3"
+    "@types/react": "npm:^19.2.17"
     "@types/react-dom": "npm:^19.2.3"
     "@types/react-window": "npm:^1.8.5"
     "@vitejs/plugin-react": "npm:^6.0.2"
-    cypress: "npm:^15.16.0"
+    cypress: "npm:^15.17.0"
     dayjs: "npm:^1.11.21"
     es-toolkit: "npm:^1.47.1"
     eslint: "npm:^9.15.0"
@@ -4224,7 +4224,7 @@ __metadata:
     react: "npm:^19.2.7"
     react-device-detect: "npm:^2.2.2"
     react-dom: "npm:^19.2.7"
-    react-idle-timer: "npm:^4.6.4"
+    react-idle-timer: "npm:^5.7.3"
     react-markdown: "npm:^10.1.0"
     react-qrcode-logo: "npm:^4.1.0"
     react-responsive: "npm:^10.0.1"
@@ -4242,7 +4242,7 @@ __metadata:
     vite: "npm:^8.0.16"
     vite-plugin-bundle-obfuscator: "npm:^1.12.0"
     vite-plugin-node-polyfills: "npm:^0.28.0"
-    web-vitals: "npm:^1.0.1"
+    web-vitals: "npm:^5.3.0"
     zustand: "npm:^5.0.14"
   languageName: unknown
   linkType: soft
@@ -7008,14 +7008,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-idle-timer@npm:^4.6.4":
-  version: 4.6.4
-  resolution: "react-idle-timer@npm:4.6.4"
+"react-idle-timer@npm:^5.7.3":
+  version: 5.7.3
+  resolution: "react-idle-timer@npm:5.7.3"
   peerDependencies:
-    prop-types: ">=15"
     react: ">=16"
     react-dom: ">=16"
-  checksum: 10c0/15b7d4ec9de49b3a936b2bc262df64ad2680ff9266214894ea1c56561cda9ca69238b13e5ef80fe0e6e5c74db570c7b97e727eb93d25a6e950b2c9d139455ab6
+  checksum: 10c0/09378c2d0ed0e84864a22bd96ac1ac3a52e089605146c621d5ead8dec5ea180769d84aff817ee0e8f6c6d41bbdf94d8d74635e3189ec3b3ea59c707adb6b2bc8
   languageName: node
   linkType: hard
 
@@ -8660,10 +8659,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^1.0.1":
-  version: 1.1.2
-  resolution: "web-vitals@npm:1.1.2"
-  checksum: 10c0/9521ea2e8ca2e4446ba8e3d5430b0c9a9a07e0d6f468a90dc5fab2bab524fb1a699f3874ea392c9e35a63dcf3651b40130d58ebd78e53a406cb9622049bf1403
+"web-vitals@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "web-vitals@npm:5.3.0"
+  checksum: 10c0/a073c024d791bfac7a92f82607999b45be978ef3070f642f3cdd94c50d3e1651cf62b2475039248256b2d84651e16fa9bdcaa4b03f31af8bfeefb05832298b97
   languageName: node
   linkType: hard
 
