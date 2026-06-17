@@ -41,19 +41,16 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
-      // Vite 8 switched dep optimization to Rolldown, which no longer emits the
-      // `.default` interop for CJS packages whose `__esModule` flag is only set
-      // at runtime (the lazy require facade). That drops the default export to a
-      // module namespace object. Unwrap it at the source import for the affected
-      // CJS deps we default-import.
+      // Keep default imports from legacy CJS packages stable under Vite 7's
+      // dependency optimizer. Unwrap the source import for the affected deps we
+      // default-import in the app.
       cjsInterop({
         client: true,
         dependencies: [
           '@mui/icons-material/**',
           'react-spinners/**',
           'crypto-js',
-          'qrcode',
-          'redux-persist/lib/storage'
+          'qrcode'
         ]
       }),
       nodePolyfills({ exclude: ['crypto'] }),
