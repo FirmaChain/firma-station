@@ -45,7 +45,6 @@
     "styled-normalize": "^8.0.7"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/crypto-js": "^4.0.2",
     "@types/node": "^25.9.1",
     "@types/numeral": "^2.0.2",
@@ -55,7 +54,6 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-window": "^1.8.5",
     "@vitejs/plugin-react-swc": "^4.3.1",
-    "ajv": "^8.20.0",
     "cypress": "^15.16.0",
     "pdf-lib": "^1.17.1",
     "prettier": "^3.3.3",
@@ -94,9 +92,7 @@
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@7.3.9",
     "axios": "1.16.1",
-    "fast-uri": "^3.1.2",
     "postcss": "^8.5.10",
-    "ip-address": "^10.1.1",
     "tmp": "^0.2.6"
   }
 }
