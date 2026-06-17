@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import GridLoader from 'react-spinners/GridLoader';
+import { GridLoader } from 'react-spinners';
 
 import { Modal } from '../../components/modal';
 import { modalActions } from '../../redux/action';

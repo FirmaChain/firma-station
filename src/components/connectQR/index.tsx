@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { QRCode } from 'react-qrcode-logo';
-import GridLoader from 'react-spinners/GridLoader';
+import { GridLoader } from 'react-spinners';
 import styled, { css, keyframes } from 'styled-components';
 
 import theme from '../../themes';

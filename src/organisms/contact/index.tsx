@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ky from 'ky';
 import { isMobile } from 'react-device-detect';
 import { useSelector } from 'react-redux';
-import GridLoader from 'react-spinners/GridLoader';
+import { GridLoader } from 'react-spinners';
 
 import { CHAIN_CONFIG } from '../../config';
 import { rootState } from '../../redux/reducers';
@@ -30,7 +30,8 @@ const Contact = () => {
 	const [isLoading, setLoading] = useState(true);
 
 	useEffect(() => {
-		ky.post(`${CHAIN_CONFIG.API_HOST}/status`, { json: { data: encryptData(address) } })
+		encryptData(address)
+			.then((data) => ky.post(`${CHAIN_CONFIG.API_HOST}/status`, { json: { data } }))
 			.then(() => {})
 			.catch(() => {});
 		setTimeout(() => {

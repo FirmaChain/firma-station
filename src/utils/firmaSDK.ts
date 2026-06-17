@@ -82,7 +82,7 @@ const FirmaSDKInternal = ({ isLedger, isMobileApp, getDecryptPrivateKey }: any) 
 					return await firmaSDK.Wallet.initFromLedger(webLedgerWallet);
 				}
 			} else {
-				const privateKey = getDecryptPrivateKey();
+				const privateKey = await getDecryptPrivateKey();
 				return await firmaSDK.Wallet.fromPrivateKey(privateKey);
 			}
 		} catch (e: any) {

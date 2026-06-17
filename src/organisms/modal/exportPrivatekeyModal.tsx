@@ -39,9 +39,9 @@ const ExportPrivatekeyModal = () => {
 	const [privatekey, setPrivatekey] = useState('');
 	const inputRef = useRef(null);
 
-	const exportWallet = () => {
-		if (isCorrectPassword(password)) {
-			setPrivatekey(getDecryptPrivateKey());
+	const exportWallet = async () => {
+		if (await isCorrectPassword(password)) {
+			setPrivatekey(await getDecryptPrivateKey());
 		} else {
 			enqueueSnackbar('Invalid Password', {
 				variant: 'error',

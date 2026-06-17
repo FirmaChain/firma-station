@@ -18,7 +18,7 @@ export const invalidateWallet = (store: string) => {
 	return Object.keys(stored).length === 0;
 };
 
-export const getStoredWallet = (store: string, password: string): Wallet => {
+export const getStoredWallet = async (store: string, password: string): Promise<Wallet> => {
 	const stored = loadKeys(store);
 
 	if (!stored) throw new Error('Key does not exist');
@@ -26,23 +26,25 @@ export const getStoredWallet = (store: string, password: string): Wallet => {
 	return decryptWallet(stored.wallet, password);
 };
 
-export const storeKey = (store: string, password: string, wallet: Wallet) => {
-	const encryptData = encryptWallet(password, wallet);
+export const storeKey = async (store: string, password: string, wallet: Wallet) => {
+	const encryptData = await encryptWallet(password, wallet);
 
 	storeKeys(store, encryptData);
 };
 
-const decryptWallet = (wallet: string, password: string) => {
+const decryptWallet = async (wallet: string, password: string): Promise<Wallet> => {
 	try {
-		const decrypted = decrypt(wallet, password);
+		const decrypted = await decrypt(wallet, password);
+		if (!decrypted) throw new Error('Incorrect password');
+
 		return JSON.parse(decrypted);
 	} catch (err) {
-		throw new Error('Incorrect password');
+		throw new Error('Incorrect password', { cause: err });
 	}
 };
 
-const encryptWallet = (password: string, wallet: Wallet): Key => {
-	const encrypted = encrypt(JSON.stringify(wallet), password);
+const encryptWallet = async (password: string, wallet: Wallet): Promise<Key> => {
+	const encrypted = await encrypt(JSON.stringify(wallet), password);
 
 	if (!encrypted) throw new Error('Encryption error occurred');
 

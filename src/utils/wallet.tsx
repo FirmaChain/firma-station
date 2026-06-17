@@ -62,29 +62,27 @@ function useFirma() {
 		}
 	};
 
-	const restoreWalletInternal = (timeKey: string) => {
-		let wallet = null;
-
+	const restoreWalletInternal = async (timeKey: string): Promise<Wallet | null> => {
 		try {
-			wallet = restoreWallet(timeKey, true);
-		} catch (error) {}
-
-		return wallet;
+			return await restoreWallet(timeKey, true);
+		} catch (error) {
+			return null;
+		}
 	};
 
-	const getDecryptPrivateKey = (): string => {
+	const getDecryptPrivateKey = async (): Promise<string> => {
 		if (!isInit) throw new Error('INVALID WALLET');
 
-		const wallet = restoreWalletInternal(timeKey);
+		const wallet = await restoreWalletInternal(timeKey);
 
 		if (wallet?.privateKey !== undefined) return wallet.privateKey;
 		else throw new Error('INVALID WALLET');
 	};
 
-	const getDecryptMnemonic = (): string => {
+	const getDecryptMnemonic = async (): Promise<string> => {
 		if (!isInit) throw new Error('INVALID WALLET');
 
-		const wallet = restoreWalletInternal(timeKey);
+		const wallet = await restoreWalletInternal(timeKey);
 
 		if (wallet?.mnemonic !== undefined) return wallet.mnemonic;
 		else return '';
@@ -108,7 +106,7 @@ function useFirma() {
 		return newWallet.getMnemonic();
 	};
 
-	const storeWalletInternal = (password: string, mnemonic: string, privateKey: string, address: string, timeKey: string) => {
+	const storeWalletInternal = async (password: string, mnemonic: string, privateKey: string, address: string, timeKey: string) => {
 		const wallet: Wallet = {
 			mnemonic,
 			privateKey,
@@ -124,8 +122,8 @@ function useFirma() {
 		walletActions.handleWalletAddress(address);
 		walletActions.handleWalletLedger(false);
 
-		storeWallet(password, wallet);
-		storeWallet(timeKey, wallet, true);
+		await storeWallet(password, wallet);
+		await storeWallet(timeKey, wallet, true);
 		initWallet(true);
 	};
 
@@ -138,7 +136,7 @@ function useFirma() {
 		const timeKey = getRandomKey();
 		walletActions.handleWalletTimeKey(timeKey);
 
-		storeWalletInternal(password, mnemonic, privateKey, address, timeKey);
+		await storeWalletInternal(password, mnemonic, privateKey, address, timeKey);
 	};
 
 	const storeWalletFromPrivateKey = async (password: string, privateKey: string) => {
@@ -149,7 +147,7 @@ function useFirma() {
 		const timeKey = getRandomKey();
 		walletActions.handleWalletTimeKey(timeKey);
 
-		storeWalletInternal(password, '', privateKey, address, timeKey);
+		await storeWalletInternal(password, '', privateKey, address, timeKey);
 	};
 
 	const connectLedger = async () => {
@@ -193,18 +191,14 @@ function useFirma() {
 	const isValidWallet = () => {
 		if (isInvalidWallet()) return true;
 		if (isLedger) return true;
+		if (!isInit) return false;
 
-		let wallet = null;
-		try {
-			wallet = restoreWallet(timeKey, true);
-		} catch (error) {}
-
-		return wallet !== null;
+		return !isTimeout(timeKey);
 	};
 
-	const isCorrectPassword = (password: string) => {
+	const isCorrectPassword = async (password: string) => {
 		try {
-			restoreWallet(password);
+			await restoreWallet(password);
 			return true;
 		} catch (error) {
 			return false;
@@ -212,7 +206,7 @@ function useFirma() {
 	};
 
 	const loginWallet = async (password: string) => {
-		const wallet = restoreWallet(password);
+		const wallet = await restoreWallet(password);
 
 		if (wallet.mnemonic !== '') {
 			await storeWalletFromMnemonic(password, wallet.mnemonic);
@@ -254,8 +248,8 @@ function useFirma() {
 	};
 
 	const downloadPaperWallet = async () => {
-		const privateKey = getDecryptPrivateKey();
-		const mnemonic = getDecryptMnemonic();
+		const privateKey = await getDecryptPrivateKey();
+		const mnemonic = await getDecryptMnemonic();
 
 		const paperWallet = new FirmaPaperWallet({
 			address,
@@ -1143,8 +1137,8 @@ function useFirma() {
 		// New functions for offline mode
 		getMnemonic: async (password: string): Promise<string | null> => {
 			try {
-				if (!isCorrectPassword(password)) return null;
-				const mnemonic = getDecryptMnemonic();
+				if (!(await isCorrectPassword(password))) return null;
+				const mnemonic = await getDecryptMnemonic();
 				return mnemonic || null;
 			} catch (error) {
 				console.error('Error getting mnemonic:', error);
@@ -1153,8 +1147,8 @@ function useFirma() {
 		},
 		getPrivateKey: async (password: string): Promise<string | null> => {
 			try {
-				if (!isCorrectPassword(password)) return null;
-				const privateKey = getDecryptPrivateKey();
+				if (!(await isCorrectPassword(password))) return null;
+				const privateKey = await getDecryptPrivateKey();
 				return privateKey || null;
 			} catch (error) {
 				console.error('Error getting private key:', error);

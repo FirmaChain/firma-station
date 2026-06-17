@@ -237,7 +237,7 @@ const ExportPrivateKey: React.FC<ExportPrivateKeyProps> = ({ onBack }) => {
 
 		setIsLoading(true);
 		try {
-			if (!isCorrectPassword(password)) {
+			if (!(await isCorrectPassword(password))) {
 				setError('Invalid password');
 				enqueueSnackbar('Invalid password', {
 					variant: 'error',

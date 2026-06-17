@@ -206,7 +206,7 @@ const DownloadPaperWallet: React.FC<DownloadPaperWalletProps> = ({ onBack }) => 
 
 		setIsLoading(true);
 		try {
-			if (!isCorrectPassword(password)) {
+			if (!(await isCorrectPassword(password))) {
 				setError('Invalid password');
 				enqueueSnackbar('Invalid password', {
 					variant: 'error',

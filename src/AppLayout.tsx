@@ -45,7 +45,7 @@ const AppLayout = () => {
 		getNotice()
 			.then((maintenance) => setMaintenance(maintenance))
 			.catch(() => {});
-	}, [address, location]);
+	}, [address, location.pathname]);
 
 	useEffect(() => {
 		// Skip network calls if in offline mode
@@ -58,7 +58,7 @@ const AppLayout = () => {
 		getContactAddressList()
 			.then((contactAddressList) => setContactAddressList(contactAddressList))
 			.catch(() => {});
-	}, [address, location]);
+	}, [address, location.pathname]);
 
 	useEffect(() => {
 		const isOfflineMode = location.pathname.includes('/offline-mode');
@@ -75,7 +75,7 @@ const AppLayout = () => {
 			setContact(contactAddressList !== null && contactAddressList.includes(address));
 			setLogin(isValidWallet() === false);
 		}
-	}, [maintenance, contactAddressList, location]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [maintenance, contactAddressList, location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const render = () => {
 		if (!isLoaded) return <MainContainer />;

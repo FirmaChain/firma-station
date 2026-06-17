@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useSelector } from 'react-redux';
-import GridLoader from 'react-spinners/GridLoader';
+import { GridLoader } from 'react-spinners';
 
 import { Modal } from '../../components/modal';
 import { modalActions, refreshActions } from '../../redux/action';

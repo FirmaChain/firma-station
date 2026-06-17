@@ -70,9 +70,9 @@ const ConfirmTxModal = () => {
 		modalActions.handleModalConfirmTx(false);
 	};
 
-	const queueTx = () => {
+	const queueTx = async () => {
 		if (isActive || isLedger) {
-			if (isCorrectPassword(password) || isLedger) {
+			if (isLedger || (await isCorrectPassword(password))) {
 				closeConfirmTxModal();
 				modalActions.handleModalQueueTx(true);
 			} else {

@@ -51,9 +51,9 @@ const ExportMnemonicModal = () => {
 		return groups;
 	};
 
-	const exportWallet = () => {
-		if (isCorrectPassword(password)) {
-			const mnemonic = getDecryptMnemonic();
+	const exportWallet = async () => {
+		if (await isCorrectPassword(password)) {
+			const mnemonic = await getDecryptMnemonic();
 
 			if (mnemonic === '') {
 				enqueueSnackbar('Faild get Mnemonic (Private Key User)', {
@@ -61,7 +61,7 @@ const ExportMnemonicModal = () => {
 					autoHideDuration: 2000
 				});
 			}
-			setMnemonic(getDecryptMnemonic());
+			setMnemonic(mnemonic);
 		} else {
 			enqueueSnackbar('Invalid Password', {
 				variant: 'error',

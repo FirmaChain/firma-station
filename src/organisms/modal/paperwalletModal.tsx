@@ -52,8 +52,8 @@ const PaperwalletModal = () => {
 		}
 	};
 
-	const downloadWallet = () => {
-		if (isCorrectPassword(password)) {
+	const downloadWallet = async () => {
+		if (await isCorrectPassword(password)) {
 			downloadPaperWallet()
 				.then((uri) => {
 					const a = document.createElement('a');

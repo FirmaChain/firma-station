@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
 		plugins: [
 			react(),
 
-			nodePolyfills({ exclude: ['crypto'] }),
+			nodePolyfills({ globals: { Buffer: true } }),
 			...(env.NODE_ENV === 'production' ? [vitePluginBundleObfuscator(minimizeObfuscatorConfig)] : [])
 		],
 
@@ -60,6 +60,10 @@ export default defineConfig(({ mode }) => {
 		build: {
 			outDir: 'build',
 			sourcemap: false
+		},
+
+		optimizeDeps: {
+			exclude: ['react-spinners']
 		},
 
 		resolve: {
