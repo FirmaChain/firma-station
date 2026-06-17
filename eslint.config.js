@@ -25,7 +25,7 @@ export default tseslint.config(
 		}
 	},
 	{
-		files: ['**/*.{js,jsx,ts,tsx}'],  
+		files: ['**/*.{js,jsx,ts,tsx}'],
 		plugins: {
 			'react-hooks': reactHooks,
 			'react-refresh': reactRefresh

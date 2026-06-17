@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 
-import { getHistoryByAddress } from '../../utils/graphqlQuery';
 import { IHistoryByAddressState } from '../../interfaces/history';
 import { useWalletStore } from '../../store';
+import { getHistoryByAddress } from '../../utils/graphqlQuery';
 
 const ITEMS_PER_PAGE = 50;
 

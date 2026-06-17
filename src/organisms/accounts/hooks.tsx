@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 
-import { getHistoryByAddress } from '../../utils/graphqlQuery';
 import { IBC_CONFIG } from '../../config';
 import { ITokensState, ITransferHistoryByAddressState } from '../../interfaces/history';
 import { useWalletStore } from '../../store';
 import { convertNumber } from '../../utils/common';
+import { getHistoryByAddress } from '../../utils/graphqlQuery';
 import { getTokenData } from '../../utils/lcdQuery';
 
 export const useTransferHistoryByAddress = () => {

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { getValidatorRedelegationsFromIndexer } from '../../utils/graphqlQuery';
 import { CHAIN_CONFIG } from '../../config';
 import { ISigningInfo, IValidatorData } from '../../interfaces/lcd';
 import {
@@ -19,6 +18,7 @@ import {
 import { useAvatarStore, useWalletStore } from '../../store';
 import { getAvatarInfo, getAvatarInfoFromAcc } from '../../utils/avatar';
 import { convertNumber, convertToFctString, makeDecimalPoint } from '../../utils/common';
+import { getValidatorRedelegationsFromIndexer } from '../../utils/graphqlQuery';
 import {
 	getAccAddressFromValOperAddress,
 	getInflation,

@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { groupBy } from 'es-toolkit/array';
 import ky from 'ky';
 
-import { getProposalQueryFromId } from '../../utils/graphqlQuery';
 import { CHAIN_CONFIG } from '../../config';
 import { IProposalDetailState, IProposalsState } from '../../interfaces/governance';
 import { IProposalQueryData } from '../../interfaces/gql';
 import { IProposalData } from '../../interfaces/lcd';
 import { useAvatarStore } from '../../store';
 import { getAvatarInfoFromAcc } from '../../utils/avatar';
+import { getProposalQueryFromId } from '../../utils/graphqlQuery';
 import { getProposalFromId, getProposalList } from '../../utils/lcdQuery';
 
 export const useGovernanceData = () => {
