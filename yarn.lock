@@ -4299,7 +4299,7 @@ __metadata:
     react: "npm:^19.2.7"
     react-device-detect: "npm:^2.2.2"
     react-dom: "npm:^19.2.7"
-    react-idle-timer: "npm:^4.6.4"
+    react-idle-timer: "npm:^5.7.3"
     react-markdown: "npm:^10.1.0"
     react-qrcode-logo: "npm:^4.1.0"
     react-redux: "npm:^9.3.0"
@@ -7209,14 +7209,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-idle-timer@npm:^4.6.4":
-  version: 4.6.4
-  resolution: "react-idle-timer@npm:4.6.4"
+"react-idle-timer@npm:^5.7.3":
+  version: 5.7.3
+  resolution: "react-idle-timer@npm:5.7.3"
   peerDependencies:
-    prop-types: ">=15"
     react: ">=16"
     react-dom: ">=16"
-  checksum: 10c0/15b7d4ec9de49b3a936b2bc262df64ad2680ff9266214894ea1c56561cda9ca69238b13e5ef80fe0e6e5c74db570c7b97e727eb93d25a6e950b2c9d139455ab6
+  checksum: 10c0/09378c2d0ed0e84864a22bd96ac1ac3a52e089605146c621d5ead8dec5ea180769d84aff817ee0e8f6c6d41bbdf94d8d74635e3189ec3b3ea59c707adb6b2bc8
   languageName: node
   linkType: hard
 
