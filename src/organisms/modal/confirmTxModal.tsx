@@ -6,7 +6,7 @@ import useFirma from '../../utils/wallet';
 import { convertToFctString, isValidString, convertNumberFormat, getDefaultFee } from '../../utils/common';
 import { rootState } from '../../redux/reducers';
 import { Modal } from '../../components/modal';
-import { modalActions } from '../../redux/action';
+import { modalActions, refreshActions } from '../../redux/action';
 import { CHAIN_CONFIG } from '../../config';
 
 import {
@@ -35,7 +35,7 @@ const ConfirmTxModal = () => {
   const { isLedger, isMobileApp, address } = useSelector((state: rootState) => state.wallet);
 
   const { enqueueSnackbar } = useSnackbar();
-  const { isCorrectPassword } = useFirma();
+  const { isCorrectPassword, setUserData } = useFirma();
 
   const [password, setPassword] = useState('');
   const [actionName, setActionName] = useState('');
@@ -45,6 +45,7 @@ const ConfirmTxModal = () => {
   const [memo, setMemo] = useState('');
   const [targetAddress, setTargetAddress] = useState('');
   const [isActive, setActive] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const ConfirmTxModal = () => {
 
       modalData.data.memo && setMemo(modalData.data.memo);
       modalData.data.targetAddress && setTargetAddress(modalData.data.targetAddress);
+      setMessageCount(modalData.data.messageCount || 0);
 
       setAmountSymbol(modalData.data.symbol ? modalData.data.symbol : CHAIN_CONFIG.PARAMS.SYMBOL);
 
@@ -101,7 +103,9 @@ const ConfirmTxModal = () => {
       autoHideDuration: 1000,
     });
     closeConfirmTxModal();
-    setTimeout(() => window.location.reload(), 1000);
+    // Refresh on-chain data in place instead of reloading the whole page.
+    setUserData();
+    refreshActions.handleRefresh();
   };
 
   const onFailed = () => {
@@ -110,7 +114,6 @@ const ConfirmTxModal = () => {
       autoHideDuration: 1000,
     });
     closeConfirmTxModal();
-    setTimeout(() => window.location.reload(), 1000);
   };
 
   return (
@@ -135,7 +138,7 @@ const ConfirmTxModal = () => {
             {isValidString(amount) && (
               <ConfirmWrapper>
                 <ConfirmLabel>Amount</ConfirmLabel>
-                <ConfirmInput point={true}>
+                <ConfirmInput $point={true}>
                   {`${convertNumberFormat(amount, 6)}`}
                   <span>&nbsp;{amountSymbol}</span>
                 </ConfirmInput>
@@ -154,6 +157,13 @@ const ConfirmTxModal = () => {
               <ConfirmLabel>Memo</ConfirmLabel>
               <ConfirmInput>{memo.length > 40 ? memo.substring(0, 40) + '...' : memo}</ConfirmInput>
             </ConfirmWrapper>
+
+            {messageCount > 1 && (
+              <ConfirmWrapper>
+                <ConfirmLabel>Messages</ConfirmLabel>
+                <ConfirmInput>{`${messageCount} messages in 1 transaction`}</ConfirmInput>
+              </ConfirmWrapper>
+            )}
           </ConfirmContainer>
           {isMobileApp && Object.keys(modalData).length > 0 ? (
             <>
@@ -187,11 +197,11 @@ const ConfirmTxModal = () => {
           )}
 
           <ButtonWrapper>
-            <CancelButton onClick={() => closeConfirmTxModal()} status={1}>
+            <CancelButton onClick={() => closeConfirmTxModal()} $status={1}>
               Cancel
             </CancelButton>
             {(isMobileApp === false || isMobileApp === undefined) && (
-              <NextButton onClick={() => queueTx()} status={isActive || isLedger ? 0 : 2} data-testid="confirm-send-button">
+              <NextButton onClick={() => queueTx()} $status={isActive || isLedger ? 0 : 2} data-testid="confirm-send-button">
                 {isLedger ? `Sign Ledger` : actionName}
               </NextButton>
             )}

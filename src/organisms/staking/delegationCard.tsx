@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer from '../../components/autoSizer';
 import { Link } from 'react-router-dom';
 import { FixedSizeList as List } from 'react-window';
 import { ResponsivePie } from '@nivo/pie';
@@ -75,14 +75,14 @@ const Row = ({ data, index, style, totalStakingState }: any) => {
   };
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 20 ? `${moniker.substring(0, 20)}...` : moniker;
+    return moniker.length > 30 ? `${moniker.substring(0, 30)}...` : moniker;
   };
 
   return (
     <DelegationItemWrapper style={style}>
       <DelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.validatorAddress}` }}>
-          <ProfileImage2 src={validatorInfo.avatarURL} />
+          <ProfileImage2 $src={validatorInfo.avatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
         </Link>
       </DelegationItemColumn>
@@ -96,20 +96,20 @@ const RedelegationRow = ({ data, index, style }: any) => {
   const validatorInfo = data[index];
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 15 ? `${moniker.substring(0, 15)}...` : moniker;
+    return moniker.length > 30 ? `${moniker.substring(0, 30)}...` : moniker;
   };
 
   return (
     <RedelegationItemWrapper style={style}>
       <RedelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.srcAddress}` }}>
-          <ProfileImage2 src={validatorInfo.srcAvatarURL} />
+          <ProfileImage2 $src={validatorInfo.srcAvatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.srcMoniker)}</MonikerTypo>
         </Link>
       </RedelegationItemColumn>
       <RedelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.dstAddress}` }}>
-          <ProfileImage2 src={validatorInfo.dstAvatarURL} />
+          <ProfileImage2 $src={validatorInfo.dstAvatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.dstMoniker)}</MonikerTypo>
         </Link>
       </RedelegationItemColumn>
@@ -130,7 +130,7 @@ const UndelegationRow = ({ data, index, style }: any) => {
     <UndelegationItemWrapper style={style}>
       <UndelegationItemColumn>
         <Link to={{ pathname: `/staking/validators/${validatorInfo.validatorAddress}` }}>
-          <ProfileImage2 src={validatorInfo.avatarURL} />
+          <ProfileImage2 $src={validatorInfo.avatarURL} />
           <MonikerTypo>{getMoniker(validatorInfo.moniker)}</MonikerTypo>
         </Link>
       </UndelegationItemColumn>
@@ -144,21 +144,21 @@ const RestakeRow = ({ data, index, style, totalStakingState }: any) => {
   const restakeInfo: IRestakeState = data[index];
 
   const getMoniker = (moniker: string) => {
-    return moniker.length > 12 ? `${moniker.substring(0, 12)}...` : moniker;
+    return moniker.length > 30 ? `${moniker.substring(0, 30)}...` : moniker;
   };
 
   return (
     <RestakeItemWrapper style={style}>
       <RestakeItemColumn>
         <Link to={{ pathname: `/staking/validators/${restakeInfo.validatorAddress}` }}>
-          <ProfileImage2 src={restakeInfo.validatorAvatar} />
+          <ProfileImage2 $src={restakeInfo.validatorAvatar} />
           <MonikerTypo>{getMoniker(restakeInfo.validatorMoniker)}</MonikerTypo>
         </Link>
       </RestakeItemColumn>
       <RestakeItemColumn>≈ {`${convertNumberFormat(restakeInfo.reward, 3)}`}</RestakeItemColumn>
       <RestakeItemColumn>≈ {`${convertNumberFormat(restakeInfo.latestReward, 3)}`}</RestakeItemColumn>
       <RestakeItemColumn>
-        <StatusBox status={restakeInfo.status}>{getRestakeStatus(restakeInfo.status)}</StatusBox>
+        <StatusBox $status={restakeInfo.status}>{getRestakeStatus(restakeInfo.status)}</StatusBox>
       </RestakeItemColumn>
     </RestakeItemWrapper>
   );
@@ -405,17 +405,17 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
       </ChartWrapper>
       <DelegationListWrapper>
         <DelegationTab>
-          <DelegationTabItem isActive={currentTab === 0} onClick={() => onCLickChangeTab(0)}>
+          <DelegationTabItem $isActive={currentTab === 0} onClick={() => onCLickChangeTab(0)}>
             Delegations ({totalStakingState.delegationList.length})
           </DelegationTabItem>
-          <DelegationTabItem isActive={currentTab === 1} onClick={() => onCLickChangeTab(1)}>
+          <DelegationTabItem $isActive={currentTab === 1} onClick={() => onCLickChangeTab(1)}>
             Redelegations ({totalStakingState.redelegationList.length})
           </DelegationTabItem>
-          <DelegationTabItem isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
+          <DelegationTabItem $isActive={currentTab === 2} onClick={() => onCLickChangeTab(2)}>
             Undelegations ({totalStakingState.undelegationList.length})
           </DelegationTabItem>
           {CHAIN_CONFIG.RESTAKE.API !== '' && (
-            <DelegationTabItem isActive={currentTab === 3} onClick={() => onCLickChangeTab(3)}>
+            <DelegationTabItem $isActive={currentTab === 3} onClick={() => onCLickChangeTab(3)}>
               Restake ({restakeList.length})
             </DelegationTabItem>
           )}
@@ -506,12 +506,12 @@ const DelegationCard = ({ totalStakingState, grantDataState }: IProps) => {
       </DelegationListWrapper>
       <ButtonWrapper>
         {CHAIN_CONFIG.RESTAKE.API !== '' && (
-          <Button isActive={totalStakingState.delegationList.length > 0} onClick={onClickRestake}>
+          <Button $isActive={totalStakingState.delegationList.length > 0} onClick={onClickRestake}>
             Restake
           </Button>
         )}
 
-        <Button isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
+        <Button $isActive={totalStakingState.stakingReward > 0} onClick={onClickWithdrawAll}>
           Withdraw All
         </Button>
       </ButtonWrapper>

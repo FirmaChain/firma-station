@@ -465,17 +465,6 @@ function useFirma() {
     const totalReward = await firmaSDK.Distribution.getTotalRewardInfo(address);
     const delegateListSort = delegateListOrigin.sort((a: any, b: any) => b.balance.amount - a.balance.amount);
 
-    const delegateList = delegateListSort.map((value) => {
-      const { moniker, avatarURL } = getAvatarInfo(avatarList, value.delegation.validator_address);
-      return {
-        validatorAddress: value.delegation.validator_address,
-        delegatorAddress: value.delegation.delegator_address,
-        amount: convertNumber(value.balance.amount),
-        moniker,
-        avatarURL
-      };
-    });
-
     const delegationBalanceList = delegateListSort.map((value) => {
       return value.balance.amount;
     });
@@ -785,6 +774,48 @@ function useFirma() {
   ) => {
     return await withGasEstimationLoader(() =>
       FirmaSDK.getGasEstimationRedelegate(validatorAddressSrc, validatorAddressDst, amount)
+    );
+  };
+
+  const redelegateWithGrant = async (
+    validatorAddressSrc: string,
+    validatorAddressDst: string,
+    amount: number,
+    validatorAddressList: string[],
+    expirationDate: Date,
+    maxFCT: number,
+    estimatedGas: number
+  ) => {
+    const result = await FirmaSDK.redelegateWithGrant(
+      validatorAddressSrc,
+      validatorAddressDst,
+      amount,
+      validatorAddressList,
+      expirationDate,
+      maxFCT,
+      estimatedGas
+    );
+
+    checkValidateResult(result);
+  };
+
+  const getGasEstimationRedelegateWithGrant = async (
+    validatorAddressSrc: string,
+    validatorAddressDst: string,
+    amount: number,
+    validatorAddressList: string[],
+    expirationDate: Date,
+    maxFCT: number
+  ) => {
+    return await withGasEstimationLoader(() =>
+      FirmaSDK.getGasEstimationRedelegateWithGrant(
+        validatorAddressSrc,
+        validatorAddressDst,
+        amount,
+        validatorAddressList,
+        expirationDate,
+        maxFCT
+      )
     );
   };
 
@@ -1169,6 +1200,7 @@ function useFirma() {
     sendIBC,
     delegate,
     redelegate,
+    redelegateWithGrant,
     undelegate,
     withdraw,
     withdrawAllValidator,
@@ -1190,6 +1222,7 @@ function useFirma() {
     getGasEstimationsendIBC,
     getGasEstimationDelegate,
     getGasEstimationRedelegate,
+    getGasEstimationRedelegateWithGrant,
     getGasEstimationUndelegate,
     getGasEstimationWithdraw,
     getGasEstimationWithdrawAllValidator,

@@ -30,10 +30,10 @@ import {
   getValidatorFromAddress,
   getValidatorDelegationsFromAddress,
   getValidatorUndelegationsFromAddress,
-  getValidatorRedelegationsFromAddress,
   getAccAddressFromValOperAddress,
   getSigningInfos,
 } from '../../utils/lcdQuery';
+import { getValidatorRedelegationsFromIndexer } from '../../apollo/gqls/query';
 
 export {
   useDelegations,
@@ -49,6 +49,8 @@ export {
 const useDelegations = () => {
   const { avatarList } = useSelector((state: rootState) => state.avatar);
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const [delegateState, setDelegateState] = useState<IDelegationState>({
     self: 0,
@@ -92,7 +94,7 @@ const useDelegations = () => {
         })
         .catch(() => {});
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     delegateState,
@@ -102,6 +104,8 @@ const useDelegations = () => {
 const useRedelegations = () => {
   const { avatarList } = useSelector((state: rootState) => state.avatar);
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const [redelegateState, setRedelegateState] = useState<IRedelegationState>({
     self: 0,
@@ -115,7 +119,7 @@ const useRedelegations = () => {
       return;
     }
 
-    getValidatorRedelegationsFromAddress(targetValidator)
+    getValidatorRedelegationsFromIndexer(targetValidator)
       .then((list) => {
         const redelegationList: IRedelegationList[] = list.map((r) => {
           const delegatorAvatar = getAvatarInfoFromAcc(avatarList, r.delegatorAddress);
@@ -143,7 +147,7 @@ const useRedelegations = () => {
         });
       })
       .catch(() => {});
-  }, [targetValidator, avatarList]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     redelegateState
@@ -153,6 +157,8 @@ const useRedelegations = () => {
 const useUndelegations = () => {
   const { avatarList } = useSelector((state: rootState) => state.avatar);
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const [undelegateState, setUndelegateState] = useState<IUndelegationState>({
     self: 0,
@@ -186,13 +192,14 @@ const useUndelegations = () => {
         });
       })
       .catch(() => {});
-  }, [targetValidator, avatarList]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [targetValidator, avatarList, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { undelegateState };
 };
 
 const useStakingData = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
   const { getStaking } = useFirma();
 
   const [totalStakingState, setTotalStakingState] = useState<ITotalStakingState>({
@@ -215,7 +222,7 @@ const useStakingData = () => {
           }
         })
         .catch(() => {});
-  }, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     totalStakingState,
@@ -225,6 +232,7 @@ const useStakingData = () => {
 const useStakingDataFromTarget = () => {
   const { getStakingFromValidator } = useFirma();
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const [targetStakingState, setTargetStakingState] = useState<ITargetStakingState>({
     available: 0,
@@ -241,7 +249,7 @@ const useStakingDataFromTarget = () => {
         })
         .catch((e) => {});
     }
-  }, [targetValidator]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [targetValidator, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     targetStakingState,
@@ -250,6 +258,7 @@ const useStakingDataFromTarget = () => {
 
 const useGrantData = () => {
   const { isInit } = useSelector((state: rootState) => state.wallet);
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
   const { getStakingGrantDataList } = useFirma();
 
   const [grantDataState, setGrantDataState] = useState<IGrantsDataState>({
@@ -266,7 +275,7 @@ const useGrantData = () => {
         }
       });
     }
-  }, [isInit]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isInit, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     grantDataState,
@@ -275,6 +284,7 @@ const useGrantData = () => {
 
 const useValidators = () => {
   const { avatarList } = useSelector((state: rootState) => state.avatar);
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const [validatorsState, setValidatorsState] = useState<IValidatorsState>({
     totalVotingPower: 0,
@@ -343,7 +353,7 @@ const useValidators = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [avatarList]);
+  }, [avatarList, refreshKey]);
 
   return {
     validatorsState,
@@ -353,6 +363,7 @@ const useValidators = () => {
 const useValidatorFromTarget = () => {
   const targetValidator = window.location.pathname.replace('/staking/validators/', '');
   const { avatarList } = useSelector((state: rootState) => state.avatar);
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
 
   const [validatorState, setValidatorState] = useState<IValidator>({
     validatorAddress: '',
@@ -430,7 +441,7 @@ const useValidatorFromTarget = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     validatorState,

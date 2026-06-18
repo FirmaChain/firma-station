@@ -16,6 +16,7 @@ export const useHistoryByAddress = () => {
     offset: 0
   });
   const { address } = useSelector((state: rootState) => state.wallet);
+  const refreshKey = useSelector((state: rootState) => state.refresh.refreshKey);
   const { enqueueSnackbar } = useSnackbar();
 
   const formatHistoryList = (data: any) => {
@@ -88,7 +89,7 @@ export const useHistoryByAddress = () => {
       });
       loadHistoryData(0, true);
     }
-  }, [address]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [address, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     historyByAddressState,

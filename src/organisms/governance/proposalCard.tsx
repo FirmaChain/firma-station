@@ -1,5 +1,5 @@
 import React from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
@@ -46,7 +46,7 @@ const Row = ({ data, index, style }: any) => {
   const getStatusTypo = (status: string) => {
     const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : 'UNKNOWN';
     const color = STATUS_COLOR[status];
-    return <StatusTypo statusColor={color}>{typo}</StatusTypo>;
+    return <StatusTypo $statusColor={color}>{typo}</StatusTypo>;
   };
 
   return (
@@ -86,7 +86,7 @@ const ProposalCard = ({ proposalsState }: IProps) => {
             const getStatusTypo = (status: string) => {
               const typo = PROPOSAL_STATUS[status] ? PROPOSAL_STATUS[status] : 'UNKNOWN';
               const color = STATUS_COLOR[status];
-              return <StatusTypo statusColor={color}>{typo}</StatusTypo>;
+              return <StatusTypo $statusColor={color}>{typo}</StatusTypo>;
             };
 
             return (

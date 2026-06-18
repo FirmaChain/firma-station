@@ -66,18 +66,21 @@ export const initializeAvatar = (lastUpdated: number) => {
           if (avatarRaw && avatarRaw.avatarList) {
             const lastUpdatedTime = avatarRaw.lastUpdatedTime;
 
-            if (lastUpdated < lastUpdatedTime) {
-              //? If saved lastUpdatedTime is less than lastUpdatedTime, update the avatar list
-              //? If two values are same, means current list is latest.
-              for (let avatar of avatarList) {
-                for (let avatarUrlRaw of avatarRaw.avatarList) {
-                  if (avatar.operatorAddress === avatarUrlRaw.operatorAddress) {
-                    avatar.url = avatarUrlRaw.url;
-                  }
+            // Always merge URLs from the crawler into the freshly-fetched
+            // chain validator list. The previous lastUpdated guard skipped
+            // the dispatch entirely when the timestamp hadn't advanced,
+            // which kept a stale avatarList (e.g. mainnet validators) in
+            // persisted Redux after a network switch.
+            for (let avatar of avatarList) {
+              for (let avatarUrlRaw of avatarRaw.avatarList) {
+                if (avatar.operatorAddress === avatarUrlRaw.operatorAddress) {
+                  avatar.url = avatarUrlRaw.url;
                 }
               }
+            }
 
-              avatarActions.handleAvatarList(avatarList);
+            avatarActions.handleAvatarList(avatarList);
+            if (lastUpdated < lastUpdatedTime) {
               avatarActions.handleAvatarLastupdated(lastUpdatedTime);
             }
           } else {

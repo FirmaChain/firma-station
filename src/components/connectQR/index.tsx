@@ -15,11 +15,11 @@ export const scaleAnim = keyframes`
   }
 `;
 
-export const QRWrapper = styled.div<{ isLoading: boolean }>`
+export const QRWrapper = styled.div<{ $isLoading: boolean }>`
   width: 140px;
   height: 140px;
   padding: 12px;
-  ${(props) => (props.isLoading ? '' : 'background-color: white;')}
+  ${(props) => (props.$isLoading ? '' : 'background-color: white;')}
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -29,7 +29,7 @@ export const QRWrapper = styled.div<{ isLoading: boolean }>`
   animation-duration: 0.4s;
   animation-timing-function: ease-out;
   ${(props) =>
-    props.isLoading === false &&
+    props.$isLoading === false &&
     css`
       animation-name: ${scaleAnim};
     `}
@@ -81,7 +81,7 @@ const ConnectQR = ({ qrSize, qrcode, expireDate, isActive, setTimerText, onExpir
   );
 
   return (
-    <QRWrapper isLoading={qrcode === ''} data-testid={qrcode ? 'qr-code' : 'qr-code-loading'}>
+    <QRWrapper $isLoading={qrcode === ''} data-testid={qrcode ? 'qr-code' : 'qr-code-loading'}>
       {qrcode === '' ? (
         <GridLoader loading={true} color={'#3550DEcc'} data-testid="qr-code-loading" />
       ) : (
@@ -99,7 +99,7 @@ const ConnectQR = ({ qrSize, qrcode, expireDate, isActive, setTimerText, onExpir
 };
 
 const useInterval = (callback: () => void, delay: number | null) => {
-  const savedCallback = useRef<() => void>();
+  const savedCallback = useRef<(() => void) | undefined>(undefined);
 
   useEffect(() => {
     savedCallback.current = callback;

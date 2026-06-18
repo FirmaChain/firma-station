@@ -11,7 +11,7 @@ import { AddressTitleTypo, UsdTypo, UserBalanceTypo, PriceTypo } from './styles'
 import { CHAIN_CONFIG } from '../../config';
 
 const AccountCard = () => {
-  const states = useSelector((state: rootState) => state);
+  const balance = useSelector((state: rootState) => state.user.balance);
   const [currentUSDPrice, setPrice] = useState(0);
 
   useEffect(() => {
@@ -29,8 +29,8 @@ const AccountCard = () => {
       <UsdTypo>
         1 {CHAIN_CONFIG.PARAMS.SYMBOL} ($ {Math.round(currentUSDPrice * 1000) / 1000})
       </UsdTypo>
-      <PriceTypo>$ {convertNumberFormat(currentUSDPrice * convertNumber(states.user.balance), 2)}</PriceTypo>
-      <UserBalanceTypo>{`${convertNumberFormat(states.user.balance, 3)} ${
+      <PriceTypo>$ {convertNumberFormat(currentUSDPrice * convertNumber(balance), 2)}</PriceTypo>
+      <UserBalanceTypo>{`${convertNumberFormat(balance, 3)} ${
         CHAIN_CONFIG.PARAMS.SYMBOL
       }`}</UserBalanceTypo>
     </BlankCard>

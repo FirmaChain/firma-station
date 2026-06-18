@@ -53,16 +53,20 @@ const CustomRoute = ({ auth, component: Component, ...p }: IProps) => {
   const { enqueueSnackbar } = useSnackbar();
   const { address } = useSelector((state: rootState) => state.wallet);
 
-  const renderFunc = (props: any) => {
-    if (auth) {
-      if (address === '') {
-        enqueueSnackbar('You Need Login First', {
-          variant: 'error',
-          autoHideDuration: 2000
-        });
+  const isUnauthorized = auth && address === '';
 
-        return <Redirect to={{ pathname: '/' }} />;
-      }
+  React.useEffect(() => {
+    if (isUnauthorized) {
+      enqueueSnackbar('You Need Login First', {
+        variant: 'error',
+        autoHideDuration: 2000
+      });
+    }
+  }, [isUnauthorized, enqueueSnackbar]);
+
+  const renderFunc = (props: any) => {
+    if (isUnauthorized) {
+      return <Redirect to={{ pathname: '/' }} />;
     }
 
     return <Component {...props} />;

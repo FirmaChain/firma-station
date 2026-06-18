@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const Row = ({ data, index, style }: any) => {
       }
     } catch (e) {}
 
-    return <HistoryTypeBox baseColor={targetTheme.tagTheme}>{targetTheme.tagDisplay}</HistoryTypeBox>;
+    return <HistoryTypeBox $baseColor={targetTheme.tagTheme}>{targetTheme.tagDisplay}</HistoryTypeBox>;
   };
 
   const getHash = (hash: string) => {

@@ -98,16 +98,34 @@ const RedelegateModal = () => {
   const [amount, setAmount] = useState('');
   const [isActiveButton, setActiveButton] = useState(false);
   const [sourceValidator, setSourceValidator] = useState('');
+  const [sourceValidatorMoniker, setSourceValidatorMoniker] = useState('');
   const [sourceAmount, setSourceAmount] = useState(0);
   const [delegationList, setDelegationList] = useState([]);
   const [targetValidator, setTargetValidator] = useState('');
+  const [targetValidatorMoniker, setTargetValidatorMoniker] = useState('');
+  const [allowValidatorList, setAllowValidatorList] = useState<string[]>([]);
 
-  const selectInputRef = useRef<any>();
+  const selectInputRef = useRef<any>(null);
 
   useEffect(() => {
     if (Object.keys(modalData).length > 0) {
       setDelegationList(modalData.data.delegationList);
       setTargetValidator(modalData.data.targetValidator);
+      setTargetValidatorMoniker(modalData.data.targetValidatorMoniker || modalData.data.targetValidator);
+      setAllowValidatorList(modalData.data.allowValidatorList || []);
+
+      // Restore inputs when the user navigates back from the Restake-options modal.
+      if (modalData.data.sourceValidator) {
+        const src = modalData.data.sourceValidator;
+        const srcAmount = modalData.data.sourceAmount || 0;
+        const amt = modalData.data.amount || '';
+        setSourceValidator(src);
+        setSourceValidatorMoniker(modalData.data.sourceValidatorMoniker || src);
+        setSourceAmount(srcAmount);
+        setAmount(amt);
+        const numAmt = convertNumber(amt);
+        setActiveButton(numAmt > 0 && numAmt <= srcAmount);
+      }
     }
   }, [redelegateModalState]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -117,10 +135,11 @@ const RedelegateModal = () => {
   };
 
   const resetModal = () => {
-    selectInputRef.current.clearValue();
+    selectInputRef.current?.clearValue();
     setActiveButton(false);
     setAmount('');
     setSourceValidator('');
+    setSourceValidatorMoniker('');
     setSourceAmount(0);
   };
 
@@ -179,18 +198,21 @@ const RedelegateModal = () => {
 
   const onChangeValidator = (e: any) => {
     if (e == null) return;
-    const { value, amount } = e;
+    const { value, amount, label } = e;
 
     setAmount('');
     setSourceValidator(value);
+    setSourceValidatorMoniker(label || value);
     setSourceAmount(convertToFctNumber(amount));
   };
 
-  const nextStep = () => {
+  const proceedRedelegateOnly = () => {
     closeModal();
+    modalActions.handleModalGasEstimation(true);
 
     getGasEstimationRedelegate(sourceValidator, targetValidator, convertNumber(amount))
       .then((gas) => {
+        modalActions.handleModalGasEstimation(false);
         if (isMobileApp) gas += 50000;
         if (convertNumber(balance) >= convertToFctNumber(getFeesFromGas(gas, isLedger))) {
           modalActions.handleModalData({
@@ -211,11 +233,42 @@ const RedelegateModal = () => {
         }
       })
       .catch((e) => {
+        modalActions.handleModalGasEstimation(false);
         enqueueSnackbar(e?.message ?? String(e), {
           variant: 'error',
           autoHideDuration: 5000,
         });
       });
+  };
+
+  // Restake-active users see a second modal to (optionally) update their
+  // Restake allow_list in the same tx. Inactive users go straight to confirm.
+  // delegationList + sourceAmount are kept on modalData so the user can
+  // navigate back from the second modal and find their inputs restored.
+  const openRestakeOptions = () => {
+    modalActions.handleModalData({
+      action: 'RedelegateRestakeOptions',
+      data: {
+        sourceValidator,
+        sourceValidatorMoniker,
+        sourceAmount,
+        targetValidator,
+        targetValidatorMoniker,
+        amount,
+        delegationList,
+        allowValidatorList,
+      },
+    });
+    closeModal();
+    modalActions.handleModalRedelegateRestake(true);
+  };
+
+  const nextStep = () => {
+    if (allowValidatorList.length === 0) {
+      proceedRedelegateOnly();
+      return;
+    }
+    openRestakeOptions();
   };
 
   return (
@@ -236,6 +289,11 @@ const RedelegateModal = () => {
           <SelectWrapper>
             <Select
               options={delegationList.filter((v: any) => v.value !== targetValidator)}
+              value={
+                sourceValidator
+                  ? (delegationList as any[]).find((v) => v.value === sourceValidator) ?? null
+                  : null
+              }
               styles={customStyles}
               onChange={onChangeValidator}
               ref={selectInputRef}
@@ -263,7 +321,7 @@ const RedelegateModal = () => {
 
               <ModalLabel>Amount</ModalLabel>
               <ModalInput>
-                <MaxButton active={true} onClick={onClickMaxAmount}>
+                <MaxButton $active={true} onClick={onClickMaxAmount}>
                   Max
                 </MaxButton>
                 <InputBoxDefault type='text' placeholder='0' onChange={onChangeAmount} value={amount} />
@@ -273,28 +331,24 @@ const RedelegateModal = () => {
 
           <ModalTooltipWrapper>
             <ModalTooltipIcon />
-            <ModalTooltipTypo>Redelegated supply will be linked for a period of 21 days.</ModalTooltipTypo>
+            <ModalTooltipTypo>
+              Redelegated supply is locked for 21 days and cannot be redelegated again during that period.
+            </ModalTooltipTypo>
           </ModalTooltipWrapper>
           <ModalTooltipWrapper>
             <ModalTooltipIcon />
             <ModalTooltipTypo>A maximum of 7 redelegations are allowed.</ModalTooltipTypo>
           </ModalTooltipWrapper>
-          <ModalTooltipWrapper>
-            <ModalTooltipIcon />
-            <ModalTooltipTypo>
-              Until the 21 day link period passes, you cannot redelegate your redelgated supply to another validator.
-            </ModalTooltipTypo>
-          </ModalTooltipWrapper>
 
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1}>
+            <CancelButton onClick={() => closeModal()} $status={1}>
               Cancel
             </CancelButton>
             <NextButton
               onClick={() => {
                 if (isActiveButton) nextStep();
               }}
-              status={isActiveButton ? 0 : 2}
+              $status={isActiveButton ? 0 : 2}
             >
               Next
             </NextButton>

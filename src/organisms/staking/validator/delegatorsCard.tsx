@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer from '../../../components/autoSizer';
 import { useMediaQuery } from 'react-responsive';
 import { FixedSizeList as List } from 'react-window';
 import { Link } from 'react-router-dom';
@@ -82,8 +82,8 @@ const DelegatorRow = ({ data, index, style }: any) => {
   return (
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
-        <ItemColumn avatar>
-          <ProfileImage2 src={item.avatarURL} />
+        <ItemColumn $avatar>
+          <ProfileImage2 $src={item.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${item.moniker}`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(convertToFctNumber(item.amount), 3)} ${
@@ -100,7 +100,7 @@ const DelegatorRowMobile = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
-          <ProfileImage2 src={item.avatarURL} />
+          <ProfileImage2 $src={item.avatarURL} />
           <DelegatorInfoMobile>
             <div>{`${item.moniker}`}</div>
             <div>{`${convertNumberFormat(convertToFctNumber(item.amount), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</div>
@@ -115,19 +115,17 @@ const RedelegatorRow = ({ data, index, style }: any) => {
   const item: IRedelegationList = data[index];
   return (
     <ItemWrapper style={style}>
-        <ItemColumn style={WalletCell} title={item.delegatorAddress}>
-          <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>  
-            {item.delegatorAddress}
-          </Link>
-        </ItemColumn>
-
-      
-      <ItemColumn avatar>
-        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
-          <ProfileImage2 src={item.dstAvatarURL} />
+      <ItemColumn style={WalletCell} title={item.delegatorAddress}>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.delegatorAddress}` }} target={'_blank'}>
+          {item.delegatorAddress}
         </Link>
       </ItemColumn>
-      <ItemColumn>
+      <ItemColumn $avatar>
+        <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
+          <ProfileImage2 $src={item.dstAvatarURL} />
+        </Link>
+      </ItemColumn>
+      <ItemColumn style={ValidatorCell}>
         <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/validators/${item.dstAddress}` }} target={'_blank'}>
           {`${item.dstMoniker}`}
         </Link>
@@ -144,7 +142,7 @@ const RedelegatorRowMobile = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.srcAddress}` }}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
-          <ProfileImage2 src={item.dstAvatarURL} />
+          <ProfileImage2 $src={item.dstAvatarURL} />
           <DelegatorInfoMobile>
             <div>{`${item.srcMoniker}`}</div>
             <div>{`${item.dstMoniker}`}</div>
@@ -164,8 +162,8 @@ const UndelegatorRow = ({ data, index, style }: any) => {
   return (
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.moniker || item.validatorAddress}` }} target={'_blank'}>
       <ItemWrapper style={style}>
-        <ItemColumn avatar>
-          <ProfileImage2 src={item.avatarURL} />
+        <ItemColumn $avatar>
+          <ProfileImage2 $src={item.avatarURL} />
         </ItemColumn>
         <ItemColumn>{`${item.moniker || item.validatorAddress}`}</ItemColumn>
         <ItemColumn>{`${convertNumberFormat(convertToFctNumber(item.balance), 3)} ${CHAIN_CONFIG.PARAMS.SYMBOL}`}</ItemColumn>
@@ -181,7 +179,7 @@ const UndelegatorRowMobile = ({ data, index, style }: any) => {
     <Link to={{ pathname: `${CHAIN_CONFIG.EXPLORER_URI}/accounts/${item.moniker || item.validatorAddress}` }} target={'_blank'}>
       <ItemMobileWrapper style={style}>
         <ItemMobileColumn>
-          <ProfileImage2 src={item.avatarURL} />
+          <ProfileImage2 $src={item.avatarURL} />
           <DelegatorInfoMobile>
             <div>{`${item.moniker || item.validatorAddress}`}</div>
             <div>
@@ -207,17 +205,16 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
   const sortedRedelegatorList = redelegateState?.redelegationList ? sortedUntimeDescending(redelegateState.redelegationList) : [];
   const sortedUndelegatorList = undelegateState?.undelegationList ? sortedUntimeDescending(undelegateState.undelegationList) : [];
 
-  console.log(sortedUndelegatorList);
   return (
     <DelegatorsCardWrapper>
       <TabBar>
-        <TabItem active={tab === 0} onClick={() => setTab(0)}>
+        <TabItem $active={tab === 0} onClick={() => setTab(0)}>
           Delegators ({delegatorCount})
         </TabItem>
-        <TabItem active={tab === 1} onClick={() => setTab(1)}>
+        <TabItem $active={tab === 1} onClick={() => setTab(1)}>
           Redelegators ({redelegatorCount})
         </TabItem>
-        <TabItem active={tab === 2} onClick={() => setTab(2)}>
+        <TabItem $active={tab === 2} onClick={() => setTab(2)}>
           Undelegators ({undelegatorCount})
         </TabItem>
       </TabBar>
@@ -244,7 +241,7 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
               ) : (
                 <>
                   <HeaderWrapper style={{ width }}>
-                    <HeaderColumn avatar></HeaderColumn>
+                    <HeaderColumn $avatar></HeaderColumn>
                     <HeaderColumn>Delegator</HeaderColumn>
                     <HeaderColumn>Amount</HeaderColumn>
                   </HeaderWrapper>
@@ -281,6 +278,7 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
                 <>
                   <HeaderWrapper style={{ width }}>
                     <HeaderColumn style={WalletCell}>Wallet</HeaderColumn>
+                    <HeaderColumn $avatar></HeaderColumn>
                     <HeaderColumn style={ValidatorCell}>To</HeaderColumn>
                     <HeaderColumn style={NumericCell}>Amount</HeaderColumn>
                     <HeaderColumn style={TimeCell}>Linked Until</HeaderColumn>
@@ -317,7 +315,7 @@ const DelegatorsCard = ({ delegateState, redelegateState, undelegateState }: IPr
             ) : (
               <>
                 <HeaderWrapper style={{ width }}>
-                  <HeaderColumn avatar></HeaderColumn>
+                  <HeaderColumn $avatar></HeaderColumn>
                   <HeaderColumn>Undelegator</HeaderColumn>
                   <HeaderColumn>Amount</HeaderColumn>
                   <HeaderColumn>Linked Until</HeaderColumn>

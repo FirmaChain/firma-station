@@ -16,7 +16,7 @@ const ToggleButton = ({ toggleText, isActive, onClickToggle }: IProps) => {
   return (
     <ToggleWrapper>
       <ToggleText>{toggleText}</ToggleText>
-      <ToggleButtonImage isActive={isActive} onClick={onClick}></ToggleButtonImage>
+      <ToggleButtonImage $isActive={isActive} onClick={onClick}></ToggleButtonImage>
     </ToggleWrapper>
   );
 };

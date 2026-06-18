@@ -22,7 +22,7 @@ Use one of these private channels:
 
 1. **GitHub Private Vulnerability Reporting** (preferred):
    <https://github.com/FirmaChain/firma-station/security/advisories/new>
-2. **Email**: `security@firmachain.io`
+2. **Email**: `contact@firmachain.org`
 
 Please include:
 

@@ -26,6 +26,10 @@ const TYPE_COLORS: IKeyValue = {
   twenty: '#D9C788'
 };
 
+// Tag color used for bank Send/Multisend transactions. Reused elsewhere as the
+// positive/receive accent (e.g. the redelegate-restake modal) so it stays in sync.
+export const SEND_COLOR = TYPE_COLORS['two'];
+
 const LABELS: IKeyValue = {
   txDelegateLabel: 'Delegate',
   txRedelegateLabel: 'Redelegate',

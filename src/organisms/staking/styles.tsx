@@ -139,7 +139,7 @@ export const ListWrapper = styled.div`
   border-radius: 4px;
 `;
 
-export const ProfileImage = styled.div<{ src?: string }>`
+export const ProfileImage = styled.div<{ $src?: string }>`
   width: 30px;
   height: 30px;
   border-radius: 15px;
@@ -150,9 +150,9 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
-export const ProfileImage2 = styled.div<{ src?: string }>`
+export const ProfileImage2 = styled.div<{ $src?: string }>`
   width: 25px;
   height: 25px;
   border-radius: 15px;
@@ -163,7 +163,7 @@ export const ProfileImage2 = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const MonikerTypo = styled.div`
   margin-left: 10px;
@@ -310,6 +310,7 @@ export const RedelegationItemColumn = styled.div`
     flex: 1;
     min-width: 16rem;
     margin-right: 5px;
+    text-align: right;
     font-size: ${({ theme }) => theme.sizes.stakingSmall};
   }
 `;
@@ -380,7 +381,7 @@ export const RestakeItemColumn = styled.div`
     margin-right: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
   }
 `;
 
@@ -412,8 +413,8 @@ export const RestakeHeaderColumn = styled.div`
   }
   &:nth-child(4) {
     width: 180px;
-    margin-right: 15px;
-    text-align: center;
+    margin-right: 20px;
+    text-align: right;
   }
 `;
 
@@ -425,14 +426,14 @@ export const DelegationTab = styled.div`
   padding-bottom: 10px;
 `;
 
-export const DelegationTabItem = styled.div<{ isActive: boolean }>`
+export const DelegationTabItem = styled.div<{ $isActive: boolean }>`
   text-align: center;
   padding: 12px 14px;
   font-size: 1.4rem;
   cursor: pointer;
   color: #888;
   ${(props) =>
-    props.isActive &&
+    props.$isActive &&
     `
     color:white;
     border-bottom:1px solid white;
@@ -465,10 +466,7 @@ export const DelegationListWrapper = styled.div`
 export const ChartWrapper = styled.div`
   width: 50%;
   height: 280px;
-  display: flex;
   position: relative;
-  align-items: center;
-  justify-content: center;
   @media only screen and (max-width: 1550px) {
     width: 100%;
   }
@@ -510,7 +508,7 @@ export const ButtonWrapper = styled.div`
   gap: 1rem;
 `;
 
-export const Button = styled.div<{ isActive?: boolean }>`
+export const Button = styled.div<{ $isActive?: boolean }>`
   width: 90px;
   height: 35px;
   padding-left: 7px;
@@ -522,7 +520,7 @@ export const Button = styled.div<{ isActive?: boolean }>`
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
-  ${(props) => (props.isActive ? `` : `background-color: #444;color:#777`)}
+  ${(props) => (props.$isActive ? `` : `background-color: #444;color:#777`)}
 `;
 
 export const ItemSmallWrapper = styled.div`
@@ -546,7 +544,7 @@ export const ProfileWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-export const ProfileImageSmall = styled.div<{ src?: string }>`
+export const ProfileImageSmall = styled.div<{ $src?: string }>`
   width: 30px;
   min-width: 30px;
   height: 30px;
@@ -557,7 +555,7 @@ export const ProfileImageSmall = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const Moniker = styled.div`
   flex: 1 1 100%;
@@ -619,13 +617,13 @@ export const SmallTitle = styled.div`
   font-size: ${({ theme }) => theme.sizes.stakingLarge};
 `;
 
-export const SortArrow = styled.div<{ order?: number; orderBy?: number; index?: number }>`
+export const SortArrow = styled.div<{ $order?: number; $orderBy?: number; $index?: number }>`
   width: 14px;
   height: 70px;
   margin-left: 3px;
   background-image: url('${(props) => {
-    if (props.orderBy === props.index) {
-      return props.order === 0 ? props.theme.urls.sortASC : props.theme.urls.sortDESC;
+    if (props.$orderBy === props.$index) {
+      return props.$order === 0 ? props.theme.urls.sortASC : props.theme.urls.sortDESC;
     } else {
       return props.theme.urls.sortIdle;
     }
@@ -636,13 +634,13 @@ export const SortArrow = styled.div<{ order?: number; orderBy?: number; index?: 
   cursor: pointer;
 `;
 
-export const StatusBox = styled.div<{ status: number }>`
+export const StatusBox = styled.div<{ $status: number }>`
   height: 20px;
   line-height: 20px;
   text-align: center;
   background-color: #555;
-  color: ${(props) => `${getRestakeStatusColor(props.status)}`};
-  background-color: ${(props) => `${getRestakeStatusColor(props.status)}30`};
+  color: ${(props) => `${getRestakeStatusColor(props.$status)}`};
+  background-color: ${(props) => `${getRestakeStatusColor(props.$status)}30`};
   padding: 3px 8px 1px 8px;
   border-radius: 15px;
 `;

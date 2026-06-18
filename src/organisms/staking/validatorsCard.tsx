@@ -60,7 +60,7 @@ const CustomRow = ({ currentValidator, index }: { currentValidator: IValidator; 
       <ItemWrapper>
         <ItemColumn>{index + 1}</ItemColumn>
         <ItemColumn>
-          <ProfileImage src={currentValidator.validatorAvatar} />
+          <ProfileImage $src={currentValidator.validatorAvatar} />
           <MonikerTypo>{currentValidator.validatorMoniker}</MonikerTypo>
         </ItemColumn>
         <ItemColumn>{`${convertNumberFormat(currentValidator.votingPowerPercent, 2)} %`}</ItemColumn>
@@ -106,7 +106,7 @@ const CustomSmallRow = ({ currentValidator, index }: { currentValidator: IValida
     <Link to={{ pathname: `/staking/validators/${currentValidator.validatorAddress}` }}>
       <ItemSmallWrapper>
         <ProfileWrapper>
-          <ProfileImageSmall src={currentValidator.validatorAvatar}></ProfileImageSmall>
+          <ProfileImageSmall $src={currentValidator.validatorAvatar}></ProfileImageSmall>
           <Moniker>{currentValidator.validatorMoniker}</Moniker>
           <ArrowIcon>〉</ArrowIcon>
         </ProfileWrapper>
@@ -268,23 +268,23 @@ const Validators = ({ validatorsState }: IProps) => {
         <HeaderColumn>No</HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(0)}>
           Validator
-          <SortArrow order={order} orderBy={orderBy} index={0} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={0} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(1)}>
           Voting Power
-          <SortArrow order={order} orderBy={orderBy} index={1} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={1} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(3)}>
           Commission
-          <SortArrow order={order} orderBy={orderBy} index={3} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={3} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(4)}>
           UpTime
-          <SortArrow order={order} orderBy={orderBy} index={4} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={4} />
         </HeaderColumn>
         <HeaderColumn onClick={() => changeOrder(5)}>
           APR / APY
-          <SortArrow order={order} orderBy={orderBy} index={5} />
+          <SortArrow $order={order} $orderBy={orderBy} $index={5} />
         </HeaderColumn>
       </HeaderWrapper>
       {isSmall && <SmallTitle>Validators</SmallTitle>}

@@ -100,28 +100,28 @@ const VotingModal = () => {
         <ModalTitle>Voting</ModalTitle>
         <ModalContent>
           <VotingWrapper>
-            <VotingItem active={votingType === 1} onClick={() => setVotingType(1)}>
+            <VotingItem $active={votingType === 1} onClick={() => setVotingType(1)}>
               YES
             </VotingItem>
-            <VotingItem active={votingType === 3} onClick={() => setVotingType(3)}>
+            <VotingItem $active={votingType === 3} onClick={() => setVotingType(3)}>
               NO
             </VotingItem>
-            <VotingItem active={votingType === 4} onClick={() => setVotingType(4)}>
+            <VotingItem $active={votingType === 4} onClick={() => setVotingType(4)}>
               NoWithVeto
             </VotingItem>
-            <VotingItem active={votingType === 2} onClick={() => setVotingType(2)}>
+            <VotingItem $active={votingType === 2} onClick={() => setVotingType(2)}>
               Abstain
             </VotingItem>
           </VotingWrapper>
           <ButtonWrapper>
-            <CancelButton onClick={() => closeModal()} status={1}>
+            <CancelButton onClick={() => closeModal()} $status={1}>
               Cancel
             </CancelButton>
             <NextButton
               onClick={() => {
                 if (votingType) nextStep();
               }}
-              status={votingType !== 0 ? 0 : 2}
+              $status={votingType !== 0 ? 0 : 2}
             >
               Vote
             </NextButton>

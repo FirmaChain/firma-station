@@ -44,7 +44,7 @@ const QRCodeModal = () => {
         </QRContent>
 
         <ButtonWrapper>
-          <CancelButton onClick={() => closeQRCodeModal()} status={1}>
+          <CancelButton onClick={() => closeQRCodeModal()} $status={1}>
             Close
           </CancelButton>
         </ButtonWrapper>

@@ -6,7 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import HelpIconOrigin from '@mui/icons-material/Help';
 import { getRestakeStatusColor } from '../../utils/common';
-import { ComponentProps, useRef } from 'react';
+import React, { ComponentProps, useRef } from 'react';
 
 export const confirmTxModalWidth = '500px';
 export const loginModalWidth = '500px';
@@ -29,6 +29,7 @@ export const gasEstimationModalWidth = '500px';
 export const sendModalWidth = '500px';
 export const votingModalWidth = '500px';
 export const restakeModalWidth = '500px';
+export const redelegateRestakeModalWidth = '500px';
 export const disconnectModalWidth = '500px';
 export const settingModalWidth = '500px';
 
@@ -81,7 +82,7 @@ export const ModalContent = styled.div`
   }
 `;
 
-export const ButtonStyleByStatus = styled.div<{ status: number }>`
+export const ButtonStyleByStatus = styled.div<{ $status: number }>`
   width: calc(100% - 2px);
   height: 46px;
   line-height: 46px;
@@ -93,7 +94,7 @@ export const ButtonStyleByStatus = styled.div<{ status: number }>`
   text-align: center;
   margin-top: 30px;
   ${(props) => {
-    switch (props.status) {
+    switch (props.$status) {
       case 0:
         return 'background-color:#3550de;color:white;';
       case 1:
@@ -268,7 +269,7 @@ export const ConfirmLabel = styled.div`
   color: #b4b4b4;
 `;
 
-export const ConfirmInput = styled.div<{ point?: boolean }>`
+export const ConfirmInput = styled.div<{ $point?: boolean }>`
   width: 100%;
   flex-grow: 1;
 
@@ -284,24 +285,24 @@ export const ConfirmInput = styled.div<{ point?: boolean }>`
     color: #b4b4b4;
   }
   ${(props) =>
-    props.point &&
+    props.$point &&
     `font-size:${props.theme.sizes.modal20};color:white;& > span { font-size: ${props.theme.sizes.modal16};`}
 `;
 
-export const InputBoxNumber = styled(InputBoxStyleDefault)<{ isInvalid?: boolean }>`
-  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
+export const InputBoxNumber = styled(InputBoxStyleDefault)<{ $isInvalid?: boolean }>`
+  border: 1px solid ${(props) => (props.$isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
   text-align: right;
   padding-right: 63px;
   width: calc(100% - 2px - 10px - 63px);
 `;
 
-export const InputMessageText = styled.div<{ isActive: boolean }>`
+export const InputMessageText = styled.div<{ $isActive: boolean }>`
   width: 100%;
   height: 10px;
   line-height: 10px;
   margin-top: 10px;
   padding: 0 5px;
-  ${(props) => (props.isActive ? 'display:block;' : 'display:none;')}
+  ${(props) => (props.$isActive ? 'display:block;' : 'display:none;')}
 `;
 
 export const MnemonicContainter = styled.div`
@@ -381,21 +382,21 @@ export const CopyIcon = styled(FileCopyIcon)`
   cursor: pointer;
 `;
 
-export const CancelButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const CancelButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const NextButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const NextButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const DownloadButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const DownloadButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const ExportButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const ExportButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const ChangeButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const ChangeButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const CreateButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const CreateButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const RecoverButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const RecoverButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
-export const ImportButton = styled.div<{ active: boolean }>`
+export const ImportButton = styled.div<{ $active: boolean }>`
   width: 220px;
   height: 48px;
   font-size: ${({ theme }) => theme.sizes.modal18};
@@ -406,7 +407,7 @@ export const ImportButton = styled.div<{ active: boolean }>`
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
   cursor: pointer;
-  ${(props) => (props.active ? `` : `background-color: #444;color:#777`)}
+  ${(props) => (props.$active ? `` : `background-color: #444;color:#777`)}
 `;
 
 export const MenuListWrap = styled.div`
@@ -459,8 +460,8 @@ export const InputWrapper = styled.div`
   }
 `;
 
-export const InputBox = styled(InputDivBoxStyleDefault)<{ active: boolean }>`
-  ${(props) => (props.active ? `border: 1px solid #888;` : ``)}
+export const InputBox = styled(InputDivBoxStyleDefault)<{ $active: boolean }>`
+  ${(props) => (props.$active ? `border: 1px solid #888;` : ``)}
   cursor: pointer;
 `;
 
@@ -571,7 +572,7 @@ export const VotingWrapper = styled.div`
   gap: 10px 10px;
 `;
 
-export const VotingItem = styled.div<{ active: boolean }>`
+export const VotingItem = styled.div<{ $active: boolean }>`
   width: calc(50% - 10px);
   height: 50px;
   line-height: 50px;
@@ -581,7 +582,7 @@ export const VotingItem = styled.div<{ active: boolean }>`
   border: 2px solid #ffffff00;
   text-align: center;
   background-color: #1c1c24;
-  ${(props) => props.active && `border:2px solid white`};
+  ${(props) => props.$active && `border:2px solid white`};
 `;
 
 export const PasswordWrapper = styled.div`
@@ -635,8 +636,8 @@ const fadeIn = keyframes`
   }
 `;
 
-export const AfterTypo = styled.div<{ isActive: boolean }>`
-  display: ${(props) => (props.isActive ? 'flex' : 'none')};
+export const AfterTypo = styled.div<{ $isActive: boolean }>`
+  display: ${(props) => (props.$isActive ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -646,7 +647,7 @@ export const AfterTypo = styled.div<{ isActive: boolean }>`
   animation-fill-mode: forwards;
 `;
 
-export const MaxButton = styled.div<{ active: boolean }>`
+export const MaxButton = styled.div<{ $active: boolean }>`
   width: 46px;
   height: 22px;
   line-height: 22px;
@@ -658,7 +659,7 @@ export const MaxButton = styled.div<{ active: boolean }>`
   right: 0;
   cursor: pointer;
   color: white;
-  ${(props) => (props.active ? `background-color: #3550de;color:#white` : `background-color: #444;color:#777`)}
+  ${(props) => (props.$active ? `background-color: #3550de;color:#white` : `background-color: #444;color:#777`)}
 `;
 
 export const HelpIcon = styled(HelpIconOrigin)`
@@ -718,7 +719,7 @@ export const ButtonWrapper = styled.div`
   gap: 10px;
 `;
 
-export const RestakeButton = styled(ButtonStyleByStatus)<{ status: number }>``;
+export const RestakeButton = styled(ButtonStyleByStatus)<{ $status: number }>``;
 
 export const Divider = styled.div`
   width: 100%;
@@ -736,7 +737,7 @@ export const DividerSolid = styled.div`
   border-bottom: 1px solid #555;
 `;
 
-export const StatusBox = styled.div<{ status: number }>`
+export const StatusBox = styled.div<{ $status: number }>`
   width: auto;
   display: inline-block;
   text-align: center;
@@ -744,8 +745,8 @@ export const StatusBox = styled.div<{ status: number }>`
   line-height: 22px;
   background-color: #555;
   font-size: 1.4rem;
-  color: ${(props) => `${getRestakeStatusColor(props.status)}`};
-  background-color: ${(props) => `${getRestakeStatusColor(props.status)}30`};
+  color: ${(props) => `${getRestakeStatusColor(props.$status)}`};
+  background-color: ${(props) => `${getRestakeStatusColor(props.$status)}30`};
   padding: 1px 8px 1px 8px;
   border-radius: 15px;
 `;
@@ -902,7 +903,7 @@ export const LoginMenuItem = styled.div`
   flex-direction: column;
 `;
 
-export const LoginMenuButton = styled(ButtonStyleByStatus)<{ status: number }>`
+export const LoginMenuButton = styled(ButtonStyleByStatus)<{ $status: number }>`
   height: 64px;
   display: flex;
   align-items: center;
@@ -927,12 +928,12 @@ export const RecoverTypeList = styled.div`
   border-radius: 20px;
   padding: 3px;
 `;
-export const RecoverTypeItem = styled.div<{ isActive: boolean }>`
+export const RecoverTypeItem = styled.div<{ $isActive: boolean }>`
   font-size: 1.6rem;
   padding: 7px 20px;
   border-radius: 20px;
   cursor: pointer;
-  ${(props) => (props.isActive ? 'color: white;background-color: #3550de;' : 'color: #ffffffaa')}
+  ${(props) => (props.$isActive ? 'color: white;background-color: #3550de;' : 'color: #ffffffaa')}
 `;
 
 export const ConfirmContainer = styled.div`
@@ -1008,7 +1009,7 @@ export const SettingMenuItem = styled.div`
   flex-direction: column;
 `;
 
-export const SettingMenuButton = styled(ButtonStyleByStatus)<{ status: number }>`
+export const SettingMenuButton = styled(ButtonStyleByStatus)<{ $status: number }>`
   height: 64px;
   display: flex;
   align-items: center;
@@ -1018,7 +1019,7 @@ export const SettingMenuButton = styled(ButtonStyleByStatus)<{ status: number }>
   margin: 0;
 `;
 
-export const DisconnectButton = styled(ButtonStyleByStatus)<{ status: number }>`
+export const DisconnectButton = styled(ButtonStyleByStatus)<{ $status: number }>`
   height: 64px;
   display: flex;
   align-items: center;
@@ -1188,7 +1189,8 @@ export const GuideStep = styled.div`
 export const GuideIcon = styled.div<{ step: number }>`
   width: 54px;
   height: 54px;
-  background-image: url('${(props) => props.theme.urls['mobileLoginStep' + props.step]}');
+  background-image: url('${(props) =>
+    props.theme.urls[`mobileLoginStep${props.step}` as keyof typeof props.theme.urls]}');
   background-size: contain;
   background-position: center;
   margin-bottom: 10px;
@@ -1271,12 +1273,17 @@ export const InvalidTypo = styled.div`
   margin-left: 5px;
 `;
 
-const InputBoxBase = styled(InputBoxStyleDefault)<{ isInvalid?: boolean }>`
-  border: 1px solid ${(props) => (props.isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
+const InputBoxBase = styled(InputBoxStyleDefault)<{ $isInvalid?: boolean }>`
+  border: 1px solid ${(props) => (props.$isInvalid ? `${props.theme.colors.mainred}50` : '#ffffff00')};
 `;
 
-export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number }) => {
-  const ref = useRef<HTMLInputElement>(null);
+export const InputBoxDefault = React.forwardRef<
+  HTMLInputElement,
+  ComponentProps<'input'> & { decimal?: number; isInvalid?: boolean }
+>((p, forwardedRef) => {
+  const { isInvalid, ...rest } = p;
+  const innerRef = useRef<HTMLInputElement>(null);
+  const ref = (forwardedRef as React.RefObject<HTMLInputElement>) ?? innerRef;
 
   // Prevents the default action for ArrowUp and ArrowDown keys if the input's `type` attribute is 'number'.
   const disableArrowKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -1380,7 +1387,8 @@ export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number 
 
   return (
     <InputBoxBase
-      {...p}
+      {...rest}
+      $isInvalid={isInvalid}
       type={p.type === 'number' ? 'text' : p.type}
       onWheel={(e: React.WheelEvent<HTMLInputElement>) => {
         p?.onWheel && p.onWheel(e);
@@ -1396,4 +1404,4 @@ export const InputBoxDefault = (p: ComponentProps<'input'> & { decimal?: number 
       inputMode={p.type === 'number' ? 'decimal' : 'text'}
     />
   );
-};
+});

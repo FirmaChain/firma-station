@@ -156,7 +156,7 @@ const ConfirmWalletModal = () => {
               <InputWrapper key={index}>
                 <ModalLabel>{getIndexText(data.index)} Word</ModalLabel>
                 <ModalInput>
-                  <InputBox active={index === currentWordIndex}>{data.text}</InputBox>
+                  <InputBox $active={index === currentWordIndex}>{data.text}</InputBox>
                 </ModalInput>
               </InputWrapper>
             ))}
@@ -172,7 +172,7 @@ const ConfirmWalletModal = () => {
             onClick={() => {
               if (isActiveCreateButton) confirmWallet();
             }}
-            status={isActiveCreateButton ? 0 : 2}
+            $status={isActiveCreateButton ? 0 : 2}
           >
             Create
           </CreateButton>

@@ -1,6 +1,7 @@
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { ApolloLink, concat } from '@apollo/client/link/core';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloLink } from '@apollo/client/link';
 import { HttpLink } from '@apollo/client/link/http';
+import { ApolloProvider } from '@apollo/client/react';
 
 import { CHAIN_CONFIG } from '../config';
 
@@ -16,8 +17,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 });
 
 const client = new ApolloClient({
-  uri: CHAIN_CONFIG.GRAPHQL_CONFIG.URI,
-  link: concat(authMiddleware, httpLink),
+  link: authMiddleware.concat(httpLink),
   cache: new InMemoryCache({}),
 });
 

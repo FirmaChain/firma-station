@@ -4,6 +4,7 @@ import * as modalAction from './actions/modalAction';
 import * as walletAction from './actions/walletAction';
 import * as userAction from './actions/userAction';
 import * as avatarAction from './actions/avatarAction';
+import * as refreshAction from './actions/refreshAction';
 
 import store from './store';
 
@@ -13,3 +14,4 @@ export const modalActions = bindActionCreators(modalAction, dispatch);
 export const walletActions = bindActionCreators(walletAction, dispatch);
 export const userActions = bindActionCreators(userAction, dispatch);
 export const avatarActions = bindActionCreators(avatarAction, dispatch);
+export const refreshActions = bindActionCreators(refreshAction, dispatch);

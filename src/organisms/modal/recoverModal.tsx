@@ -39,8 +39,8 @@ const RecoverModal = () => {
   const [inputWord, setInputWord] = useState('');
   const [password, setPassword] = useState('');
 
-  const inputRefMnemonic = useRef<HTMLTextAreaElement>();
-  const inputRefPrivateKey = useRef<HTMLTextAreaElement>();
+  const inputRefMnemonic = useRef<HTMLTextAreaElement | null>(null);
+  const inputRefPrivateKey = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     activeRecoverButton(false);
@@ -135,10 +135,10 @@ const RecoverModal = () => {
         <ModalContent>
           <RecoverTypeWrap>
             <RecoverTypeList>
-              <RecoverTypeItem isActive={recoverType === 0} onClick={() => setRecoverType(0)}>
+              <RecoverTypeItem $isActive={recoverType === 0} onClick={() => setRecoverType(0)}>
                 Mnemonic
               </RecoverTypeItem>
-              <RecoverTypeItem isActive={recoverType === 1} onClick={() => setRecoverType(1)}>
+              <RecoverTypeItem $isActive={recoverType === 1} onClick={() => setRecoverType(1)}>
                 Private Key
               </RecoverTypeItem>
             </RecoverTypeList>
@@ -167,7 +167,7 @@ const RecoverModal = () => {
           <Password onChange={onChangePassword} onKeyDown={onKeyDownPassword} />
 
           <RecoverButton
-            status={isActiveRecoverButton ? 0 : 2}
+            $status={isActiveRecoverButton ? 0 : 2}
             onClick={() => {
               if (isActiveRecoverButton) recoverWallet();
             }}

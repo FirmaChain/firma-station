@@ -120,13 +120,13 @@ export const BarDiv = styled.div`
   margin-left: 14px;
   background-color: #aaa;
 `;
-export const ProfileImg = styled.div<{ src?: string }>`
+export const ProfileImg = styled.div<{ $src?: string }>`
   width: 20px;
   height: 20px;
   border-radius: 10px;
   margin-right: 8px;
   margin-top: 1px;
-  background-image: url('${(props) => (props.src ? props.src : props.theme.urls.profile)}');
+  background-image: url('${(props) => (props.$src ? props.$src : props.theme.urls.profile)}');
   background-size: contain;
   background-color: #bababa;
   background-repeat: no-repeat;

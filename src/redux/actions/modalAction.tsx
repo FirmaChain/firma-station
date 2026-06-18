@@ -23,6 +23,7 @@ import {
   HANDLE_MODAL_QUEUETX,
   HANDLE_MODAL_GASESTIMATION,
   HANDLE_MODAL_RESTAKE,
+  HANDLE_MODAL_REDELEGATERESTAKE,
   HANDLE_MODAL_CONNECTAPP,
   HANDLE_MODAL_DISCONNECT,
 } from '../types';
@@ -57,3 +58,7 @@ export const handleModalQueueTx = (isVisible: boolean) => ({ type: HANDLE_MODAL_
 export const handleModalGasEstimation = (isVisible: boolean) => ({ type: HANDLE_MODAL_GASESTIMATION, isVisible });
 
 export const handleModalRestake = (isVisible: boolean) => ({ type: HANDLE_MODAL_RESTAKE, isVisible });
+export const handleModalRedelegateRestake = (isVisible: boolean) => ({
+  type: HANDLE_MODAL_REDELEGATERESTAKE,
+  isVisible,
+});

@@ -64,7 +64,7 @@ export const useDashboard = () => {
 };
 
 const useInterval = (callback: () => void, delay: number) => {
-  const savedCallback = useRef<() => void>();
+  const savedCallback = useRef<(() => void) | undefined>(undefined);
 
   useEffect(() => {
     savedCallback.current = callback;

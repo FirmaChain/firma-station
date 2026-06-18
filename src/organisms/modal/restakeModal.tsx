@@ -253,7 +253,7 @@ const RestakeModal = () => {
           <ModalInputRowWrap>
             <ModalLabel>Restake Status</ModalLabel>
             <ModalInput style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <StatusBox status={status}>{getRestakeStatus(status)}</StatusBox>
+              <StatusBox $status={status}>{getRestakeStatus(status)}</StatusBox>
             </ModalInput>
           </ModalInputRowWrap>
           {isActiveRestake && (
@@ -317,20 +317,20 @@ const RestakeModal = () => {
             </ModalTooltipTypo>
           </ModalTooltipWrapper>
           <ButtonWrapper>
-            <CancelButton onClick={() => closeRestakeModal()} status={1}>
+            <CancelButton onClick={() => closeRestakeModal()} $status={1}>
               Cancel
             </CancelButton>
             {isActiveRestake ? (
               <>
-                <RestakeButton onClick={onClickDisable} status={1}>
+                <RestakeButton onClick={onClickDisable} $status={1}>
                   Disable
                 </RestakeButton>
-                <RestakeButton onClick={onClickEnable} status={0}>
+                <RestakeButton onClick={onClickEnable} $status={0}>
                   Update
                 </RestakeButton>
               </>
             ) : (
-              <RestakeButton onClick={onClickEnable} status={0}>
+              <RestakeButton onClick={onClickEnable} $status={0}>
                 Enable
               </RestakeButton>
             )}
@@ -342,7 +342,7 @@ const RestakeModal = () => {
 };
 
 const useInterval = (callback: () => void, delay: number) => {
-  const savedCallback = useRef<() => void>();
+  const savedCallback = useRef<(() => void) | undefined>(undefined);
 
   useEffect(() => {
     savedCallback.current = callback;

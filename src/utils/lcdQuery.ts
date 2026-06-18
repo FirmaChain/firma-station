@@ -19,7 +19,6 @@ export {
   getValidatorFromAddress,
   getValidatorDelegationsFromAddress,
   getValidatorUndelegationsFromAddress,
-  getValidatorRedelegationsFromAddress,
   getSigningInfos,
   getSignedBlocksWindow,
   getAccAddressFromValOperAddress,
@@ -129,78 +128,6 @@ const getValidatorDelegationsFromAddress = async (
   return result;
 };
 
-/**
- * Aggregates outgoing redelegations from the given validator (this validator as
- * src) by iterating through its current delegator set and querying each
- * delegator's redelegations. This matches the semantics most explorers use for
- * a validator's "redelegate" count.
- *
- * Trade-off: a delegator who has fully redelegated 100% of their stake away
- * from this validator no longer appears in the delegator list, so their
- * outgoing redelegation will be missed. Standard Cosmos LCD does not expose a
- * validator-wide redelegation endpoint, so this iteration is the practical
- * workaround.
- */
-const getValidatorRedelegationsFromAddress = async (
-  valoperAddress: string
-): Promise<{
-  delegatorAddress: string;
-  srcAddress: string;
-  dstAddress: string;
-  balance: string;
-  completionTime: string;
-}[]> => {
-  // 1. Fetch all current delegators of this validator (handle pagination)
-  const delegators: string[] = [];
-  let paginationKey = '';
-  do {
-    const page = await firmaSDK.Staking.getDelegationListFromValidator(valoperAddress, paginationKey);
-    for (const delegation of page.dataList) {
-      delegators.push(delegation.delegation.delegator_address);
-    }
-    paginationKey = page.pagination?.next_key || '';
-  } while (paginationKey);
-
-  // 2. For each delegator, fetch their redelegations and filter to ones involving this validator
-  const allRedelegations = await Promise.all(
-    delegators.map((delegatorAddress) =>
-      firmaSDK.Staking.getTotalRedelegationInfo(delegatorAddress)
-        .then((redels) => ({ delegatorAddress, redels }))
-        .catch(() => ({ delegatorAddress, redels: [] }))
-    )
-  );
-
-  // 3. Flatten entries that match this validator
-  const result: {
-    delegatorAddress: string;
-    srcAddress: string;
-    dstAddress: string;
-    balance: string;
-    completionTime: string;
-  }[] = [];
-
-  for (const { delegatorAddress, redels } of allRedelegations) {
-    for (const redel of redels) {
-      const srcAddress = redel.redelegation.validator_src_address;
-      const dstAddress = redel.redelegation.validator_dst_address;
-      // Match explorer semantics: count only redelegations where this validator is the source
-      // (outgoing, i.e. delegators leaving this validator).
-      if (srcAddress !== valoperAddress) continue;
-
-      for (const entry of redel.entries) {
-        result.push({
-          delegatorAddress,
-          srcAddress,
-          dstAddress,
-          balance: entry.balance,
-          completionTime: entry.redelegation_entry.completion_time,
-        });
-      }
-    }
-  }
-
-  return result;
-};
 
 const getValidatorUndelegationsFromAddress = async (
   valoperAddress: string

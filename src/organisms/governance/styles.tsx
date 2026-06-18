@@ -80,15 +80,15 @@ export const DescriptionTypo = styled.div`
   margin-top: 14px;
 `;
 
-export const StatusTypo = styled.div<{ statusColor: string }>`
+export const StatusTypo = styled.div<{ $statusColor: string }>`
   display: inline-block;
   height: 40px;
   line-height: 40px;
   padding: 0px 10px;
   border-radius: 4px;
   margin-top: 10px;
-  color: ${(props) => props.statusColor && props.statusColor};
-  background: ${(props) => props.statusColor && props.statusColor}50;
+  color: ${(props) => props.$statusColor && props.$statusColor};
+  background: ${(props) => props.$statusColor && props.$statusColor}50;
 `;
 
 export const SmallList = styled.div`

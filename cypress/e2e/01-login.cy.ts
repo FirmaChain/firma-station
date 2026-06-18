@@ -1,3 +1,5 @@
+export {};
+
 describe('Firma Station - Login Test', () => {
   beforeEach(() => {
     cy.visit('/');

@@ -71,7 +71,7 @@ const ValidatorCard = ({ targetValidatorData }: IProps) => {
           <ProfileWrapper>
             <LeftWrapper>
               <ProfileImageWrap>
-                <ProfileImage src={targetValidatorData.validatorAvatar} />
+                <ProfileImage $src={targetValidatorData.validatorAvatar} />
               </ProfileImageWrap>
               <DescriptionWrap>
                 <NameTypo>{targetValidatorData.validatorMoniker}</NameTypo>

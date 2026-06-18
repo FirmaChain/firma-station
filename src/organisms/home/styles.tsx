@@ -181,10 +181,10 @@ export const PiechartLabelTypo = styled.div`
   color: #ccc;
 `;
 
-export const PiechartLabelIcon = styled.div<{ bgColor: string }>`
+export const PiechartLabelIcon = styled.div<{ $bgColor: string }>`
   width: 20px;
   height: 20px;
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.$bgColor};
   float: left;
 `;
 

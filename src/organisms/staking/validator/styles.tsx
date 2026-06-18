@@ -39,7 +39,7 @@ export const Buttons = styled.div`
   justify-content: center;
 `;
 
-export const Button = styled.div<{ isActive?: boolean }>`
+export const Button = styled.div<{ $isActive?: boolean }>`
   width: 100px;
   height: 35px;
   line-height: 35px;
@@ -48,7 +48,7 @@ export const Button = styled.div<{ isActive?: boolean }>`
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.mainblue};
   border-radius: 4px;
-  ${(props) => (props.isActive ? `` : `background-color: #444;color:#777`)}
+  ${(props) => (props.$isActive ? `` : `background-color: #444;color:#777`)}
 `;
 
 export const DelegatorsCardWrapper = styled.div`
@@ -70,12 +70,12 @@ export const TabBar = styled.div`
   margin-bottom: 8px;
 `;
 
-export const TabItem = styled.div<{ active?: boolean }>`
+export const TabItem = styled.div<{ $active?: boolean }>`
   padding: 10px 18px;
   cursor: pointer;
   font-size: ${({ theme }) => theme.sizes.defaultSize};
-  color: ${({ active }) => (active ? '#fff' : '#888')};
-  border-bottom: 2px solid ${({ active }) => (active ? '#3550DE' : 'transparent')};
+  color: ${({ $active }) => ($active ? '#fff' : '#888')};
+  border-bottom: 2px solid ${({ $active }) => ($active ? '#3550DE' : 'transparent')};
   transition: color 0.15s ease;
   &:hover {
     color: #ddd;
@@ -98,9 +98,9 @@ export const RowWrapper = styled.div`
   flex-wrap: nowrap;
 `;
 
-export const Column = styled.div<{ avatar?: boolean }>`
+export const Column = styled.div<{ $avatar?: boolean }>`
   width: 100%;
-  flex: ${({ avatar }) => (avatar ? '0 0 40px' : '1 1 100%')};
+  flex: ${({ $avatar }) => ($avatar ? '0 0 40px' : '1 1 100%')};
 
   &:last-child {
     text-align: right;
@@ -201,7 +201,7 @@ export const ProfileImageWrap = styled.div`
   width: 100px;
 `;
 
-export const ProfileImage = styled.div<{ src?: string }>`
+export const ProfileImage = styled.div<{ $src?: string }>`
   width: 80px;
   height: 80px;
   border-radius: 40px;
@@ -211,7 +211,7 @@ export const ProfileImage = styled.div<{ src?: string }>`
   background-position: center;
   background-repeat: no-repeat;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 export const DescriptionWrap = styled.div`
   width: 100%;
@@ -306,7 +306,7 @@ export const CopyIconImg = styled(FileCopyIcon)`
   left: 114px;
 `;
 
-export const ProfileImage2 = styled.div<{ src?: string }>`
+export const ProfileImage2 = styled.div<{ $src?: string }>`
   width: 30px;
   min-width: 30px;
   max-width: 30px;
@@ -319,7 +319,7 @@ export const ProfileImage2 = styled.div<{ src?: string }>`
   background-repeat: no-repeat;
   float: left;
   ${(props) =>
-    props.src ? `background-image:url('${props.src}')` : `background-image: url("${props.theme.urls.profile}");`}
+    props.$src ? `background-image:url('${props.$src}')` : `background-image: url("${props.theme.urls.profile}");`}
 `;
 
 export const DelegatorMobile = styled.div`

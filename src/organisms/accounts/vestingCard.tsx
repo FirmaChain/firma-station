@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import AutoSizer from 'react-virtualized-auto-sizer';
+import AutoSizer from '../../components/autoSizer';
 import { FixedSizeList as List } from 'react-window';
 
 import { IVesting } from '../../redux/reducers/userReducer';

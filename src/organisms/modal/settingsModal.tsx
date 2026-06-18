@@ -52,7 +52,7 @@ const ExportWalletModal = () => {
           {menuList.map((menu, index) => {
             return (
               <SettingMenuItem key={index} onClick={() => openSubModal(menu.modalAction)}>
-                <SettingMenuButton status={1}>{menu.name}</SettingMenuButton>
+                <SettingMenuButton $status={1}>{menu.name}</SettingMenuButton>
               </SettingMenuItem>
             );
           })}
@@ -62,7 +62,7 @@ const ExportWalletModal = () => {
           <DividerORTypo>OR</DividerORTypo>
         </DividerOR>
         <DisconnectButton
-          status={3}
+          $status={3}
           onClick={() => {
             resetWallet();
             closeExportWalletModal();
