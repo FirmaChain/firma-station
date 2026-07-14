@@ -10,7 +10,7 @@ const CommunityList = () => {
 
   return (
     <CommunityWrapper>
-      <CommunityItem onClick={() => openLink('https://t.me/firmachain_announcement')}>
+      <CommunityItem onClick={() => openLink('https://telegram.me/firmachain_announcement')}>
         <CommunityItemIcon icon={theme.urls.telegram} />
         <CommunityItemTypo>Telegram</CommunityItemTypo>
       </CommunityItem>
