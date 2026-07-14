@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod-mainnet-station
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v6
         with:
